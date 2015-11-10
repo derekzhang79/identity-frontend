@@ -1,0 +1,31 @@
+{
+  "defaultStacks" : ["identity"],
+  "packages" : {
+    "identity-frontend": {
+      "type": "autoscaling",
+      "apps": [
+        "identity-frontend"
+      ],
+      "data": {
+        "port": "8860",
+        "bucket": "gu-identity-frontend-dist"
+      }
+    }
+  },
+  "recipes" : {
+    "default" : {
+      "depends" : [
+        "uploadArtifacts",
+        "deploy"
+      ]
+    },
+    "uploadArtifacts": {
+      "actionsBeforeApp": ["identity-frontend.uploadArtifacts"]
+    },
+    "deploy": {
+      "actionsPerHost": [
+        "identity-frontend.deploy"
+      ]
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "defaultStacks": [ "identity" ],
+  "packages": {
+    "gu-identity-frontend-dist": {
+      "type": "aws-s3",
+      "data": {
+        "bucket": "gu-identity-frontend-dist",
+        "prefixPackage": false,
+        "prefixStage": false,
+        "prefixStack": false,
+        "publicReadAcl": false,
+        "cacheControl": "max-age=600"
+      }
+    }
+  },
+
+  "recipes": {
+    "default": {
+      "depends": [
+        "deployGuIdentityFrontendDist"
+      ]
+    },
+
+    "deployGuIdentityFrontendDist": {
+      "actionsBeforeApp": [
+        "gu-identity-frontend-dist.uploadStaticFiles"
+      ]
+    }
+
+  }
+}
+

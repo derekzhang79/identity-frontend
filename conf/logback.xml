@@ -1,0 +1,34 @@
+<configuration>
+
+    <contextName>identity-frontend</contextName>
+
+    <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logs.home}/identity-frontend-app.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logs.home}/identity-frontend-app.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{36}:%line - %msg%n%xException{full}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ACCESSLOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logs.home}/identity-frontend-access.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logs.home}/identity-frontend-access.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%date %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="LOGFILE"/>
+    </root>
+</configuration>

@@ -19,8 +19,8 @@ libraryDependencies ++= Seq(
 packageName in Universal := normalizedName.value
 
 riffRaffPackageType := (packageZipTarball in Universal).value
-riffRaffPackageName := s"identity:${name.value}"
-riffRaffManifestProjectName := riffRaffPackageName.value
+riffRaffPackageName := name.value
+riffRaffManifestProjectName := s"identity:${name.value}"
 riffRaffBuildIdentifier := Option(System.getenv("CIRCLE_BUILD_NUM")).getOrElse("DEV")
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")

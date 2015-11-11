@@ -1,5 +1,7 @@
 # Identity-frontend
 
+[![Circle CI](https://circleci.com/gh/guardian/identity-frontend/tree/master.svg?style=shield)](https://circleci.com/gh/guardian/identity-frontend/tree/master)
+
 # Application configuration
 
 Configuration files:
@@ -76,7 +78,7 @@ sbt devrun
 
 ## Testing - Lines in the sand
 
-- All tests should be included in this repo and executed before deployment. 
+- All tests should be included in this repo and executed before deployment.
 - Failing tests will block deployment.
 - Prefer unit tests to integration/functional tests.
 - Browser tests should only be written if the functionality cannot be tested any other way.

@@ -12,7 +12,8 @@ general:
 
 dependencies:
   pre:
-    - alias sbt="java $SBT_OPTS -jar sbt-launch.jar $@"
+    - wget -q https://dl.bintray.com/sbt/debian/sbt-0.13.9.deb
+    - sudo dpkg -i sbt-0.13.9.deb
   # Cache the resolution-cache and build streams to speed things up
   cache_directories:
     - "~/.sbt"

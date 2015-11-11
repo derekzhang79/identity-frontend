@@ -2,6 +2,8 @@ machine:
   timezone: UTC
   java:
     version: oraclejdk8
+  environment:
+    SBT_OPTS: "-Xmx1384M -XX:MaxMetaspaceSize=384M -XX:+UseCompressedOops"
 
 # Collect build artifacts
 general:
@@ -9,6 +11,8 @@ general:
     - target/riffraff
 
 dependencies:
+  pre:
+    - alias sbt="java $SBT_OPTS -jar sbt-launch.jar $@"
   # Cache the resolution-cache and build streams to speed things up
   cache_directories:
     - "~/.sbt"

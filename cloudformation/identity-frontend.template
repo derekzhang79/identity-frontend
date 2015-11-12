@@ -56,6 +56,7 @@
         "LatencyAlarmThreshold": 0.5,
         "LatencyAlarmPeriod": 60,
         "NotificationAlarmPeriod": 1200,
+        "LoadBalancerName": "identity-frontend-PROD",
         "InstanceName": "PROD:identity-frontend",
         "InstanceType": "t2.micro",
         "DesiredInstances": 1,
@@ -66,6 +67,7 @@
         "LatencyAlarmThreshold": 5,
         "LatencyAlarmPeriod": 1200,
         "NotificationAlarmPeriod": 1200,
+        "LoadBalancerName": "identity-frontend-CODE",
         "InstanceName": "CODE:identity-frontend",
         "InstanceType": "t2.micro",
         "DesiredInstances": 1,
@@ -136,7 +138,12 @@
     "LoadBalancer": {
       "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
       "Properties": {
-        "Scheme" : "internet-facing",
+        "LoadBalancerName": {
+          "Fn::FindInMap": ["StageVariables", {
+            "Ref": "Stage"
+          }, "LoadBalancerName"]
+        },
+        "Scheme": "internet-facing",
         "Listeners": [{
           "LoadBalancerPort": "443",
           "InstancePort": "8860",

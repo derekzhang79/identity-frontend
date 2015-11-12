@@ -314,6 +314,17 @@
             "ToPort": "8860",
             "CidrIp": "0.0.0.0/0"
           }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [ "identity-frontend", { "Ref": "Stage"}, "loadbalancer-sg" ]
+              ]
+            }
+          }
         ]
       }
     },
@@ -330,6 +341,17 @@
             "ToPort": "8860",
             "SourceSecurityGroupId": {
               "Ref": "LoadBalancerSecurityGroup"
+            }
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [ "identity-frontend", { "Ref": "Stage"}, "instance-sg" ]
+              ]
             }
           }
         ]

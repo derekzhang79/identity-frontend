@@ -11,7 +11,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtNativePackage
 libraryDependencies ++= Seq(
   "org.scalatestplus" %% "play" % "1.4.0-M3",
   ws,
-  filters
+  filters,
+  "jp.co.bizreach" %% "play2-handlebars" % "0.3.0"
 )
 
 
@@ -34,4 +35,4 @@ publishArtifact in (Compile, packageDoc) := false
 play.PlayImport.PlayKeys.playDefaultPort := 8860
 routesGenerator := InjectedRoutesGenerator
 
-addCommandAlias("devrun", "run -Dconfig.resource=dev.conf -Dlogs.home=logs")
+addCommandAlias("devrun", "run -Dlogs.home=logs")

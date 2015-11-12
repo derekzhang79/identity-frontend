@@ -3,6 +3,8 @@
 # ~~~~
 
 # Home page
-GET        /                    @controllers.Application.index
-GET        /management/healthcheck        @controllers.HealthCheck.healthCheck
+GET        /                              @com.gu.identity.frontend.controllers.Application.index
+
+GET        /management/healthcheck        @com.gu.identity.frontend.controllers.HealthCheck.healthCheck
+
 GET        /assets/*file                  @controllers.Assets.at(path="/public", file)

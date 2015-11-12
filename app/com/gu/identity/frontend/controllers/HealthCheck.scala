@@ -1,4 +1,4 @@
-package controllers
+package com.gu.identity.frontend.controllers
 
 import javax.inject.Inject
 

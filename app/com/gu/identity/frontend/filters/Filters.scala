@@ -1,4 +1,4 @@
-package filters
+package com.gu.identity.frontend.filters
 
 import javax.inject.Inject
 

@@ -413,7 +413,11 @@
         "Namespace": "AWS/ELB",
         "Period": "60",
         "Statistic": "Average",
-        "Threshold": {"Ref":"MinInstances"},
+        "Threshold": {
+          "Fn::FindInMap": ["StageVariables", {
+            "Ref": "Stage"
+          }, "DesiredInstances"]
+        },
         "AlarmActions": [
           { "Ref": "TopicSendEmail" },
           { "Ref": "TopicPagerDutyAlerts" }

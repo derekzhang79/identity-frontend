@@ -1,4 +1,4 @@
-package util
+package com.gu.identity.frontend.logging
 
 import org.slf4j.LoggerFactory
 

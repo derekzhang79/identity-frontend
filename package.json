@@ -1,0 +1,19 @@
+{
+  "name": "identity-frontend",
+  "version": "1.0.0-SNAPSHOT",
+  "description": "Frontend for User sign-in and registration at the Guardian",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guardian/identity-frontend.git"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "npm run build-sass",
+    "prebuild-sass": "mkdir -p ./target/web/sass && cp -r ./public/* ./target/web/sass",
+    "build-sass": "node-sass target/web/sass --output target/web/sass --output-style compressed --source-map true --source-map-root /assets"
+  },
+  "devDependencies": {
+    "node-sass": "^3.4.2"
+  }
+}

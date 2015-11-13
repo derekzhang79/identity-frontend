@@ -12,7 +12,8 @@ libraryDependencies ++= Seq(
   "org.scalatestplus" %% "play" % "1.4.0-M3",
   ws,
   filters,
-  "jp.co.bizreach" %% "play2-handlebars" % "0.3.0"
+  "jp.co.bizreach" %% "play2-handlebars" % "0.3.0",
+  "com.mohiva" %% "play-html-compressor" % "0.5.0"
 )
 
 

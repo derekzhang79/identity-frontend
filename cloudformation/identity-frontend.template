@@ -1,0 +1,476 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Identity Frontend",
+  "Parameters": {
+    "KeyName": {
+      "Description": "The EC2 Key Pair to allow SSH access to the instances",
+      "Type": "AWS::EC2::KeyPair::KeyName"
+    },
+    "Stage": {
+      "Description": "Environment name",
+      "Type": "String",
+      "AllowedValues": [ "CODE", "PROD" ]
+    },
+    "SshAccessSecurityGroup": {
+      "Description": "Security group that is allowed SSH access to the instances",
+      "Type": "AWS::EC2::SecurityGroup::Id"
+    },
+    "VpcId": {
+      "Description": "ID of the VPC onto which to launch the application",
+      "Type": "AWS::EC2::VPC::Id"
+    },
+    "PrivateVpcSubnets" : {
+      "Description": "Public subnets to use in VPC",
+      "Type": "List<AWS::EC2::Subnet::Id>"
+    },
+    "PublicVpcSubnets" : {
+      "Description": "Public subnets to use for the ELB",
+      "Type": "List<AWS::EC2::Subnet::Id>"
+    },
+    "AmiId": {
+      "Description": "Custom AMI to use for instances, created using Packer",
+      "Type": "String"
+    },
+    "LogstashHost" : {
+      "Description": "Logstash load balancer host",
+      "Type": "String"
+    },
+    "InternalCidrIp": {
+      "Description": "Internal network CIDR IP",
+      "Type": "String"
+    },
+    "AlarmEmailAddress": {
+      "Description": "Contact email for alarms",
+      "Type": "String"
+    },
+    "PagerDutyUrl": {
+      "Description": "HTTPS url for pager duty notifications",
+      "Type": "String"
+    }
+  },
+
+  "Mappings": {
+    "StageVariables": {
+      "PROD": {
+        "AutoscalingNotificationsARN": "arn:aws:sns:eu-west-1:942464564246:AutoscalingNotificationsPROD",
+        "LatencyAlarmThreshold": 0.5,
+        "LatencyAlarmPeriod": 60,
+        "NotificationAlarmPeriod": 1200,
+        "LoadBalancerName": "identity-frontend-PROD",
+        "InstanceName": "PROD:identity-frontend",
+        "InstanceType": "t2.micro",
+        "DesiredInstances": 1,
+        "MaxInstances": 2
+      },
+      "CODE": {
+        "AutoscalingNotificationsARN": "arn:aws:sns:eu-west-1:942464564246:AutoscalingNotificationsCODE",
+        "LatencyAlarmThreshold": 5,
+        "LatencyAlarmPeriod": 1200,
+        "NotificationAlarmPeriod": 1200,
+        "LoadBalancerName": "identity-frontend-CODE",
+        "InstanceName": "CODE:identity-frontend",
+        "InstanceType": "t2.micro",
+        "DesiredInstances": 1,
+        "MaxInstances": 2
+      }
+    },
+    "CertsMap": {
+      "CODE": {
+        "ssl": "arn:aws:iam::942464564246:server-certificate/sites.code.dev-theguardian.com-exp2023-08-04"
+      },
+      "PROD": {
+        "ssl": "arn:aws:iam::942464564246:server-certificate/sites.theguardian.com-exp2017-05-31"
+      }
+    }
+  },
+
+  "Resources": {
+    "IdentityRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [ {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [ "ec2.amazonaws.com" ]
+            },
+            "Action": [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Path": "/",
+        "Policies": [ {
+          "PolicyName": "root",
+
+          "PolicyDocument": {
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::gu-identity-*/*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": "ec2:DescribeTags",
+                "Resource": "*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "cloudwatch:*",
+                  "logs:*"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+        } ]
+      }
+    },
+
+    "InstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [ {"Ref": "IdentityRole"} ]
+      }
+    },
+
+    "LoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "LoadBalancerName": {
+          "Fn::FindInMap": ["StageVariables", {
+            "Ref": "Stage"
+          }, "LoadBalancerName"]
+        },
+        "Scheme": "internet-facing",
+        "Listeners": [{
+          "LoadBalancerPort": "443",
+          "InstancePort": "8860",
+          "Protocol": "HTTPS",
+          "SSLCertificateId": { "Fn::FindInMap": [ "CertsMap", { "Ref": "Stage" }, "ssl" ]}
+        }],
+        "CrossZone": "true",
+        "HealthCheck": {
+          "Target": "HTTP:8860/management/healthcheck",
+          "HealthyThreshold": "2",
+          "UnhealthyThreshold": "10",
+          "Interval": "30",
+          "Timeout": "10"
+        },
+        "Subnets": { "Ref": "PublicVpcSubnets" },
+        "SecurityGroups": [
+          { "Ref": "LoadBalancerSecurityGroup" }
+        ]
+      }
+    },
+
+    "AutoscalingGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "AvailabilityZones": { "Fn::GetAZs": "" },
+        "LaunchConfigurationName": { "Ref": "LaunchConfig" },
+        "MinSize": {
+          "Fn::FindInMap": ["StageVariables", {
+            "Ref": "Stage"
+          }, "DesiredInstances"]
+        },
+        "MaxSize": {
+          "Fn::FindInMap": ["StageVariables", {
+            "Ref": "Stage"
+          }, "MaxInstances"]
+        },
+        "DesiredCapacity": {
+          "Fn::FindInMap": ["StageVariables", {
+            "Ref": "Stage"
+          }, "DesiredInstances"]
+        },
+        "HealthCheckType": "ELB",
+        "HealthCheckGracePeriod": 400,
+        "LoadBalancerNames": [ {"Ref": "LoadBalancer"} ],
+        "Tags": [
+          {
+            "Key": "Stage",
+            "Value": { "Ref": "Stage" },
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "LogstashHost",
+            "Value": { "Ref": "LogstashHost" },
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::FindInMap": ["StageVariables", {
+                "Ref": "Stage"
+              }, "InstanceName"]
+            },
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Stack",
+            "Value": "identity",
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "App",
+            "Value": "identity-frontend",
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Role",
+            "Value": "identity-frontend",
+            "PropagateAtLaunch": "true"
+          }
+        ],
+        "NotificationConfiguration" : {
+          "TopicARN" : {
+            "Fn::FindInMap": ["StageVariables", {
+              "Ref": "Stage"
+            }, "AutoscalingNotificationsARN"]
+          },
+          "NotificationTypes":  [
+            "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+            "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"
+          ]
+        },
+        "VPCZoneIdentifier": {
+          "Ref": "PrivateVpcSubnets"
+        }
+      }
+    },
+
+    "LaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "KeyName": {"Ref": "KeyName"},
+        "ImageId": {"Ref": "AmiId"},
+        "SecurityGroups": [
+          {"Ref": "InstanceSecurityGroup"},
+          {"Ref": "SshAccessSecurityGroup"}
+        ],
+        "InstanceType": {
+          "Fn::FindInMap": ["StageVariables", {
+            "Ref": "Stage"
+          }, "InstanceType"]
+        },
+        "AssociatePublicIpAddress": "False",
+        "IamInstanceProfile": {"Ref": "InstanceProfile"},
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": ["", [
+              "#!/bin/bash -ev\n",
+
+              "export IDENTITY_stage='", {
+                "Ref": "Stage"
+              }, "'\n",
+
+              "aws s3 cp s3://gu-identity-dist/cwlogs-setup.sh .\n",
+              "chmod +x cwlogs-setup.sh\n",
+              "./cwlogs-setup.sh\n",
+
+              "aws s3 cp s3://gu-identity-dist/cron-setup.sh .\n",
+              "chmod +x cron-setup.sh\n",
+              "./cron-setup.sh\n",
+
+              "aws s3 cp s3://gu-identity-dist/set-ssh-keys.sh .\n",
+              "chmod +x set-ssh-keys.sh\n",
+              "./set-ssh-keys.sh\n",
+
+              "aws s3 cp s3://gu-identity-dist/logstash-setup.sh .\n",
+              "chmod +x logstash-setup.sh\n",
+              "./logstash-setup.sh\n",
+
+              "aws s3 cp s3://gu-identity-frontend-dist/identity-frontend-bootstrap.sh .\n",
+              "chmod +x identity-frontend-bootstrap.sh\n",
+              "./identity-frontend-bootstrap.sh\n",
+
+
+              "service identity-frontend start\n"
+            ]]
+          }
+        }
+      }
+    },
+
+    "LoadBalancerSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": { "Ref": "VpcId" },
+        "GroupDescription": "Open up HTTP access to load balancer",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "443",
+            "ToPort": "443",
+            "CidrIp": { "Ref": "InternalCidrIp" }
+          }
+        ],
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "8860",
+            "ToPort": "8860",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [ "identity-frontend", { "Ref": "Stage"}, "loadbalancer-sg" ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+
+    "InstanceSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": { "Ref": "VpcId" },
+        "GroupDescription": "Open up HTTP access to load balancer",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "8860",
+            "ToPort": "8860",
+            "SourceSecurityGroupId": {
+              "Ref": "LoadBalancerSecurityGroup"
+            }
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join": [
+                "-",
+                [ "identity-frontend", { "Ref": "Stage"}, "instance-sg" ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+
+    "HighLatencyAlarm": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": {"Fn::Join" : [ " ", [
+          "Scale-Up if latency is greater than",
+          {"Fn::FindInMap": ["StageVariables", { "Ref": "Stage" }, "LatencyAlarmThreshold" ]},
+          "seconds over last",
+          {"Fn::FindInMap": ["StageVariables", { "Ref": "Stage" }, "LatencyAlarmPeriod" ]},
+          "seconds"
+        ]]},
+        "Namespace": "AWS/ELB",
+        "MetricName": "Latency",
+        "Statistic": "Average",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [ { "Name": "LoadBalancer", "Value": { "Ref": "LoadBalancer" } } ],
+        "Threshold": { "Fn::FindInMap": ["StageVariables", { "Ref": "Stage" }, "LatencyAlarmThreshold" ]},
+        "Period": { "Fn::FindInMap": ["StageVariables", { "Ref": "Stage" }, "LatencyAlarmPeriod" ]},
+        "EvaluationPeriods": "1",
+        "AlarmActions": [
+          { "Ref": "ScaleUpPolicy" }
+        ],
+        "OKActions": [
+          { "Ref": "ScaleDownPolicy" }
+        ]
+      }
+    },
+
+    "ScaleUpPolicy": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AutoScalingGroupName": { "Ref": "AutoscalingGroup" },
+        "AdjustmentType": "PercentChangeInCapacity",
+        "ScalingAdjustment": "100",
+        "Cooldown": "300"
+      }
+    },
+
+    "ScaleDownPolicy": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AdjustmentType": "ChangeInCapacity",
+        "AutoScalingGroupName": { "Ref": "AutoscalingGroup" },
+        "Cooldown": "3600",
+        "ScalingAdjustment": "-1"
+      }
+    },
+
+    "TopicSendEmail": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "SendEmailToIdentityDev",
+        "Subscription": [
+          {
+            "Endpoint": {"Ref":"AlarmEmailAddress"},
+            "Protocol": "email"
+          }
+        ]
+      }
+    },
+
+    "TopicPagerDutyAlerts": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "PagerDutyTopic",
+        "Subscription": [
+          {
+            "Endpoint": {"Ref": "PagerDutyUrl"},
+            "Protocol": "https"
+          }
+        ]
+      }
+    },
+
+    "alarmNoHealthyHosts": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ActionsEnabled": "true",
+        "AlarmDescription": "There are insufficient healthy hosts",
+        "ComparisonOperator": "LessThanThreshold",
+        "EvaluationPeriods": "1",
+        "MetricName": "HealthyHostCount",
+        "Namespace": "AWS/ELB",
+        "Period": "60",
+        "Statistic": "Average",
+        "Threshold": {
+          "Fn::FindInMap": ["StageVariables", {
+            "Ref": "Stage"
+          }, "DesiredInstances"]
+        },
+        "AlarmActions": [
+          { "Ref": "TopicSendEmail" },
+          { "Ref": "TopicPagerDutyAlerts" }
+        ],
+        "InsufficientDataActions": [
+          { "Ref": "TopicSendEmail" },
+          { "Ref": "TopicPagerDutyAlerts" }
+        ],
+        "OKActions": [
+          { "Ref": "TopicPagerDutyAlerts" }
+        ],
+        "Dimensions": [
+          {
+            "Name": "LoadBalancerName",
+            "Value": { "Ref": "LoadBalancer"}
+          }
+        ]
+      }
+    }
+  },
+
+  "Outputs": {
+    "LoadBalancer": {
+      "Value": { "Fn::GetAtt": ["LoadBalancer", "DNSName"] }
+    }
+  }
+}

@@ -4,6 +4,7 @@
 
 # Home page
 GET        /                              @com.gu.identity.frontend.controllers.Application.index
+GET        /signin                        @com.gu.identity.frontend.controllers.Application.signIn
 
 GET        /management/healthcheck        @com.gu.identity.frontend.controllers.HealthCheck.healthCheck
 

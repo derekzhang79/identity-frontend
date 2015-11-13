@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.views
 
+import com.gu.identity.frontend.views.models.{LayoutViewModel, SignInViewModel}
 import jp.co.bizreach.play2handlebars.HBS
 
 /**
@@ -9,6 +10,8 @@ object ViewRenderer {
   def render(view: String, attributes: Map[String, Any] = Map.empty) =
     HBS(view, attributes)
 
-  def renderSignIn =
-    render("signIn", Map("title" -> "Sign in to the Guardian", "pageTitle" -> "Sign in") )
+  def renderSignIn = {
+    val attrs = LayoutViewModel().toMap ++ SignInViewModel().toMap
+    render("signIn", attrs)
+  }
 }

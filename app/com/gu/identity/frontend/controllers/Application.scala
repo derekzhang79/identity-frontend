@@ -9,9 +9,7 @@ import play.api.mvc._
 class Application @Inject() extends Controller with Logging {
 
   def index = Action {
-    logger.debug("Index page hit.")
-
-    Ok("main")
+    Redirect(routes.Application.signIn())
   }
 
   def signIn = Action {

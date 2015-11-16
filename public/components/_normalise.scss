@@ -1,8 +1,7 @@
-/**
- * Normalise browser defaults.
- * - Adapter around https://github.com/hail2u/normalize.scss to normalise browser defaults
- * - Only import what you need to keep responses small
- */
+// Normalise browser defaults.
+//   - Adapter around https://github.com/hail2u/normalize.scss to normalise browser defaults
+//   - Only import what you need to keep responses small
+
 
 // All normalize.css modules in the following, use as a reference:
 // @import "modularized-normalize-scss/normalize";
@@ -53,11 +52,9 @@
 
 
 // Forms
+//   - Known limitation: by default, Chrome and Safari on OS X allow very limited
+//     styling of `select`, unless a `border` property is set.
 
-/**
- * Known limitation: by default, Chrome and Safari on OS X allow very limited
- * styling of `select`, unless a `border` property is set.
- */
 
 @import 'modularized-normalize-scss/forms/fix-font';
 @import 'modularized-normalize-scss/forms/fix-overflow';

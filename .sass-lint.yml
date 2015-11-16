@@ -1,0 +1,6 @@
+files:
+  include: 'public/**/*.scss'
+  ignore:
+      - 'app/**/*.*'
+      - 'node_modules/**/*.*'
+      - 'target/**/*.*'

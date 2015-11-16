@@ -1,0 +1,80 @@
+/**
+ * Normalise browser defaults.
+ * - Adapter around https://github.com/hail2u/normalize.scss to normalise browser defaults
+ * - Only import what you need to keep responses small
+ */
+
+// All normalize.css modules in the following, use as a reference:
+// @import "modularized-normalize-scss/normalize";
+
+// Base
+@import 'modularized-normalize-scss/base/html';
+@import 'modularized-normalize-scss/base/body';
+
+
+// HTML5 display definitions
+
+@import 'modularized-normalize-scss/html5/blocks';
+@import 'modularized-normalize-scss/html5/inline-blocks';
+// @import 'modularized-normalize-scss/html5/audio';
+// @import 'modularized-normalize-scss/html5/hidden';
+
+
+// Links
+
+@import 'modularized-normalize-scss/links/fix-background';
+@import 'modularized-normalize-scss/links/fix-outline';
+
+
+// Text-level semantics
+
+// @import 'modularized-normalize-scss/text-level/abbr';
+// @import 'modularized-normalize-scss/text-level/fix-bolder';
+// @import 'modularized-normalize-scss/text-level/dfn';
+// @import 'modularized-normalize-scss/text-level/headings';
+// @import 'modularized-normalize-scss/text-level/mark';
+// @import 'modularized-normalize-scss/text-level/small';
+// @import 'modularized-normalize-scss/text-level/sub-and-sup';
+
+
+// Embedded content
+
+
+// @import 'modularized-normalize-scss/embed/img';
+// @import 'modularized-normalize-scss/embed/svg';
+
+
+// Grouping content
+
+// @import 'modularized-normalize-scss/grouping/figure';
+// @import 'modularized-normalize-scss/grouping/hr';
+// @import 'modularized-normalize-scss/grouping/pre';
+// @import 'modularized-normalize-scss/grouping/fix-monospace';
+
+
+// Forms
+
+/**
+ * Known limitation: by default, Chrome and Safari on OS X allow very limited
+ * styling of `select`, unless a `border` property is set.
+ */
+
+@import 'modularized-normalize-scss/forms/fix-font';
+@import 'modularized-normalize-scss/forms/fix-overflow';
+@import 'modularized-normalize-scss/forms/fix-text-transform';
+@import 'modularized-normalize-scss/forms/buttons';
+@import 'modularized-normalize-scss/forms/disabled';
+@import 'modularized-normalize-scss/forms/fix-focus-inner';
+@import 'modularized-normalize-scss/forms/fix-line-height';
+// @import 'modularized-normalize-scss/forms/checkbox-and-radio';
+// @import 'modularized-normalize-scss/forms/number';
+// @import 'modularized-normalize-scss/forms/search';
+// @import 'modularized-normalize-scss/forms/fieldset';
+// @import 'modularized-normalize-scss/forms/legend';
+// @import 'modularized-normalize-scss/forms/textarea';
+// @import 'modularized-normalize-scss/forms/optgroup';
+
+
+// Tables
+
+// @import 'modularized-normalize-scss/tables/fix-cell-spacing';

@@ -11,9 +11,12 @@
   "scripts": {
     "build": "npm run build-sass",
     "prebuild-sass": "mkdir -p ./target/web/sass && cp -r ./public/* ./target/web/sass",
-    "build-sass": "node-sass target/web/sass --output target/web/sass --output-style compressed --source-map true --source-map-root /assets"
+    "build-sass": "node-sass target/web/sass --output target/web/sass --output-style compressed --source-map true --source-map-root /assets --include-path node_modules"
   },
   "devDependencies": {
     "node-sass": "^3.4.2"
+  },
+  "dependencies": {
+    "modularized-normalize-scss": "^3.0.3"
   }
 }

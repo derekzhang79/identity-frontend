@@ -1,0 +1,22 @@
+.social-signin {
+
+}
+
+%social-signin__cta {
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  margin: 10px;
+  border-radius: 15px;
+  font-size: 13px;
+}
+
+.social-signin__cta--google {
+  @extend %social-signin__cta;
+  background-color: #DD4B39;
+}
+
+.social-signin__cta--facebook {
+  @extend %social-signin__cta;
+  background-color: #3B5998;
+}

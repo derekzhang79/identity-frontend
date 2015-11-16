@@ -15,6 +15,8 @@ sass in Assets := {
   (sassOutputDirectory.value ** "*.css*").get
 }
 
+sass in Assets := (sass in Assets).dependsOn(nodeModules in Assets).value
+
 managedSourceDirectories in Assets += sassOutputDirectory.value
 
 sourceGenerators in Assets <+= sass in Assets

@@ -35,10 +35,6 @@
       "Description": "Logstash load balancer host",
       "Type": "String"
     },
-    "InternalCidrIp": {
-      "Description": "Internal network CIDR IP",
-      "Type": "String"
-    },
     "AlarmEmailAddress": {
       "Description": "Contact email for alarms",
       "Type": "String"
@@ -304,7 +300,7 @@
             "IpProtocol": "tcp",
             "FromPort": "443",
             "ToPort": "443",
-            "CidrIp": { "Ref": "InternalCidrIp" }
+            "CidrIp": "0.0.0.0/0"
           }
         ],
         "SecurityGroupEgress": [

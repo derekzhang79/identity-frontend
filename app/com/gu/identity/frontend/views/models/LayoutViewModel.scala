@@ -10,7 +10,7 @@ case class LayoutViewModel(styles: Seq[String]) extends ViewModel {
 
 object LayoutViewModel {
 
-  val styleFiles = Seq("main.css")
+  val styleFiles = Seq("bundle.css")
 
   def apply(): LayoutViewModel = {
     val styleUrls = styleFiles.map(routes.Assets.at(_).url)

@@ -2,5 +2,5 @@
 
 .content {
   margin: 0 auto;
-  width: 8 * 100px;
+  width: calc(8 * 100px);
 }

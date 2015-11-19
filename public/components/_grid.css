@@ -1,4 +1,4 @@
-$grid-columns: 12;
+$gridcolumns: 12;
 
 %clearfix {
   *zoom: 1;
@@ -25,13 +25,13 @@ $grid-columns: 12;
   min-height: 1px;
 }
 
-// TODO: breakpoints for responsive columns
+/* TODO: breakpoints for responsive columns */
 
-@for $i from 1 through $grid-columns {
+@for $index from 1 to $gridcolumns {
 
-  %column-#{$i} {
+  %column-$index {
     @extend %column;
-    width: 100% / $grid-columns * $i;
+    width: calc(100% / $gridcolumns * $index);
   }
 
 }

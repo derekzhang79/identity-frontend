@@ -1,0 +1,8 @@
+{
+  "use": [
+    "precss",
+    "postcss-calc"
+  ],
+  "input": "public/main.css",
+  "output": "target/web/build/bundle.css"
+}

@@ -1,0 +1,21 @@
+/**
+ * Typography: typographic styles.
+ */
+
+@import 'fonts/fonts';
+
+%font-serif {
+  font-family: GuardianTextEgyptianWeb, Georgia, serif;
+}
+
+%font-sans-serif {
+  font-family: GuardianTextSansWeb, 'Helvetica Neue' , Helvetica, Arial, 'Lucida Grande', sans-serif;
+}
+
+
+
+html {
+  @extend %font-serif;
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}

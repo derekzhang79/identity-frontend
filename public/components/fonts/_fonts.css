@@ -1,0 +1,38 @@
+/**
+ * Fonts
+ *   - only use what you need
+ *   - Ripped out of https://github.com/guardian/guss-webfonts
+ *   - Fonts are all hinting-off and kerning-off
+ *   - GuardianTextEgyptianWeb - ascii only, use for page render only, no user input/output
+ *   - GuardianTextSansWeb - full charset, use for user input and output
+ *   - Italic, Medium and Black fonts not yet used. Include rules when needed
+ */
+
+
+@define-mixin guFontFace $family, $fontSet, $filebase, $font-weight: 400, $font-style: normal {
+  $file-path: v0/$fontSet/$family/$filebase;
+
+  /* Note: disabled woff2 loading until browser support improves; */
+
+  @font-face {
+    font-family: $family;
+    src: resolve('$file-path.eot'); /* IE9 Compat Modes */
+    src: resolve('$file-path.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         inline('$file-path.woff') format('woff'), /* Modern Browsers */
+         resolve('$file-path.ttf') format('truetype'), /* Safari, Android, iOS */
+         resolve('$file-path.svg#$family') format('svg'); /* Legacy iOS */
+
+    font-weight: $font-weight;
+    font-style: $font-style;
+    font-stretch: normal;
+  }
+
+}
+
+
+/* GuardianTextEgyptianWeb */
+@mixin guFontFace GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Regular;
+@mixin guFontFace GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Bold, 700;
+
+/* GuardianTextSansWeb */
+@mixin guFontFace GuardianTextSansWeb, all, GuardianTextSansWeb-Regular;

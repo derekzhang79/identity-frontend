@@ -1,4 +1,5 @@
 @import 'components/normalise';
+@import 'components/typography';
 
 .content {
   margin: 0 auto;

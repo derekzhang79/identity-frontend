@@ -1,6 +1,8 @@
 @import 'components/normalise';
 @import 'components/typography';
 
+@import 'components/header/header';
+
 .content {
   margin: 0 auto;
   width: calc(8 * 100px);

@@ -1,9 +1,8 @@
 {
   "use": [
-    "cssnano",
     "precss",
-    "postcss-calc",
-    "postcss-assets"
+    "postcss-assets",
+    "cssnano"
   ],
   "input": "public/main.css",
   "output": "target/web/build/bundle.css",

@@ -16,6 +16,7 @@
   background-image: inline('../logo/guardian-logo-160.svg');
   background-repeat: no-repeat;
   background-size: contain;
+  border: none;
   margin: 0.9rem 1rem;
   margin: 9px 10px;
   overflow: hidden;
@@ -33,9 +34,4 @@
   @extend %font-text-2;
   color: #fff;
   line-height: 48px;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }

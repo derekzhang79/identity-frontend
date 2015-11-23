@@ -4,8 +4,12 @@
   @extend %font-text-1;
   color: #333;
   background-color: #ddd;
-  padding: 10px;
+  padding: 10px 20px;
   margin-top: 20px;
+
+  p {
+    margin: 10px 0;
+  }
 }
 
 
@@ -32,9 +36,19 @@
   margin: 10px 0;
 }
 
+.signin-form__email-password-wrapper {
+  @extend %row;
+}
+
 .signin-form__control--email,
-.signin-form__control--password {
+.signin-form__control--password,
+.signin-form__control--submit {
   @extend %column-6;
+}
+
+.signin-form__control--email,
+.signin-form__control--submit {
+  padding-right: 15px;
 }
 
 .signin-form__control--remember-me,
@@ -73,21 +87,30 @@
 .signin-form__field--email,
 .signin-form__field--password {
   @extend %signin-form__field;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-.signin-form__submit {
+.signin-form__submit-button {
   @extend %font-text-2;
   background-color: #005689;
-  color: white;
-  padding: 5px 10px;
   border: 0;
   border-radius: 15px;
+  color: white;
+  display: block;
+  padding: 5px 10px;
+  width: 100%;
 }
 
 .signin-form__cta--signup {
   @extend %font-text-1;
+  clear: both;
+  margin: 10px 0;
 }
 
 .signin-form__terms {
   @extend %font-text-1;
+  margin: 20px 0;
+  padding-top: 10px;
+  border-top: 1px solid ##989898;
 }

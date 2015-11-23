@@ -2,7 +2,7 @@
 
   <div class="signin__prelude">
     <p>Creating an account means you can save articles for later, leave comments, enter competitions, become a member and lots more.</p>
-    <p>Want to know more? <a href="#">Read our FAQs</a>.</p>
+    <p>Want to know more? <a href="http://www.theguardian.com/help/identity-faq">Read our FAQs</a>.</p>
   </div>
 
   <h1 class="signin__heading">{{ title }}</h1>
@@ -11,27 +11,29 @@
 
   <p class="signin-form__prelude">or use email:</p>
   <form class="signin-form" action="{{ actions.signIn }}">
-      <fieldset class="signin-form__fieldset">
-          <div class="signin-form__control--email">
-              <label class="signin-form__label--email">Email address</label>
-              <input class="signin-form__field--email" type="email" />
-          </div>
-          <div class="signin-form__control--password">
-              <label class="signin-form__label--password">Password</label>
-              <input class="signin-form__field--password" type="password" />
-          </div>
-          <div class="signin-form__control--remember-me">
-              <input class="signin-form__checkbox--remember-me" type="checkbox" name="keepMeSignedIn"/>
-              <label class="signin-form__label--remember">Remember me</label>
-          </div>
-          <div class="signin-form__control--submit">
-              <button class="signin-form__submit" type="submit">Sign in</button>
-          </div>
+    <fieldset class="signin-form__fieldset">
+      <div class="signin-form__email-password-wrapper">
+        <div class="signin-form__control--email">
+          <label class="signin-form__label--email" for="signin_field_email">Email address</label>
+          <input class="signin-form__field--email" id="signin_field_email" type="email" name="email" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        </div>
+        <div class="signin-form__control--password">
+          <label class="signin-form__label--password" for="signin_field_password">Password</label>
+          <input class="signin-form__field--password" id="signin_field_password" type="password" name="password" />
+        </div>
+      </div>
+      <div class="signin-form__control--remember-me">
+        <input class="signin-form__checkbox--remember-me" id="signin_field_remember_me" type="checkbox" name="keepMeSignedIn"/>
+        <label class="signin-form__label--remember" for="signin_field_remember_me">Remember me</label>
+      </div>
+      <div class="signin-form__control--submit">
+        <button class="signin-form__submit-button" type="submit">Sign in</button>
+      </div>
 
-          <div class="signin-form__cta--signup">Don't have an account? <a href="/register">Sign up</a>.</div>
+      <p class="signin-form__cta--signup">Don't have an account? <a href="/register">Sign up</a>.</p>
 
-          <p class="signin-form__terms">By proceeding, you agree to the Guardian's <a href="http://www.theguardian.com/help/terms-of-service">Terms of Service &amp; <a href="http://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.</p>
-      </fieldset>
+      <p class="signin-form__terms">By proceeding, you agree to the Guardian's <a href="http://www.theguardian.com/help/terms-of-service">Terms of Service</a> &amp; <a href="http://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.</p>
+    </fieldset>
   </form>
 
 {{/partial}}

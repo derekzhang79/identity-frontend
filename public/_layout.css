@@ -15,3 +15,16 @@
   margin-bottom: 20px;
   margin-bottom: 2rem;
 }
+
+
+a, .link {
+  color: #005689;
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 1px solid #DCDCDC;
+  transition: border-color 0.15s ease-out;
+
+  &:hover {
+    border-color: #6E99B3;
+  }
+}

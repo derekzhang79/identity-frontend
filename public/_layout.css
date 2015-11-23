@@ -7,15 +7,35 @@
 
 %content-block {
   margin: 0 auto;
-  width: calc(8 * 100px);
+  padding: 0 20px;
+  box-sizing: border-box;
+
+  @media all and (min-width: 980px) {
+    max-width: 980px;
+    max-width: 98rem;
+  }
+
+  @media all and (min-width: 1140px) {
+    max-width: 1140px;
+    max-width: 114rem;
+  }
+
+  @media all and (min-width: 1300px) {
+    max-width: 1300px;
+    max-width: 130rem;
+  }
+
 }
 
 .content {
   @extend %content-block;
-  margin-bottom: 20px;
-  margin-bottom: 2rem;
+  background-color: #fff;
+  padding: 20px;
 }
 
+body {
+  background-color: #F4F4F4;
+}
 
 a, .link {
   color: #005689;

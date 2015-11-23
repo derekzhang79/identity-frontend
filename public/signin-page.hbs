@@ -1,9 +1,11 @@
 {{# partial "content" }}
 
-  <div class="signin__prelude">
-    <p>Creating an account means you can save articles for later, leave comments, enter competitions, become a member and lots more.</p>
-    <p>Want to know more? <a href="http://www.theguardian.com/help/identity-faq">Read our FAQs</a>.</p>
-  </div>
+  {{#showPrelude}}
+    <div class="signin__prelude">
+      <p>Creating an account means you can save articles for later, leave comments, enter competitions, become a member and lots more.</p>
+      <p>Want to know more? <a href="http://www.theguardian.com/help/identity-faq">Read our FAQs</a>.</p>
+    </div>
+  {{/showPrelude}}
 
   <h1 class="signin__heading">{{ title }}</h1>
 
@@ -31,6 +33,8 @@
       </div>
 
       <p class="signin-form__cta--signup">Don't have an account? <a href="/register">Sign up</a>.</p>
+
+      <p class="signin-form__cta--reset"><a href="/reset">Forgotten password?</a></p>
 
       <p class="signin-form__terms">By proceeding, you agree to the Guardian's <a href="http://www.theguardian.com/help/terms-of-service">Terms of Service</a> &amp; <a href="http://www.theguardian.com/help/privacy-policy">Privacy Policy</a>.</p>
     </fieldset>

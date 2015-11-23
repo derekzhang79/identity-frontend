@@ -1,11 +1,12 @@
 .social-signin {
   @extend %row;
   margin-bottom: 40px;
+  max-width: 600px;
 }
 
 
 .social-signin__cta-wrapper {
-  @extend %column-6;
+
 }
 
 %social-signin__cta {
@@ -14,7 +15,7 @@
   display: block;
   text-decoration: none;
   padding: 10px 10px 8px 60px;
-  margin: 0;
+  margin: 10px 0;
   border-radius: 15px;
   background-repeat: no-repeat;
   background-position: 20px center;
@@ -31,7 +32,6 @@
   @extend %social-signin__cta;
   background-color: #3B5998;
   background-image: inline('icon-facebook.svg');
-  margin-right: 15px;
 }
 
 

@@ -6,9 +6,7 @@
 
 .header__inner {
   @extend %clearfix;
-  width: 130rem;
-  width: 1300px;
-  margin: 0 auto;
+  @extend %content-block;
 }
 
 .header__logo-link {

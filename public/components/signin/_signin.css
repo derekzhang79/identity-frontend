@@ -15,7 +15,11 @@
 
 .signin__heading {
   @extend %font-heading-1;
-  margin: 2em 0 0.5em;
+  margin: 0.5em 0 0.5em;
+}
+
+.signin-form {
+  max-width: 600px;
 }
 
 
@@ -25,9 +29,9 @@
 
 .signin-form__fieldset {
   border: none;
-  border-top: 1px solid #999;
+  border-top: 1px solid #989898;
   margin: 0;
-  padding: 20px 0 0 0;
+  padding: 10px 0 0 0;
 }
 
 
@@ -42,15 +46,6 @@
 
 .signin-form__control--email,
 .signin-form__control--password,
-.signin-form__control--submit {
-  @extend %column-6;
-}
-
-.signin-form__control--email,
-.signin-form__control--submit {
-  padding-right: 15px;
-}
-
 .signin-form__control--remember-me,
 .signin-form__control--submit {
   @extend %signin-form__control;
@@ -76,7 +71,7 @@
   @extend %font-text-sans-2;
   display: block;
   background-color: #fff;
-  border: 1px solid #999;
+  border: 1px solid #989898;
   color: #000;
   padding: 5px 15px;
   border-radius: 15px;
@@ -91,6 +86,10 @@
   width: 100%;
 }
 
+.signin-form__control--submit {
+  margin-bottom: 20px;
+}
+
 .signin-form__submit-button {
   @extend %font-text-2;
   background-color: #005689;
@@ -98,11 +97,13 @@
   border-radius: 15px;
   color: white;
   display: block;
-  padding: 5px 10px;
+  text-align: left;
+  padding: 5px 10px 5px 15px;
   width: 100%;
 }
 
-.signin-form__cta--signup {
+.signin-form__cta--signup,
+.signin-form__cta--reset {
   @extend %font-text-1;
   clear: both;
   margin: 10px 0;
@@ -112,5 +113,5 @@
   @extend %font-text-1;
   margin: 20px 0;
   padding-top: 10px;
-  border-top: 1px solid ##989898;
+  border-top: 1px solid #989898;
 }

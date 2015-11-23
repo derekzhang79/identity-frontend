@@ -8,7 +8,8 @@ case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguard
 
 case class SignInViewModel(title: String = "Sign in to the Guardian",
                            pageTitle: String = "Sign in",
+                           showPrelude: Boolean = false,
                            links: SignInLinksViewModel = SignInLinksViewModel()) extends ViewModel {
   def toMap =
-    Map("title" -> title, "pageTitle" -> pageTitle, "links" -> links.toMap)
+    Map("title" -> title, "pageTitle" -> pageTitle, "showPrelude" -> showPrelude, "links" -> links.toMap)
 }

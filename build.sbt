@@ -16,9 +16,6 @@ libraryDependencies ++= Seq(
   "com.mohiva" %% "play-html-compressor" % "0.5.0"
 )
 
-// Include handlebars views in resources
-unmanagedResourceDirectories in Compile += baseDirectory.value / "app" / "views"
-
 // Config for packaging app for deployment with riffraff
 packageName in Universal := normalizedName.value
 

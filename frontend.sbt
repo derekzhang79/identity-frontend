@@ -20,3 +20,6 @@ build in Assets := (build in Assets).dependsOn(nodeModules in Assets).value
 managedSourceDirectories in Assets += buildOutputDirectory.value
 
 sourceGenerators in Assets <+= build in Assets
+
+// Include handlebars views in resources for lookup on classpath
+unmanagedResourceDirectories in Compile += (resourceDirectory in Assets).value

@@ -2,8 +2,16 @@
 @import 'components/typography';
 
 @import 'components/header/header';
+@import 'components/footer/footer';
 
-.content {
+
+%content-block {
   margin: 0 auto;
   width: calc(8 * 100px);
+}
+
+.content {
+  @extend %content-block;
+  margin-bottom: 20px;
+  margin-bottom: 2rem;
 }

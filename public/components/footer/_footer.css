@@ -1,0 +1,13 @@
+.footer {
+  @extend %font-sans-serif;
+  background-color: #484848;
+  color: #dcdcdc;
+}
+
+.footer__copyright {
+  @extend %content-block;
+  @extend %font-text-sans-0;
+  border-top: 1px solid #666;
+  margin: 0;
+  padding: 6px 0 18px;
+}

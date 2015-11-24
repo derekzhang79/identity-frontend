@@ -15,7 +15,7 @@
   background-repeat: no-repeat;
   background-size: contain;
   border: none;
-  margin: 0.9rem 1rem;
+  margin: 0.9rem 0;
   overflow: hidden;
   height: height('../logo/guardian-logo-160.svg');
   width: width('../logo/guardian-logo-160.svg');

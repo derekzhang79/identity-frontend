@@ -42,6 +42,20 @@
     "PagerDutyUrl": {
       "Description": "HTTPS url for pager duty notifications",
       "Type": "String"
+    },
+    "Stack": {
+      "Description": "Application stack",
+      "Type": "String",
+      "Default": "identity"
+    },
+    "App": {
+      "Description": "Application name",
+      "Type": "String",
+      "Default": "identity-frontend"
+    },
+    "LoadBalancerLogsS3Bucket":{
+      "Description": "S3 Bucket to write ELB logs to",
+      "Type": "String"
     }
   },
 
@@ -52,8 +66,6 @@
         "LatencyAlarmThreshold": 0.5,
         "LatencyAlarmPeriod": 60,
         "NotificationAlarmPeriod": 1200,
-        "LoadBalancerName": "identity-frontend-PROD",
-        "InstanceName": "PROD:identity-frontend",
         "InstanceType": "t2.micro",
         "DesiredInstances": 1,
         "MaxInstances": 2
@@ -63,8 +75,6 @@
         "LatencyAlarmThreshold": 5,
         "LatencyAlarmPeriod": 1200,
         "NotificationAlarmPeriod": 1200,
-        "LoadBalancerName": "identity-frontend-CODE",
-        "InstanceName": "CODE:identity-frontend",
         "InstanceType": "t2.micro",
         "DesiredInstances": 1,
         "MaxInstances": 2
@@ -134,11 +144,7 @@
     "LoadBalancer": {
       "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
       "Properties": {
-        "LoadBalancerName": {
-          "Fn::FindInMap": ["StageVariables", {
-            "Ref": "Stage"
-          }, "LoadBalancerName"]
-        },
+        "LoadBalancerName": {"Fn::Join": ["-", [{"Ref":"App"}, {"Ref":"Stage"}]]},
         "Scheme": "internet-facing",
         "Listeners": [{
           "LoadBalancerPort": "443",
@@ -157,7 +163,21 @@
         "Subnets": { "Ref": "PublicVpcSubnets" },
         "SecurityGroups": [
           { "Ref": "LoadBalancerSecurityGroup" }
-        ]
+        ],
+        "AccessLoggingPolicy" : {
+          "EmitInterval": 5,
+          "Enabled": true,
+          "S3BucketName": {"Ref": "LoadBalancerLogsS3Bucket"},
+          "S3BucketPrefix": {
+            "Fn::Join": ["/", [
+              "ELBLogs",
+              {"Ref": "Stack"},
+              {"Ref": "App"},
+              {"Ref": "Stage"}
+            ]
+            ]
+          }
+        }
       }
     },
 
@@ -198,20 +218,18 @@
           {
             "Key": "Name",
             "Value": {
-              "Fn::FindInMap": ["StageVariables", {
-                "Ref": "Stage"
-              }, "InstanceName"]
+              "Fn::Join": [":", [{"Ref":"Stage"}, {"Ref":"App"}]]
             },
             "PropagateAtLaunch": "true"
           },
           {
             "Key": "Stack",
-            "Value": "identity",
+            "Value": {"Ref": "Stack"},
             "PropagateAtLaunch": "true"
           },
           {
             "Key": "App",
-            "Value": "identity-frontend",
+            "Value": {"Ref": "App"},
             "PropagateAtLaunch": "true"
           },
           {

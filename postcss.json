@@ -2,6 +2,7 @@
   "use": [
     "precss",
     "postcss-assets",
+    "cssnext",
     "cssnano"
   ],
   "input": "public/main.css",
@@ -9,5 +10,11 @@
   "postcss-assets": {
     "basePath": "public/",
     "baseUrl": "/assets/"
+  },
+  "cssnext": {
+    "messages": {
+      "browser": false,
+      "console": true
+    }
   }
 }

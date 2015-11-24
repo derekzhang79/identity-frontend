@@ -13,7 +13,7 @@ html {
 }
 
 
-@define-mixin font-size $size $line-height  {
+@define-mixin font-size $size, $line-height  {
   font-size: calc( 0px + $size );
   font-size: calc( 0rem + $size / 10 );
   line-height: calc( 0px + $line-height );
@@ -30,35 +30,35 @@ html {
 
 %font-heading-1 {
   @extend %font-serif;
-  @mixin font-size 24 28;
+  @mixin font-size 24, 28;
 }
 
 %font-text-1 {
   @extend %font-serif;
-  @mixin font-size 14 20;
+  @mixin font-size 14, 20;
 }
 
 %font-text-2 {
   @extend %font-serif;
-  @mixin font-size 16 24;
+  @mixin font-size 16, 24;
 }
 
 %font-text-3 {
   @extend %font-serif;
-  @mixin font-size 18 28;
+  @mixin font-size 18, 28;
 }
 
 %font-text-sans-0 {
   @extend %font-sans-serif;
-  @mixin font-size 12 16;
+  @mixin font-size 12, 16;
 }
 
 %font-text-sans-1 {
   @extend %font-sans-serif;
-  @mixin font-size 14 18;
+  @mixin font-size 14, 18;
 }
 
 %font-text-sans-2 {
   @extend %font-sans-serif;
-  @mixin font-size 16 20;
+  @mixin font-size 16, 20;
 }

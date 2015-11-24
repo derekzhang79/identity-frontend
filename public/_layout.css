@@ -1,9 +1,6 @@
 @import 'components/normalise';
+@import 'components/grid';
 @import 'components/typography';
-
-@import 'components/header/header';
-@import 'components/footer/footer';
-
 
 %content-block {
   margin: 0 auto;
@@ -27,6 +24,9 @@
 
 }
 
+@import 'components/header/header';
+@import 'components/footer/footer';
+
 .content {
   @extend %content-block;
   background-color: #fff;
@@ -41,10 +41,18 @@ a, .link {
   color: #005689;
   cursor: pointer;
   text-decoration: none;
-  border-bottom: 1px solid #DCDCDC;
-  transition: border-color 0.15s ease-out;
 
   &:hover {
-    border-color: #6E99B3;
+    text-decoration: underline;
+  }
+
+  .content & {
+    border-bottom: 1px solid #DCDCDC;
+    transition: border-color 0.15s ease-out;
+
+    &:hover {
+      text-decoration: none;
+      border-color: #6E99B3;
+    }
   }
 }

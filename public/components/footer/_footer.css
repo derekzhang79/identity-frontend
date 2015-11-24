@@ -4,10 +4,44 @@
   color: #dcdcdc;
 }
 
-.footer__copyright {
+.footer__inner {
   @extend %content-block;
+}
+
+.footer__copyright {
   @extend %font-text-sans-0;
+
   border-top: 1px solid #666;
+  clear: both;
   margin: 0;
   padding: 6px 0 18px;
+}
+
+@define-mixin footer-columns $cols: 1, $gap: 0 {
+  column-count: $cols;
+  column-gap: $gap;
+}
+
+.colophon__list {
+  @extend %font-text-sans-1;
+  @mixin footer-columns 2;
+
+  @media all and (min-width: 600px) {
+    @mixin footer-columns 3;
+  }
+
+  @media all and (min-width: 980px) {
+    @mixin footer-columns 4;
+  }
+
+  margin: 0;
+  padding: 1.2rem 0 0.6rem;
+  list-style: none;
+
+  a {
+    display: inline-block;
+    padding-bottom: 0.75rem;
+    text-transform: lowercase;
+    color: #DCDCDC;
+  }
 }

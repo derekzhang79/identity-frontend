@@ -1,7 +1,13 @@
 @import '../grid';
 
+%signin-container {
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
 .signin__prelude {
   @extend %font-text-1;
+  @extend %signin-container;
   color: #333;
   background-color: #ddd;
   padding: 10px 20px;
@@ -15,11 +21,13 @@
 
 .signin__heading {
   @extend %font-heading-1;
-  margin: 0.5em 0 0.5em;
+  @extend %signin-container;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .signin-form {
-  max-width: 60rem;
+  @extend %signin-container;
   position: relative;
 }
 

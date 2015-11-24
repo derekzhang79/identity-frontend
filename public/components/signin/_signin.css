@@ -19,12 +19,16 @@
 }
 
 .signin-form {
-  max-width: 600px;
+  max-width: 60rem;
+  position: relative;
 }
 
 
 .signin-form__prelude {
   @extend %font-text-1;
+  color: #989898;
+  margin: 0 0 0.5rem;
+  text-align: center;
 }
 
 .signin-form__fieldset {
@@ -119,7 +123,7 @@
 }
 
 .signin-form__control--submit {
-  margin-bottom: 20px;
+  margin: 2rem 0;
 }
 
 .signin-form__submit-button {
@@ -130,15 +134,24 @@
   color: white;
   display: block;
   text-align: left;
-  padding: 5px 10px 5px 15px;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
   width: 100%;
 }
 
-.signin-form__cta--signup,
-.signin-form__cta--reset {
+%signin-form__cta {
   @extend %font-text-1;
+  margin: 1rem 0;
+}
+
+.signin-form__cta--signup {
+  @extend %signin-form__cta;
   clear: both;
-  margin: 10px 0;
+}
+
+.signin-form__cta--reset {
+  @extend %signin-form__cta;
+  position: absolute;
+  right: 0;
 }
 
 .signin-form__terms {

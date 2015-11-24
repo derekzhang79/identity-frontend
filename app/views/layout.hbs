@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{ pageTitle }} | Identity | The Guardian</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {{#each styles}}
+    <link href="{{ this }}" type="text/css" rel="stylesheet">
+  {{/each}}
+</head>
+<body>
+{{#block "header" }}
+  <header>
+    <a href="http://www.theguardian.com">
+        <span>The Guardian</span>
+    </a>
+  </header>
+{{/block}}
+
+  <div class="content">
+    {{#block "content" }}{{/block}}
+  </div>
+
+{{#block "footer" }}
+  <footer>
+      <p>&copy; 2015 Guardian News and Media Limited or its affiliated companies. All rights reserved.</p>
+  </footer>
+{{/block}}
+</body>
+</html>

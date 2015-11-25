@@ -6,6 +6,8 @@
 GET        /                              @com.gu.identity.frontend.controllers.Application.index
 GET        /signin                        @com.gu.identity.frontend.controllers.Application.signIn
 
+POST       /actions/signin                @com.gu.identity.frontend.controllers.Actions.signIn
+
 GET        /management/healthcheck        @com.gu.identity.frontend.controllers.HealthCheck.healthCheck
 
 GET        /assets/*file                  @controllers.Assets.at(path="/public", file)

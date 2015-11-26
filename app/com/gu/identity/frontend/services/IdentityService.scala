@@ -4,8 +4,8 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.service.client.{Cookie, IdentityClient}
-import org.joda.time.DateTime
+import com.gu.identity.service.client._
+import play.api.mvc.{Cookie => PlayCookie}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -15,21 +15,20 @@ import scala.concurrent.{ExecutionContext, Future}
  */
 @ImplementedBy(classOf[IdentityServiceImpl])
 trait IdentityService {
-  def authenticate(email: Option[String], password: Option[String])(implicit ec: ExecutionContext): Future[Either[ServiceError, Seq[IdentityCookie]]]
+  def authenticate(email: Option[String], password: Option[String])(implicit ec: ExecutionContext): Future[Either[ServiceError, Seq[PlayCookie]]]
 }
 
 
-case class IdentityCookie(key: String, value: String, isSession: Boolean, expires: DateTime)
+class IdentityServiceImpl @Inject() (config: Configuration, httpProvider: IdentityServiceHttpProvider) extends IdentityService {
 
+  implicit val clientConfiguration = IdentityClientConfiguration(config.identityApiHost, config.identityApiKey, httpProvider, IdentityServiceJsonParser)
 
-
-class IdentityServiceImpl @Inject() (config: Configuration) extends IdentityService {
-
-  val client = IdentityClient(config.identityApiHost, config.identityApiKey)
-
-  def authenticate(email: Option[String], password: Option[String])(implicit ec: ExecutionContext): Future[Either[ServiceError, Seq[IdentityCookie]]] = {
-    client.authenticate(email, password).map { response =>
-      Left(ServiceBadRequest("TODO!"))
+  def authenticate(email: Option[String], password: Option[String])(implicit ec: ExecutionContext) = {
+    IdentityClient.authenticateCookies(email, password).map {
+      case Left(error) => Left(ServiceBadRequest(error.message))
+      case Right(cookies) => Right(cookies.map { c =>
+        PlayCookie(c.key, c.value, secure = true)
+      })
     }
   }
 

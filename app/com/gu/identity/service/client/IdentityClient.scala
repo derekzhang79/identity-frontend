@@ -1,23 +1,39 @@
 package com.gu.identity.service.client
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
-class IdentityClient(configuration: IdentityClientConfiguration) {
+object IdentityClient {
 
-  def authenticate(email: Option[String], password: Option[String]): Future[Either[IdentityClientError, Seq[Cookie]]] =
-    AuthenticateRequest.from(email, password) match {
-      case Right(request) => authenticate(request)
+  def authenticateCookies(email: Option[String], password: Option[String])(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientError, Seq[Cookie]]] =
+    AuthenticateCookiesRequest.from(email, password) match {
+      case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(err))
     }
 
-  def authenticate(request: AuthenticateRequest): Future[Either[IdentityClientError, Seq[Cookie]]] = {
-    Future.failed(new NotImplementedError("TODO"))
-  }
+  def authenticateCookies(request: AuthenticateCookiesRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientError, Seq[Cookie]]] =
+    makeRequest(request, ApiEndpoints.authenticateEndpoint).map {
+      case Left(err) => Left(err)
+      case Right(response) => {
+        val parsed = configuration.jsonParser.parseAuthenticationCookiesResponse(response.body)
 
-}
+        Right(parsed.cookies.values.map { c =>
+          Cookie(c.key, c.value, c.sessionCookie.getOrElse(false), parsed.cookies.expiresAt)
+        })
+      }
+    }
 
-object IdentityClient {
-  def apply(host: String, apiKey: String): IdentityClient =
-    new IdentityClient(IdentityClientConfiguration(host, apiKey))
+
+  private def apiKeyHeaders(implicit configuration: IdentityClientConfiguration) =
+    Iterable("X-GU-ID-Client-Access-Token" -> s"Bearer ${configuration.apiKey}")
+
+  private def makeRequest(request: ApiRequest, endpoint: Future[String])(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext) =
+    endpoint.flatMap { url =>
+      request.method match {
+        case GET => configuration.httpProvider.get(url, request.parameters, request.headers ++ apiKeyHeaders)
+        case POST => configuration.httpProvider.post(url, request.body, request.parameters, request.headers ++ apiKeyHeaders)
+        case DELETE => configuration.httpProvider.delete(url, request.body, request.parameters, request.headers ++ apiKeyHeaders)
+      }
+    }
+
 }

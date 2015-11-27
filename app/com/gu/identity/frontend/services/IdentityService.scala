@@ -5,6 +5,7 @@ import javax.inject.Inject
 import com.google.inject.ImplementedBy
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.service.client._
+import org.joda.time.{DateTime, Seconds}
 import play.api.mvc.{Cookie => PlayCookie}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,7 +32,11 @@ class IdentityServiceImpl @Inject() (config: Configuration, httpProvider: Identi
         }
       }
       case Right(cookies) => Right(cookies.map { c =>
-        PlayCookie(c.key, c.value, secure = true)
+        val maxAge = if (/*rememberMe*/ true) Some(Seconds.secondsBetween(DateTime.now, c.expires).getSeconds) else None
+        val secureHttpOnly = c.key.startsWith("SC_")
+        val cookieMaxAgeOpt = maxAge.filterNot(_ => c.isSession)
+
+        PlayCookie(c.key, c.value, cookieMaxAgeOpt, "/", Some("thegulocal.com"), secure = secureHttpOnly, httpOnly = secureHttpOnly)
       })
     }
   }

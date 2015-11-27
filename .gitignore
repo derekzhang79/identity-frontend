@@ -4,3 +4,7 @@ logs
 
 target
 project/target
+
+# local certificates
+*.crt
+*.key

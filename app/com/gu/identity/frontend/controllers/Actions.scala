@@ -41,7 +41,6 @@ class Actions @Inject() (identityService: IdentityService) extends Controller wi
 
   private def getReturnUrl(implicit request: Request[AnyContent]) =
     getFormParam("returnUrl")
-      .orElse(request.headers.get("Referer"))
       .filter(validateReturnUrl)
       .getOrElse("https://www.theguardian.com") // default
 

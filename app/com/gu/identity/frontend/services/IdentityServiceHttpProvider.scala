@@ -18,11 +18,17 @@ class IdentityServiceHttpProvider @Inject() (ws: WSClient) extends HttpProvider 
       .withRequestTimeout(10000)
       .withBody(body.getOrElse(""))
       .execute(method).map { response =>
-      Right(HttpResponse(response.body, response.status, response.statusText))
-    }.recoverWith {
-      // TODO: recover 4xx errors as Future.successful(Left) and 5xx errors as Future.failed(GatewayError)
-      case NonFatal(err) => Future.failed(GatewayError(err, err.getMessage))
-    }
+        Right(HttpResponse(response.body, response.status, response.statusText))
+
+      }.recoverWith {
+        case NonFatal(err) => Future.failed {
+          GatewayError(
+            "Request Error",
+            Some(s"Error executing $method request to: $url - ${err.getMessage}"),
+            cause = Some(err)
+          )
+        }
+      }
   }
 
   override def get(url: String, urlParameters: HttpParameters, headers: HttpParameters)(implicit ec: ExecutionContext): Future[Either[IdentityClientError, HttpResponse]] =

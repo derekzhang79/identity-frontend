@@ -24,7 +24,7 @@ class Actions @Inject() (identityService: IdentityService) extends Controller wi
     val password = getFormParam("password")
 
     identityService.authenticate(email, password).map { r =>
-      r.fold(e => BadRequest(e.message), cookies => Ok("all good with cookies").withCookies(cookies: _*))
+      r.fold(e => BadRequest(e.toString), cookies => Ok("all good with cookies").withCookies(cookies: _*))
 
     }.recover {
       case NonFatal(ex) => BadGateway(s"API error: ${ex.getMessage}")

@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
  */
 @ImplementedBy(classOf[IdentityServiceImpl])
 trait IdentityService {
-  def authenticate(email: Option[String], password: Option[String])(implicit ec: ExecutionContext): Future[Either[ServiceError, Seq[PlayCookie]]]
+  def authenticate(email: Option[String], password: Option[String])(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
 }
 
 
@@ -25,7 +25,11 @@ class IdentityServiceImpl @Inject() (config: Configuration, httpProvider: Identi
 
   def authenticate(email: Option[String], password: Option[String])(implicit ec: ExecutionContext) = {
     IdentityClient.authenticateCookies(email, password).map {
-      case Left(error) => Left(ServiceBadRequest(error.message))
+      case Left(errors) => Left {
+        errors.map { e =>
+          ServiceBadRequest(e.message, e.description)
+        }
+      }
       case Right(cookies) => Right(cookies.map { c =>
         PlayCookie(c.key, c.value, secure = true)
       })

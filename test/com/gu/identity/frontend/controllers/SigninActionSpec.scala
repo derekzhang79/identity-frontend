@@ -1,0 +1,59 @@
+package com.gu.identity.frontend.controllers
+
+import com.gu.identity.frontend.services.IdentityService
+import org.mockito.Mockito._
+import org.scalatest.mock.MockitoSugar
+import org.scalatestplus.play.PlaySpec
+import play.api.inject.bind
+import play.api.inject.guice.GuiceInjectorBuilder
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
+
+import scala.concurrent.Future
+
+
+class SigninActionSpec extends PlaySpec with MockitoSugar {
+
+  val mockIdentityService = mock[IdentityService]
+
+  def fakeSigninRequest(email: Option[String], password: Option[String], rememberMe: Option[String], returnUrl: Option[String]) = {
+    val bodyParams = Seq("email" -> email, "password" -> password, "keepMeSignedIn" -> rememberMe, "returnUrl" -> returnUrl)
+      .filter(_._2.isDefined)
+      .map(p => p._1 -> p._2.get)
+
+    FakeRequest("POST", "/actions/signin")
+      .withFormUrlEncodedBody(bodyParams: _*)
+  }
+
+  val injector = new GuiceInjectorBuilder()
+    .overrides(bind[IdentityService].to(mockIdentityService))
+    .injector()
+
+  val controller = injector.instanceOf[Actions]
+
+
+  "POST /signin" should {
+
+    "redirect to returnUrl when passed authentication" in {
+      val email = Some("me@me.com")
+      val password = Some("password")
+      val rememberMe = None
+      val returnUrl = Some("http://www.theguardian.com/yeah")
+
+      when(mockIdentityService.authenticate(email, password, rememberMe.isDefined))
+        .thenReturn{
+          Future.successful {
+            Right(Seq.empty)
+          }
+        }
+
+      val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result) mustEqual returnUrl
+    }
+
+  }
+
+}

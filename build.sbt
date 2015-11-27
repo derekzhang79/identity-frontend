@@ -9,7 +9,9 @@ version := "1.0.0-SNAPSHOT"
 lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtNativePackager, UniversalPlugin, RiffRaffArtifact)
 
 libraryDependencies ++= Seq(
-  "org.scalatestplus" %% "play" % "1.4.0-M3",
+  "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
+  "org.scalatest" %% "scalatest" % "2.2.5" % "test",
+  "org.mockito" % "mockito-core" % "1.9.5" % "test",
   ws,
   filters,
   "jp.co.bizreach" %% "play2-handlebars" % "0.3.0",

@@ -16,7 +16,7 @@ import scala.concurrent.{ExecutionContext, Future}
  */
 @ImplementedBy(classOf[IdentityServiceImpl])
 trait IdentityService {
-  def authenticate(email: Option[String], password: Option[String])(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
+  def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
 }
 
 
@@ -24,7 +24,7 @@ class IdentityServiceImpl @Inject() (config: Configuration, httpProvider: Identi
 
   implicit val clientConfiguration = IdentityClientConfiguration(config.identityApiHost, config.identityApiKey, httpProvider, IdentityServiceJsonParser)
 
-  def authenticate(email: Option[String], password: Option[String])(implicit ec: ExecutionContext) = {
+  def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean)(implicit ec: ExecutionContext) = {
     IdentityClient.authenticateCookies(email, password).map {
       case Left(errors) => Left {
         errors.map { e =>
@@ -32,7 +32,7 @@ class IdentityServiceImpl @Inject() (config: Configuration, httpProvider: Identi
         }
       }
       case Right(cookies) => Right(cookies.map { c =>
-        val maxAge = if (/*rememberMe*/ true) Some(Seconds.secondsBetween(DateTime.now, c.expires).getSeconds) else None
+        val maxAge = if (rememberMe) Some(Seconds.secondsBetween(DateTime.now, c.expires).getSeconds) else None
         val secureHttpOnly = c.key.startsWith("SC_")
         val cookieMaxAgeOpt = maxAge.filterNot(_ => c.isSession)
 

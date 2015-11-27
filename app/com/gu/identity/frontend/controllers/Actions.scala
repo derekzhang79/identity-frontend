@@ -21,8 +21,9 @@ class Actions @Inject() (identityService: IdentityService) extends Controller wi
   def signIn = Action.async { implicit req =>
     val email = getFormParam("email")
     val password = getFormParam("password")
+    val rememberMe = getFormParam("keepMeSignedIn").contains("true")
 
-    identityService.authenticate(email, password).map {
+    identityService.authenticate(email, password, rememberMe).map {
       case Left(errors) => redirectToSigninPageWithErrors(errors)
       case Right(cookies) =>
         SeeOther(getReturnUrl)

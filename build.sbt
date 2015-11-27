@@ -35,4 +35,4 @@ publishArtifact in (Compile, packageDoc) := false
 play.PlayImport.PlayKeys.playDefaultPort := 8860
 routesGenerator := InjectedRoutesGenerator
 
-addCommandAlias("devrun", "run -Dlogs.home=logs")
+addCommandAlias("devrun", "run -Dlogs.home=logs -Dconfig.resource=DEV.conf")

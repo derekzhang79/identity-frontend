@@ -36,7 +36,7 @@ class IdentityServiceImpl @Inject() (config: Configuration, httpProvider: Identi
         val secureHttpOnly = c.key.startsWith("SC_")
         val cookieMaxAgeOpt = maxAge.filterNot(_ => c.isSession)
 
-        PlayCookie(c.key, c.value, cookieMaxAgeOpt, "/", Some("thegulocal.com"), secure = secureHttpOnly, httpOnly = secureHttpOnly)
+        PlayCookie(c.key, c.value, cookieMaxAgeOpt, "/", Some(config.identityCookieDomain), secure = secureHttpOnly, httpOnly = secureHttpOnly)
       })
     }
   }

@@ -10,5 +10,5 @@ import play.filters.headers.SecurityHeadersFilter
 class Filters @Inject() (securityHeadersFilter: SecurityHeadersFilter, gzipFilter: GzipFilter, htmlCompressorFilter: HTMLCompressorFilter) extends HttpFilters {
   // Note: filters are processed in reverse (foldRight), so need to explicitly
   //       put htmlCompressorFilter at end so that its processed first
-  def filters = Seq(securityHeadersFilter, gzipFilter, htmlCompressorFilter)
+  def filters = Seq(StrictTransportSecurityHeaderFilter, securityHeadersFilter, gzipFilter, htmlCompressorFilter)
 }

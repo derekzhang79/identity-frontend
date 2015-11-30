@@ -14,7 +14,7 @@ class Application @Inject() extends Controller with Logging {
 
   def signIn = Action {
     Cached{
-      Ok(renderSignIn)
+      Ok(renderSignIn(req.getQueryString("error").seq.toSeq))
     }
   }
 }

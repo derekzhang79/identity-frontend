@@ -9,6 +9,10 @@
 
   <h1 class="signin__heading">{{ title }}</h1>
 
+  {{#each errors}}
+    <p>{{this}}</p>
+  {{/each}}
+
   {{> components/social-signin/_social-signin }}
 
   <form class="signin-form" action="{{ actions.signIn }}" method="POST">

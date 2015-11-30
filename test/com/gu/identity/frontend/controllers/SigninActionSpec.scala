@@ -7,6 +7,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.inject.bind
 import play.api.inject.guice.GuiceInjectorBuilder
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import org.scalatest.Matchers._
@@ -44,17 +45,23 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       val rememberMe = None
       val returnUrl = Some("http://www.theguardian.com/yeah")
 
+      val testCookie = Cookie("SC_GU_U", "##hash##")
+
       when(mockIdentityService.authenticate(email, password, rememberMe.isDefined))
         .thenReturn {
           Future.successful {
-            Right(Seq.empty)
+            Right(Seq(testCookie))
           }
         }
 
       val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
+      val resultCookies = cookies(result)
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual returnUrl
+
+      resultCookies.size mustEqual 1
+      resultCookies.head mustEqual testCookie
     }
 
     "redirect to sign in page when failed authentication" in new WithControllerMockedDependencies {
@@ -74,6 +81,8 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).get should startWith (routes.Application.signIn().url)
+
+      // TODO check error parameters
     }
 
 

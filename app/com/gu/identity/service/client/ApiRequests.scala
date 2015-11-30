@@ -17,8 +17,10 @@ case class AuthenticateCookiesRequest(email: String, password: String) extends A
 
 
 object AuthenticateCookiesRequest {
+  private val emailRegex = "^.+@.+$".r
+
   private def isValidEmail(email: String): Boolean =
-    email.nonEmpty
+    emailRegex.findFirstIn(email).isDefined
 
   private def isValidPassword(password: String): Boolean =
     password.nonEmpty

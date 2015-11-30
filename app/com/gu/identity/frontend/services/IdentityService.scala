@@ -27,8 +27,9 @@ class IdentityServiceImpl @Inject() (config: Configuration, httpProvider: Identi
   def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean)(implicit ec: ExecutionContext) = {
     IdentityClient.authenticateCookies(email, password).map {
       case Left(errors) => Left {
-        errors.map { e =>
-          ServiceBadRequest(e.message, e.description)
+        errors.map {
+          case e: BadRequest => ServiceBadRequest(e.message, e.description)
+          case e: GatewayError => ServiceGatewayError(e.message, e.description)
         }
       }
       case Right(cookies) => Right(cookies.map { c =>

@@ -24,7 +24,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       .overrides(bind[IdentityService].to(mockIdentityService))
       .injector()
 
-    val controller = injector.instanceOf[Actions]
+    val controller = injector.instanceOf[SigninAction]
   }
 
   def fakeSigninRequest(email: Option[String], password: Option[String], rememberMe: Option[String], returnUrl: Option[String]) = {

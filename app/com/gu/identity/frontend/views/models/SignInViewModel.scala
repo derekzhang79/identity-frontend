@@ -12,7 +12,7 @@ case class SignInViewModel(title: String = "Sign in to the Guardian",
                            pageTitle: String = "Sign in",
                            showPrelude: Boolean = false,
                            links: SignInLinksViewModel = SignInLinksViewModel(),
-                           actions: Map[String, String] = Map("signIn" -> routes.Actions.signIn().url)) extends ViewModel {
+                           actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url)) extends ViewModel {
   def toMap =
     Map("title" -> title, "pageTitle" -> pageTitle, "showPrelude" -> showPrelude, "links" -> links.toMap, "actions" -> actions)
 }

@@ -13,7 +13,7 @@ import scala.util.control.NonFatal
 /**
  * Form actions controller
  */
-class Actions @Inject() (identityService: IdentityService) extends Controller with Logging {
+class SigninAction @Inject() (identityService: IdentityService) extends Controller with Logging {
 
   private def getFormParam(name: String)(implicit request: Request[AnyContent]) =
     request.body.asFormUrlEncoded.flatMap(_.get(name)).flatMap(_.headOption)

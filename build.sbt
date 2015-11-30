@@ -18,6 +18,9 @@ libraryDependencies ++= Seq(
   "com.mohiva" %% "play-html-compressor" % "0.5.0"
 )
 
+// Set logs options and default local resource for running locally (run and test)
+javaOptions ++= Seq("-Dlogs.home=logs", "-Dconfig.resource=DEV.conf")
+
 // Config for packaging app for deployment with riffraff
 packageName in Universal := normalizedName.value
 
@@ -37,4 +40,4 @@ publishArtifact in (Compile, packageDoc) := false
 play.PlayImport.PlayKeys.playDefaultPort := 8860
 routesGenerator := InjectedRoutesGenerator
 
-addCommandAlias("devrun", "run -Dlogs.home=logs -Dconfig.resource=DEV.conf")
+addCommandAlias("devrun", "run")

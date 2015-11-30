@@ -85,6 +85,48 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       // TODO check error parameters
     }
 
+    "redirect to sign in page when service error" in new WithControllerMockedDependencies {
+      val email = Some("me@me.com")
+      val password = Some("password")
+      val rememberMe = None
+      val returnUrl = Some("http://www.theguardian.com/yeah")
+
+      when(mockIdentityService.authenticate(email, password, rememberMe.isDefined))
+        .thenReturn {
+          Future.successful {
+            Left(Seq(ServiceGatewayError("Unexpected 500 error")))
+          }
+        }
+
+      val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).get should startWith (routes.Application.signIn().url)
+
+      // TODO check error parameters
+    }
+
+
+    "redirect to sign in page when error from future" in new WithControllerMockedDependencies {
+      val email = Some("me@me.com")
+      val password = Some("password")
+      val rememberMe = None
+      val returnUrl = Some("http://www.theguardian.com/yeah")
+
+      when(mockIdentityService.authenticate(email, password, rememberMe.isDefined))
+        .thenReturn {
+          Future.failed {
+            new RuntimeException("Unexpected 500 error")
+          }
+        }
+
+      val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).get should startWith (routes.Application.signIn().url)
+
+      // TODO check error parameters
+    }
 
   }
 

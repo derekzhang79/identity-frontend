@@ -3,12 +3,11 @@ package com.gu.identity.frontend.services
 import javax.inject.Inject
 
 import com.gu.identity.service.client._
-import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.libs.json.Reads.jodaDateReads
 import play.api.libs.ws.{WSResponse, WSClient}
 
-import scala.concurrent.{Future, ExecutionContext}
+import scala.concurrent.Future
 import scala.util.control.NonFatal
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext

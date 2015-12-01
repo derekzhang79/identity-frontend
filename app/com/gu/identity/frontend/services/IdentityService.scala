@@ -20,9 +20,9 @@ trait IdentityService {
 }
 
 
-class IdentityServiceImpl @Inject() (config: Configuration, adapter: IdentityServiceRequestHandler, httpProvider: IdentityServiceHttpProvider) extends IdentityService {
+class IdentityServiceImpl @Inject() (config: Configuration, adapter: IdentityServiceRequestHandler) extends IdentityService {
 
-  implicit val clientConfiguration = IdentityClientConfiguration(config.identityApiHost, config.identityApiKey, httpProvider, IdentityServiceJsonParser, adapter)
+  implicit val clientConfiguration = IdentityClientConfiguration(config.identityApiHost, config.identityApiKey, adapter)
 
   def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean)(implicit ec: ExecutionContext) = {
     IdentityClient.authenticateCookies(email, password).map {

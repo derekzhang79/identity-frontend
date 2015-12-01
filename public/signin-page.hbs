@@ -9,16 +9,17 @@
 
   <h1 class="signin__heading">{{ title }}</h1>
 
-  {{#each errors}}
-    <p>{{this}}</p>
-  {{/each}}
-
   {{> components/social-signin/_social-signin }}
 
   <form class="signin-form" action="{{ actions.signIn }}" method="POST">
     <p class="signin-form__prelude">or</p>
 
     <fieldset class="signin-form__fieldset">
+
+      {{#each errors}}
+          <label class="signin-form__label--error">{{this}}</label>
+      {{/each}}
+
       <div class="signin-form__control--email">
         <label class="signin-form__label--email" for="signin_field_email">Email address</label>
         <input class="signin-form__field--email" id="signin_field_email" type="email" name="email" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />

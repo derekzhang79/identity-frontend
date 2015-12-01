@@ -15,18 +15,18 @@ import scala.util.control.NonFatal
  */
 class SigninAction @Inject() (identityService: IdentityService) extends Controller with Logging {
 
-  private def getFormParam(name: String)(implicit request: Request[AnyContent]) =
+  private def getFormParam(name: String, request: Request[AnyContent]) =
     request.body.asFormUrlEncoded.flatMap(_.get(name)).flatMap(_.headOption)
 
-  def signIn = Action.async { implicit req =>
-    val email = getFormParam("email")
-    val password = getFormParam("password")
-    val rememberMe = getFormParam("keepMeSignedIn").contains("true")
+  def signIn = Action.async { request =>
+    val email = getFormParam("email", request)
+    val password = getFormParam("password", request)
+    val rememberMe = getFormParam("keepMeSignedIn", request).contains("true")
 
     identityService.authenticate(email, password, rememberMe).map {
       case Left(errors) => redirectToSigninPageWithErrors(errors)
       case Right(cookies) =>
-        SeeOther(getReturnUrl)
+        SeeOther(getReturnUrl(request))
           .withHeaders("Cache-Control" -> "no-cache")
           .withCookies(cookies: _*)
 
@@ -39,8 +39,8 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
   }
 
 
-  private def getReturnUrl(implicit request: Request[AnyContent]) =
-    getFormParam("returnUrl")
+  private def getReturnUrl(request: Request[AnyContent]) =
+    getFormParam("returnUrl", request)
       .filter(validateReturnUrl)
       .getOrElse("https://www.theguardian.com") // default
 

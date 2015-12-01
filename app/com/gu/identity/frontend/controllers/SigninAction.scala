@@ -3,9 +3,11 @@ package com.gu.identity.frontend.controllers
 import javax.inject.Inject
 
 import com.gu.identity.frontend.logging.Logging
-import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceError, IdentityService}
-import play.api.mvc.{AnyContent, Request, Action, Controller}
+import com.gu.identity.frontend.services.{IdentityService, ServiceError, ServiceGatewayError}
+import play.api.data.Form
+import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.mvc.{Action, Controller}
 
 import scala.util.control.NonFatal
 
@@ -15,18 +17,26 @@ import scala.util.control.NonFatal
  */
 class SigninAction @Inject() (identityService: IdentityService) extends Controller with Logging {
 
-  private def getFormParam(name: String, request: Request[AnyContent]) =
-    request.body.asFormUrlEncoded.flatMap(_.get(name)).flatMap(_.headOption)
+  case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String])
+
+  private val signInFormBody = Form(
+    mapping(
+      "email" -> optional(text),
+      "password" -> optional(text),
+      "rememberMe" -> default(boolean, false),
+      "returnUrl" -> optional(text)
+    )(SignInRequest.apply)(SignInRequest.unapply)
+  )
+
 
   def signIn = Action.async { request =>
-    val email = getFormParam("email", request)
-    val password = getFormParam("password", request)
-    val rememberMe = getFormParam("keepMeSignedIn", request).contains("true")
 
-    identityService.authenticate(email, password, rememberMe).map {
+    val formParams = signInFormBody.bindFromRequest()(request).get
+
+    identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe).map {
       case Left(errors) => redirectToSigninPageWithErrors(errors)
       case Right(cookies) =>
-        SeeOther(getReturnUrl(request))
+        SeeOther(normaliseReturnUrl(formParams.returnUrl))
           .withHeaders("Cache-Control" -> "no-cache")
           .withCookies(cookies: _*)
 
@@ -39,8 +49,8 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
   }
 
 
-  private def getReturnUrl(request: Request[AnyContent]) =
-    getFormParam("returnUrl", request)
+  private def normaliseReturnUrl(returnUrl: Option[String]) =
+    returnUrl
       .filter(validateReturnUrl)
       .getOrElse("https://www.theguardian.com") // default
 
@@ -48,7 +58,7 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
 
   private val urlRegex = """^https?://([^/]+).*$""".r
 
-  def validateReturnUrl(returnUrl: String) =
+  private def validateReturnUrl(returnUrl: String) =
     returnUrl match {
       case urlRegex(domain) if domain.endsWith(".theguardian.com") => true
       case _ => false

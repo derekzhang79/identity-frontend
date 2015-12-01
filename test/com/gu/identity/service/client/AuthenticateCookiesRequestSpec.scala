@@ -6,6 +6,12 @@ import org.scalatest.mock.MockitoSugar
 
 class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with MockitoSugar {
 
+  val http = mock[HttpProvider]
+  val json = mock[JsonParser]
+  val handler = mock[IdentityClientRequestHandler]
+
+  implicit val testConfig = IdentityClientConfiguration("test.gu.com", "##key##", http, json, handler)
+
   "Authenticate Cookies API Request" should {
     "Parse correctly with a valid email address and password" in {
       val email = Some("test@guardian.co.uk")

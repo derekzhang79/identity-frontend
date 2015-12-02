@@ -1,0 +1,63 @@
+@import 'components/normalise';
+@import 'components/grid';
+@import 'components/typography';
+
+%content-block {
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  box-sizing: border-box;
+
+  @media all and (min-width: 480px) {
+    padding: 0 2rem;
+  }
+
+  @media all and (min-width: 980px) {
+    max-width: 980px;
+    max-width: 98rem;
+  }
+
+  @media all and (min-width: 1140px) {
+    max-width: 1140px;
+    max-width: 114rem;
+  }
+
+  @media all and (min-width: 1300px) {
+    max-width: 1300px;
+    max-width: 130rem;
+  }
+
+}
+
+@import 'components/header/header';
+@import 'components/footer/footer';
+
+.content {
+  @extend %content-block;
+  background-color: #fff;
+  padding: 2rem;
+}
+
+body {
+  background-color: #F4F4F4;
+}
+
+a, .link {
+  color: #005689;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .content & {
+    border-bottom: 1px solid #DCDCDC;
+    transition: border-color 0.15s ease-out;
+
+    &:hover {
+      text-decoration: none;
+      border-color: #6E99B3;
+    }
+  }
+}

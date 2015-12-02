@@ -1,0 +1,170 @@
+@import '../grid';
+
+%signin-container {
+  max-width: 60rem;
+  margin: 0 auto;
+}
+
+.signin__prelude {
+  @extend %font-text-1;
+  @extend %signin-container;
+  color: #333;
+  background-color: #ddd;
+  padding: 10px 20px;
+  margin-top: 20px;
+
+  p {
+    margin: 10px 0;
+  }
+}
+
+
+.signin__heading {
+  @extend %font-heading-1;
+  @extend %signin-container;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.signin-form {
+  @extend %signin-container;
+  position: relative;
+}
+
+
+.signin-form__prelude {
+  @extend %font-text-1;
+  color: #989898;
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+
+.signin-form__fieldset {
+  border: none;
+  border-top: 1px solid #989898;
+  margin: 0;
+  padding: 10px 0 0 0;
+}
+
+
+%signin-form__control {
+  @extend %row;
+  margin: 10px 0;
+}
+
+.signin-form__email-password-wrapper {
+  @extend %row;
+}
+
+.signin-form__control--email,
+.signin-form__control--password,
+.signin-form__control--remember-me,
+.signin-form__control--submit {
+  @extend %signin-form__control;
+}
+
+%signin-form__label {
+  @extend %font-text-2;
+  display: block;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.signin-form__label--email,
+.signin-form__label--password,
+.signin-form__label--submit {
+  @extend %signin-form__label;
+}
+
+.signin-form__label--remember {
+  @extend %font-text-1;
+  cursor: pointer;
+}
+
+%signin-form__field {
+  @extend %font-text-sans-2;
+  display: block;
+  background-color: #fff;
+  border: 1px solid #989898;
+  color: #000;
+  padding: 5px 15px;
+  border-radius: 15px;
+  margin: 5px 0;
+  min-width: 60%;
+}
+
+.signin-form__field--email,
+.signin-form__field--password {
+  @extend %signin-form__field;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+%signin-form__checkbox {
+  @extend %font-text-sans-2;
+  display: inline-block;
+  border: 1px solid #989898;
+  border-radius: 3px;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  margin: 0 0.5rem 0 0;
+}
+
+.signin-form__checkbox--remember-me {
+  /* Only display nicer checkbox when browser supports CSS3 - should fallback nicely */
+  &:checked, &:not(:checked) {
+    display: none;
+  }
+
+  &:checked + .signin-form__label--remember::before {
+    @extend %signin-form__checkbox;
+    content: '\2713'; /* tick character */
+  }
+
+  &:not(:checked) + .signin-form__label--remember::before {
+    @extend %signin-form__checkbox;
+    content: '\00A0';
+  }
+}
+
+.signin-form__control--submit {
+  margin: 2rem 0;
+}
+
+.signin-form__submit-button {
+  @extend %font-text-sans-2;
+  background-color: #005689;
+  border: 0;
+  border-radius: 15px;
+  color: white;
+  display: block;
+  text-align: left;
+  padding: 0.5rem 1rem 0.5rem 2rem;
+  width: 100%;
+}
+
+%signin-form__cta {
+  @extend %font-text-1;
+  margin: 1rem 0;
+}
+
+.signin-form__cta--signup {
+  @extend %signin-form__cta;
+  clear: both;
+}
+
+.signin-form__cta--reset {
+  @extend %signin-form__cta;
+  position: absolute;
+  right: 0;
+}
+
+.signin-form__terms {
+  @extend %font-text-1;
+  margin: 20px 0;
+  padding-top: 10px;
+  border-top: 1px solid #989898;
+}

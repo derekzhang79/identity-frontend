@@ -12,6 +12,6 @@ object ViewRenderer {
 
   def renderSignIn = {
     val attrs = LayoutViewModel().toMap ++ SignInViewModel().toMap
-    render("signIn", attrs)
+    render("signin-page", attrs)
   }
 }

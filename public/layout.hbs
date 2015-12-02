@@ -8,22 +8,12 @@
   {{/each}}
 </head>
 <body>
-{{#block "header" }}
-  <header>
-    <a href="http://www.theguardian.com">
-        <span>The Guardian</span>
-    </a>
-  </header>
-{{/block}}
+  {{> components/header/_header }}
 
   <div class="content">
     {{#block "content" }}{{/block}}
   </div>
 
-{{#block "footer" }}
-  <footer>
-      <p>&copy; 2015 Guardian News and Media Limited or its affiliated companies. All rights reserved.</p>
-  </footer>
-{{/block}}
+  {{> components/footer/_footer }}
 </body>
 </html>

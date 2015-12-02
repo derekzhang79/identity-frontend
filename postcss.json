@@ -1,0 +1,20 @@
+{
+  "use": [
+    "precss",
+    "postcss-assets",
+    "cssnext",
+    "cssnano"
+  ],
+  "input": "public/main.css",
+  "output": "target/web/build/bundle.css",
+  "postcss-assets": {
+    "basePath": "public/",
+    "baseUrl": "/assets/"
+  },
+  "cssnext": {
+    "messages": {
+      "browser": false,
+      "console": true
+    }
+  }
+}

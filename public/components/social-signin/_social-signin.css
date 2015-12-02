@@ -1,0 +1,38 @@
+.social-signin {
+  @extend %row;
+  margin: 0 auto 2rem;
+  max-width: 60rem;
+}
+
+
+.social-signin__cta-wrapper {
+
+}
+
+%social-signin__cta {
+  @extend %font-text-sans-1;
+  color: black;
+  display: block;
+  text-decoration: none;
+  padding: 1rem 1rem 0.8rem 3.8rem;
+  margin: 0 0 1.5rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 1.5rem;
+  background-color: white;
+  background-repeat: no-repeat;
+  background-position: 1rem center;
+
+  &:hover {
+    border: 1px solid #bdbdbd;
+  }
+}
+
+.social-signin__cta--google {
+  @extend %social-signin__cta;
+  background-image: inline('icon-google.svg');
+}
+
+.social-signin__cta--facebook {
+  @extend %social-signin__cta;
+  background-image: inline('icon-facebook.svg');
+}

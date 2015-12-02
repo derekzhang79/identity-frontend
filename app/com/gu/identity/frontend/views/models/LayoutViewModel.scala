@@ -10,9 +10,11 @@ case class LayoutViewModel(styles: Seq[String]) extends ViewModel {
 
 object LayoutViewModel {
 
-  def apply(): LayoutViewModel = {
-    val styles = Seq(routes.Assets.at("layout.css").url)
+  val styleFiles = Seq("bundle.css")
 
-    LayoutViewModel(styles)
+  def apply(): LayoutViewModel = {
+    val styleUrls = styleFiles.map(routes.Assets.at(_).url)
+
+    LayoutViewModel(styleUrls)
   }
 }

@@ -1,0 +1,71 @@
+@import '../logo/logo';
+
+.header {
+  background: #005689;
+}
+
+.header__inner {
+  @extend %clearfix;
+  @extend %content-block;
+}
+
+.header__logo-link {
+  float: right;
+  background-image: inline('../logo/guardian-logo-160.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  margin: 0.9rem 0;
+  overflow: hidden;
+  height: height('../logo/guardian-logo-160.svg');
+  width: width('../logo/guardian-logo-160.svg');
+}
+
+.header__logo-link-text {
+  display: block;
+  text-indent: -1000rem;
+}
+
+.header__back-link {
+  @extend %font-text-2;
+  color: #fff;
+  line-height: 4.8rem;
+
+  &::before {
+    content: '';
+    background-image: inline('arrow-back.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 100%;
+    display: inline-block;
+    height: 3.2rem;
+    width: 3.2rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+
+  &:hover::before {
+    border-color: #fff;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:hover .header__back-link-text {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+
+}
+
+.header__back-link-text {
+  opacity: 0;
+  transition: opacity 0.15s linear;
+
+  @media all and (max-width: 50rem) {
+    display: none;
+  }
+}

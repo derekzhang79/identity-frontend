@@ -1,7 +1,7 @@
 
 import WebKeys._
 
-val build = taskKey[Seq[File]]("Compiles Sass files")
+val build = taskKey[Seq[File]]("Compiles Frontend assets using npm")
 
 val buildOutputDirectory = settingKey[File]("Output directory for generated sources from npm build task")
 

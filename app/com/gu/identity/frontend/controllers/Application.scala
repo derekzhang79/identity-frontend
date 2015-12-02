@@ -13,6 +13,8 @@ class Application @Inject() extends Controller with Logging {
   }
 
   def signIn = Action {
-    Ok(renderSignIn)
+    Cached{
+      Ok(renderSignIn)
+    }
   }
 }

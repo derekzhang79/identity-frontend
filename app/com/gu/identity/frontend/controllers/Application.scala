@@ -12,9 +12,9 @@ class Application @Inject() extends Controller with Logging {
     Redirect(routes.Application.signIn())
   }
 
-  def signIn = Action {
+  def signIn = Action { req =>
     Cached{
-      Ok(renderSignIn(req.getQueryString("error").seq.toSeq))
+      Ok(renderSignIn(req.getQueryString("error").seq.toSeq, req.getQueryString("email").getOrElse("")))
     }
   }
 }

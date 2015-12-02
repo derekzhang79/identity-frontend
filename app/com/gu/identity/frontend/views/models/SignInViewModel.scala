@@ -34,8 +34,9 @@ case class SignInViewModel(title: String = "Sign in to the Guardian",
                            pageTitle: String = "Sign in",
                            showPrelude: Boolean = false,
                            errors: Seq[ErrorViewModel] = Seq.empty,
+                           email: String = "",
                            links: SignInLinksViewModel = SignInLinksViewModel(),
                            actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url)) extends ViewModel {
   def toMap =
-    Map("title" -> title, "pageTitle" -> pageTitle, "showPrelude" -> showPrelude, "errors" -> errors.map(_.toMap), "links" -> links.toMap, "actions" -> actions)
+    Map("title" -> title, "pageTitle" -> pageTitle, "showPrelude" -> showPrelude, "errors" -> errors.map(_.toMap), "email" -> email, "links" -> links.toMap, "actions" -> actions)
 }

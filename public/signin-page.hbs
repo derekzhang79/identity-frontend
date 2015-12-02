@@ -17,7 +17,7 @@
     <fieldset class="signin-form__fieldset">
 
       {{#each errors}}
-          <label class="signin-form__label--error">{{this}}</label>
+          <p id="{{id}}" class="signin-form__error">{{message}}</p>
       {{/each}}
 
       <div class="signin-form__control--email">

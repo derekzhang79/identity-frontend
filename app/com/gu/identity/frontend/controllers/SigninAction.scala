@@ -30,22 +30,22 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
 
 
   def signIn = Action.async { request =>
-  NoCache {
-    val formParams = signInFormBody.bindFromRequest()(request).get
+    NoCache {
+      val formParams = signInFormBody.bindFromRequest()(request).get
 
-    identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe).map {
-      case Left(errors) => redirectToSigninPageWithErrors(errors)
-      case Right(cookies) =>
-        SeeOther(normaliseReturnUrl(formParams.returnUrl))
-          .withCookies(cookies: _*)
+      identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe).map {
+        case Left(errors) => redirectToSigninPageWithErrors(errors)
+        case Right(cookies) =>
+          SeeOther(normaliseReturnUrl(formParams.returnUrl))
+            .withCookies(cookies: _*)
 
-    }.recover {
-      case NonFatal(ex) => {
-        logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
-        redirectToSigninPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)))
+      }.recover {
+        case NonFatal(ex) => {
+          logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
+          redirectToSigninPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)))
+        }
       }
     }
-  }
   }
 
 

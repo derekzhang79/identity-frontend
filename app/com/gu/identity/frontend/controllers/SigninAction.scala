@@ -30,20 +30,20 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
 
 
   def signIn = Action.async { request =>
+    NoCache {
+      val formParams = signInFormBody.bindFromRequest()(request).get
 
-    val formParams = signInFormBody.bindFromRequest()(request).get
+      identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe).map {
+        case Left(errors) => redirectToSigninPageWithErrors(errors)
+        case Right(cookies) =>
+          SeeOther(normaliseReturnUrl(formParams.returnUrl))
+            .withCookies(cookies: _*)
 
-    identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe).map {
-      case Left(errors) => redirectToSigninPageWithErrors(errors)
-      case Right(cookies) =>
-        SeeOther(normaliseReturnUrl(formParams.returnUrl))
-          .withHeaders("Cache-Control" -> "no-cache")
-          .withCookies(cookies: _*)
-
-    }.recover {
-      case NonFatal(ex) => {
-        logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
-        redirectToSigninPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)))
+      }.recover {
+        case NonFatal(ex) => {
+          logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
+          redirectToSigninPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)))
+        }
       }
     }
   }
@@ -67,7 +67,6 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
   private def redirectToSigninPageWithErrors(errors: Seq[ServiceError]) = {
     val query = errors.map(e => s"error=${e.message}").mkString("&")
     SeeOther(routes.Application.signIn().url + s"?$query")
-      .withHeaders("Cache-Control" -> "no-cache")
   }
 
 }

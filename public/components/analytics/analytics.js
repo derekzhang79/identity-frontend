@@ -1,44 +1,9 @@
 import s from './omniture';
 
-
-//define([
-//    'common/utils/$',
-//    'common/utils/_',
-//    'common/utils/config',
-//    'common/utils/cookies',
-//    'common/utils/date-formats',
-//    'common/utils/detect',
-//    'common/utils/mediator',
-//    'common/utils/pad',
-//    'common/utils/storage',
-//    'common/modules/analytics/beacon',
-//    'common/modules/analytics/mvt-cookie',
-//    'common/modules/experiments/ab',
-//    'common/modules/onward/history',
-//    'common/modules/identity/api'
-//], function (
-//    s,
-//    $,
-//    _,
-//    config,
-//    cookies,
-//    dateFormats,
-//    detect,
-//    mediator,
-//    pad,
-//    storage,
-//    beacon,
-//    mvtCookie,
-//    ab,
-//    history,
-//    id
-//) {
-
 var R2_STORAGE_KEY = 's_ni', // DO NOT CHANGE THIS, ITS IS SHARED WITH R2. BAD THINGS WILL HAPPEN!
     NG_STORAGE_KEY = 'gu.analytics.referrerVars';
 
 function Omniture() {
-    this.isEmbed = false //!!guardian.isEmbed;
     this.s = s;
     this.pageviewSent = false;
     //this.addHandlers();
@@ -70,17 +35,7 @@ Omniture.prototype.logView = function () {
 };
 
 Omniture.prototype.generateTrackingImageString = function () {
-    return 's_i_' + s.account;
-};
-
-// Certain pages have specfic channel rules
-Omniture.prototype.getChannel = function () {
-    if (config.page.contentType === 'Network Front') {
-        return 'Network Front';
-    } else if (this.isEmbed) {
-        return 'Embedded';
-    }
-    return config.page.section || '';
+    return 's_i_' + s.account.split(',').join('_');
 };
 
 Omniture.prototype.logTag = function (spec) {
@@ -99,8 +54,8 @@ Omniture.prototype.logTag = function (spec) {
             tag: spec.tag || 'untracked',
             time: new Date().getTime()
         };
-        try { sessionStorage.setItem(R2_STORAGE_KEY, storeObj.tag); } catch (e) {/**/}
-        storage.session.set(NG_STORAGE_KEY, storeObj);
+        //try { sessionStorage.setItem(R2_STORAGE_KEY, storeObj.tag); } catch (e) {/**/}
+        //storage.session.set(NG_STORAGE_KEY, storeObj);
     } else {
         // this is confusing: if s.tl() first param is "true" then it *doesn't* delay.
         delay = spec.samePage ? true : spec.target;
@@ -186,15 +141,8 @@ Omniture.prototype.populatePageProperties = function () {
 
     //this.s.prop3     = config.page.publication || '';
 
-    this.s.channel   = 'identity'; //this.getChannel();
-    //this.s.prop4     = config.page.keywords || '';
-    //this.s.prop6     = config.page.author || '';
-    //this.s.prop7     = webPublicationDate ? dateFormats.utcDateString(webPublicationDate) : '';
-    //this.s.prop8     = config.page.pageCode || '';
-    //this.s.prop9     = config.page.contentType || '';
-    //this.s.prop10    = config.page.tones || '';
-    //
-    //this.s.prop13    = config.page.series || '';
+    this.s.channel   = 'identity';
+
 
     // see http://blogs.adobe.com/digitalmarketing/mobile/responsive-web-design-and-web-analytics/
     //this.s.eVar18    = detect.getBreakpoint();
@@ -209,8 +157,6 @@ Omniture.prototype.populatePageProperties = function () {
     this.s.prop20    = tpA[2] + ':' + tpA[1];
     this.s.eVar20    = 'D=c20';
 
-    //this.s.prop25    = config.page.blogs || '';
-
     //this.s.prop60    = detect.isFireFoxOSApp() ? 'firefoxosapp' : null;
 
     this.s.prop19    = platform;
@@ -221,8 +167,6 @@ Omniture.prototype.populatePageProperties = function () {
     //this.s.prop40    = detect.adblockInUse || detect.getFirefoxAdblockPlusInstalled();
 
     //this.s.prop47    = config.page.edition || '';
-
-    //this.s.prop51  = config.page.allowUserGeneratedContent ? 'witness-contribution-cta-shown' : null;
 
     this.s.eVar51  = mvt;
 
@@ -242,33 +186,20 @@ Omniture.prototype.populatePageProperties = function () {
         this.s.eVar60 = mvtId;
     }
 
-    //if (config.page.commentable) {
-    //    this.s.events = this.s.apl(this.s.events, 'event46', ',');
-    //}
-
-    //if (config.page.section === 'identity')  {
-        this.s.prop11 = 'Users';
-        this.s.prop9 = 'userid';
-        //this.s.eVar27 = config.page.omnitureErrorMessage || '';
-        this.s.eVar42 = ''; //config.page.returnUrl || '';
-        this.s.hier2 = 'GU/Users/Registration';
-        //this.s.events = this.s.apl(this.s.events, config.page.omnitureEvent, ',');
-    //}
+    // Identity specific config
+    this.s.prop11 = 'Users';
+    this.s.prop9 = 'userid';
+    //this.s.eVar27 = config.page.omnitureErrorMessage || '';
+    this.s.eVar42 = ''; //config.page.returnUrl || '';
+    this.s.hier2 = 'GU/Users/Registration';
+    //this.s.events = this.s.apl(this.s.events, config.page.omnitureEvent, ',');
 
     this.s.prop56    = 'Javascript';
-
-    // not all pages have a production office
-    //if (config.page.productionOffice) {
-    //    this.s.prop64 = config.page.productionOffice;
-    //}
 
     /* Omniture library version */
     this.s.prop62    = 'Guardian JS-1.4.1 20140914';
 
     //this.s.prop63    = detect.getPageSpeed();
-
-    //this.s.prop65    = config.page.headline || '';
-    //this.s.eVar70    = config.page.headline || '';
 
     // Set Page View Event
     this.s.events    = this.s.apl(this.s.events, 'event4', ',', 2);
@@ -315,18 +246,6 @@ Omniture.prototype.populatePageProperties = function () {
     //}
 
     //this.s.prop73 = detect.isFacebookApp() ? 'facebook app' : detect.isTwitterApp() ? 'twitter app' : null;
-
-    //this.s.prop75 = config.page.wordCount || 0;
-    //this.s.eVar75 = config.page.wordCount || 0;
-
-    //if (this.isEmbed) {
-    //    this.s.eVar11 = this.s.prop11 = 'Embedded';
-    //
-    //    // Get iframe's parent url: http://www.nczonline.net/blog/2013/04/16/getting-the-url-of-an-iframes-parent
-    //    if (!!window.parent && window.parent !== window) {
-    //        this.s.referrer = document.referrer;
-    //    }
-    //}
 };
 
 Omniture.prototype.go = function () {
@@ -347,7 +266,6 @@ Omniture.prototype.confirmPageView = function () {
             clearInterval(checkForPageViewInterval);
 
             this.pageviewSent = true;
-          console.log('pageview sent');
             //mediator.emit('module:analytics:omniture:pageview:sent');
         }
     }.bind(this), 250);

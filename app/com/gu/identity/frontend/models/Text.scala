@@ -31,3 +31,8 @@ case class SocialSignInText (
                               facebook: String = Messages("socialsignin.description", "Facebook"),
                               google: String = Messages("socialsignin.description", "Google")
                               )
+
+case class HeaderText (
+                      back: String = Messages("header.backtext"),
+                      logo: String = Messages("header.logo")
+                        )

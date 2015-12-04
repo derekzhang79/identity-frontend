@@ -18,3 +18,6 @@ signin.privacypolicy=Privacy Policy
 layout.pagetitle=| Identity | The Guardian
 
 socialsignin.description=Sign in with {0}
+
+header.backtext=Back to the Guardian
+header.logo=The Guardian

@@ -14,3 +14,5 @@ signin.signup=Sign up
 signin.conditions=By proceeding, you agree to the Guardian's
 signin.termsofservice=Terms of Service
 signin.privacypolicy=Privacy Policy
+
+layout.pagetitle=| Identity | The Guardian

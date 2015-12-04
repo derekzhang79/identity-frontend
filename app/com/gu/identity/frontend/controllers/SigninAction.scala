@@ -65,12 +65,8 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
     }
 
   private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String]) = {
-    val query = errors.map(e => s"error=${e.id}").mkString("&")
-    val emailAddress = email match {
-      case Some(email) => "&email=" + email
-      case None => ""
-    }
-    SeeOther(routes.Application.signIn(email).url + s"?$query")
+    val query = errors.map(_.id)
+    SeeOther(routes.Application.signIn(email, query).url)
   }
 
 }

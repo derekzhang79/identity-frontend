@@ -2,47 +2,53 @@ package test.util
 
 import java.net.URL
 import java.util.concurrent.TimeUnit
-import org.openqa.selenium.support.ui.{ExpectedConditions, WebDriverWait}
-import org.openqa.selenium.{By, Cookie}
+import org.openqa.selenium.support.ui.{ExpectedCondition, ExpectedConditions, WebDriverWait}
+import org.openqa.selenium.{JavascriptExecutor, By, Cookie}
 import org.scalatest.selenium.WebBrowser
-import scala.util.Try
+import scala.util.{Success, Failure, Try}
 import scala.collection.JavaConverters._
 
 trait Util { this: WebBrowser =>
 
   lazy implicit val driver = Config.driver
 
-  def resetDriver() = {
+  protected def resetDriver() = {
     driver.get("about:about")
     go.to(Config.baseUrl)
     driver.manage().deleteAllCookies()
-    driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS)
+    driver.manage().timeouts().implicitlyWait(timeOut, TimeUnit.SECONDS)
   }
 
-  private val defaultTimeOut = 15
-
-  protected def pageHasText(text: String, timeoutSecs: Int=defaultTimeOut): Boolean = {
-    val pred = ExpectedConditions.textToBePresentInElementLocated(By.tagName("body"), text)
-    Try {
-      new WebDriverWait(driver, timeoutSecs).until(pred)
-    }.isSuccess
+  protected def pageHasText(text: String): Boolean = {
+    waitUntil(ExpectedConditions.textToBePresentInElementLocated(By.tagName("body"), text))
   }
 
-  protected def pageHasElement(q: Query, timeoutSecs: Int=defaultTimeOut): Boolean = {
-    val pred = ExpectedConditions.visibilityOfElementLocated(q.by)
-    Try {
-      new WebDriverWait(driver, timeoutSecs).until(pred)
-    }.isSuccess
+  protected def pageHasElement(q: Query): Boolean = {
+    waitUntil(ExpectedConditions.visibilityOfElementLocated(q.by))
   }
 
-  protected def pageContainsUrl(urlFraction: String, timeoutSecs: Int=defaultTimeOut): Boolean = {
-    val pred = ExpectedConditions.urlContains(urlFraction)
-    Try {
-      new WebDriverWait(driver, timeoutSecs).until(pred)
-    }.isSuccess
+  protected def pageContainsUrl(urlFraction: String): Boolean = {
+    waitUntil(ExpectedConditions.urlContains(urlFraction))
   }
 
   protected def currentHost: String = new URL(currentUrl).getHost
 
-  def cookiesSet: Set[Cookie] = driver.manage().getCookies.asScala.toSet
+  protected def cookiesSet: Set[Cookie] = driver.manage().getCookies.asScala.toSet
+
+  private def stopWindowLoad() = {
+    val js = driver.asInstanceOf[JavascriptExecutor]
+    js.executeScript("window.stop();")
+  }
+
+  private def waitUntil[T](pred: ExpectedCondition[T]) = {
+    Try(new WebDriverWait(driver, timeOut).until(pred)) match {
+      case Success(_) => true
+      case Failure(e) => { // Retry once with half the timeout.
+        stopWindowLoad()
+        Try(new WebDriverWait(driver, timeOut/2).until(pred)).isSuccess
+      }
+    }
+  }
+
+  private val timeOut = 60
 }

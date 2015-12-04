@@ -2,12 +2,12 @@
 
   {{#showPrelude}}
     <div class="signin__prelude">
-      <p>Creating an account means you can save articles for later, leave comments, enter competitions, become a member and lots more.</p>
+      <p>{{pageText.prelude}}</p>
       <p>Want to know more? <a href="http://www.theguardian.com/help/identity-faq">Read our FAQs</a>.</p>
     </div>
   {{/showPrelude}}
 
-  <h1 class="signin__heading">{{ title }}</h1>
+  <h1 class="signin__heading">{{ pageText.title }}</h1>
 
   {{> components/social-signin/_social-signin }}
 

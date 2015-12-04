@@ -13,7 +13,7 @@ trait WebBrowserUtil { this: WebBrowser =>
   lazy implicit val driver = Config.driver
 
   protected def resetDriver() = {
-    driver.get("about:about")
+    driver.get("about:blank")
     go.to(Config.baseUrl)
     driver.manage().deleteAllCookies()
     driver.manage().timeouts().implicitlyWait(timeOut, TimeUnit.SECONDS)

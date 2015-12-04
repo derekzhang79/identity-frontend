@@ -35,7 +35,10 @@ object Config {
   def webDriverSessionId(): String = {
     Config.driver match {
       case remoteDriver: RemoteWebDriver => remoteDriver.getSessionId.toString
-      case _ => throw new ClassCastException
+      case _ => {
+        logger.error("Unknown Web Driver session ID")
+        "unknown"
+      }
     }
   }
 

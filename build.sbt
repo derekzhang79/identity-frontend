@@ -8,6 +8,8 @@ version := "1.0.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtNativePackager, UniversalPlugin, RiffRaffArtifact)
 
+lazy val functionalTests = Project("functional-tests", file("functional-tests"))
+
 libraryDependencies ++= Seq(
   "org.scalatestplus" %% "play" % "1.4.0-M3",
   ws,

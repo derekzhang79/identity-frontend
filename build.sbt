@@ -31,6 +31,8 @@ riffRaffBuildIdentifier := Option(System.getenv("CIRCLE_BUILD_NUM")).getOrElse("
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 
+mappings in Universal ++= (baseDirectory.value / "deploy" ***).get pair relativeTo(baseDirectory.value)
+
 
 // Disable packaging of scaladoc
 sources in (Compile, doc) := Seq.empty

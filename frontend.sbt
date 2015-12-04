@@ -23,3 +23,5 @@ sourceGenerators in Assets <+= build in Assets
 
 // Include handlebars views in resources for lookup on classpath
 unmanagedResourceDirectories in Compile += (resourceDirectory in Assets).value
+
+mappings in Universal ++= (baseDirectory.value / "deploy" * "*").get map (x => x -> ("deploy/" + x.getName))

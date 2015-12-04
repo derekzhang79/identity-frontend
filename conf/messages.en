@@ -21,3 +21,21 @@ socialsignin.description=Sign in with {0}
 
 header.backtext=Back to the Guardian
 header.logo=The Guardian
+
+footer.membership=membership
+footer.jobs=jobs
+footer.dating=dating
+footer.masterclasses=masterclasses
+footer.labs=Guardian labs
+footer.subscribe=subscribe
+footer.topics=all topics
+footer.contributors=all contributors
+footer.about=about us
+footer.contact=contact us
+footer.techfeedback=report technical issue
+footer.complaints=complaints & corrections
+footer.terms=terms & conditions
+footer.privacy=privacy policy
+footer.cookie=cookie policy
+footer.securedrop=securedrop
+footer.copyright=© 2015 Guardian News and Media Limited or its affiliated companies. All rights reserved.

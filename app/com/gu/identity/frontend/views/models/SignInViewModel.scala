@@ -12,6 +12,7 @@ case class SignInViewModel(signInPageText: SignInPageText,
                            layoutText: LayoutText,
                            socialSignInText: SocialSignInText,
                            headerText: HeaderText,
+                           footerText: FooterText,
                            showPrelude: Boolean = false,
                            links: SignInLinksViewModel = SignInLinksViewModel()) extends ViewModel {
   def toMap =
@@ -20,6 +21,7 @@ case class SignInViewModel(signInPageText: SignInPageText,
       "layoutText" -> layoutText,
       "socialSignInText" -> socialSignInText,
       "headerText" -> headerText,
+      "footerText" -> footerText,
       "showPrelude" -> showPrelude,
       "links" -> links.toMap)
 }
@@ -30,7 +32,8 @@ object SignInViewModel {
       SignInPageText(),
       LayoutText(),
       SocialSignInText(),
-      HeaderText()
+      HeaderText(),
+      FooterText()
     )
   }
 }

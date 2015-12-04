@@ -36,3 +36,23 @@ case class HeaderText (
                       back: String = Messages("header.backtext"),
                       logo: String = Messages("header.logo")
                         )
+
+case class FooterText (
+                      membership: String = Messages("footer.membership"),
+                      jobs: String = Messages("footer.jobs"),
+                      dating: String = Messages("footer.dating"),
+                      masterclasses: String = Messages("footer.masterclasses"),
+                      labs: String = Messages("footer.labs"),
+                      subscribe: String = Messages("footer.subscribe"),
+                      topics: String = Messages("footer.topics"),
+                      contributors: String = Messages("footer.contributors"),
+                      about: String = Messages("footer.about"),
+                      contact: String = Messages("footer.contact"),
+                      techFeedback: String = Messages("footer.techfeedback"),
+                      complaints: String = Messages("footer.complaints"),
+                      terms: String = Messages("footer.terms"),
+                      privacy: String = Messages("footer.privacy"),
+                      cookie: String = Messages("footer.cookie"),
+                      secureDrop: String = Messages("footer.securedrop"),
+                      copyright: String = Messages("footer.copyright")
+                        )

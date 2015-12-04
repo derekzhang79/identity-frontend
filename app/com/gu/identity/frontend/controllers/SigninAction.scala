@@ -71,7 +71,6 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
       case None => ""
     }
     SeeOther(routes.Application.signIn().url + s"?$query" + emailAddress)
-      .withHeaders("Cache-Control" -> "no-cache")
   }
 
 }

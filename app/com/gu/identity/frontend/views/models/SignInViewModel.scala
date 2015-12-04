@@ -29,5 +29,7 @@ object SignInViewModel {
 
 case class SignInPageText (
                       title: String = Messages("signin.title"),
-                      prelude: String = Messages("signin.prelude")
+                      prelude: String = Messages("signin.prelude"),
+                      preludeMoreInfo: String = Messages("signin.prelude.moreinfo"),
+                      preludeFaq: String = Messages("signin.prelude.faq")
                         )

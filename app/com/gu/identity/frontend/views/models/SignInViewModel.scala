@@ -56,13 +56,15 @@ case class SignInViewModel(signInPageText: SignInPageText,
 }
 
 object SignInViewModel {
-  def apply(): SignInViewModel = {
+  def apply(errors: Seq[ErrorViewModel], email: String): SignInViewModel = {
     SignInViewModel(
       SignInPageText(),
       LayoutText(),
       SocialSignInText(),
       HeaderText(),
-      FooterText()
+      FooterText(),
+      errors = errors,
+      email = email
     )
   }
 }

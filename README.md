@@ -76,11 +76,20 @@ aws s3 cp --profile identity s3://gu-identity-frontend-private/DEV/identity-fron
 sbt devrun
 ```
 
-## Testing - Lines in the sand
+## Testing
 
-- All tests should be included in this repo and executed before deployment.
-- Failing tests will block deployment.
+### Functional tests
+
+`sbt "project functional-tests" test`
+
+These are browser driving Selenium tests.
+
+### Unit tests
+
+`sbt test`
+
+### Guidelines
+
+- Tests should complete in under five minutes.
 - Prefer unit tests to integration/functional tests.
-- Browser tests should only be written if the functionality cannot be tested any other way.
-- Tests should always complete in under five minutes.
-- Unstable tests are not acceptable.
+- Unstable tests should be removed.

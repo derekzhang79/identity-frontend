@@ -2,6 +2,8 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.controllers.routes
 
+import com.gu.identity.frontend.models._
+
 case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguardian.com/facebook/signin",
                                 socialGoogle: String = "https://oauth.theguardian.com/google/signin") extends ViewModel {
   def toMap =
@@ -29,14 +31,40 @@ object ErrorViewModel {
   private def getErrorMessage(id: String) = errorMessages.getOrElse(id, default)
 }
 
-
-case class SignInViewModel(title: String = "Sign in to the Guardian",
-                           pageTitle: String = "Sign in",
+case class SignInViewModel(signInPageText: SignInPageText,
+                           layoutText: LayoutText,
+                           socialSignInText: SocialSignInText,
+                           headerText: HeaderText,
+                           footerText: FooterText,
                            showPrelude: Boolean = false,
                            errors: Seq[ErrorViewModel] = Seq.empty,
                            email: String = "",
                            links: SignInLinksViewModel = SignInLinksViewModel(),
                            actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url)) extends ViewModel {
   def toMap =
-    Map("title" -> title, "pageTitle" -> pageTitle, "showPrelude" -> showPrelude, "errors" -> errors.map(_.toMap), "email" -> email, "links" -> links.toMap, "actions" -> actions)
+    Map(
+      "signInPageText" -> signInPageText,
+      "layoutText" -> layoutText,
+      "socialSignInText" -> socialSignInText,
+      "headerText" -> headerText,
+      "footerText" -> footerText,
+      "showPrelude" -> showPrelude,
+      "errors" -> errors.map(_.toMap),
+      "email" -> email,
+      "links" -> links.toMap,
+      "actions" -> actions)
+}
+
+object SignInViewModel {
+  def apply(errors: Seq[ErrorViewModel], email: String): SignInViewModel = {
+    SignInViewModel(
+      SignInPageText(),
+      LayoutText(),
+      SocialSignInText(),
+      HeaderText(),
+      FooterText(),
+      errors = errors,
+      email = email
+    )
+  }
 }

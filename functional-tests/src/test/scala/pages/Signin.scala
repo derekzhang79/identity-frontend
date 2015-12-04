@@ -1,9 +1,9 @@
 package test.pages
 
-import test.util.{TestUser, Util, Config}
+import test.util.{TestUser, WebBrowserUtil, Config}
 import org.scalatest.selenium.{Page, WebBrowser}
 
-class Signin(val testUser: TestUser) extends Page with WebBrowser with Util {
+class Signin(val testUser: TestUser) extends Page with WebBrowser with WebBrowserUtil {
   val url = s"${Config.baseUrl}/signin"
 
   private lazy val signUpLink = cssSelector(s"a[href='/register']")

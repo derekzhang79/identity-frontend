@@ -8,7 +8,7 @@ import org.scalatest.selenium.WebBrowser
 import scala.util.{Success, Failure, Try}
 import scala.collection.JavaConverters._
 
-trait Util { this: WebBrowser =>
+trait WebBrowserUtil { this: WebBrowser =>
 
   lazy implicit val driver = Config.driver
 

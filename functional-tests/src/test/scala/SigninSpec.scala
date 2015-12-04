@@ -1,12 +1,12 @@
 package test
 
 import test.pages.RegisterConfirm
-import test.util.{TestUser, Util, Config}
+import test.util.{TestUser, WebBrowserUtil, Config}
 import org.scalatest.selenium.WebBrowser
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FeatureSpec, GivenWhenThen}
 import org.slf4j.LoggerFactory
 
-class SigninSpec extends FeatureSpec with WebBrowser with Util
+class SigninSpec extends FeatureSpec with WebBrowser with WebBrowserUtil
   with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll  {
 
   def logger = LoggerFactory.getLogger(this.getClass)

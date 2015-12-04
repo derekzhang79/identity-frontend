@@ -31,5 +31,16 @@ case class SignInPageText (
                       title: String = Messages("signin.title"),
                       prelude: String = Messages("signin.prelude"),
                       preludeMoreInfo: String = Messages("signin.prelude.moreinfo"),
-                      preludeFaq: String = Messages("signin.prelude.faq")
+                      preludeFaq: String = Messages("signin.prelude.faq"),
+                      email: String = Messages("signin.email"),
+                      divideText: String = Messages("signin.dividetext"),
+                      password: String = Messages("signin.password"),
+                      forgottenPassword: String = Messages("signin.forgottenpassword"),
+                      rememberMe: String = Messages("signin.rememberme"),
+                      signIn: String = Messages("signin.signin"),
+                      noAccount: String = Messages("signin.noaccount"),
+                      signUp: String = Messages("signin.signup"),
+                      conditions: String = Messages("signin.conditions"),
+                      termsOfService: String = Messages("signin.termsofservice"),
+                      privacyPolicy: String = Messages("signin.privacypolicy")
                         )

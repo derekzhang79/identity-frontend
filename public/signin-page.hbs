@@ -11,13 +11,18 @@
 
   {{> components/social-signin/_social-signin }}
 
-  <form class="signin-form" action="{{ actions.signIn }}">
+  <form class="signin-form" action="{{ actions.signIn }}" method="POST">
     <p class="signin-form__prelude">{{signInPageText.divideText}}</p>
 
     <fieldset class="signin-form__fieldset">
+
+      {{#each errors}}
+          <p id="{{id}}" class="signin-form__error">{{message}}</p>
+      {{/each}}
+
       <div class="signin-form__control--email">
-        <label class="signin-form__label--email" for="signin_field_email"> {{signInPageText.email}} </label>
-        <input class="signin-form__field--email" id="signin_field_email" type="email" name="email" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <label class="signin-form__label--email" for="signin_field_email">{{signInPageText.email}}</label>
+        <input class="signin-form__field--email" id="signin_field_email" type="email" name="email" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}"/>
       </div>
       <div class="signin-form__control--password">
         <label class="signin-form__label--password" for="signin_field_password"> {{signInPageText.password}} </label>
@@ -26,8 +31,8 @@
       </div>
 
       <div class="signin-form__control--remember-me">
-        <input class="signin-form__checkbox--remember-me" id="signin_field_remember_me" type="checkbox" name="keepMeSignedIn"/>
-        <label class="signin-form__label--remember" for="signin_field_remember_me"> {{signInPageText.rememberMe}} </label>
+        <input class="signin-form__checkbox--remember-me" id="signin_field_remember_me" type="checkbox" name="keepMeSignedIn" value="true"/>
+        <label class="signin-form__label--remember" for="signin_field_remember_me">{{signInPageText.rememberMe}}</label>
       </div>
       <div class="signin-form__control--submit">
         <button class="signin-form__submit-button" id="signin_submit" type="submit"> {{signInPageText.signIn}} </button>

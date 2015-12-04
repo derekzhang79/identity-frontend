@@ -1,5 +1,7 @@
 package com.gu.identity.frontend.views.models
 
+import com.gu.identity.frontend.controllers.routes
+
 import com.gu.identity.frontend.models._
 
 case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguardian.com/facebook/signin",
@@ -8,13 +10,37 @@ case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguard
     Map("socialFacebook" -> socialFacebook, "socialGoogle" -> socialGoogle)
 }
 
+case class ErrorViewModel(id: String, message: String) extends ViewModel {
+  def toMap =
+    Map("id" -> id, "message" -> message)
+}
+
+object ErrorViewModel {
+
+  def apply(id: String): ErrorViewModel = {
+    ErrorViewModel(id, getErrorMessage(id))
+  }
+
+  val errorMessages = Map(
+    "error-gateway" -> "There was a problem signing in, please try again.",
+    "error-bad-request" -> "Incorrect email or password, please try again."
+  )
+
+  val default: String = "There was an unexpected problem, please try again."
+
+  private def getErrorMessage(id: String) = errorMessages.getOrElse(id, default)
+}
+
 case class SignInViewModel(signInPageText: SignInPageText,
                            layoutText: LayoutText,
                            socialSignInText: SocialSignInText,
                            headerText: HeaderText,
                            footerText: FooterText,
                            showPrelude: Boolean = false,
-                           links: SignInLinksViewModel = SignInLinksViewModel()) extends ViewModel {
+                           errors: Seq[ErrorViewModel] = Seq.empty,
+                           email: String = "",
+                           links: SignInLinksViewModel = SignInLinksViewModel(),
+                           actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url)) extends ViewModel {
   def toMap =
     Map(
       "signInPageText" -> signInPageText,
@@ -23,7 +49,10 @@ case class SignInViewModel(signInPageText: SignInPageText,
       "headerText" -> headerText,
       "footerText" -> footerText,
       "showPrelude" -> showPrelude,
-      "links" -> links.toMap)
+      "errors" -> errors.map(_.toMap),
+      "email" -> email,
+      "links" -> links.toMap,
+      "actions" -> actions)
 }
 
 object SignInViewModel {

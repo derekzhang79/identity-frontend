@@ -16,3 +16,5 @@ signin.termsofservice=Terms of Service
 signin.privacypolicy=Privacy Policy
 
 layout.pagetitle=| Identity | The Guardian
+
+socialsignin.description=Sign in with {0}

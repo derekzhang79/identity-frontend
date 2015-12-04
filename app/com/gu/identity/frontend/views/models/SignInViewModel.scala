@@ -12,17 +12,19 @@ case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguard
 
 case class SignInViewModel(signInPageText: SignInPageText,
                            layoutText: LayoutText,
+                           socialSignInText: SocialSignInText,
                            showPrelude: Boolean = false,
                            links: SignInLinksViewModel = SignInLinksViewModel()) extends ViewModel {
   def toMap =
-    Map("signInPageText" -> signInPageText, "layoutText" -> layoutText, "showPrelude" -> showPrelude, "links" -> links.toMap)
+    Map("signInPageText" -> signInPageText, "layoutText" -> layoutText, "socialSignInText" -> socialSignInText, "showPrelude" -> showPrelude, "links" -> links.toMap)
 }
 
 object SignInViewModel {
   def apply(): SignInViewModel = {
     SignInViewModel(
       SignInPageText(),
-      LayoutText()
+      LayoutText(),
+      SocialSignInText()
     )
   }
 }
@@ -49,3 +51,8 @@ case class SignInPageText (
 case class LayoutText (
                       layoutPageTitle: String = Messages("layout.pagetitle")
                         )
+
+case class SocialSignInText (
+                            facebook: String = Messages("socialsignin.description", "Facebook"),
+                            google: String = Messages("socialsignin.description", "Google")
+                              )

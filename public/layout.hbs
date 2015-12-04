@@ -15,5 +15,9 @@
   </div>
 
   {{> components/footer/_footer }}
+
+  {{#each javascripts}}
+    <script src="{{ this }}" type="text/javascript" async></script>
+  {{/each}}
 </body>
 </html>

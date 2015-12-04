@@ -70,7 +70,7 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
       case Some(email) => "&email=" + email
       case None => ""
     }
-    SeeOther(routes.Application.signIn().url + s"?$query" + emailAddress)
+    SeeOther(routes.Application.signIn(email).url + s"?$query")
   }
 
 }

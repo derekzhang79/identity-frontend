@@ -80,7 +80,7 @@ function s_doPlugins(s) {
     for (var i=0,j=diary.length;i<j;++i)
     {
         var pV=diary[i];
-        var tmp=(pV>=cutoff) && (pV<now) && (vC+=1) && newDiary.push(pV);
+        (pV>=cutoff) && (pV<now) && (vC+=1) && newDiary.push(pV);
     }
     newDiary.push(now);
     newDiary=newDiary.join(",");
@@ -120,8 +120,8 @@ function s_doPlugins(s) {
 }
 s.doPlugins=s_doPlugins;
 
-var s_sv_dynamic_root = "survey.112.2o7.net/survey/dynamic";
-var s_sv_gather_root = "survey.112.2o7.net/survey/gather";
+//var s_sv_dynamic_root = "survey.112.2o7.net/survey/dynamic";
+//var s_sv_gather_root = "survey.112.2o7.net/survey/gather";
 
 
 /* WARNING: Changing any of the below variables will cause drastic

@@ -12,7 +12,7 @@
     "prebuild": "mkdir -p ./target/web/build",
     "build": "npm run build-css && npm run build-js",
     "build-css": "postcss -c postcss.json",
-    "build-js": "webpack"
+    "build-js": "webpack -p"
   },
   "devDependencies": {
     "babel-core": "^6.2.1",

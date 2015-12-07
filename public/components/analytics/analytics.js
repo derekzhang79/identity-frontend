@@ -1,7 +1,7 @@
 import s from './omniture';
 
-var R2_STORAGE_KEY = 's_ni', // DO NOT CHANGE THIS, ITS IS SHARED WITH R2. BAD THINGS WILL HAPPEN!
-    NG_STORAGE_KEY = 'gu.analytics.referrerVars';
+//var R2_STORAGE_KEY = 's_ni', // DO NOT CHANGE THIS, ITS IS SHARED WITH R2. BAD THINGS WILL HAPPEN!
+//    NG_STORAGE_KEY = 'gu.analytics.referrerVars';
 
 function Omniture() {
     this.s = s;
@@ -81,11 +81,10 @@ Omniture.prototype.trackLink = function (linkObject, linkName, options) {
 };
 
 Omniture.prototype.populatePageProperties = function () {
-    var d,
-        now      = new Date(),
+    var now      = new Date(),
         tpA      = this.s.getTimeParting('n', '+0'),
         /* Retrieve navigation interaction data */
-        ni       = '', // TODO storage.session.get(NG_STORAGE_KEY),
+        // ni       = '', // TODO storage.session.get(NG_STORAGE_KEY),
         platform = 'frontend',
         mvt      = '', //ab.makeOmnitureTag(document),
         // Tag the identity of this user, which is composed of

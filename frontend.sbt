@@ -1,5 +1,6 @@
-
 import WebKeys._
+import com.typesafe.sbt.web.incremental
+import com.typesafe.sbt.web.incremental._
 
 val build = taskKey[Seq[File]]("Compiles Frontend assets using npm")
 
@@ -9,11 +10,35 @@ buildOutputDirectory in Assets := webTarget.value / "build"
 
 build in Assets := {
   val log = streams.value.log
-  log.info("Running npm run build")
-  val outDir = (buildOutputDirectory in Assets).value
-  val cmd = Process("npm run build", baseDirectory.value) !< log
-  if (cmd != 0) sys.error(s"Non-zero error code for `npm run build`: $cmd")
-  (outDir ***).get
+
+  val sourceDir = (resourceDirectory in Assets).value
+  val targetDir = (buildOutputDirectory in Assets).value
+  val sources = (sourceDir ** "*.*").get
+
+  // use sbt-web compile incremental API to only build when needed
+  val results = incremental.syncIncremental((streams in Assets).value.cacheDirectory / "npm-build", Seq("npm-build")) {
+    ops =>
+      ops.map { op =>
+        log.info("Running npm run build")
+        val startTime = System.currentTimeMillis
+
+        val cmd = Process("npm run build", baseDirectory.value) !< log
+        val result = {
+          if (cmd == 0) OpSuccess(sources.toSet, (targetDir  ** "*.*").get.toSet)
+          else {
+            log.error(s"Non-zero error code for `npm run build`: $cmd")
+            OpFailure
+          }
+        }
+
+        log.info(s"Finished npm build in ${System.currentTimeMillis - startTime}ms")
+
+        op -> result
+      }.toMap -> Set.empty
+
+  }
+
+  (results._1 ++ results._2).toSeq
 }
 
 build in Assets := (build in Assets).dependsOn(nodeModules in Assets).value

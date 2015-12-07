@@ -6,28 +6,9 @@ var R2_STORAGE_KEY = 's_ni', // DO NOT CHANGE THIS, ITS IS SHARED WITH R2. BAD T
 function Omniture() {
     this.s = s;
     this.pageviewSent = false;
-    //this.addHandlers();
-}
 
-//Omniture.prototype.addHandlers = function () {
-//    mediator.on('module:clickstream:interaction', this.trackLinkImmediate.bind(this));
-//
-//    mediator.on('module:clickstream:click', this.logTag.bind(this));
-//
-//    mediator.on('module:analytics:omniture:pageview:sent', function () {
-//        // Independently log this page view, used for checking we have not broken analytics.
-//        // We want to exclude off-site embed tracking from this data.
-//        if (!this.isEmbed) {
-//            beacon.fire('/count/pva.gif');
-//        }
-//    }.bind(this));
-//
-//    mediator.on('module:analytics:omniture:pageview:sent', function () {
-//        if (config.switches.noBounceIndicator) {
-//            storage.session.remove('gu-bounce-test');
-//        }
-//    });
-//};
+  // TODO do we need link tracking?
+}
 
 Omniture.prototype.logView = function () {
     this.s.t();
@@ -220,15 +201,6 @@ Omniture.prototype.populatePageProperties = function () {
     // the operating system
     this.s.eVar58 = navigator.platform || 'unknown';
 
-    // the number of Guardian links inside the body
-    //if (config.page.inBodyInternalLinkCount) {
-    //    this.s.prop58 = config.page.inBodyInternalLinkCount;
-    //}
-    //
-    //// the number of External links inside the body
-    //if (config.page.inBodyExternalLinkCount) {
-    //    this.s.prop69 = config.page.inBodyExternalLinkCount;
-    //}
 
     //if (ni) {
     //    d = new Date().getTime();

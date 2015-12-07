@@ -137,51 +137,110 @@ s.visitorNamespace="guardian";
 /*
  * Plugin: getValOnce_v1.1
  */
-s.getValOnce=new Function("v","c","e","t",""
-    +"var s=this,a=new Date,v=v?v:'',c=c?c:'s_gvo',e=e?e:0,i=t=='m'?6000"
-    +"0:86400000;k=s.c_r(c);if(v){a.setTime(a.getTime()+e*i);s.c_w(c,v,e"
-    +"==0?0:a);}return v==k?'':v");
+s.getValOnce=function(v,c,e,t) {
+  var s = this, a = new Date, v = v ? v : '', c = c ? c : 's_gvo', e = e ? e : 0, i = t == 'm' ? 60000 : 86400000, k = s.c_r(c);
+  if (v) {
+    a.setTime(a.getTime() + e * i);
+    s.c_w(c, v, e == 0 ? 0 : a);
+  }
+  return v == k ? '' : v
+};
 
 /*
  * Plugin: Days since last Visit 1.1.H - capture time from last visit
  * Modified by Guardian to check that s.c_r() did not return null.
  */
-s.getDaysSinceLastVisit=new Function("c",""
-    +"var s=this,e=new Date(),es=new Date(),cval,cval_s,cval_ss,ct=e.getT"
-    +"ime(),day=24*60*60*1000,f1,f2,f3,f4,f5;e.setTime(ct+3*365*day);es.s"
-    +"etTime(ct+30*60*1000);f0='Cookies Not Supported';f1='First Visit';f"
-    +"2='More than 30 days';f3='More than 7 days';f4='Less than 7 days';f"
-    +"5='Less than 1 day';cval=s.c_r(c);if(cval && cval.length==0){s.c_w(c,ct,e);"
-    +"s.c_w(c+'_s',f1,es);}else{var d=ct-cval;if(d>30*60*1000){if(d>30*da"
-    +"y){s.c_w(c,ct,e);s.c_w(c+'_s',f2,es);}else if(d<30*day+1 && d>7*day"
-    +"){s.c_w(c,ct,e);s.c_w(c+'_s',f3,es);}else if(d<7*day+1 && d>day){s."
-    +"c_w(c,ct,e);s.c_w(c+'_s',f4,es);}else if(d<day+1){s.c_w(c,ct,e);s.c"
-    +"_w(c+'_s',f5,es);}}else{s.c_w(c,ct,e);cval_ss=s.c_r(c+'_s');s.c_w(c"
-    +"+'_s',cval_ss,es);}}cval_s=s.c_r(c+'_s');if(cval_s.length==0) retur"
-    +"n f0;else if(cval_s!=f1&&cval_s!=f2&&cval_s!=f3&&cval_s!=f4&&cval_s"
-    +"!=f5) return '';else return cval_s;");
+s.getDaysSinceLastVisit=function(c) {
+  var s = this, e = new Date(), es = new Date(), cval, cval_s, cval_ss, ct = e.getTime(), day = 24 * 60 * 60 * 1000, f0, f1, f2, f3, f4, f5;
+  e.setTime(ct + 3 * 365 * day);
+  es.setTime(ct + 30 * 60 * 1000);
+  f0 = 'Cookies Not Supported';
+  f1 = 'First Visit';
+  f2 = 'More than 30 days';
+  f3 = 'More than 7 days';
+  f4 = 'Less than 7 days';
+  f5 = 'Less than 1 day';
+  cval = s.c_r(c);
+  if (cval && cval.length == 0) {
+    s.c_w(c, ct, e);
+    s.c_w(c + '_s', f1, es);
+  } else {
+    var d = ct - cval;
+    if (d > 30 * 60 * 1000) {
+      if (d > 30 * day) {
+        s.c_w(c, ct, e);
+        s.c_w(c + '_s', f2, es);
+      } else if (d < 30 * day + 1 && d > 7 * day) {
+        s.c_w(c, ct, e);
+        s.c_w(c + '_s', f3, es);
+      } else if (d < 7 * day + 1 && d > day) {
+        s.c_w(c, ct, e);
+        s.c_w(c + '_s', f4, es);
+      } else if (d < day + 1) {
+        s.c_w(c, ct, e);
+        s.c_w(c + '_s', f5, es);
+      }
+    } else {
+      s.c_w(c, ct, e);
+      cval_ss = s.c_r(c + '_s');
+      s.c_w(c + '_s', cval_ss, es);
+    }
+  }
+  cval_s = s.c_r(c + '_s');
+  if (cval_s.length == 0) return f0; else if (cval_s != f1 && cval_s != f2 && cval_s != f3 && cval_s != f4 && cval_s != f5) return ''; else return cval_s;
+};
 
 /*
  * Plugin: getNewRepeat 1.2 - Returns whether user is new or repeat
  */
-s.getNewRepeat=new Function("d","cn",""
-    +"var s=this,e=new Date(),cval,sval,ct=e.getTime();d=d?d:30;cn=cn?cn:"
-    +"'s_nr';e.setTime(ct+d*24*60*60*1000);cval=s.c_r(cn);if(cval.length="
-    +"=0){s.c_w(cn,ct+'-New',e);return'New';}sval=s.split(cval,'-');if(ct"
-    +"-sval[0]<30*60*1000&&sval[1]=='New'){s.c_w(cn,ct+'-New',e);return'N"
-    +"ew';}else{s.c_w(cn,ct+'-Repeat',e);return'Repeat';}");
-
+s.getNewRepeat=function(d,cn) {
+  var s = this, e = new Date(), cval, sval, ct = e.getTime();
+  d = d ? d : 30;
+  cn = cn ? cn : 's_nr';
+  e.setTime(ct + d * 24 * 60 * 60 * 1000);
+  cval = s.c_r(cn);
+  if (cval.length == 0) {
+    s.c_w(cn, ct + '-New', e);
+    return 'New';
+  }
+  sval = s.split(cval, '-');
+  if (ct - sval[0] < 30 * 60 * 1000 && sval[1] == 'New') {
+    s.c_w(cn, ct + '-New', e);
+    return 'New';
+  } else {
+    s.c_w(cn, ct + '-Repeat', e);
+    return 'Repeat';
+  }
+};
 /*
  * Plugin: getPreviousValue_v1.0 - return previous value of designated
  *   variable (requires split utility)
  */
-s.getPreviousValue=new Function("v","c","el",""
-+"var s=this,t=new Date,i,j,r='';t.setTime(t.getTime()+1800000);if(el"
-+"){if(s.events){i=s.split(el,',');j=s.split(s.events,',');for(x in i"
-+"){for(y in j){if(i[x]==j[y]){if(s.c_r(c)) r=s.c_r(c);v?s.c_w(c,v,t)"
-+":s.c_w(c,'no value',t);return r}}}}}else{if(s.c_r(c)) r=s.c_r(c);v?"
-+"s.c_w(c,v,t):s.c_w(c,'no value',t);return r}");
-
+s.getPreviousValue=function(v,c,el) {
+  var s = this, t = new Date, i, j, r = '';
+  t.setTime(t.getTime() + 1800000);
+  if (el) {
+    if (s.events) {
+      i = s.split(el, ',');
+      j = s.split(s.events, ',');
+      for (x in i) {
+        for (y in j) {
+          if (i[x] == j[y]) {
+            if (s.c_r(c)) r = s.c_r(c);
+            v ? s.c_w(c, v, t)
+              : s.c_w(c, 'no value', t);
+            return r
+          }
+        }
+      }
+    }
+  } else {
+    if (s.c_r(c)) r = s.c_r(c);
+    v ?
+      s.c_w(c, v, t) : s.c_w(c, 'no value', t);
+    return r
+  }
+};
 
 /**
  * getLoadTimeDim v.0.1
@@ -203,35 +262,82 @@ s.getPreviousValue=new Function("v","c","el",""
 /*
  * Plugin Utility: apl v1.1
  */
-s.apl=new Function("l","v","d","u",""
-    +"var s=this,m=0;if(!l)l='';if(u){var i,n,a=s.split(l,d);for(i=0;i<a."
-    +"length;i++){n=a[i];m=m||(u==1?(n==v):(n.toLowerCase()==v.toLowerCas"
-    +"e()));}}if(!m)l=l?l+d+v:v;return l");
+s.apl=function(l,v,d,u) {
+  var s = this, m = 0;
+  if (!l)l = '';
+  if (u) {
+    var i, n, a = s.split(l, d);
+    for (i = 0; i < a.length; i++) {
+      n = a[i];
+      m = m || (u == 1 ? (n == v) : (n.toLowerCase() == v.toLowerCase()));
+    }
+  }
+  if (!m)l = l ? l + d + v : v;
+  return l
+};
 
 /*
  * Utility Function: split v1.5 (JS 1.0 compatible)
  */
-s.split=new Function("l","d",""
-    +"var i,x=0,a=new Array;while(l){i=l.indexOf(d);i=i>-1?i:l.length;a[x"
-    +"++]=l.substring(0,i);l=l.substring(i+d.length);}return a");
+s.split=function(l,d) {
+  var i, x = 0, a = new Array;
+  while (l) {
+    i = l.indexOf(d);
+    i = i > -1 ? i : l.length;
+    a[x++] = l.substring(0, i);
+    l = l.substring(i + d.length);
+  }
+  return a
+}
 
 /*
  * Plugin: getTimeParting 3.3
  * Modified by Guardian to check the current year has been configured
  */
-s.getTimeParting=new Function("h","z",""
-    +"var s=this,od;od=new Date('1/1/2000');if(od.getDay()!=6||od.getMont"
-    +"h()!=0){return'Data Not Available';}else{var H,M,D,W,U,ds,de,tm,tt,"
-    +"da=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Sa"
-    +"turday'],d=new Date(),a=[];z=z?z:0;z=parseFloat(z);if(s._tpDST && s._tpDST[d.getFullYear()]){var"
-    +" dso=s._tpDST[d.getFullYear()].split(/,/);ds=new Date(dso[0]+'/'+d."
-    +"getFullYear());de=new Date(dso[1]+'/'+d.getFullYear());if(h=='n'&&d"
-    +">ds&&d<de){z=z+1;}else if(h=='s'&&(d>de||d<ds)){z=z+1;}}d=d.getTime"
-    +"()+(d.getTimezoneOffset()*60000);d=new Date(d+(3600000*z));H=d.getH"
-    +"ours();M=d.getMinutes();M=(M<10)?'0'+M:M;D=d.getDay();U='AM';W='Wee"
-    +"kday';if(H>=12){U='PM';H=H-12;}if(H==0){H=12;}if(D==6||D==0){W='Wee"
-    +"kend';}D=da[D];tm=H+':'+M+U;tt=H+':'+((M>30)?'30':'00')+U;a=[tm,tt,"
-    +"D,W];return a;}");
+s.getTimeParting=function(h,z) {
+  var s = this, od;
+  od = new Date('1/1/2000');
+  if (od.getDay() != 6 || od.getMonth() != 0) {
+    return 'Data Not Available';
+  } else {
+    var H, M, D, W, U, ds, de, tm, tt, da = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], d = new Date(), a = [];
+    z = z ? z : 0;
+    z = parseFloat(z);
+    if (s._tpDST && s._tpDST[d.getFullYear()]) {
+      var dso = s._tpDST[d.getFullYear()].split(/,/);
+      ds = new Date(dso[0] + '/' + d.getFullYear());
+      de = new Date(dso[1] + '/' + d.getFullYear());
+      if (h == 'n' && d > ds && d < de) {
+        z = z + 1;
+      } else if (h == 's' && (d > de || d < ds)) {
+        z = z + 1;
+      }
+    }
+    d = d.getTime() + (d.getTimezoneOffset() * 60000);
+    d = new Date(d + (3600000 * z));
+    H = d.getHours();
+    M = d.getMinutes();
+    M = (M < 10) ? '0' + M : M;
+    D = d.getDay();
+    U = 'AM';
+    W = 'Weekday';
+    if (H >= 12) {
+      U = 'PM';
+      H = H - 12;
+    }
+    if (H == 0) {
+      H = 12;
+    }
+    if (D == 6 || D == 0) {
+      W = 'Weekend';
+    }
+    D = da[D];
+    tm = H + ':' + M + U;
+    tt = H + ':' + ((M > 30) ? '30' : '00') + U;
+    a = [tm, tt, D, W];
+    return a;
+  }
+}
 
 // This is a Guardian fix to avoid using getQueryParam(), which passes through
 // hash locations,eg. example.com?CMP=campaign#example

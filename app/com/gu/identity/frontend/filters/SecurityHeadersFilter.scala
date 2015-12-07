@@ -33,7 +33,7 @@ class SecurityHeadersFilter @Inject() (configuration: Configuration) extends Ess
 
   val csp = Map(
     "default-src" -> Seq(CSP_SELF_DOMAIN),
-    "script-src" -> (Seq(CSP_SELF_DOMAIN, "'unsafe-eval'") ++ hashesForInlineScripts),
+    "script-src" -> (Seq(CSP_SELF_DOMAIN) ++ hashesForInlineScripts),
     "img-src" -> (Seq(CSP_SELF_DOMAIN, CSP_DATA_PROTOCOL) ++ analyticsImageDomainsForCSP),
     "font-src" -> Seq(CSP_SELF_DOMAIN, CSP_DATA_PROTOCOL)
   )
@@ -55,4 +55,3 @@ class SecurityHeadersFilter @Inject() (configuration: Configuration) extends Ess
   private def toCSPShaDefinition(in: String) =
     s"'sha256-$in'"
 }
-

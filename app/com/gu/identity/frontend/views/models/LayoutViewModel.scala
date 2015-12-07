@@ -5,9 +5,9 @@ import controllers.routes
 import play.api.libs.json.Json
 
 
-case class LayoutViewModel(inlineJavascriptConfig: String, styles: Seq[String], javascripts: Seq[String]) extends ViewModel {
+case class LayoutViewModel(inlineJsConfig: InlineSource, styles: Seq[String], javascripts: Seq[String]) extends ViewModel {
   def toMap =
-    Map("inlineJavascriptConfig" -> inlineJavascriptConfig, "styles" -> styles, "javascripts" -> javascripts)
+    Map("inlineJsConfig" -> inlineJsConfig.toMap, "styles" -> styles, "javascripts" -> javascripts)
 }
 
 object LayoutViewModel {
@@ -26,6 +26,6 @@ object LayoutViewModel {
     val jsConfig = Json.stringify(Json.toJson(config))
     val jsConfigScript = s"""this._idConfig=$jsConfig;"""
 
-    LayoutViewModel(jsConfigScript, styleUrls, javascriptUrls)
+    LayoutViewModel(InlineSource(jsConfigScript), styleUrls, javascriptUrls)
   }
 }

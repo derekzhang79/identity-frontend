@@ -4,8 +4,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object IdentityClient extends Logging {
 
-  def authenticateCookies(email: Option[String], password: Option[String])(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] =
-    AuthenticateCookiesRequest.from(email, password) match {
+  def authenticateCookies(email: Option[String], password: Option[String], rememberMe: Boolean)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] =
+    AuthenticateCookiesRequest.from(email, password, rememberMe) match {
       case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(Seq(err)))
     }

@@ -25,7 +25,7 @@ class IdentityServiceImpl @Inject() (config: Configuration, adapter: IdentitySer
   implicit val clientConfiguration = IdentityClientConfiguration(config.identityApiHost, config.identityApiKey, adapter)
 
   def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean)(implicit ec: ExecutionContext) = {
-    IdentityClient.authenticateCookies(email, password).map {
+    IdentityClient.authenticateCookies(email, password, rememberMe).map {
       case Left(errors) => Left {
         errors.map {
           case e: BadRequest => ServiceBadRequest(e.message, e.description)

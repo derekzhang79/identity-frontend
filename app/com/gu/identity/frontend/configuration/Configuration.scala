@@ -10,6 +10,8 @@ trait Configuration {
 
   val identityApiKey: String
   val identityApiHost: String
+
+  val omnitureAccount: String
 }
 
 class ApplicationConfiguration extends Configuration {
@@ -21,4 +23,6 @@ class ApplicationConfiguration extends Configuration {
 
   val identityApiKey = getString("identity.api.key")
   val identityApiHost = getString("identity.api.host")
+
+  val omnitureAccount = getString("omniture.account")
 }

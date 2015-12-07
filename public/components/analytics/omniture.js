@@ -1,10 +1,12 @@
 /* Extracted from https://github.com/guardian/frontend/blob/master/static/public/javascripts/vendor/omniture.js */
 
+/*global window*/
+
 /* SiteCatalyst code version: AM 1.4.1
  Copyright 1996-2014 Adobe, Inc. All Rights Reserved
  More info available at http://www.omniture.com */
 
-const s_account='guardiangu-frontend-dev';
+const s_account = getOmnitureAccount();
 
 // PROD s_account
 // const s_account='guardiangu-frontend,guardiangu-network';
@@ -12,6 +14,14 @@ const s_account='guardiangu-frontend-dev';
 const s = s_gi(s_account);
 
 export default s;
+
+function getOmnitureAccount() {
+  const account = window._idConfig && window._idConfig.omnitureAccount;
+  if (!account) {
+    throw new Error('Omniture account configuration not found');
+  }
+  return account;
+}
 
 /************************** CONFIG SECTION **************************/
 /* You may add or alter any code config here. */

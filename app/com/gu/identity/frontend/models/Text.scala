@@ -38,21 +38,11 @@ case class HeaderText (
                         )
 
 case class FooterText (
-                      membership: String = Messages("footer.membership"),
-                      jobs: String = Messages("footer.jobs"),
-                      dating: String = Messages("footer.dating"),
-                      masterclasses: String = Messages("footer.masterclasses"),
-                      labs: String = Messages("footer.labs"),
-                      subscribe: String = Messages("footer.subscribe"),
-                      topics: String = Messages("footer.topics"),
-                      contributors: String = Messages("footer.contributors"),
-                      about: String = Messages("footer.about"),
-                      contact: String = Messages("footer.contact"),
-                      techFeedback: String = Messages("footer.techfeedback"),
-                      complaints: String = Messages("footer.complaints"),
+                      help: String = Messages("footer.help"),
                       terms: String = Messages("footer.terms"),
+                      contact: String = Messages("footer.contact"),
                       privacy: String = Messages("footer.privacy"),
-                      cookie: String = Messages("footer.cookie"),
-                      secureDrop: String = Messages("footer.securedrop"),
+                      techFeedback: String = Messages("footer.techfeedback"),
+                      cookies: String = Messages("footer.cookies"),
                       copyright: String = Messages("footer.copyright")
                         )

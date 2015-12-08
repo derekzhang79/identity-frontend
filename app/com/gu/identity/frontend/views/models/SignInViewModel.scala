@@ -41,6 +41,7 @@ case class SignInViewModel(signInPageText: SignInPageText,
                            email: String = "",
                            returnUrl: String = "",
                            registerUrl: String = "",
+                           forgotPasswordUrl: String = "",
                            links: SignInLinksViewModel = SignInLinksViewModel(),
                            actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url)) extends ViewModel {
   def toMap =
@@ -55,6 +56,7 @@ case class SignInViewModel(signInPageText: SignInPageText,
       "email" -> email,
       "returnUrl" -> returnUrl,
       "registerUrl" -> registerUrl,
+      "forgotPasswordUrl" -> forgotPasswordUrl,
       "links" -> links.toMap,
       "actions" -> actions)
 }
@@ -71,7 +73,8 @@ object SignInViewModel {
       errors = errors,
       email = email,
       returnUrl = rtnUrl,
-      registerUrl = if (rtnUrl == "") "/register" else s"/register?returnUrl=${rtnUrl}"
+      registerUrl = if (rtnUrl == "") "/register" else s"/register?returnUrl=${rtnUrl}",
+      forgotPasswordUrl = if (rtnUrl == "") "/reset" else s"/reset?returnUrl=${rtnUrl}"
     )
   }
 }

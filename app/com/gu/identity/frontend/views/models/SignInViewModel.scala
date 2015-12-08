@@ -10,6 +10,15 @@ case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguard
     Map("socialFacebook" -> socialFacebook, "socialGoogle" -> socialGoogle)
 }
 
+object SignInLinksViewModel {
+  def apply(returnUrl: Option[String]): SignInLinksViewModel = {
+      SignInLinksViewModel(
+        socialFacebook = UrlBuilder("https://oauth.theguardian.com/facebook/signin", returnUrl.map(("returnUrl",_))),
+        socialGoogle = UrlBuilder("https://oauth.theguardian.com/google/signin", returnUrl.map(("returnUrl",_)))
+    )
+  }
+}
+
 case class ErrorViewModel(id: String, message: String) extends ViewModel {
   def toMap =
     Map("id" -> id, "message" -> message)
@@ -63,7 +72,6 @@ case class SignInViewModel(signInPageText: SignInPageText,
 
 object SignInViewModel {
   def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String]): SignInViewModel = {
-    val rtnUrl = returnUrl.getOrElse("")
     SignInViewModel(
       SignInPageText(),
       LayoutText(),
@@ -72,9 +80,16 @@ object SignInViewModel {
       FooterText(),
       errors = errors,
       email = email,
-      returnUrl = rtnUrl,
-      registerUrl = if (rtnUrl == "") "/register" else s"/register?returnUrl=${rtnUrl}",
-      forgotPasswordUrl = if (rtnUrl == "") "/reset" else s"/reset?returnUrl=${rtnUrl}"
+      returnUrl = returnUrl.getOrElse(""),
+      registerUrl = UrlBuilder("/register", returnUrl.map(("returnUrl",_))),
+      forgotPasswordUrl = UrlBuilder("/reset", returnUrl.map(("returnUrl",_))),
+      links = SignInLinksViewModel(returnUrl)
     )
+  }
+}
+
+object UrlBuilder {
+  def apply(baseUrl: String, param: Option[(String, String)]) = {
+    param.map(url => s"${baseUrl}/?${url._1}=${url._2}").getOrElse(baseUrl)
   }
 }

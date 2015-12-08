@@ -1,5 +1,7 @@
 package com.gu.identity.service.client
 
+import com.gu.identity.frontend.models.TrackingData
+
 sealed trait ApiRequest {
   val method: HttpMethod = GET
   val headers: HttpParameters = Nil
@@ -16,10 +18,10 @@ object ApiRequest {
     s"https://${configuration.host}/$path"
 }
 
-case class AuthenticateCookiesRequest(url: String, email: String, password: String, rememberMe: Boolean, extraHeaders: HttpParameters = Nil) extends ApiRequest {
+case class AuthenticateCookiesRequest(url: String, email: String, password: String, rememberMe: Boolean, trackingData: TrackingData, extraHeaders: HttpParameters = Nil) extends ApiRequest {
   override val method = POST
   override val headers = Seq("Content-Type" -> "application/x-www-form-urlencoded") ++ extraHeaders
-  override val parameters = Seq("format" -> "cookies", "persistent" -> rememberMe.toString)
+  override val parameters = Seq("format" -> "cookies", "persistent" -> rememberMe.toString) ++ trackingData.parameters
   override val body = Some(s"email=$email&password=$password")
 }
 
@@ -33,9 +35,9 @@ object AuthenticateCookiesRequest {
   private def isValidPassword(password: String): Boolean =
     password.nonEmpty
 
-  def from(email: Option[String], password: Option[String], rememberMe: Boolean)(implicit configuration: IdentityClientConfiguration): Either[BadRequest, AuthenticateCookiesRequest] =
+  def from(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Either[BadRequest, AuthenticateCookiesRequest] =
     (email, password) match {
-      case (Some(e), Some(p)) if isValidEmail(e) && isValidPassword(p) => Right(AuthenticateCookiesRequest(ApiRequest.apiEndpoint("auth"), e, p, rememberMe, ApiRequest.apiKeyHeaders))
+      case (Some(e), Some(p)) if isValidEmail(e) && isValidPassword(p) => Right(AuthenticateCookiesRequest(ApiRequest.apiEndpoint("auth"), e, p, rememberMe, trackingData, ApiRequest.apiKeyHeaders))
       case _ => Left(BadRequest("Invalid request"))
     }
 

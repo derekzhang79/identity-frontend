@@ -4,6 +4,7 @@ import javax.inject.Inject
 
 import com.google.inject.ImplementedBy
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.service.client._
 import org.joda.time.{DateTime, Seconds}
 import play.api.mvc.{Cookie => PlayCookie}
@@ -16,7 +17,7 @@ import scala.concurrent.{ExecutionContext, Future}
  */
 @ImplementedBy(classOf[IdentityServiceImpl])
 trait IdentityService {
-  def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
+  def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
 }
 
 
@@ -24,8 +25,8 @@ class IdentityServiceImpl @Inject() (config: Configuration, adapter: IdentitySer
 
   implicit val clientConfiguration = IdentityClientConfiguration(config.identityApiHost, config.identityApiKey, adapter)
 
-  def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean)(implicit ec: ExecutionContext) = {
-    IdentityClient.authenticateCookies(email, password, rememberMe).map {
+  def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit ec: ExecutionContext) = {
+    IdentityClient.authenticateCookies(email, password, rememberMe, trackingData).map {
       case Left(errors) => Left {
         errors.map {
           case e: BadRequest => ServiceBadRequest(e.message, e.description)

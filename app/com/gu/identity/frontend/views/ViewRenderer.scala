@@ -10,9 +10,9 @@ object ViewRenderer {
   def render(view: String, attributes: Map[String, Any] = Map.empty) =
     HBS(view, attributes)
 
-  def renderSignIn(errorIds: Seq[String], email: String) = {
+  def renderSignIn(errorIds: Seq[String], email: String, returnUrl: Option[String]) = {
     val errors = errorIds.map(ErrorViewModel.apply)
-    val attrs = LayoutViewModel().toMap ++ SignInViewModel(errors = errors, email = email).toMap
+    val attrs = LayoutViewModel().toMap ++ SignInViewModel(errors = errors, email = email, returnUrl = returnUrl).toMap
     render("signin-page", attrs)
   }
 }

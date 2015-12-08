@@ -39,6 +39,7 @@ case class SignInViewModel(signInPageText: SignInPageText,
                            showPrelude: Boolean = false,
                            errors: Seq[ErrorViewModel] = Seq.empty,
                            email: String = "",
+                           returnUrl: String = "",
                            links: SignInLinksViewModel = SignInLinksViewModel(),
                            actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url)) extends ViewModel {
   def toMap =
@@ -51,12 +52,13 @@ case class SignInViewModel(signInPageText: SignInPageText,
       "showPrelude" -> showPrelude,
       "errors" -> errors.map(_.toMap),
       "email" -> email,
+      "returnUrl" -> returnUrl,
       "links" -> links.toMap,
       "actions" -> actions)
 }
 
 object SignInViewModel {
-  def apply(errors: Seq[ErrorViewModel], email: String): SignInViewModel = {
+  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String]): SignInViewModel = {
     SignInViewModel(
       SignInPageText(),
       LayoutText(),
@@ -64,7 +66,8 @@ object SignInViewModel {
       HeaderText(),
       FooterText(),
       errors = errors,
-      email = email
+      email = email,
+      returnUrl = returnUrl.getOrElse("")
     )
   }
 }

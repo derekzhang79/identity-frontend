@@ -4,7 +4,7 @@
 
 # Home page
 GET        /                              @com.gu.identity.frontend.controllers.Application.index
-GET        /signin                        @com.gu.identity.frontend.controllers.Application.signIn(email: Option[String], error: Seq[String])
+GET        /signin                        @com.gu.identity.frontend.controllers.Application.signIn(email: Option[String], error: Seq[String], returnUrl: Option[String])
 
 POST       /actions/signin                @com.gu.identity.frontend.controllers.SigninAction.signIn
 

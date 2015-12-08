@@ -34,7 +34,7 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
       val formParams = signInFormBody.bindFromRequest()(request).get
 
       identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe).map {
-        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email)
+        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, formParams.returnUrl)
         case Right(cookies) =>
           SeeOther(normaliseReturnUrl(formParams.returnUrl))
             .withCookies(cookies: _*)
@@ -42,7 +42,7 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
       }.recover {
         case NonFatal(ex) => {
           logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
-          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), formParams.email)
+          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), formParams.email, formParams.returnUrl)
         }
       }
     }
@@ -64,9 +64,9 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
       case _ => false
     }
 
-  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String]) = {
+  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String], returnUrl: Option[String]) = {
     val query = errors.map(_.id)
-    SeeOther(routes.Application.signIn(email, query).url)
+    SeeOther(routes.Application.signIn(email, query, returnUrl).url)
   }
 
 }

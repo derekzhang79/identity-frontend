@@ -1,11 +1,13 @@
 package com.gu.identity.service.client
 
+import com.gu.identity.frontend.models.TrackingData
+
 import scala.concurrent.{ExecutionContext, Future}
 
 object IdentityClient extends Logging {
 
-  def authenticateCookies(email: Option[String], password: Option[String], rememberMe: Boolean)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] =
-    AuthenticateCookiesRequest.from(email, password, rememberMe) match {
+  def authenticateCookies(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] =
+    AuthenticateCookiesRequest.from(email, password, rememberMe, trackingData) match {
       case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(Seq(err)))
     }

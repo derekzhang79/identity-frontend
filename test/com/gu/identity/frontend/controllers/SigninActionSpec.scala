@@ -1,7 +1,9 @@
 package com.gu.identity.frontend.controllers
 
+import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services._
 import org.mockito.Mockito._
+import org.mockito.Matchers.{any => argAny, eq => argEq}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.inject.bind
@@ -12,7 +14,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import org.scalatest.Matchers._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class SigninActionSpec extends PlaySpec with MockitoSugar {
@@ -47,7 +49,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
 
       val testCookie = Cookie("SC_GU_U", "##hash##")
 
-      when(mockIdentityService.authenticate(email, password, rememberMe.isDefined))
+      when(mockIdentityService.authenticate(argEq(email), argEq(password), argEq(rememberMe.isDefined), argAny[TrackingData])(argAny[ExecutionContext]))
         .thenReturn {
           Future.successful {
             Right(Seq(testCookie))
@@ -70,7 +72,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       val rememberMe = None
       val returnUrl = Some("http://www.theguardian.com/yeah")
 
-      when(mockIdentityService.authenticate(email, password, rememberMe.isDefined))
+      when(mockIdentityService.authenticate(argEq(email), argEq(password), argEq(rememberMe.isDefined), argAny[TrackingData])(argAny[ExecutionContext]))
         .thenReturn {
           Future.successful {
             Left(Seq(ServiceBadRequest("Invalid email or password")))
@@ -91,7 +93,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       val rememberMe = None
       val returnUrl = Some("http://www.theguardian.com/yeah")
 
-      when(mockIdentityService.authenticate(email, password, rememberMe.isDefined))
+      when(mockIdentityService.authenticate(argEq(email), argEq(password), argEq(rememberMe.isDefined), argAny[TrackingData])(argAny[ExecutionContext]))
         .thenReturn {
           Future.successful {
             Left(Seq(ServiceGatewayError("Unexpected 500 error")))
@@ -113,7 +115,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       val rememberMe = None
       val returnUrl = Some("http://www.theguardian.com/yeah")
 
-      when(mockIdentityService.authenticate(email, password, rememberMe.isDefined))
+      when(mockIdentityService.authenticate(argEq(email), argEq(password), argEq(rememberMe.isDefined), argAny[TrackingData])(argAny[ExecutionContext]))
         .thenReturn {
           Future.failed {
             new RuntimeException("Unexpected 500 error")

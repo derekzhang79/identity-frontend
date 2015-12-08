@@ -26,5 +26,8 @@
     "postcss-cli": "^2.3.2",
     "precss": "^1.3.0",
     "webpack": "^1.12.9"
+  },
+  "dependencies": {
+    "curl-amd": "^0.8.12"
   }
 }

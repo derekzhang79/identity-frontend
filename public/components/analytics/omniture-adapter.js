@@ -1,6 +1,6 @@
 import s from './omniture';
 
-import { getMvtFullId } from './mvt';
+import { getMvtFullId, getActiveTestsAndResultsForOmniture } from './mvt';
 
 //var R2_STORAGE_KEY = 's_ni', // DO NOT CHANGE THIS, ITS IS SHARED WITH R2. BAD THINGS WILL HAPPEN!
 //    NG_STORAGE_KEY = 'gu.analytics.referrerVars';
@@ -88,7 +88,7 @@ Omniture.prototype.populatePageProperties = function () {
         /* Retrieve navigation interaction data */
         // ni       = '', // TODO storage.session.get(NG_STORAGE_KEY),
         platform = 'frontend',
-        mvtTag      = '', //ab.makeOmnitureTag(document),
+        mvtTag      = getActiveTestsAndResultsForOmniture(),
         // Tag the identity of this user, which is composed of
         // the omniture visitor id, the ophan browser id, and the frontend-only mvt id.
         mvtId    = getMvtFullId(),

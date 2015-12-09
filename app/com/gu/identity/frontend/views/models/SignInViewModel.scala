@@ -11,10 +11,10 @@ case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguard
 }
 
 object SignInLinksViewModel {
-  def apply(returnUrl: Option[String]): SignInLinksViewModel = {
+  def apply(urlParams: Seq[Option[(String, String)]]): SignInLinksViewModel = {
       SignInLinksViewModel(
-        socialFacebook = UrlBuilder("https://oauth.theguardian.com/facebook/signin", returnUrl.map(("returnUrl",_))),
-        socialGoogle = UrlBuilder("https://oauth.theguardian.com/google/signin", returnUrl.map(("returnUrl",_)))
+        socialFacebook = UrlBuilder("https://oauth.theguardian.com/facebook/signin", urlParams),
+        socialGoogle = UrlBuilder("https://oauth.theguardian.com/google/signin", urlParams)
     )
   }
 }
@@ -74,6 +74,9 @@ case class SignInViewModel(signInPageText: SignInPageText,
 
 object SignInViewModel {
   def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean]): SignInViewModel = {
+
+    val urlParams: Seq[Option[(String, String)]] = Seq(returnUrl.map(("returnUrl", _)), skipConfirmation.map(bool => ("skipConfirmation", bool.toString)))
+
     SignInViewModel(
       SignInPageText(),
       LayoutText(),
@@ -84,15 +87,26 @@ object SignInViewModel {
       email = email,
       returnUrl = returnUrl.getOrElse(""),
       skipConfirmation = skipConfirmation.getOrElse(false),
-      registerUrl = UrlBuilder("/register", returnUrl.map(("returnUrl",_))),
-      forgotPasswordUrl = UrlBuilder("/reset", returnUrl.map(("returnUrl",_))),
-      links = SignInLinksViewModel(returnUrl)
+      registerUrl = UrlBuilder("/register", urlParams),
+      forgotPasswordUrl = UrlBuilder("/reset", urlParams),
+      links = SignInLinksViewModel(urlParams)
     )
   }
 }
 
 object UrlBuilder {
-  def apply(baseUrl: String, param: Option[(String, String)]) = {
-    param.map(url => s"${baseUrl}/?${url._1}=${url._2}").getOrElse(baseUrl)
+
+  def apply(baseUrl: String, params: Seq[Option[(String, String)]]) = {
+     createParamString(params) match {
+       case "" => baseUrl
+       case paramString => s"${baseUrl}/?${paramString}"
+     }
+  }
+
+  private def createParamString(urlParams: Seq[Option[(String, String)]]): String = {
+    urlParams match {
+      case Seq() => ""
+      case params => params.head.map(x => s"${x._1}=${x._2}&").getOrElse("") + createParamString(params.tail)
+    }
   }
 }

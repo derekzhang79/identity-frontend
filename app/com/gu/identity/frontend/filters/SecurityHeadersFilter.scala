@@ -1,0 +1,57 @@
+package com.gu.identity.frontend.filters
+
+import javax.inject.{Inject, Singleton}
+
+import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.views.models.LayoutViewModel
+import play.api.mvc.{EssentialAction, EssentialFilter}
+import play.filters.headers.{SecurityHeadersConfig, SecurityHeadersFilter => PlaySecurityHeadersFilter}
+
+/**
+ * Adapter for Play's SecurityHeadersFilter, allowing overriding of headers.
+ *
+ * Required to specify hashes of inlined scripts at runtime.
+ */
+@Singleton
+class SecurityHeadersFilter @Inject() (configuration: Configuration) extends EssentialFilter {
+
+  private val defaultConfig = SecurityHeadersConfig.fromConfiguration(configuration.appConfiguration)
+
+  val CSP_SELF_DOMAIN = "'self'"
+  val CSP_DATA_PROTOCOL = "data:"
+
+  val analyticsImageDomainsForCSP = Seq(
+    "https://hits-secure.theguardian.com",
+    "https://sb.scorecardresearch.com"
+  )
+
+  val inlinedScripts = Seq(
+    LayoutViewModel(configuration).inlineJsConfig
+  )
+
+  val hashesForInlineScripts = inlinedScripts.map(s => toCSPShaDefinition(s.sha256))
+
+  val csp = Map(
+    "default-src" -> Seq(CSP_SELF_DOMAIN),
+    "script-src" -> (Seq(CSP_SELF_DOMAIN) ++ hashesForInlineScripts),
+    "img-src" -> (Seq(CSP_SELF_DOMAIN, CSP_DATA_PROTOCOL) ++ analyticsImageDomainsForCSP),
+    "font-src" -> Seq(CSP_SELF_DOMAIN, CSP_DATA_PROTOCOL)
+  )
+
+  val augmentedConfig = defaultConfig.copy(contentSecurityPolicy = Some(toCSPHeader(csp)))
+
+
+  val delegate = PlaySecurityHeadersFilter(augmentedConfig)
+
+  override def apply(next: EssentialAction): EssentialAction =
+    delegate.apply(next)
+
+
+  private def toCSPHeader(csp: Map[String, Seq[String]]) =
+    csp.map {
+      case (key, value) => s"$key ${value.mkString(" ")}"
+    }.mkString("; ")
+
+  private def toCSPShaDefinition(in: String) =
+    s"'sha256-$in'"
+}

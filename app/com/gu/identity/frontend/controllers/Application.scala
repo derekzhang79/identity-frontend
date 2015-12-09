@@ -9,12 +9,12 @@ import play.api.mvc._
 class Application @Inject() extends Controller with Logging {
 
   def index = Action {
-    Redirect(routes.Application.signIn(email = None, error = Seq.empty, returnUrl = None))
+    Redirect(routes.Application.signIn(email = None, error = Seq.empty, returnUrl = None, skipConfirmation = None))
   }
 
-  def signIn(email: Option[String], error: Seq[String], returnUrl: Option[String]) = Action { req =>
+  def signIn(email: Option[String], error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = Action { req =>
     Cached{
-      Ok(renderSignIn(error, email.getOrElse(""), returnUrl))
+      Ok(renderSignIn(error, email.getOrElse(""), returnUrl, skipConfirmation))
     }
   }
 }

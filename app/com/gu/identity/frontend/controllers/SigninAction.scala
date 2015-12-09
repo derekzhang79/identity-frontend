@@ -17,14 +17,15 @@ import scala.util.control.NonFatal
  */
 class SigninAction @Inject() (identityService: IdentityService) extends Controller with Logging {
 
-  case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String])
+  case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String], skipConfirmation: Option[Boolean])
 
   private val signInFormBody = Form(
     mapping(
       "email" -> optional(text),
       "password" -> optional(text),
       "rememberMe" -> default(boolean, false),
-      "returnUrl" -> optional(text)
+      "returnUrl" -> optional(text),
+      "skipConfirmation" -> optional(boolean)
     )(SignInRequest.apply)(SignInRequest.unapply)
   )
 
@@ -34,7 +35,7 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
       val formParams = signInFormBody.bindFromRequest()(request).get
 
       identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe).map {
-        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, formParams.returnUrl)
+        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, formParams.returnUrl, formParams.skipConfirmation)
         case Right(cookies) =>
           SeeOther(normaliseReturnUrl(formParams.returnUrl))
             .withCookies(cookies: _*)
@@ -42,7 +43,7 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
       }.recover {
         case NonFatal(ex) => {
           logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
-          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), formParams.email, formParams.returnUrl)
+          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), formParams.email, formParams.returnUrl, formParams.skipConfirmation)
         }
       }
     }
@@ -64,9 +65,9 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
       case _ => false
     }
 
-  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String], returnUrl: Option[String]) = {
+  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = {
     val query = errors.map(_.id)
-    SeeOther(routes.Application.signIn(email, query, returnUrl).url)
+    SeeOther(routes.Application.signIn(email, query, returnUrl, skipConfirmation).url)
   }
 
 }

@@ -49,6 +49,7 @@ case class SignInViewModel(signInPageText: SignInPageText,
                            errors: Seq[ErrorViewModel] = Seq.empty,
                            email: String = "",
                            returnUrl: String = "",
+                           skipConfirmation: Boolean = false,
                            registerUrl: String = "",
                            forgotPasswordUrl: String = "",
                            links: SignInLinksViewModel = SignInLinksViewModel(),
@@ -64,6 +65,7 @@ case class SignInViewModel(signInPageText: SignInPageText,
       "errors" -> errors.map(_.toMap),
       "email" -> email,
       "returnUrl" -> returnUrl,
+      "skipConfirmation" -> skipConfirmation,
       "registerUrl" -> registerUrl,
       "forgotPasswordUrl" -> forgotPasswordUrl,
       "links" -> links.toMap,
@@ -71,7 +73,7 @@ case class SignInViewModel(signInPageText: SignInPageText,
 }
 
 object SignInViewModel {
-  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String]): SignInViewModel = {
+  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean]): SignInViewModel = {
     SignInViewModel(
       SignInPageText(),
       LayoutText(),
@@ -81,6 +83,7 @@ object SignInViewModel {
       errors = errors,
       email = email,
       returnUrl = returnUrl.getOrElse(""),
+      skipConfirmation = skipConfirmation.getOrElse(false),
       registerUrl = UrlBuilder("/register", returnUrl.map(("returnUrl",_))),
       forgotPasswordUrl = UrlBuilder("/reset", returnUrl.map(("returnUrl",_))),
       links = SignInLinksViewModel(returnUrl)

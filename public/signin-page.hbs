@@ -13,6 +13,7 @@
 
   <form class="signin-form" action="{{ actions.signIn }}" method="POST">
     <input type="hidden" name="returnUrl" value="{{returnUrl}}">
+    <input type="hidden" name="skipConfirmation" value="{{skipConfirmation}}">
     <p class="signin-form__prelude">{{signInPageText.divideText}}</p>
 
     <fieldset class="signin-form__fieldset">

@@ -13,10 +13,10 @@ case class InlineSource(source: String, sha256: String) extends ViewModel {
 
 object InlineSource {
   def apply(source: String): InlineSource =
-    InlineSource(source, sha256(source))
+    InlineSource(source, sha256(source).getOrElse(""))
 
   private def sha256(in: String) =
-    Base64.encodeBase64String(DigestUtils.sha256(in))
+    Option(Base64.encodeBase64String(DigestUtils.sha256(in)))
 }
 
 

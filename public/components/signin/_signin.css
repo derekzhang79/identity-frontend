@@ -2,7 +2,7 @@
 $error-color: #dd4b39;
 
 %signin-container {
-  max-width: 60rem;
+  max-width: 40rem;
   margin: 0 auto;
 }
 
@@ -23,6 +23,7 @@ $error-color: #dd4b39;
 .signin__heading {
   @extend %font-heading-1;
   @extend %signin-container;
+  font-weight: normal;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
@@ -42,9 +43,9 @@ $error-color: #dd4b39;
 
 .signin-form__fieldset {
   border: none;
-  border-top: 1px solid #989898;
+  border-top: 1px solid #eee;
   margin: 0;
-  padding: 10px 0 0 0;
+  padding: 1rem 0 0 0;
 }
 
 
@@ -148,7 +149,7 @@ $error-color: #dd4b39;
   color: white;
   display: block;
   text-align: left;
-  padding: 0.5rem 1rem 0.5rem 2rem;
+  padding: 1rem 1rem 0.8rem 2rem;
   width: 100%;
 }
 
@@ -172,5 +173,5 @@ $error-color: #dd4b39;
   @extend %font-text-1;
   margin: 20px 0;
   padding-top: 10px;
-  border-top: 1px solid #989898;
+  border-top: 1px solid #eee;
 }

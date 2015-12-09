@@ -1,7 +1,7 @@
 .social-signin {
   @extend %row;
   margin: 0 auto 2rem;
-  max-width: 60rem;
+  max-width: 40rem;
 }
 
 
@@ -30,6 +30,7 @@
 .social-signin__cta--google {
   @extend %social-signin__cta;
   background-image: inline('icon-google.svg');
+  margin-bottom: 0;
 }
 
 .social-signin__cta--facebook {

@@ -99,7 +99,8 @@ object UrlBuilder {
   def apply(baseUrl: String, params: Seq[Option[(String, String)]]) = {
      createParamString(params) match {
        case "" => baseUrl
-       case paramString => s"${baseUrl}/?${paramString}"
+         //remove the final & added to the param list
+       case paramString => s"${baseUrl}/?${paramString}".dropRight(1)
      }
   }
 

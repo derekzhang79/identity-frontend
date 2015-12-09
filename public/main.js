@@ -1,3 +1,3 @@
-import analytics from './components/analytics/analytics';
+import { logPageView } from './components/analytics/analytics';
 
-analytics.go();
+logPageView();

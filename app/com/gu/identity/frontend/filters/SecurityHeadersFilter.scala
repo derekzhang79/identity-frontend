@@ -20,9 +20,14 @@ class SecurityHeadersFilter @Inject() (configuration: Configuration) extends Ess
   val CSP_SELF_DOMAIN = "'self'"
   val CSP_DATA_PROTOCOL = "data:"
 
-  val analyticsImageDomainsForCSP = Seq(
+  val allowedHostsForImages = Seq(
     "https://hits-secure.theguardian.com",
-    "https://sb.scorecardresearch.com"
+    "https://sb.scorecardresearch.com",
+    "https://ophan.theguardian.com"
+  )
+
+  val allowedHostsForScripts = Seq(
+    "https://j.ophan.co.uk"
   )
 
   val inlinedScripts = Seq(
@@ -33,8 +38,8 @@ class SecurityHeadersFilter @Inject() (configuration: Configuration) extends Ess
 
   val csp = Map(
     "default-src" -> Seq(CSP_SELF_DOMAIN),
-    "script-src" -> (Seq(CSP_SELF_DOMAIN) ++ hashesForInlineScripts),
-    "img-src" -> (Seq(CSP_SELF_DOMAIN, CSP_DATA_PROTOCOL) ++ analyticsImageDomainsForCSP),
+    "script-src" -> (Seq(CSP_SELF_DOMAIN) ++ hashesForInlineScripts ++ allowedHostsForScripts),
+    "img-src" -> (Seq(CSP_SELF_DOMAIN, CSP_DATA_PROTOCOL) ++ allowedHostsForImages),
     "font-src" -> Seq(CSP_SELF_DOMAIN, CSP_DATA_PROTOCOL)
   )
 

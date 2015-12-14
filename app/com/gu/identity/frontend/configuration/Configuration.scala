@@ -1,11 +1,7 @@
 package com.gu.identity.frontend.configuration
 
-import com.google.inject.ImplementedBy
-import play.api.Play.current
 import play.api.{Configuration => PlayConfiguration}
 
-
-@ImplementedBy(classOf[ApplicationConfiguration])
 trait Configuration {
   val appConfiguration: PlayConfiguration
 
@@ -17,8 +13,7 @@ trait Configuration {
   val omnitureAccount: String
 }
 
-class ApplicationConfiguration extends Configuration {
-  val appConfiguration = current.configuration
+class ApplicationConfiguration(val appConfiguration: PlayConfiguration) extends Configuration {
 
   private def getString(path: String) =
     appConfiguration.getString(path).getOrElse(sys.error(s"Missing configuration: $path"))

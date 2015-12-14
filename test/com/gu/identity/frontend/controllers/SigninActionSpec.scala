@@ -6,9 +6,7 @@ import org.mockito.Mockito._
 import org.mockito.Matchers.{any => argAny, eq => argEq}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import play.api.inject.bind
-import play.api.inject.guice.GuiceInjectorBuilder
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.i18n.MessagesApi
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -21,12 +19,9 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
 
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
+    val messages = mock[MessagesApi]
 
-    val injector = new GuiceInjectorBuilder()
-      .overrides(bind[IdentityService].to(mockIdentityService))
-      .injector()
-
-    val controller = injector.instanceOf[SigninAction]
+    val controller = new SigninAction(mockIdentityService, messages)
   }
 
   def fakeSigninRequest(email: Option[String], password: Option[String], rememberMe: Option[String], returnUrl: Option[String]) = {

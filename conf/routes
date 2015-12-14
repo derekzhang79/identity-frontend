@@ -10,4 +10,4 @@ POST       /actions/signin                @com.gu.identity.frontend.controllers.
 
 GET        /management/healthcheck        @com.gu.identity.frontend.controllers.HealthCheck.healthCheck
 
-GET        /assets/*file                  @controllers.Assets.at(path="/public", file)
+GET        /static/*file                  @controllers.Assets.at(path="/public", file)

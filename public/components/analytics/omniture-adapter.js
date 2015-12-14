@@ -1,5 +1,7 @@
 import s from './omniture';
 
+import { getMvtFullId, getActiveTestsAndResultsForOmniture } from './mvt';
+
 //var R2_STORAGE_KEY = 's_ni', // DO NOT CHANGE THIS, ITS IS SHARED WITH R2. BAD THINGS WILL HAPPEN!
 //    NG_STORAGE_KEY = 'gu.analytics.referrerVars';
 
@@ -86,10 +88,10 @@ Omniture.prototype.populatePageProperties = function () {
         /* Retrieve navigation interaction data */
         // ni       = '', // TODO storage.session.get(NG_STORAGE_KEY),
         platform = 'frontend',
-        mvt      = '', //ab.makeOmnitureTag(document),
+        mvtTag      = getActiveTestsAndResultsForOmniture(),
         // Tag the identity of this user, which is composed of
         // the omniture visitor id, the ophan browser id, and the frontend-only mvt id.
-        mvtId    = '', //mvtCookie.getMvtFullId(),
+        mvtId    = getMvtFullId(),
         webPublicationDate = false; //config.page.webPublicationDate;
 
     // http://www.scribd.com/doc/42029685/15/cookieDomainPeriods
@@ -148,9 +150,9 @@ Omniture.prototype.populatePageProperties = function () {
 
     //this.s.prop47    = config.page.edition || '';
 
-    this.s.eVar51  = mvt;
+    this.s.eVar51  = mvtTag;
 
-    this.s.list1  = mvt; // allows us to 'unstack' the AB test names (allows longer names)
+    this.s.list1  = mvtTag; // allows us to 'unstack' the AB test names (allows longer names)
 
     // List of components on the page
     //this.s.list2 = _.uniq($('[data-component]')

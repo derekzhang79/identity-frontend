@@ -5,6 +5,8 @@
 // Use curl loader as Ophan library is AMD
 import 'curl-amd/dist/curl/curl';
 
+import { getActiveTestsAndResultsForOphan } from './mvt';
+
 const ophanScript = 'https://j.ophan.co.uk/ophan.ng.js';
 
 const curlOptions = {
@@ -19,11 +21,19 @@ function getOphan() {
 }
 
 export function init() {
-  return getOphan();
+  return recordMvt();
 }
 
 export function record( obj ) {
   return getOphan().then( ophan => {
     ophan.record( obj );
   });
+}
+
+function recordMvt() {
+  const params = {
+    'abTestRegister': getActiveTestsAndResultsForOphan()
+  };
+
+  return record( params );
 }

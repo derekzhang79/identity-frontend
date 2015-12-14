@@ -11,7 +11,7 @@ case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguard
 }
 
 object SignInLinksViewModel {
-  def apply(urlParams: Seq[Option[(String, String)]]): SignInLinksViewModel = {
+  def apply(urlParams: Seq[(String, String)]): SignInLinksViewModel = {
       SignInLinksViewModel(
         socialFacebook = UrlBuilder("https://oauth.theguardian.com/facebook/signin", urlParams),
         socialGoogle = UrlBuilder("https://oauth.theguardian.com/google/signin", urlParams)
@@ -75,8 +75,7 @@ case class SignInViewModel(signInPageText: SignInPageText,
 object SignInViewModel {
   def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean]): SignInViewModel = {
 
-    val urlParams: Seq[Option[(String, String)]] = Seq(returnUrl.map(("returnUrl", _)), skipConfirmation.map(bool => ("skipConfirmation", bool.toString)))
-
+    val urlParams: Seq[(String, String)] = Seq(returnUrl.map(("returnUrl", _)), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
     SignInViewModel(
       SignInPageText(),
       LayoutText(),
@@ -96,18 +95,12 @@ object SignInViewModel {
 
 object UrlBuilder {
 
-  def apply(baseUrl: String, params: Seq[Option[(String, String)]]) = {
-     createParamString(params) match {
+  def apply(baseUrl: String, params: Seq[(String, String)]) = {
+    val paramString = params.map(x => s"${x._1}=${x._2}").mkString("&")
+     paramString match {
        case "" => baseUrl
-         //remove the final & added to the param list
-       case paramString => s"${baseUrl}/?${paramString}".dropRight(1)
+       case paramString => s"${baseUrl}/?${paramString}"
      }
-  }
 
-  private def createParamString(urlParams: Seq[Option[(String, String)]]): String = {
-    urlParams match {
-      case Seq() => ""
-      case params => params.head.map(x => s"${x._1}=${x._2}&").getOrElse("") + createParamString(params.tail)
-    }
   }
 }

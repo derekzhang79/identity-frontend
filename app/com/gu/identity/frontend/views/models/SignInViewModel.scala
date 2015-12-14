@@ -2,8 +2,6 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.models.Text._
-
-import com.gu.identity.frontend.models._
 import play.api.i18n.Messages
 
 case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguardian.com/facebook/signin",
@@ -67,27 +65,6 @@ case class SignInViewModel(showPrelude: Boolean = false,
       "forgotPasswordUrl" -> forgotPasswordUrl,
       "links" -> links.toMap,
       "actions" -> actions)
-}
-
-object SignInViewModel {
-  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean]): SignInViewModel = {
-
-    val urlParams: Seq[(String, String)] = Seq(returnUrl.map(("returnUrl", _)), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
-    SignInViewModel(
-      SignInPageText(),
-      LayoutText(),
-      SocialSignInText(),
-      HeaderText(),
-      FooterText(),
-      errors = errors,
-      email = email,
-      returnUrl = returnUrl.getOrElse(""),
-      skipConfirmation = skipConfirmation.getOrElse(false),
-      registerUrl = UrlBuilder("/register", urlParams),
-      forgotPasswordUrl = UrlBuilder("/reset", urlParams),
-      links = SignInLinksViewModel(urlParams)
-    )
-  }
 }
 
 object UrlBuilder {

@@ -32,7 +32,6 @@
 
 /* GuardianTextEgyptianWeb */
 @mixin guFontFace GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Regular;
-@mixin guFontFace GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Bold, 700;
 
 /* GuardianTextSansWeb */
 @mixin guFontFace GuardianTextSansWeb, all, GuardianTextSansWeb-Regular;

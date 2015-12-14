@@ -27,23 +27,25 @@
         <input class="signin-form__field--email" id="signin_field_email" type="email" name="email" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}"/>
       </div>
       <div class="signin-form__control--password">
-        <label class="signin-form__label--password" for="signin_field_password"> {{signInPageText.password}} </label>
+        <label class="signin-form__label--password" for="signin_field_password">{{signInPageText.password}}</label>
         <input class="signin-form__field--password" id="signin_field_password" type="password" name="password" />
         <p class="signin-form__cta--reset"><a href="{{forgotPasswordUrl}}"> {{signInPageText.forgottenPassword}} </a></p>
       </div>
+      <div class="signin-form__cta--reset"><a href="/reset">{{signInPageText.forgottenPassword}}</a></div>
+
 
       <div class="signin-form__control--remember-me">
-        <input class="signin-form__checkbox--remember-me" id="signin_field_remember_me" type="checkbox" name="keepMeSignedIn" value="true"/>
-        <label class="signin-form__label--remember" for="signin_field_remember_me">{{signInPageText.rememberMe}}</label>
+        <input class="signin-form__checkbox--remember-me" id="signin_field_remember_me" type="checkbox" name="keepMeSignedIn" checked="checked" value="true"/>
+        <label class="signin-form__label--remember" for="signin_field_remember_me" tabindex="0">{{signInPageText.rememberMe}}</label>
       </div>
       <div class="signin-form__control--submit">
-        <button class="signin-form__submit-button" id="signin_submit" type="submit"> {{signInPageText.signIn}} </button>
+        <button class="signin-form__submit-button" id="signin_submit" type="submit">{{signInPageText.signIn}}</button>
       </div>
 
       <p class="signin-form__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
 
 
-      <p class="signin-form__terms"> {{signInPageText.conditions}} <a href="http://www.theguardian.com/help/terms-of-service"> {{signInPageText.termsOfService}} </a> &amp; <a href="http://www.theguardian.com/help/privacy-policy"> {{signInPageText.privacyPolicy}} </a>.</p>
+      <p class="signin-form__terms">{{signInPageText.conditions}} <a href="http://www.theguardian.com/help/terms-of-service">{{signInPageText.termsOfService}}</a> &amp; <a href="http://www.theguardian.com/help/privacy-policy">{{signInPageText.privacyPolicy}}</a>.</p>
     </fieldset>
   </form>
 

@@ -9,9 +9,9 @@ signin.password=Password
 signin.forgottenpassword=Forgotten password?
 signin.rememberme=Remember me
 signin.signin=Sign in
-signin.noaccount=Don't have an account?
+signin.noaccount=Don''t have an account?
 signin.signup=Sign up
-signin.conditions=By proceeding, you agree to the Guardian's
+signin.conditions=By proceeding, you agree to the Guardian''s
 signin.termsofservice=Terms of Service
 signin.privacypolicy=Privacy Policy
 

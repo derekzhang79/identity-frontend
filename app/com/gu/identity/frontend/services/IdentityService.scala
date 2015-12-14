@@ -1,8 +1,5 @@
 package com.gu.identity.frontend.services
 
-import javax.inject.Inject
-
-import com.google.inject.ImplementedBy
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.service.client._
@@ -15,13 +12,12 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
  * Adapter for the identity service client.
  */
-@ImplementedBy(classOf[IdentityServiceImpl])
 trait IdentityService {
   def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
 }
 
 
-class IdentityServiceImpl @Inject() (config: Configuration, adapter: IdentityServiceRequestHandler) extends IdentityService {
+class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequestHandler) extends IdentityService {
 
   implicit val clientConfiguration = IdentityClientConfiguration(config.identityApiHost, config.identityApiKey, adapter)
 

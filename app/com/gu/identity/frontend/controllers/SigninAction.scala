@@ -1,22 +1,22 @@
 package com.gu.identity.frontend.controllers
 
-import javax.inject.Inject
-
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services.{IdentityService, ServiceError, ServiceGatewayError}
 import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
+import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{Action, Controller}
 
 import scala.util.control.NonFatal
+import play.api.i18n.Messages.Implicits._
 
 
 /**
  * Form actions controller
  */
-class SigninAction @Inject() (identityService: IdentityService) extends Controller with Logging {
+class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
 
   case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String], skipConfirmation: Option[Boolean])
 
@@ -31,7 +31,7 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
   )
 
 
-  def signIn = Action.async { request =>
+  def signIn = Action.async { implicit request =>
     NoCache {
       val formParams = signInFormBody.bindFromRequest()(request).get
       val trackingData = TrackingData(request, formParams.returnUrl)

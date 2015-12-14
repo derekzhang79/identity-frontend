@@ -1,12 +1,14 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.controllers.routes
+import com.gu.identity.frontend.models.Text._
 
 import com.gu.identity.frontend.models._
+import play.api.i18n.Messages
 
 case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguardian.com/facebook/signin",
                                 socialGoogle: String = "https://oauth.theguardian.com/google/signin") extends ViewModel {
-  def toMap =
+  def toMap(implicit messages: Messages) =
     Map("socialFacebook" -> socialFacebook, "socialGoogle" -> socialGoogle)
 }
 
@@ -20,7 +22,7 @@ object SignInLinksViewModel {
 }
 
 case class ErrorViewModel(id: String, message: String) extends ViewModel {
-  def toMap =
+  def toMap(implicit messages: Messages) =
     Map("id" -> id, "message" -> message)
 }
 
@@ -40,12 +42,7 @@ object ErrorViewModel {
   private def getErrorMessage(id: String) = errorMessages.getOrElse(id, default)
 }
 
-case class SignInViewModel(signInPageText: SignInPageText,
-                           layoutText: LayoutText,
-                           socialSignInText: SocialSignInText,
-                           headerText: HeaderText,
-                           footerText: FooterText,
-                           showPrelude: Boolean = false,
+case class SignInViewModel(showPrelude: Boolean = false,
                            errors: Seq[ErrorViewModel] = Seq.empty,
                            email: String = "",
                            returnUrl: String = "",
@@ -54,13 +51,13 @@ case class SignInViewModel(signInPageText: SignInPageText,
                            forgotPasswordUrl: String = "",
                            links: SignInLinksViewModel = SignInLinksViewModel(),
                            actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url)) extends ViewModel {
-  def toMap =
+  def toMap(implicit messages: Messages) =
     Map(
-      "signInPageText" -> signInPageText,
-      "layoutText" -> layoutText,
-      "socialSignInText" -> socialSignInText,
-      "headerText" -> headerText,
-      "footerText" -> footerText,
+      "signInPageText" -> SignInPageText.toMap,
+      "layoutText" -> LayoutText.toMap,
+      "socialSignInText" -> SocialSignInText.toMap,
+      "headerText" -> HeaderText.toMap,
+      "footerText" -> FooterText.toMap,
       "showPrelude" -> showPrelude,
       "errors" -> errors.map(_.toMap),
       "email" -> email,

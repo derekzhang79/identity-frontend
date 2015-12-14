@@ -3,11 +3,11 @@
 # ~~~~
 
 # Home page
-GET        /                              @com.gu.identity.frontend.controllers.Application.index
-GET        /signin                        @com.gu.identity.frontend.controllers.Application.signIn(email: Option[String], error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean])
+GET        /                              com.gu.identity.frontend.controllers.Application.index
+GET        /signin                        com.gu.identity.frontend.controllers.Application.signIn(email: Option[String], error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean])
 
-POST       /actions/signin                @com.gu.identity.frontend.controllers.SigninAction.signIn
+POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 
-GET        /management/healthcheck        @com.gu.identity.frontend.controllers.HealthCheck.healthCheck
+GET        /management/healthcheck        com.gu.identity.frontend.controllers.HealthCheck.healthCheck
 
-GET        /assets/*file                  @controllers.Assets.at(path="/public", file)
+GET        /static/*file                  controllers.Assets.at(path="/public", file)

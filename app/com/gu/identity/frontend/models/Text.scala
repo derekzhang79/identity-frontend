@@ -1,10 +1,10 @@
 package com.gu.identity.frontend.models
 
-import play.api.i18n.MessagesApi
+import play.api.i18n.Messages
 
 object Text {
   object SignInPageText {
-    def toMap(implicit messages: MessagesApi): Map[String, String] = {
+    def toMap(implicit messages: Messages): Map[String, String] = {
       Map (
         "title" -> messages("signin.title"),
         "pageTitle" -> messages("signin.pagetitle"),
@@ -27,7 +27,7 @@ object Text {
   }
 
   object LayoutText {
-    def toMap(implicit messages: MessagesApi): Map[String, String] = {
+    def toMap(implicit messages: Messages): Map[String, String] = {
       Map(
         "layoutPageTitle" -> messages("layout.pagetitle")
       )
@@ -35,7 +35,7 @@ object Text {
   }
 
   object SocialSignInText {
-    def toMap(implicit messages: MessagesApi): Map[String, String] = {
+    def toMap(implicit messages: Messages): Map[String, String] = {
       Map(
         "facebook" -> messages("socialsignin.description", "Facebook"),
         "google" -> messages("socialsignin.description", "Google")
@@ -44,7 +44,7 @@ object Text {
   }
 
   object HeaderText {
-    def toMap(implicit messages: MessagesApi): Map[String, String] = {
+    def toMap(implicit messages: Messages): Map[String, String] = {
       Map(
         "back" -> messages("header.backtext"),
         "logo" -> messages("header.logo")
@@ -53,7 +53,7 @@ object Text {
   }
 
   object FooterText {
-    def toMap(implicit messages: MessagesApi): Map[String, String] = {
+    def toMap(implicit messages: Messages): Map[String, String] = {
       Map(
         "help" -> messages("footer.help"),
         "terms" -> messages("footer.terms"),

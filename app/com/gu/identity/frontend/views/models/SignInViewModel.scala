@@ -4,16 +4,16 @@ import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.models.Text._
 
 import com.gu.identity.frontend.models._
-import play.api.i18n.MessagesApi
+import play.api.i18n.Messages
 
 case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguardian.com/facebook/signin",
                                 socialGoogle: String = "https://oauth.theguardian.com/google/signin") extends ViewModel {
-  def toMap(implicit messages: MessagesApi) =
+  def toMap(implicit messages: Messages) =
     Map("socialFacebook" -> socialFacebook, "socialGoogle" -> socialGoogle)
 }
 
 case class ErrorViewModel(id: String, message: String) extends ViewModel {
-  def toMap(implicit messages: MessagesApi) =
+  def toMap(implicit messages: Messages) =
     Map("id" -> id, "message" -> message)
 }
 
@@ -38,7 +38,7 @@ case class SignInViewModel(showPrelude: Boolean = false,
                            email: String = "",
                            links: SignInLinksViewModel = SignInLinksViewModel(),
                            actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url)) extends ViewModel {
-  def toMap(implicit messages: MessagesApi) =
+  def toMap(implicit messages: Messages) =
     Map(
       "signInPageText" -> SignInPageText.toMap,
       "layoutText" -> LayoutText.toMap,

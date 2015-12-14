@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.configuration
 
 import com.gu.identity.frontend.controllers.{SigninAction, HealthCheck, Application}
-import com.gu.identity.frontend.filters.{SecurityHeadersFilter, Filters}
+import com.gu.identity.frontend.filters.{BetaUserGroupFilter, SecurityHeadersFilter, Filters}
 import com.gu.identity.frontend.services.{IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import jp.co.bizreach.play2handlebars.HandlebarsPlugin
 import play.api.i18n.I18nComponents
@@ -31,6 +31,12 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val signinController = new SigninAction(identityService, messagesApi)
   lazy val assets = new controllers.Assets(httpErrorHandler)
 
-  override lazy val httpFilters = new Filters(new SecurityHeadersFilter(frontendConfiguration), new GzipFilter(), new DefaultHTMLCompressorFilter(configuration, environment)).filters
+  override lazy val httpFilters = new Filters(new SecurityHeadersFilter(
+    frontendConfiguration),
+    new GzipFilter(),
+    new DefaultHTMLCompressorFilter(configuration, environment),
+    new BetaUserGroupFilter(frontendConfiguration)
+  ).filters
+
   override lazy val router = new Routes(httpErrorHandler, applicationController, signinController, healthcheckController, assets)
 }

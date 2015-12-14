@@ -66,9 +66,9 @@
         "LatencyAlarmThreshold": 0.5,
         "LatencyAlarmPeriod": 60,
         "NotificationAlarmPeriod": 1200,
-        "InstanceType": "t2.micro",
-        "DesiredInstances": 1,
-        "MaxInstances": 2
+        "InstanceType": "t2.medium",
+        "DesiredInstances": 3,
+        "MaxInstances": 12
       },
       "CODE": {
         "AutoscalingNotificationsARN": "arn:aws:sns:eu-west-1:942464564246:AutoscalingNotificationsCODE",

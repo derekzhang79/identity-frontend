@@ -3,14 +3,14 @@ package com.gu.identity.frontend.configuration
 import play.api.{Configuration => PlayConfiguration}
 
 trait Configuration {
-  val appConfiguration: PlayConfiguration
-
   val identityCookieDomain: String
 
   val identityApiKey: String
   val identityApiHost: String
 
   val omnitureAccount: String
+
+  val appConfiguration: PlayConfiguration
 }
 
 class ApplicationConfiguration(val appConfiguration: PlayConfiguration) extends Configuration {

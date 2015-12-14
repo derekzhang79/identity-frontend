@@ -8,6 +8,7 @@ import play.api.test.FakeRequest
 import scala.concurrent.Future
 import play.api.mvc.Results._
 import play.api.test.Helpers._
+import play.api.{Configuration => PlayConfiguration}
 
 class BetaUserGroupFilterSpec extends WordSpec with Matchers {
 
@@ -16,6 +17,7 @@ class BetaUserGroupFilterSpec extends WordSpec with Matchers {
     override val identityApiKey: String = "identityApiKey"
     override val identityCookieDomain: String = "theguardian.com"
     override val omnitureAccount: String = "omnitureAccount"
+    override val appConfiguration: PlayConfiguration = null
   }
 
   val filter = new BetaUserGroupFilter(config)

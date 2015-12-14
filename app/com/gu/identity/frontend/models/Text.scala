@@ -1,48 +1,68 @@
 package com.gu.identity.frontend.models
 
 import play.api.i18n.Messages
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
 
-case class SignInPageText (
-                            title: String = Messages("signin.title"),
-                            pageTitle: String = Messages("signin.pagetitle"),
-                            prelude: String = Messages("signin.prelude"),
-                            preludeMoreInfo: String = Messages("signin.prelude.moreinfo"),
-                            preludeFaq: String = Messages("signin.prelude.faq"),
-                            email: String = Messages("signin.email"),
-                            divideText: String = Messages("signin.dividetext"),
-                            password: String = Messages("signin.password"),
-                            forgottenPassword: String = Messages("signin.forgottenpassword"),
-                            rememberMe: String = Messages("signin.rememberme"),
-                            signIn: String = Messages("signin.signin"),
-                            noAccount: String = Messages("signin.noaccount"),
-                            signUp: String = Messages("signin.signup"),
-                            conditions: String = Messages("signin.conditions"),
-                            termsOfService: String = Messages("signin.termsofservice"),
-                            privacyPolicy: String = Messages("signin.privacypolicy")
-                            )
+object Text {
+  object SignInPageText {
+    def toMap(implicit messages: Messages): Map[String, String] = {
+      Map (
+        "title" -> messages("signin.title"),
+        "pageTitle" -> messages("signin.pagetitle"),
+        "prelude" -> messages("signin.prelude"),
+        "preludeMoreInfo" -> messages("signin.prelude.moreinfo"),
+        "preludeFaq" -> messages("signin.prelude.faq"),
+        "email" -> messages("signin.email"),
+        "divideText" -> messages("signin.dividetext"),
+        "password" -> messages("signin.password"),
+        "forgottenPassword" -> messages("signin.forgottenpassword"),
+        "rememberMe" -> messages("signin.rememberme"),
+        "signIn" -> messages("signin.signin"),
+        "noAccount" -> messages("signin.noaccount"),
+        "signUp" -> messages("signin.signup"),
+        "conditions" -> messages("signin.conditions"),
+        "termsOfService" -> messages("signin.termsofservice"),
+        "privacyPolicy" -> messages("signin.privacypolicy")
+      )
+    }
+  }
 
-case class LayoutText (
-                        layoutPageTitle: String = Messages("layout.pagetitle")
-                        )
+  object LayoutText {
+    def toMap(implicit messages: Messages): Map[String, String] = {
+      Map(
+        "layoutPageTitle" -> messages("layout.pagetitle")
+      )
+    }
+  }
 
-case class SocialSignInText (
-                              facebook: String = Messages("socialsignin.description", "Facebook"),
-                              google: String = Messages("socialsignin.description", "Google")
-                              )
+  object SocialSignInText {
+    def toMap(implicit messages: Messages): Map[String, String] = {
+      Map(
+        "facebook" -> messages("socialsignin.description", "Facebook"),
+        "google" -> messages("socialsignin.description", "Google")
+      )
+    }
+  }
 
-case class HeaderText (
-                      back: String = Messages("header.backtext"),
-                      logo: String = Messages("header.logo")
-                        )
+  object HeaderText {
+    def toMap(implicit messages: Messages): Map[String, String] = {
+      Map(
+        "back" -> messages("header.backtext"),
+        "logo" -> messages("header.logo")
+      )
+    }
+  }
 
-case class FooterText (
-                      help: String = Messages("footer.help"),
-                      terms: String = Messages("footer.terms"),
-                      contact: String = Messages("footer.contact"),
-                      privacy: String = Messages("footer.privacy"),
-                      techFeedback: String = Messages("footer.techfeedback"),
-                      cookies: String = Messages("footer.cookies"),
-                      copyright: String = Messages("footer.copyright")
-                        )
+  object FooterText {
+    def toMap(implicit messages: Messages): Map[String, String] = {
+      Map(
+        "help" -> messages("footer.help"),
+        "terms" -> messages("footer.terms"),
+        "contact" -> messages("footer.contact"),
+        "privacy" -> messages("footer.privacy"),
+        "techFeedback" -> messages("footer.techfeedback"),
+        "cookies" -> messages("footer.cookies"),
+        "copyright" -> messages("footer.copyright")
+      )
+    }
+  }
+}

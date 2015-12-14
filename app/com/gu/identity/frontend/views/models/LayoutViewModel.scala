@@ -2,11 +2,12 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
 import controllers.routes
+import play.api.i18n.Messages
 import play.api.libs.json.Json
 
 
 case class LayoutViewModel(inlineJsConfig: InlineSource, styles: Seq[String], javascripts: Seq[String]) extends ViewModel {
-  def toMap =
+  def toMap(implicit messages: Messages) =
     Map("inlineJsConfig" -> inlineJsConfig.toMap, "styles" -> styles, "javascripts" -> javascripts)
 }
 

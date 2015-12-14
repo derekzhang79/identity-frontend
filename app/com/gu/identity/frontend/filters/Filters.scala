@@ -1,12 +1,10 @@
 package com.gu.identity.frontend.filters
 
-import javax.inject.Inject
-
 import com.mohiva.play.htmlcompressor.HTMLCompressorFilter
 import play.api.http.HttpFilters
 import play.filters.gzip.GzipFilter
 
-class Filters @Inject() (securityHeadersFilter: SecurityHeadersFilter,
+class Filters (securityHeadersFilter: SecurityHeadersFilter,
                          gzipFilter: GzipFilter,
                          htmlCompressorFilter: HTMLCompressorFilter,
                          betaUserGroupFilter: BetaUserGroupFilter) extends HttpFilters {

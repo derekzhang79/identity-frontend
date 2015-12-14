@@ -1,7 +1,5 @@
 package com.gu.identity.frontend.services
 
-import javax.inject.Inject
-
 import com.gu.identity.frontend.logging.{Logging => ApplicationLogging}
 import com.gu.identity.service.client._
 import play.api.libs.json.Json
@@ -13,7 +11,7 @@ import scala.util.control.NonFatal
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-class IdentityServiceRequestHandler @Inject() (ws: WSClient) extends IdentityClientRequestHandler with ApplicationLogging {
+class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequestHandler with ApplicationLogging {
 
   implicit val dateReads = jodaDateReads("yyyy-MM-dd'T'HH:mm:ssZ")
 

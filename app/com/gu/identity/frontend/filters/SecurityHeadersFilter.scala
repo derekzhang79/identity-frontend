@@ -1,11 +1,8 @@
 package com.gu.identity.frontend.filters
 
-import javax.inject.{Inject, Singleton}
-
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.views.models.LayoutViewModel
 import play.api.mvc.{EssentialAction, EssentialFilter}
-import play.api.Play.current
 import play.filters.headers.{SecurityHeadersConfig, SecurityHeadersFilter => PlaySecurityHeadersFilter}
 
 /**
@@ -13,10 +10,9 @@ import play.filters.headers.{SecurityHeadersConfig, SecurityHeadersFilter => Pla
  *
  * Required to specify hashes of inlined scripts at runtime.
  */
-@Singleton
-class SecurityHeadersFilter @Inject() (configuration: Configuration) extends EssentialFilter {
+class SecurityHeadersFilter(configuration: Configuration) extends EssentialFilter {
 
-  private val defaultConfig = SecurityHeadersConfig.fromConfiguration(current.configuration)
+  private val defaultConfig = SecurityHeadersConfig.fromConfiguration(configuration.appConfiguration)
 
   val CSP_SELF_DOMAIN = "'self'"
   val CSP_DATA_PROTOCOL = "data:"

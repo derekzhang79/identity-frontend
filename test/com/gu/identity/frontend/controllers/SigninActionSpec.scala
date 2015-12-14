@@ -77,7 +77,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get should startWith (routes.Application.signIn(None, Seq.empty).url)
+      redirectLocation(result).get should startWith (routes.Application.signIn(None, Seq.empty, None, None).url)
 
       // TODO check error parameters
     }
@@ -98,7 +98,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get should startWith (routes.Application.signIn(None, Seq.empty).url)
+      redirectLocation(result).get should startWith (routes.Application.signIn(None, Seq.empty, None, None).url)
 
       // TODO check error parameters
     }
@@ -120,7 +120,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get should startWith (routes.Application.signIn(None, Seq.empty).url)
+      redirectLocation(result).get should startWith (routes.Application.signIn(None, Seq.empty, None, None).url)
 
       // TODO check error parameters
     }

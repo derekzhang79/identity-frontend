@@ -12,6 +12,8 @@
   {{> components/social-signin/_social-signin }}
 
   <form class="signin-form" action="{{ actions.signIn }}" method="POST">
+    <input type="hidden" name="returnUrl" value="{{returnUrl}}">
+    <input type="hidden" name="skipConfirmation" value="{{skipConfirmation}}">
     <p class="signin-form__prelude">{{signInPageText.divideText}}</p>
 
     <fieldset class="signin-form__fieldset">
@@ -27,8 +29,8 @@
       <div class="signin-form__control--password">
         <label class="signin-form__label--password" for="signin_field_password">{{signInPageText.password}}</label>
         <input class="signin-form__field--password" id="signin_field_password" type="password" name="password" />
+        <p class="signin-form__cta--reset"><a href="{{forgotPasswordUrl}}"> {{signInPageText.forgottenPassword}} </a></p>
       </div>
-      <div class="signin-form__cta--reset"><a href="/reset">{{signInPageText.forgottenPassword}}</a></div>
 
 
       <div class="signin-form__control--remember-me">
@@ -39,7 +41,7 @@
         <button class="signin-form__submit-button" id="signin_submit" type="submit">{{signInPageText.signIn}}</button>
       </div>
 
-      <p class="signin-form__cta--signup">{{signInPageText.noAccount}} <a id="register_cta" href="/register">{{signInPageText.signUp}}</a>.</p>
+      <p class="signin-form__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
 
 
       <p class="signin-form__terms">{{signInPageText.conditions}} <a href="http://www.theguardian.com/help/terms-of-service">{{signInPageText.termsOfService}}</a> &amp; <a href="http://www.theguardian.com/help/privacy-policy">{{signInPageText.privacyPolicy}}</a>.</p>

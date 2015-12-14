@@ -18,14 +18,15 @@ import play.api.i18n.Messages.Implicits._
  */
 class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
 
-  case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String])
+  case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String], skipConfirmation: Option[Boolean])
 
   private val signInFormBody = Form(
     mapping(
       "email" -> optional(text),
       "password" -> optional(text),
       "rememberMe" -> default(boolean, false),
-      "returnUrl" -> optional(text)
+      "returnUrl" -> optional(text),
+      "skipConfirmation" -> optional(boolean)
     )(SignInRequest.apply)(SignInRequest.unapply)
   )
 
@@ -36,7 +37,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       val trackingData = TrackingData(request, formParams.returnUrl)
 
       identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
-        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email)
+        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, formParams.returnUrl, formParams.skipConfirmation)
         case Right(cookies) =>
           SeeOther(normaliseReturnUrl(formParams.returnUrl))
             .withCookies(cookies: _*)
@@ -44,7 +45,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       }.recover {
         case NonFatal(ex) => {
           logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
-          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), formParams.email)
+          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), formParams.email, formParams.returnUrl, formParams.skipConfirmation)
         }
       }
     }
@@ -66,9 +67,9 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       case _ => false
     }
 
-  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String]) = {
+  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = {
     val query = errors.map(_.id)
-    SeeOther(routes.Application.signIn(email, query).url)
+    SeeOther(routes.Application.signIn(email, query, returnUrl, skipConfirmation).url)
   }
 
 }

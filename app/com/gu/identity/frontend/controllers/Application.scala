@@ -15,7 +15,7 @@ class Application @Inject() (configuration: Configuration) extends Controller wi
 
   def signIn(email: Option[String], error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = Action { req =>
     Cached{
-      Ok(renderSignIn(configuration, error, email.getOrElse(""), skipConfirmation))
+      Ok(renderSignIn(configuration, error, email.getOrElse(""), returnUrl, skipConfirmation))
     }
   }
 }

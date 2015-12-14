@@ -9,7 +9,7 @@
   "output": "target/web/build/bundle.css",
   "postcss-assets": {
     "basePath": "public/",
-    "baseUrl": "/assets/"
+    "baseUrl": "/static/"
   },
   "cssnext": {
     "messages": {

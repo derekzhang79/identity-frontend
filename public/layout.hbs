@@ -3,6 +3,9 @@
 <head>
   <title>{{ signInPageText.pageTitle }} {{layoutText.layoutPageTitle}}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script type="text/javascript">{{{ inlineJsConfig.source }}}</script>
+
   {{#each styles}}
     <link href="{{ this }}" type="text/css" rel="stylesheet">
   {{/each}}
@@ -15,5 +18,9 @@
   </div>
 
   {{> components/footer/_footer }}
+
+  {{#each javascripts}}
+    <script src="{{ this }}" type="text/javascript" async></script>
+  {{/each}}
 </body>
 </html>

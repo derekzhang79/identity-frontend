@@ -3,6 +3,7 @@ package com.gu.identity.frontend.controllers
 import javax.inject.Inject
 
 import com.gu.identity.frontend.logging.Logging
+import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services.{IdentityService, ServiceError, ServiceGatewayError}
 import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
@@ -33,8 +34,9 @@ class SigninAction @Inject() (identityService: IdentityService) extends Controll
   def signIn = Action.async { request =>
     NoCache {
       val formParams = signInFormBody.bindFromRequest()(request).get
+      val trackingData = TrackingData(request, formParams.returnUrl)
 
-      identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe).map {
+      identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
         case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, formParams.returnUrl, formParams.skipConfirmation)
         case Right(cookies) =>
           SeeOther(normaliseReturnUrl(formParams.returnUrl))

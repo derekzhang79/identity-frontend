@@ -67,6 +67,22 @@ case class SignInViewModel(showPrelude: Boolean = false,
       "actions" -> actions)
 }
 
+object SignInViewModel {
+  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean]): SignInViewModel = {
+    val urlParams: Seq[(String, String)] = Seq(returnUrl.map(("returnUrl", _)), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
+
+    SignInViewModel(
+      errors = errors,
+      email = email,
+      returnUrl = returnUrl.getOrElse(""),
+      skipConfirmation = skipConfirmation.getOrElse(false),
+      registerUrl = UrlBuilder("/register", urlParams),
+      forgotPasswordUrl = UrlBuilder("/reset", urlParams),
+      links = SignInLinksViewModel(urlParams)
+    )
+  }
+}
+
 object UrlBuilder {
 
   def apply(baseUrl: String, params: Seq[(String, String)]) = {

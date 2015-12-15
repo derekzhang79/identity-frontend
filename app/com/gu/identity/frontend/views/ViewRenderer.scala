@@ -14,7 +14,13 @@ object ViewRenderer {
 
   def renderSignIn(configuration: Configuration, errorIds: Seq[String], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean])(implicit messages: Messages) = {
     val errors = errorIds.map(ErrorViewModel.apply)
-    val attrs = LayoutViewModel(configuration).toMap ++ SignInViewModel(errors = errors, email = email, returnUrl = returnUrl.getOrElse(""), skipConfirmation = skipConfirmation.getOrElse(true)).toMap
+    val attrs = LayoutViewModel(configuration).toMap ++
+      SignInViewModel(
+        errors = errors,
+        email = email,
+        returnUrl = returnUrl,
+        skipConfirmation = skipConfirmation
+      ).toMap
     render("signin-page", attrs)
   }
 }

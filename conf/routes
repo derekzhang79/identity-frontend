@@ -8,6 +8,8 @@ GET        /signin                        com.gu.identity.frontend.controllers.A
 
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 
+POST       /actions/register              com.gu.identity.frontend.controllers.RegisterAction.register
+
 GET        /management/healthcheck        com.gu.identity.frontend.controllers.HealthCheck.healthCheck
 
 GET        /static/*file                  controllers.Assets.at(path="/public", file)

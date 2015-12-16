@@ -16,13 +16,19 @@ object ApiRequest {
 
   def apiEndpoint(path: String)(implicit configuration: IdentityClientConfiguration) =
     s"https://${configuration.host}/$path"
+
+  private[client] def encodeBody(params: (String, String)*) = {
+    def encode = java.net.URLEncoder.encode(_: String, "UTF8")
+
+    params.map(p => s"${p._1}=${encode(p._2)}").mkString("&")
+  }
 }
 
 case class AuthenticateCookiesRequest(url: String, email: String, password: String, rememberMe: Boolean, trackingData: TrackingData, extraHeaders: HttpParameters = Nil) extends ApiRequest {
   override val method = POST
   override val headers = Seq("Content-Type" -> "application/x-www-form-urlencoded") ++ extraHeaders
   override val parameters = Seq("format" -> "cookies", "persistent" -> rememberMe.toString) ++ trackingData.parameters
-  override val body = Some(s"email=$email&password=$password")
+  override val body = Some(ApiRequest.encodeBody("email" -> email, "password" -> password))
 }
 
 

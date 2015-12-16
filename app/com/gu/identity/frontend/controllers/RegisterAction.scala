@@ -4,9 +4,11 @@ import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.services.IdentityService
 import play.api.data.{Mapping, Form}
 import play.api.data.Forms._
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, Controller}
 
+import scala.concurrent.Future
 
 class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
 
@@ -33,13 +35,19 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
       "firstName" -> nonEmptyText,
       "lastName" -> nonEmptyText,
       "email" -> email,
-      "username" -> username,
-      "password" -> password,
+      "username" -> nonEmptyText,
+      "password" -> nonEmptyText,
       "receiveGnmMarketing" -> boolean,
       "receive3rdPartyMarketing" -> boolean
     )(RegisterRequest.apply)(RegisterRequest.unapply)
   )
 
-  def register = Action.async { implicit request => ???
+  def register = Action.async { implicit request =>
+    NoCache {
+        registerForm.bindFromRequest()(request).fold(
+          errorForm => Future(SeeOther(routes.Application.register(Seq.empty).url)),
+          success => Future(Ok("200"))
+      )
+    }
   }
 }

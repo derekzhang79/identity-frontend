@@ -89,7 +89,7 @@ object UrlBuilder {
     val paramString = params.map(x => s"${x._1}=${x._2}").mkString("&")
      paramString match {
        case "" => baseUrl
-       case paramString => s"${baseUrl}/?${paramString}"
+       case paramString => s"$baseUrl?$paramString"
      }
 
   }

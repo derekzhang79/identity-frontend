@@ -25,7 +25,7 @@ object IdentityClient extends Logging {
   def register(request: RegisterApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] = {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
-      case Right(AuthenticationCookiesResponse(cookies)) =>
+      case Right(RegisterResponse(cookies)) =>
         Right(cookies.values.map { c =>
           IdentityCookie(c.key, c.value, c.sessionCookie.getOrElse(false), cookies.expiresAt)
         })

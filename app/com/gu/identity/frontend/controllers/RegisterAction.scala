@@ -10,9 +10,7 @@ import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.Future
 
-class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
-
-  case class RegisterRequest(
+case class RegisterRequest(
                             firstName: String,
                             lastName: String,
                             email: String,
@@ -20,7 +18,9 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
                             password: String,
                             receiveGnmMarketing: Boolean,
                             receive3rdPartyMarketing: Boolean
-                              )
+                            )
+
+class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
 
   private val username: Mapping[String] = text.verifying(
     "error.username", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
@@ -44,9 +44,14 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
 
   def register = Action.async { implicit request =>
     NoCache {
-        registerForm.bindFromRequest()(request).fold(
-          errorForm => Future(SeeOther(routes.Application.register(Seq("error-registration")).url)),
-          success => Future(Ok("200"))
+      registerForm.bindFromRequest()(request).fold(
+        errorForm => Future(SeeOther(routes.Application.register(Seq("error-registration")).url)),
+        success => identityService.register(success).map {
+          case Left(errors) => SeeOther(routes.Application.register(Seq("error-registration")).url)
+          case Right(cookies) =>
+            SeeOther("http://www.theguardian.com")
+              .withCookies(cookies: _*)
+        }
       )
     }
   }

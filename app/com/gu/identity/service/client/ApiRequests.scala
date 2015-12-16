@@ -7,7 +7,7 @@ sealed trait ApiRequest {
   val headers: HttpParameters = Nil
   val url: String
   val parameters: HttpParameters = Nil
-  val body: Option[String] = None
+  val body: Option[ApiRequestBody] = None
 }
 
 object ApiRequest {
@@ -28,9 +28,11 @@ case class AuthenticateCookiesRequest(url: String, email: String, password: Stri
   override val method = POST
   override val headers = Seq("Content-Type" -> "application/x-www-form-urlencoded") ++ extraHeaders
   override val parameters = Seq("format" -> "cookies", "persistent" -> rememberMe.toString) ++ trackingData.parameters
-  override val body = Some(ApiRequest.encodeBody("email" -> email, "password" -> password))
+//  override val body = Some(ApiRequest.encodeBody("email" -> email, "password" -> password))
+  override val body = Some(AuthenticateCookiesRequestBody(email, password))
 }
 
+case class AuthenticateCookiesRequestBody(email: String, password: String) extends ApiRequestBody
 
 object AuthenticateCookiesRequest {
   private val emailRegex = "^.+@.+$".r
@@ -48,3 +50,28 @@ object AuthenticateCookiesRequest {
     }
 
 }
+
+trait ApiRequestBody
+
+case class RegisterApiRequest(url: String, email: String, password: String, extraHeaders: HttpParameters = Nil, override val body: Option[ApiRequestBody]) extends ApiRequest {
+  override val method = POST
+  override val headers = Seq("Content-Type" -> "application/json") ++ extraHeaders
+  override val parameters = Seq("format" -> "cookies")
+}
+
+object RegisterApiRequest {
+  def apply(email: String, password: String)(implicit configuration: IdentityClientConfiguration): RegisterApiRequest ={
+    RegisterApiRequest(
+      ApiRequest.apiEndpoint("user"),
+      email,
+      password,
+      body = Some(RegisterRequestBody(email, password))
+    )
+  }
+}
+
+case class RegisterRequestBody(primaryEmailAddress: String, password: String, publicFields: Option[RegisterRequestBodyPublicFields] = None, privateFields: Option[RegisterRequestBodyPrivateFields] = None) extends ApiRequestBody
+
+case class RegisterRequestBodyPublicFields(username: String)
+
+case class RegisterRequestBodyPrivateFields(firstName: String, lastName: String, registrationIp: String)

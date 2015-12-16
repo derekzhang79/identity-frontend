@@ -65,7 +65,8 @@ object RegisterApiRequest {
       ApiRequest.apiEndpoint("user"),
       email,
       password,
-      body = Some(RegisterRequestBody(email, password))
+      body = Some(RegisterRequestBody(email, password)),
+      extraHeaders = ApiRequest.apiKeyHeaders
     )
   }
 }

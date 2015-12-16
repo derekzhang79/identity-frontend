@@ -15,7 +15,8 @@ object ErrorViewModel {
 
   val errorMessages = Map(
     "error-gateway" -> "There was a problem signing in, please try again.",
-    "error-bad-request" -> "Incorrect email or password, please try again."
+    "error-bad-request" -> "Incorrect email or password, please try again.",
+    "error-registration" -> "Sorry an account could not be set up."
   )
 
   val default: String = "There was an unexpected problem, please try again."

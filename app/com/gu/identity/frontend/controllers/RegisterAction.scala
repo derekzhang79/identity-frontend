@@ -45,7 +45,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   def register = Action.async { implicit request =>
     NoCache {
         registerForm.bindFromRequest()(request).fold(
-          errorForm => Future(SeeOther(routes.Application.register(Seq.empty).url)),
+          errorForm => Future(SeeOther(routes.Application.register(Seq("error-registration")).url)),
           success => Future(Ok("200"))
       )
     }

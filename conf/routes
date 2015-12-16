@@ -9,5 +9,6 @@ GET        /signin                        com.gu.identity.frontend.controllers.A
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 
 GET        /management/healthcheck        com.gu.identity.frontend.controllers.HealthCheck.healthCheck
+GET        /management/manifest           com.gu.identity.frontend.controllers.Manifest.manifest
 
 GET        /static/*file                  controllers.Assets.at(path="/public", file)

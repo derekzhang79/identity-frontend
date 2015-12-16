@@ -1,0 +1,6 @@
+{
+  "checkpoints": {
+    "CODE": { "url": "https://profile-origin.code.dev-theguardian.com/management/manifest", "overdue": "15M" },
+    "PROD": { "url": "https://profile-beta.theguardian.com/management/manifest", "overdue": "1H" }
+  }
+}

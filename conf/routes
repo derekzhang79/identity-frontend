@@ -4,7 +4,7 @@
 
 # Home page
 GET        /                              com.gu.identity.frontend.controllers.Application.index
-GET        /signin                        com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean])
+GET        /signin                        com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None)
 
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 

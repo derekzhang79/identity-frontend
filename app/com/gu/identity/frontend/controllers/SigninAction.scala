@@ -37,7 +37,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       val trackingData = TrackingData(request, formParams.returnUrl)
 
       identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
-        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, formParams.returnUrl, formParams.skipConfirmation)
+        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.returnUrl, formParams.skipConfirmation)
         case Right(cookies) =>
           SeeOther(normaliseReturnUrl(formParams.returnUrl))
             .withCookies(cookies: _*)
@@ -45,7 +45,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       }.recover {
         case NonFatal(ex) => {
           logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
-          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), formParams.email, formParams.returnUrl, formParams.skipConfirmation)
+          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), formParams.returnUrl, formParams.skipConfirmation)
         }
       }
     }
@@ -67,9 +67,9 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       case _ => false
     }
 
-  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = {
-    val query = errors.map(_.id)
-    SeeOther(routes.Application.signIn(query, returnUrl, skipConfirmation).url)
+  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = {
+    val errorIds = errors.map(_.id)
+    SeeOther(routes.Application.signIn(errorIds, returnUrl, skipConfirmation).url)
   }
 
 }

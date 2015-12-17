@@ -12,12 +12,11 @@ object ViewRenderer {
   def render(view: String, attributes: Map[String, Any] = Map.empty) =
     HBS(view, attributes)
 
-  def renderSignIn(configuration: Configuration, errorIds: Seq[String], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean])(implicit messages: Messages) = {
+  def renderSignIn(configuration: Configuration, errorIds: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean])(implicit messages: Messages) = {
     val errors = errorIds.map(ErrorViewModel.apply)
     val attrs = LayoutViewModel(configuration).toMap ++
       SignInViewModel(
         errors = errors,
-        email = email,
         returnUrl = returnUrl,
         skipConfirmation = skipConfirmation
       ).toMap

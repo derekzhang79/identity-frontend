@@ -69,7 +69,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
 
   private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = {
     val query = errors.map(_.id)
-    SeeOther(routes.Application.signIn(email, query, returnUrl, skipConfirmation).url)
+    SeeOther(routes.Application.signIn(query, returnUrl, skipConfirmation).url)
   }
 
 }

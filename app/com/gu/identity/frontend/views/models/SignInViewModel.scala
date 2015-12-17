@@ -42,7 +42,6 @@ object ErrorViewModel {
 
 case class SignInViewModel(showPrelude: Boolean = false,
                            errors: Seq[ErrorViewModel] = Seq.empty,
-                           email: String = "",
                            returnUrl: String = "",
                            skipConfirmation: Boolean = false,
                            registerUrl: String = "",
@@ -58,7 +57,6 @@ case class SignInViewModel(showPrelude: Boolean = false,
       "footerText" -> FooterText.toMap,
       "showPrelude" -> showPrelude,
       "errors" -> errors.map(_.toMap),
-      "email" -> email,
       "returnUrl" -> returnUrl,
       "skipConfirmation" -> skipConfirmation,
       "registerUrl" -> registerUrl,
@@ -68,12 +66,11 @@ case class SignInViewModel(showPrelude: Boolean = false,
 }
 
 object SignInViewModel {
-  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean]): SignInViewModel = {
+  def apply(errors: Seq[ErrorViewModel], returnUrl: Option[String], skipConfirmation: Option[Boolean]): SignInViewModel = {
     val urlParams: Seq[(String, String)] = Seq(returnUrl.map(("returnUrl", _)), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
 
     SignInViewModel(
       errors = errors,
-      email = email,
       returnUrl = returnUrl.getOrElse(""),
       skipConfirmation = skipConfirmation.getOrElse(false),
       registerUrl = UrlBuilder("/register", urlParams),

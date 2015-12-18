@@ -7,7 +7,7 @@ import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{Request, AnyContent, Action, Controller}
 
 import scala.util.control.NonFatal
 import play.api.i18n.Messages.Implicits._
@@ -30,6 +30,12 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     )(SignInRequest.apply)(SignInRequest.unapply)
   )
 
+  private def establishReturnUrl(request: Request[AnyContent], returnUrl: Option[String]) = {
+    returnUrl match {
+      case Some(url) => returnUrl
+      case _ => request.headers.get("Referer")
+    }
+  }
 
   def signIn = Action.async { implicit request =>
     NoCache {
@@ -38,9 +44,11 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
 
       identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
         case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, formParams.returnUrl, formParams.skipConfirmation)
-        case Right(cookies) =>
-          SeeOther(normaliseReturnUrl(formParams.returnUrl))
+        case Right(cookies) => {
+          val url = establishReturnUrl(request, formParams.returnUrl)
+          SeeOther(normaliseReturnUrl(url))
             .withCookies(cookies: _*)
+        }
 
       }.recover {
         case NonFatal(ex) => {
@@ -50,7 +58,6 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       }
     }
   }
-
 
   private def normaliseReturnUrl(returnUrl: Option[String]) =
     returnUrl

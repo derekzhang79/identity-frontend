@@ -1,6 +1,7 @@
 package com.gu.identity.service.client
 
 import com.gu.identity.frontend.models.TrackingData
+import org.joda.time.DateTime
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -26,9 +27,8 @@ object IdentityClient extends Logging {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
       case Right(RegisterResponse(cookies)) =>
-        Right(cookies.values.map { c =>
-          IdentityCookie(c.key, c.value, c.sessionCookie.getOrElse(false), cookies.expiresAt)
-        })
+        //TODO need to update this to use the RegisterResponse values
+        Right(Seq(IdentityCookie("","", false, DateTime.now())))
       case Right(other) => Left(Seq(GatewayError("Unknown response")))
     }
   }

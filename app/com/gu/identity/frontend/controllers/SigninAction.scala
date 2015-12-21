@@ -34,7 +34,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     NoCache {
       val formParams = signInFormBody.bindFromRequest()(request).get
       val trackingData = TrackingData(request, formParams.returnUrl)
-      val returnUrl = ReturnUrl(request, formParams.returnUrl)
+      val returnUrl = ReturnUrl(request.headers.get("Referer"), formParams.returnUrl)
 
       identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
         case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, returnUrl, formParams.skipConfirmation)

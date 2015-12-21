@@ -1,28 +1,27 @@
 package com.gu.identity.frontend.models
 
-import play.api.mvc.{AnyContent, Request}
+import java.net.URI
+import scala.util.Try
 
 case class ReturnUrl(url: String)
 
 object ReturnUrl {
 
-  private val urlRegex = """^https?://([^/]+).*$""".r
   val default = ReturnUrl("http://www.theguardian.com")
+  val domains = List(".theguardian.com", ".code.dev-theguardian.com", ".thegulocal.com")
 
-  def apply(request: Request[AnyContent], returnUrl: Option[String]): ReturnUrl =
-    returnUrl.orElse(refererUrl(request)).map(ReturnUrl(_)).getOrElse(default)
+  def apply(returnUrl: Option[String], referer: Option[String]): ReturnUrl = {
+    returnUrl.map(ReturnUrl(_))
+      .orElse(referer.map(ReturnUrl(_)))
+      .filter(validDomain(_))
+      .getOrElse(default)
+  }
 
-  def refererUrl(request: Request[AnyContent]): Option[String] = request.headers.get("Referer")
+  def validDomain(returnUrl: ReturnUrl): Boolean = {
+    val hostname = host(returnUrl)
+    domains.exists(s".$hostname".endsWith(_))
+  }
 
-  private def normaliseReturnUrl(returnUrl: Option[String]) =
-    returnUrl
-      .filter(validateReturnUrl)
-      .getOrElse("https://www.theguardian.com") // default
-
-  private def validateReturnUrl(returnUrl: String) =
-    returnUrl match {
-      case urlRegex(domain) if domain.endsWith(".theguardian.com") => true
-      case _ => false
-    }
+  def host(returnUrl: ReturnUrl): String = Try(new URI(returnUrl.url)).map(_.getHost).getOrElse("")
 
 }

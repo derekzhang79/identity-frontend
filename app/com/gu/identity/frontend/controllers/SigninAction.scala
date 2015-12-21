@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.logging.Logging
-import com.gu.identity.frontend.models.TrackingData
+import com.gu.identity.frontend.models.{ReturnUrl, TrackingData}
 import com.gu.identity.frontend.services.{IdentityService, ServiceError, ServiceGatewayError}
 import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
@@ -30,53 +30,32 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     )(SignInRequest.apply)(SignInRequest.unapply)
   )
 
-  private def establishReturnUrl(request: Request[AnyContent], returnUrl: Option[String]) = {
-    returnUrl match {
-      case Some(url) => returnUrl
-      case _ => request.headers.get("Referer")
-    }
-  }
-
   def signIn = Action.async { implicit request =>
     NoCache {
       val formParams = signInFormBody.bindFromRequest()(request).get
       val trackingData = TrackingData(request, formParams.returnUrl)
+      val returnUrl = ReturnUrl(request, formParams.returnUrl)
 
       identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
-        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, formParams.returnUrl, formParams.skipConfirmation)
+        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, returnUrl, formParams.skipConfirmation)
         case Right(cookies) => {
-          val url = establishReturnUrl(request, formParams.returnUrl)
-          SeeOther(normaliseReturnUrl(url))
+          SeeOther(returnUrl.url)
             .withCookies(cookies: _*)
         }
 
       }.recover {
         case NonFatal(ex) => {
           logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
-          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), formParams.email, formParams.returnUrl, formParams.skipConfirmation)
+          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), formParams.email, returnUrl, formParams.skipConfirmation)
         }
       }
     }
   }
 
-  private def normaliseReturnUrl(returnUrl: Option[String]) =
-    returnUrl
-      .filter(validateReturnUrl)
-      .getOrElse("https://www.theguardian.com") // default
 
-
-
-  private val urlRegex = """^https?://([^/]+).*$""".r
-
-  private def validateReturnUrl(returnUrl: String) =
-    returnUrl match {
-      case urlRegex(domain) if domain.endsWith(".theguardian.com") => true
-      case _ => false
-    }
-
-  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = {
+  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], email: Option[String], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]) = {
     val query = errors.map(_.id)
-    SeeOther(routes.Application.signIn(email, query, returnUrl, skipConfirmation).url)
+    SeeOther(routes.Application.signIn(email, query, Some(returnUrl.url), skipConfirmation).url)
   }
 
 }

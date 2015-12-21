@@ -26,7 +26,7 @@ object ReturnUrl {
 
   def profileDomain(returnUrl: ReturnUrl): Boolean = {
     val hostname = host(returnUrl)
-    profile.exists(s".$hostname".endsWith(_))
+    profile.exists(_ == hostname)
   }
 
   def host(returnUrl: ReturnUrl): String = Try(new URI(returnUrl.url)).map(_.getHost).getOrElse("")

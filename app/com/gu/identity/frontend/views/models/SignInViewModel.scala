@@ -70,13 +70,13 @@ case class SignInViewModel(showPrelude: Boolean = false,
 }
 
 object SignInViewModel {
-  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean])(implicit request: RequestHeader): SignInViewModel = {
-    val urlParams: Seq[(String, String)] = Seq(returnUrl.map(("returnUrl", _)), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
+  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit request: RequestHeader): SignInViewModel = {
+    val urlParams: Seq[(String, String)] = Seq(Some("returnUrl" -> returnUrl.url), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
 
     SignInViewModel(
       errors = errors,
       email = email,
-      returnUrl = ReturnUrl(returnUrl, request.headers.get("Referer")).url,
+      returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
       registerUrl = UrlBuilder("/register", urlParams),
       forgotPasswordUrl = UrlBuilder("/reset", urlParams),

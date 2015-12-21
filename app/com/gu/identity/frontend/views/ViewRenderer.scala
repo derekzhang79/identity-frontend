@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.views
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.views.models.{ErrorViewModel, LayoutViewModel, SignInViewModel}
 import jp.co.bizreach.play2handlebars.HBS
 import play.api.i18n.Messages
@@ -19,7 +20,7 @@ object ViewRenderer {
       SignInViewModel(
         errors = errors,
         email = email,
-        returnUrl = returnUrl,
+        returnUrl = ReturnUrl(returnUrl, request.headers.get("Referer")),
         skipConfirmation = skipConfirmation
       )(request).toMap
     render("signin-page", attrs)

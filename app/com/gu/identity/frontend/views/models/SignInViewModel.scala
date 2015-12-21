@@ -1,8 +1,10 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.controllers.routes
+import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.models.Text._
 import play.api.i18n.Messages
+import play.api.mvc.{RequestHeader, Request}
 
 case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguardian.com/facebook/signin",
                                 socialGoogle: String = "https://oauth.theguardian.com/google/signin") extends ViewModel {
@@ -68,13 +70,13 @@ case class SignInViewModel(showPrelude: Boolean = false,
 }
 
 object SignInViewModel {
-  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean]): SignInViewModel = {
+  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean])(implicit request: RequestHeader): SignInViewModel = {
     val urlParams: Seq[(String, String)] = Seq(returnUrl.map(("returnUrl", _)), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
 
     SignInViewModel(
       errors = errors,
       email = email,
-      returnUrl = returnUrl.getOrElse(""),
+      returnUrl = ReturnUrl(returnUrl, request.headers.get("Referer")).url,
       skipConfirmation = skipConfirmation.getOrElse(false),
       registerUrl = UrlBuilder("/register", urlParams),
       forgotPasswordUrl = UrlBuilder("/reset", urlParams),

@@ -22,7 +22,7 @@ object ViewRenderer {
         email = email,
         returnUrl = ReturnUrl(returnUrl, request.headers.get("Referer")),
         skipConfirmation = skipConfirmation
-      )(request).toMap
+      ).toMap
     render("signin-page", attrs)
   }
 }

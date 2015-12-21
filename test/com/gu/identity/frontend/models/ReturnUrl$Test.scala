@@ -23,6 +23,7 @@ class ReturnUrl$Test extends FlatSpec with Matchers {
     ReturnUrl(Some("http://jobs.theguardian.com/apply"), None) should be(ReturnUrl("http://jobs.theguardian.com/apply"))
     ReturnUrl(None, Some("http://jobs.theguardian.com/apply")) should be(ReturnUrl("http://jobs.theguardian.com/apply"))
 
+    ReturnUrl(None, Some("http://www.thegulocal.com/")) should be(ReturnUrl("http://www.thegulocal.com/"))
     ReturnUrl(None, None) should be(ReturnUrl("http://www.theguardian.com"))
 
     ReturnUrl(Some("http://baddomain.com"), None) should be(ReturnUrl("http://www.theguardian.com"))

@@ -1,7 +1,6 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.controllers.routes
-import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.models.Text._
 import play.api.i18n.Messages
 

@@ -7,7 +7,7 @@ import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc.{Request, AnyContent, Action, Controller}
+import play.api.mvc.{Action, Controller}
 
 import scala.util.control.NonFatal
 import play.api.i18n.Messages.Implicits._
@@ -34,7 +34,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     NoCache {
       val formParams = signInFormBody.bindFromRequest()(request).get
       val trackingData = TrackingData(request, formParams.returnUrl)
-      val returnUrl = ReturnUrl(request.headers.get("Referer"), formParams.returnUrl)
+      val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"))
 
       identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
         case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, formParams.email, returnUrl, formParams.skipConfirmation)

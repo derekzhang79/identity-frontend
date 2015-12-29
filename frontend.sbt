@@ -4,7 +4,7 @@ import com.typesafe.sbt.web.incremental._
 
 val build = taskKey[Seq[File]]("Compiles Frontend assets using npm")
 
-val buildOutputDirectory = settingKey[File]("Output directory for generated sources from npm build task")
+val buildOutputDirectory: SettingKey[File] = settingKey[File]("Output directory for generated sources from npm build task")
 
 buildOutputDirectory in Assets := webTarget.value / "build"
 
@@ -23,8 +23,9 @@ build in Assets := {
         val startTime = System.currentTimeMillis
 
         val cmd = Process("npm run build", baseDirectory.value) !< log
+        val targetFiles = (targetDir ** "*.*").get
         val result = {
-          if (cmd == 0) OpSuccess(sources.toSet, (targetDir  ** "*.*").get.toSet)
+          if (cmd == 0) OpSuccess(sources.toSet, targetFiles.toSet)
           else {
             log.error(s"Non-zero error code for `npm run build`: $cmd")
             OpFailure

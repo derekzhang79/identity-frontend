@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.controllers.routes
+import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.models.Text._
 import play.api.i18n.Messages
 
@@ -31,8 +32,8 @@ object ErrorViewModel {
   }
 
   val errorMessages = Map(
-    "error-gateway" -> "There was a problem signing in, please try again.",
-    "error-bad-request" -> "Incorrect email or password, please try again."
+    "error-gateway" -> "There was a problem signing in; please try again.",
+    "error-bad-request" -> "Incorrect email or password; please try again."
   )
 
   val default: String = "There was an unexpected problem, please try again."
@@ -66,12 +67,12 @@ case class SignInViewModel(showPrelude: Boolean = false,
 }
 
 object SignInViewModel {
-  def apply(errors: Seq[ErrorViewModel], returnUrl: Option[String], skipConfirmation: Option[Boolean]): SignInViewModel = {
-    val urlParams: Seq[(String, String)] = Seq(returnUrl.map(("returnUrl", _)), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
+  def apply(errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): SignInViewModel = {
+    val urlParams: Seq[(String, String)] = Seq(Some("returnUrl" -> returnUrl.url), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
 
     SignInViewModel(
       errors = errors,
-      returnUrl = returnUrl.getOrElse(""),
+      returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
       registerUrl = UrlBuilder("/register", urlParams),
       forgotPasswordUrl = UrlBuilder("/reset", urlParams),

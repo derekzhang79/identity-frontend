@@ -22,7 +22,7 @@ build in Assets := {
         log.info("Running npm run build")
         val startTime = System.currentTimeMillis
 
-        val cmd = Process("npm run build", baseDirectory.value) !< log
+        val cmd = Process("npm run build -s", baseDirectory.value) !< log
         val targetFiles = (targetDir ** "*.*").get
         val result = {
           if (cmd == 0) OpSuccess(sources.toSet, targetFiles.toSet)

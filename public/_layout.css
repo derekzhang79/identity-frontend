@@ -1,6 +1,6 @@
-@import 'components/normalise';
-@import 'components/grid';
-@import 'components/typography';
+@import 'components/_normalise.css';
+@import 'components/_grid.css';
+@import 'components/_typography.css';
 
 html {
   height: 100%;
@@ -35,8 +35,8 @@ body {
 
 }
 
-@import 'components/header/header';
-@import 'components/footer/footer';
+@import 'components/header/_header.css';
+@import 'components/footer/_footer.css';
 
 .content {
   @extend %content-block;

@@ -1,5 +1,6 @@
 {
   "use": [
+    "postcss-import",
     "precss",
     "postcss-assets",
     "postcss-cssnext",
@@ -9,7 +10,7 @@
   "input": "public/main.css",
   "output": "target/web/build/bundle.css",
   "precss": {
-    "import": true,
+    "import": false,
     "mixins": true,
     "variables": true,
     "media": true,
@@ -28,11 +29,5 @@
   "postcss-assets": {
     "basePath": "public/",
     "baseUrl": "/static/"
-  },
-  "postcss-cssnext": {
-    "messages": {
-      "browser": false,
-      "console": true
-    }
   }
 }

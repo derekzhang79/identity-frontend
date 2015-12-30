@@ -2,7 +2,7 @@
  * Typography: typographic styles.
  */
 
-@import 'fonts/fonts';
+@import 'fonts/_fonts.css';
 
 $base-font-size: 10;
 

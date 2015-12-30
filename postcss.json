@@ -2,8 +2,9 @@
   "use": [
     "precss",
     "postcss-assets",
-    "cssnext",
-    "cssnano"
+    "postcss-cssnext",
+    "cssnano",
+    "postcss-reporter"
   ],
   "input": "public/main.css",
   "output": "target/web/build/bundle.css",
@@ -28,7 +29,7 @@
     "basePath": "public/",
     "baseUrl": "/static/"
   },
-  "cssnext": {
+  "postcss-cssnext": {
     "messages": {
       "browser": false,
       "console": true

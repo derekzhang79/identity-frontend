@@ -19,11 +19,12 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.1.18",
     "cssnano": "^3.3.2",
-    "cssnext": "^1.8.4",
     "normalize.css": "^3.0.3",
     "postcss-assets": "^3.0.2",
     "postcss-calc": "^5.0.0",
     "postcss-cli": "^2.3.2",
+    "postcss-cssnext": "^2.3.0",
+    "postcss-reporter": "^1.3.0",
     "precss": "^1.3.0",
     "webpack": "^1.12.9"
   },

@@ -23,7 +23,6 @@
     "cssnano": "^3.3.2",
     "normalize.css": "^3.0.3",
     "postcss-assets": "^3.0.2",
-    "postcss-calc": "^5.0.0",
     "postcss-cli": "^2.3.2",
     "postcss-cssnext": "^2.3.0",
     "postcss-discard-comments": "^2.0.3",

@@ -1,6 +1,7 @@
 {
   "use": [
     "postcss-import",
+    "postcss-discard-comments",
     "precss",
     "postcss-assets",
     "postcss-cssnext",

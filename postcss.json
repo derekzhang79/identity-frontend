@@ -29,5 +29,8 @@
   "postcss-assets": {
     "basePath": "public/",
     "baseUrl": "/static/"
+  },
+  "postcss-reporter": {
+    "clearMessages": true
   }
 }

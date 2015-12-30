@@ -11,8 +11,10 @@
   "scripts": {
     "prebuild": "mkdir -p ./target/web/build",
     "build": "npm run build-css && npm run build-js",
+    "prebuild-css": "npm run lint-css",
     "build-css": "postcss -c postcss.json",
-    "build-js": "webpack -p"
+    "build-js": "webpack -p",
+    "lint-css": "stylelint 'public/**/*.css'"
   },
   "devDependencies": {
     "babel-core": "^6.2.1",
@@ -27,6 +29,7 @@
     "postcss-import": "^7.1.3",
     "postcss-reporter": "^1.3.0",
     "precss": "^1.3.0",
+    "stylelint": "^3.1.4",
     "webpack": "^1.12.9"
   },
   "dependencies": {

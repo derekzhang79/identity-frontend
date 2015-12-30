@@ -1,23 +1,21 @@
 /**
  * Typography: typographic styles.
+ *
+ * Reset from estimated browser default font-size of 16px to $base-font-size
  */
 
-@import 'fonts/_fonts.css';
+@import "fonts/_fonts.css";
 
 $base-font-size: 10;
 
-
 html {
-  font-size: calc( $base-font-size / 16em );  /* reset from default 16px to base */
+  font-size: calc($base-font-size / 16em);
   text-rendering: optimizeSpeed;
 }
 
-
-@define-mixin font-size $size, $line-height  {
-  font-size: calc( 0px + $size );
-  font-size: calc( 0rem + $size / 10 );
-  line-height: calc( 0px + $line-height );
-  line-height: calc( 0rem + $line-height / 10 );
+@define-mixin font-size $size, $line-height {
+  font-size: calc($size / $(base-font-size) rem);
+  line-height: calc($line-height / $(base-font-size) rem);
 }
 
 %font-serif {
@@ -25,7 +23,7 @@ html {
 }
 
 %font-sans-serif {
-  font-family: GuardianTextSansWeb, 'Helvetica Neue' , Helvetica, Arial, 'Lucida Grande', sans-serif;
+  font-family: GuardianTextSansWeb, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
 %font-heading-1 {

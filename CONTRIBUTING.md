@@ -26,7 +26,30 @@ If you have any questions, come chat to us or send us an email.
 - **Scala:** [Scala style guide](http://docs.scala-lang.org/style/)
 - **Views:** [handlebars](http://jknack.github.io/handlebars.java/) used, view
   inputs defined in view model objects, only use built in helpers if you can
-- **Javascript:** [Idiomatic JS](https://github.com/rwaldron/idiomatic.js),
-  enforced with [eslint](http://eslint.org/) when running tests
-- **CSS:** [Idiomatic CSS](https://github.com/necolas/idiomatic-css), enforced
-  with [stylelint](http://stylelint.io/) when running tests
+
+### Component organisation
+TODO
+
+### Javascript guidelines
+Javascript source should be written in ES6 in the [Idiomatic JS](https://github.com/rwaldron/idiomatic.js)
+style. This is enforced using [eslint](http://eslint.org/) when running tests.
+
+ES6 is transpiled with [Babel](https://babeljs.io/) as part of a
+[Webpack](http://webpack.github.io/) build step. The webpack build config
+is defined in [`webpack.config.js`](https://github.com/guardian/identity-frontend/blob/master/webpack.config.js).
+
+The build is triggered as part of sbt's compile stage. This is configured using
+an `sbt-web` task in [`frontend.sbt`](https://github.com/guardian/identity-frontend/blob/master/frontend.sbt)
+which will run `npm run build` when a frontend asset has changed.
+
+### CSS guidelines
+CSS source should be written using [Idiomatic CSS](https://github.com/necolas/idiomatic-css) style.
+This is enforced using [stylelint](http://stylelint.io/) when running tests.
+
+CSS is processed using [PostCSS](https://github.com/postcss/postcss)
+
+### Test guidelines
+
+- Tests should complete in under five minutes.
+- Prefer unit tests to integration/functional tests.
+- Unstable tests should be removed.

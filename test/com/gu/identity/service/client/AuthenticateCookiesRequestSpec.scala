@@ -33,19 +33,6 @@ class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with Mockito
       result.right.get.parameters should contain("persistent" -> "false")
     }
 
-    "Parse correctly with a valid email address and password that requires encoded params" in {
-      val email = Some("test@guardian.co.uk")
-      val password = Some("some%thing")
-
-      val result = AuthenticateCookiesRequest.from(email, password, rememberMe = false, trackingData)
-
-      result.isRight shouldBe true
-      result.right.get.email should equal (email.get)
-      result.right.get.password should equal(password.get)
-      result.right.get.parameters should contain("persistent" -> "false")
-      result.right.get.body should equal(Some("email=test%40guardian.co.uk&password=some%25thing"))
-    }
-
     "Set persistent parameter on request" in {
       val email = Some("test@guardian.co.uk")
       val password = Some("god")

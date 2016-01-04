@@ -1,5 +1,6 @@
 package com.gu.identity.service.client
 
+import com.gu.identity.frontend.controllers.RegisterRequest
 import com.gu.identity.frontend.models.TrackingData
 
 sealed trait ApiRequest {
@@ -52,26 +53,35 @@ object AuthenticateCookiesRequest {
 
 trait ApiRequestBody
 
-case class RegisterApiRequest(url: String, email: String, password: String, extraHeaders: HttpParameters = Nil, override val body: Option[ApiRequestBody]) extends ApiRequest {
+case class RegisterApiRequest(url: String, extraHeaders: HttpParameters = Nil, override val body: Option[ApiRequestBody]) extends ApiRequest {
   override val method = POST
   override val headers = Seq("Content-Type" -> "application/json") ++ extraHeaders
   override val parameters = Seq("format" -> "cookies")
 }
 
 object RegisterApiRequest {
-  def apply(email: String, password: String)(implicit configuration: IdentityClientConfiguration): RegisterApiRequest ={
+  def apply(request: RegisterRequest, clientIp: String)(implicit configuration: IdentityClientConfiguration): RegisterApiRequest ={
     RegisterApiRequest(
       ApiRequest.apiEndpoint("user"),
-      email,
-      password,
-      body = Some(RegisterRequestBody(email, password)),
+      body = Some(RegisterRequestBody(
+        request.email,
+        request.password,
+        RegisterRequestBodyPublicFields(request.username),
+        RegisterRequestBodyPrivateFields(
+          request.firstName,
+          request.lastName,
+          request.receiveGnmMarketing,
+          request.receive3rdPartyMarketing,
+          clientIp
+        )
+      )),
       extraHeaders = ApiRequest.apiKeyHeaders
     )
   }
 }
 
-case class RegisterRequestBody(primaryEmailAddress: String, password: String, publicFields: Option[RegisterRequestBodyPublicFields] = None, privateFields: Option[RegisterRequestBodyPrivateFields] = None) extends ApiRequestBody
+case class RegisterRequestBody(primaryEmailAddress: String, password: String, publicFields: RegisterRequestBodyPublicFields, privateFields: RegisterRequestBodyPrivateFields) extends ApiRequestBody
 
 case class RegisterRequestBodyPublicFields(username: String)
 
-case class RegisterRequestBodyPrivateFields(firstName: String, lastName: String, registrationIp: String)
+case class RegisterRequestBodyPrivateFields(firstName: String, lastName: String, receiveGnmMarketing: Boolean, receive3rdPartyMarketing: Boolean,  registrationIp: String)

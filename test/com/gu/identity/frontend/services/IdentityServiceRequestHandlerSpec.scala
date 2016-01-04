@@ -23,5 +23,4 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       result should equal ("email=test%40guardian.co.uk&password=some%25thing")
     }
   }
-
 }

@@ -1,8 +1,10 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.controllers.routes
+import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.models.Text._
 import play.api.i18n.Messages
+import play.api.mvc.{RequestHeader, Request}
 
 case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguardian.com/facebook/signin",
                                 socialGoogle: String = "https://oauth.theguardian.com/google/signin") extends ViewModel {
@@ -47,13 +49,13 @@ case class SignInViewModel(showPrelude: Boolean = false,
 }
 
 object SignInViewModel {
-  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: Option[String], skipConfirmation: Option[Boolean]): SignInViewModel = {
-    val urlParams: Seq[(String, String)] = Seq(returnUrl.map(("returnUrl", _)), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
+  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): SignInViewModel = {
+    val urlParams: Seq[(String, String)] = Seq(Some("returnUrl" -> returnUrl.url), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
 
     SignInViewModel(
       errors = errors,
       email = email,
-      returnUrl = returnUrl.getOrElse(""),
+      returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
       registerUrl = UrlBuilder("/register", urlParams),
       forgotPasswordUrl = UrlBuilder("/reset", urlParams),
@@ -68,7 +70,7 @@ object UrlBuilder {
     val paramString = params.map(x => s"${x._1}=${x._2}").mkString("&")
      paramString match {
        case "" => baseUrl
-       case paramString => s"${baseUrl}/?${paramString}"
+       case paramString => s"$baseUrl?$paramString"
      }
 
   }

@@ -273,35 +273,17 @@
         "IamInstanceProfile": {"Ref": "InstanceProfile"},
         "UserData": {
           "Fn::Base64": {
-            "Fn::Join": ["", [
+            "Fn::Join": ["\n", [
               "#!/bin/bash -ev\n",
 
-              "export IDENTITY_stage='", {
-                "Ref": "Stage"
-              }, "'\n",
+              "source /identity-functions.sh",
 
-              "aws s3 cp s3://gu-identity-dist/cwlogs-setup.sh .\n",
-              "chmod +x cwlogs-setup.sh\n",
-              "./cwlogs-setup.sh\n",
+              "installScript identity-bootstrap.sh",
+              "installScript logstash-setup.sh",
 
-              "aws s3 cp s3://gu-identity-dist/cron-setup.sh .\n",
-              "chmod +x cron-setup.sh\n",
-              "./cron-setup.sh\n",
+              "installScriptFromS3 s3://gu-identity-frontend-dist/identity-frontend-bootstrap.sh identity-frontend-bootstrap.sh",
 
-              "aws s3 cp s3://gu-identity-dist/set-ssh-keys.sh .\n",
-              "chmod +x set-ssh-keys.sh\n",
-              "./set-ssh-keys.sh\n",
-
-              "aws s3 cp s3://gu-identity-dist/logstash-setup.sh .\n",
-              "chmod +x logstash-setup.sh\n",
-              "./logstash-setup.sh\n",
-
-              "aws s3 cp s3://gu-identity-frontend-dist/identity-frontend-bootstrap.sh .\n",
-              "chmod +x identity-frontend-bootstrap.sh\n",
-              "./identity-frontend-bootstrap.sh\n",
-
-
-              "service identity-frontend start\n"
+              "service identity-frontend start"
             ]]
           }
         }

@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.configuration
 
-import com.gu.identity.frontend.controllers.{RegisterAction, SigninAction, HealthCheck, Application}
+import com.gu.identity.frontend.controllers.{Manifest, RegisterAction, SigninAction, HealthCheck, Application}
 import com.gu.identity.frontend.filters.{BetaUserGroupFilter, SecurityHeadersFilter, Filters}
 import com.gu.identity.frontend.services.{IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import jp.co.bizreach.play2handlebars.HandlebarsPlugin
@@ -28,6 +28,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
 
   lazy val applicationController = new Application(frontendConfiguration, messagesApi)
   lazy val healthcheckController = new HealthCheck()
+  lazy val manifestController = new Manifest()
   lazy val signinController = new SigninAction(identityService, messagesApi)
   lazy val registerController = new RegisterAction(identityService, messagesApi)
   lazy val assets = new controllers.Assets(httpErrorHandler)
@@ -39,5 +40,5 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
     new BetaUserGroupFilter(frontendConfiguration)
   ).filters
 
-  override lazy val router = new Routes(httpErrorHandler, applicationController, signinController, registerController, healthcheckController, assets)
+  override lazy val router = new Routes(httpErrorHandler, applicationController, signinController, registerController, healthcheckController, manifestController, assets)
 }

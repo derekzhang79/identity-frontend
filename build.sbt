@@ -6,7 +6,8 @@ scalaVersion := "2.11.7"
 
 version := "1.0.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtNativePackager, UniversalPlugin, RiffRaffArtifact)
+lazy val root = (project in file(".")).enablePlugins(
+  PlayScala, SbtNativePackager, UniversalPlugin, RiffRaffArtifact, BuildInfoPlugin)
 
 lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 
@@ -35,6 +36,14 @@ riffRaffUploadManifestBucket := Option("riffraff-builds")
 
 mappings in Universal ++= (baseDirectory.value / "deploy" ***).get pair relativeTo(baseDirectory.value)
 
+// Prout
+buildInfoKeys := Seq[BuildInfoKey](
+  name,
+  BuildInfoKey.constant("gitCommitId", Option(System.getenv("CIRCLE_SHA1")) getOrElse(try {
+    "git rev-parse HEAD".!!.trim
+  } catch { case e: Exception => "unknown" })),
+  BuildInfoKey.constant("buildNumber", Option(System.getenv("CIRCLE_BUILD_NUM")) getOrElse "DEV")
+)
 
 // Disable packaging of scaladoc
 sources in (Compile, doc) := Seq.empty

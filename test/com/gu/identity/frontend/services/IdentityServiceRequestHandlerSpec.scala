@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.services
 
-import com.gu.identity.service.client.{AuthenticateCookiesRequestBody, AuthenticateCookiesRequest}
+import com.gu.identity.service.client.{RegisterRequestBodyPrivateFields, RegisterRequestBodyPublicFields, RegisterRequestBody, AuthenticateCookiesRequestBody}
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.ws.WSClient
@@ -21,6 +21,26 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val result = handler.handleRequestBody(requestBody)
 
       result should equal ("email=test%40guardian.co.uk&password=some%25thing")
+    }
+
+    "Encode correct json when using a Register Request." in {
+      val email = "test@guardian.co.uk"
+      val password = "some%thing"
+      val username = "myUsername"
+      val firstName = "First"
+      val lastName = "Last"
+      val registrationIp = "123.456.789.012"
+
+      val requestBody = RegisterRequestBody(
+        email,
+        password,
+        Some(RegisterRequestBodyPublicFields(username)),
+        Some(RegisterRequestBodyPrivateFields(firstName, lastName, registrationIp))
+      )
+      val result = handler.handleRequestBody(requestBody)
+      val expectedResult = s"""{"primaryEmailAddress":"$email","password":"$password","publicFields":{"username":"$username"},"privateFields":{"firstName":"$firstName","lastName":"$lastName","registrationIp":"$registrationIp"}}"""
+
+      result should equal (expectedResult)
     }
   }
 }

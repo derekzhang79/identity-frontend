@@ -28,7 +28,6 @@ case class AuthenticateCookiesRequest(url: String, email: String, password: Stri
   override val method = POST
   override val headers = Seq("Content-Type" -> "application/x-www-form-urlencoded") ++ extraHeaders
   override val parameters = Seq("format" -> "cookies", "persistent" -> rememberMe.toString) ++ trackingData.parameters
-//  override val body = Some(ApiRequest.encodeBody("email" -> email, "password" -> password))
   override val body = Some(AuthenticateCookiesRequestBody(email, password))
 }
 

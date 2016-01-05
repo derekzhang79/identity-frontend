@@ -5,7 +5,7 @@ import org.joda.time.DateTime
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object IdentityClient extends Logging {
+class IdentityClient extends Logging {
 
   def authenticateCookies(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] =
     AuthenticateCookiesRequest.from(email, password, rememberMe, trackingData) match {

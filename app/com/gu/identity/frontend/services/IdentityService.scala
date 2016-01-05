@@ -19,12 +19,12 @@ trait IdentityService {
 }
 
 
-class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequestHandler) extends IdentityService {
+class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequestHandler, client: IdentityClient) extends IdentityService {
 
   implicit val clientConfiguration = IdentityClientConfiguration(config.identityApiHost, config.identityApiKey, adapter)
 
   def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit ec: ExecutionContext) = {
-    IdentityClient.authenticateCookies(email, password, rememberMe, trackingData).map {
+    client.authenticateCookies(email, password, rememberMe, trackingData).map {
       case Left(errors) => Left {
         errors.map {
           case e: BadRequest => ServiceBadRequest(e.message, e.description)
@@ -43,7 +43,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
 
   override def register(request: RegisterRequest, clientIp: String)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]] = {
     val apiRequest = RegisterApiRequest(request, clientIp)
-    IdentityClient.register(apiRequest).map {
+    client.register(apiRequest).map {
       case Left(errors) => Left {
         errors.map {
           case e: BadRequest => ServiceBadRequest(e.message, e.description)

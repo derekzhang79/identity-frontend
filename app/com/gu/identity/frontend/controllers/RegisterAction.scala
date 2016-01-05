@@ -10,6 +10,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.Future
+import scala.util.control.NonFatal
 
 case class RegisterRequest(
                             firstName: String,
@@ -57,6 +58,12 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
             case Left(errors) => SeeOther(routes.Application.register(Seq("error-registration"), Some(returnUrl.url)).url)
             case Right(cookies) =>
               SeeOther(returnUrl.url).withCookies(cookies: _*)
+          }. recover {
+            case NonFatal(ex) => {
+              logger.warn(s"Unexpected error while registering: ${ex.getMessage}", ex)
+              SeeOther(routes.Application.register(Seq("error-registration"), None).url)
+            }
+
           }
         }
       )

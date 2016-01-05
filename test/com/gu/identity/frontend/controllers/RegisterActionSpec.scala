@@ -120,5 +120,28 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
+
+    "redirect to register page when error from the future" in new WithControllerMockedDependencies {
+      val firstName = "first"
+      val lastName = "last"
+      val email = "test@email.com"
+      val username = "username"
+      val password = "password"
+      val receiveGnmMarketing = false
+      val receive3rdPartyMarketing = false
+      val returnUrl = Some("http://www.theguardian.com/test")
+
+      when(mockIdentityService.register(anyObject(), anyString())(argAny[ExecutionContext]))
+        .thenReturn{
+          Future.failed {
+            new RuntimeException("Unexpected 500 error")
+          }
+        }
+
+      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl))
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
+    }
   }
 }

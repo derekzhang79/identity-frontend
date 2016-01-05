@@ -1,8 +1,7 @@
 package com.gu.identity.frontend.controllers
 
-import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services.IdentityService
-import org.mockito.Matchers._
+import org.mockito.Matchers.{any => argAny}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
@@ -10,8 +9,9 @@ import play.api.i18n.MessagesApi
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import org.mockito.Matchers._
 
-import scala.concurrent.{Future, ExecutionContext}
+import scala.concurrent.{ExecutionContext, Future}
 
 class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
@@ -22,14 +22,14 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
   }
 
   def fakeRegisterRequest(
-                         firstName: String,
-                         lastName: String,
-                         email: String,
-                         username: String,
-                         password: String,
-                         receiveGnmMarketing: Boolean,
-                         receive3rdPartyMarketing: Boolean
-                           ): Unit = {
+                           firstName: String,
+                           lastName: String,
+                           email: String,
+                           username: String,
+                           password: String,
+                           receiveGnmMarketing: Boolean,
+                           receive3rdPartyMarketing: Boolean
+                         ) = {
     val bodyParams = Seq(
       "firstName" -> firstName,
       "lastName" -> lastName,
@@ -37,18 +37,38 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "username" -> username,
       "password" -> password,
       "receiveGnmMarketing" -> receiveGnmMarketing.toString,
-      "receive3rdPartyMarketing" -> receive3rdPartyMarketing.toString).map(p => p._1 -> p._2)
+      "receive3rdPartyMarketing" -> receive3rdPartyMarketing.toString)
 
-    FakeRequest("POST", "/actions/register")
-      .withFormUrlEncodedBody(bodyParams: _*)
-
+    FakeRequest("POST", "/actions/register").withFormUrlEncodedBody(bodyParams: _*)
   }
 
   "POST /register" should {
     "redirect to theguardian.com" in new WithControllerMockedDependencies {
-      val registerRequest = RegisterRequest("first", "last", "me@me.com", "username", "password", false, false)
-      true mustEqual true
-      //TODO
+      val firstName = "first"
+      val lastName = "last"
+      val email = "test@email.com"
+      val username = "username"
+      val password = "password"
+      val receiveGnmMarketing = false
+      val receive3rdPartyMarketing = false
+
+      val testCookie = Cookie("SC_GU_U", "##hash##")
+
+      when(mockIdentityService.register(anyObject(), anyString())(argAny[ExecutionContext]))
+        .thenReturn{
+          Future.successful {
+           Right(Seq(testCookie))
+          }
+        }
+
+      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing))
+      val resultCookies = cookies(result)
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result) mustEqual Some("http://www.theguardian.com")
+
+      resultCookies.size mustEqual 1
+      resultCookies.head mustEqual testCookie
     }
   }
 }

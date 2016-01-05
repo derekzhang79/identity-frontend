@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.controllers
 
-import com.gu.identity.frontend.services.IdentityService
+import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
 import org.mockito.Matchers.{any => argAny}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -10,6 +10,7 @@ import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import org.mockito.Matchers._
+import org.scalatest._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -72,6 +73,52 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
       resultCookies.size mustEqual 1
       resultCookies.head mustEqual testCookie
+    }
+
+    "redirect to register page when failed to create account" in new WithControllerMockedDependencies {
+      val firstName = "first"
+      val lastName = "last"
+      val email = "test@email.com"
+      val username = "username"
+      val password = "password"
+      val receiveGnmMarketing = false
+      val receive3rdPartyMarketing = false
+      val returnUrl = Some("http://www.theguardian.com/test")
+
+      when(mockIdentityService.register(anyObject(), anyString())(argAny[ExecutionContext]))
+        .thenReturn{
+          Future.successful {
+            Left(Seq(ServiceBadRequest("User could not be registered, invalid fields in form.")))
+          }
+        }
+
+      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl))
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
+    }
+
+    "redirect to register page when service error" in new WithControllerMockedDependencies {
+      val firstName = "first"
+      val lastName = "last"
+      val email = "test@email.com"
+      val username = "username"
+      val password = "password"
+      val receiveGnmMarketing = false
+      val receive3rdPartyMarketing = false
+      val returnUrl = Some("http://www.theguardian.com/test")
+
+      when(mockIdentityService.register(anyObject(), anyString())(argAny[ExecutionContext]))
+        .thenReturn{
+          Future.successful {
+            Left(Seq(ServiceGatewayError("Unexpected 500 error")))
+          }
+        }
+
+      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl))
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
   }
 }

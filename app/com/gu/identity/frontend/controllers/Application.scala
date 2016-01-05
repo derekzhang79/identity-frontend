@@ -19,7 +19,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
     }
   }
 
-  def register(error: Seq[String]) = Action {
+  def register(error: Seq[String], returnUrl: Option[String]) = Action {
     Cached{
       Ok("Hello, This is the Registration Page")
     }

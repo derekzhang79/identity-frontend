@@ -7,7 +7,7 @@ GET        /                              com.gu.identity.frontend.controllers.A
 
 GET        /signin                        com.gu.identity.frontend.controllers.Application.signIn(email: Option[String], error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean])
 
-GET        /register                      com.gu.identity.frontend.controllers.Application.register(error: Seq[String])
+GET        /register                      com.gu.identity.frontend.controllers.Application.register(error: Seq[String], returnUrl: Option[String])
 
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 

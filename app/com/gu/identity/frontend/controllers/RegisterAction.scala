@@ -2,7 +2,7 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.ReturnUrl
-import com.gu.identity.frontend.services.IdentityService
+import com.gu.identity.frontend.services.{ServiceError, IdentityService}
 import play.api.data.{Mapping, Form}
 import play.api.data.Forms._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -50,13 +50,14 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
       val clientIp = request.remoteAddress
 
       registerForm.bindFromRequest.fold(
-        errorForm => Future(SeeOther(routes.Application.register(Seq("error-registration")).url)),
-        success => identityService.register(success, clientIp).map {
-          case Left(errors) => SeeOther(routes.Application.register(Seq("error-registration")).url)
-          case Right(cookies) =>
-            val returnUrl = ReturnUrl(success.returnUrl, request.headers.get("Referer"))
-            SeeOther(returnUrl.url)
-              .withCookies(cookies: _*)
+        errorForm => Future(SeeOther(routes.Application.register(Seq("error-registration"), None).url)),
+        success => {
+          val returnUrl = ReturnUrl(success.returnUrl, request.headers.get("Referer"))
+          identityService.register(success, clientIp).map {
+            case Left(errors) => SeeOther(routes.Application.register(Seq("error-registration"), Some(returnUrl.url)).url)
+            case Right(cookies) =>
+              SeeOther(returnUrl.url).withCookies(cookies: _*)
+          }
         }
       )
     }

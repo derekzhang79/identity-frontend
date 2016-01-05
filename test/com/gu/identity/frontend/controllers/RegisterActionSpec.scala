@@ -28,7 +28,8 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
                            username: String,
                            password: String,
                            receiveGnmMarketing: Boolean,
-                           receive3rdPartyMarketing: Boolean
+                           receive3rdPartyMarketing: Boolean,
+                           returnUrl: Option[String]
                          ) = {
     val bodyParams = Seq(
       "firstName" -> firstName,
@@ -37,13 +38,14 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "username" -> username,
       "password" -> password,
       "receiveGnmMarketing" -> receiveGnmMarketing.toString,
-      "receive3rdPartyMarketing" -> receive3rdPartyMarketing.toString)
+      "receive3rdPartyMarketing" -> receive3rdPartyMarketing.toString,
+      "returnUrl" -> returnUrl.getOrElse("http://none.com"))
 
     FakeRequest("POST", "/actions/register").withFormUrlEncodedBody(bodyParams: _*)
   }
 
   "POST /register" should {
-    "redirect to theguardian.com" in new WithControllerMockedDependencies {
+    "redirect to theguardian.com when registration is successful" in new WithControllerMockedDependencies {
       val firstName = "first"
       val lastName = "last"
       val email = "test@email.com"
@@ -51,6 +53,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val password = "password"
       val receiveGnmMarketing = false
       val receive3rdPartyMarketing = false
+      val returnUrl = Some("http://www.theguardian.com/test")
 
       val testCookie = Cookie("SC_GU_U", "##hash##")
 
@@ -61,11 +64,11 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           }
         }
 
-      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing))
+      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl))
       val resultCookies = cookies(result)
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result) mustEqual Some("http://www.theguardian.com")
+      redirectLocation(result) mustEqual Some("http://www.theguardian.com/test")
 
       resultCookies.size mustEqual 1
       resultCookies.head mustEqual testCookie

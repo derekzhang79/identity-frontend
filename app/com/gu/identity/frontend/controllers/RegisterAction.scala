@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.logging.Logging
+import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.services.IdentityService
 import play.api.data.{Mapping, Form}
 import play.api.data.Forms._
@@ -17,7 +18,8 @@ case class RegisterRequest(
                             username: String,
                             password: String,
                             receiveGnmMarketing: Boolean,
-                            receive3rdPartyMarketing: Boolean
+                            receive3rdPartyMarketing: Boolean,
+                            returnUrl: Option[String]
                             )
 
 class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
@@ -38,19 +40,22 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
       "username" -> nonEmptyText,
       "password" -> nonEmptyText,
       "receiveGnmMarketing" -> boolean,
-      "receive3rdPartyMarketing" -> boolean
+      "receive3rdPartyMarketing" -> boolean,
+      "returnUrl" -> optional(text)
     )(RegisterRequest.apply)(RegisterRequest.unapply)
   )
 
   def register = Action.async { implicit request =>
     NoCache {
       val clientIp = request.remoteAddress
+
       registerForm.bindFromRequest.fold(
         errorForm => Future(SeeOther(routes.Application.register(Seq("error-registration")).url)),
         success => identityService.register(success, clientIp).map {
           case Left(errors) => SeeOther(routes.Application.register(Seq("error-registration")).url)
           case Right(cookies) =>
-            SeeOther("http://www.theguardian.com")
+            val returnUrl = ReturnUrl(success.returnUrl, request.headers.get("Referer"))
+            SeeOther(returnUrl.url)
               .withCookies(cookies: _*)
         }
       )

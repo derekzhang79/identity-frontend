@@ -26,7 +26,7 @@ class IdentityClient extends Logging {
   def register(request: RegisterApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] = {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
-      case Right(RegisterResponse(cookies)) =>
+      case Right(RegisterResponse(status, user)) =>
         //TODO need to update this to use the RegisterResponse values
         Right(Seq(IdentityCookie("","", false, DateTime.now())))
       case Right(other) => Left(Seq(GatewayError("Unknown response")))

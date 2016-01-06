@@ -10,12 +10,12 @@ import play.api.mvc._
 class Application (configuration: Configuration, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
 
   def index = Action {
-    Redirect(routes.Application.signIn(email = None, error = Seq.empty, returnUrl = None, skipConfirmation = None))
+    Redirect(routes.Application.signIn())
   }
 
-  def signIn(email: Option[String], error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = Action { implicit req =>
+  def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = Action { implicit req =>
     Cached{
-      Ok(renderSignIn(configuration, error, email.getOrElse(""), returnUrl, skipConfirmation))
+      Ok(renderSignIn(configuration, error, returnUrl, skipConfirmation))
     }
   }
 }

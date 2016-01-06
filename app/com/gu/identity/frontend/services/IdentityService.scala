@@ -55,10 +55,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
   }
 
   def createPlayCookie(cookie: IdentityCookie): PlayCookie = {
-    val maxAge = if (false) Some(Seconds.secondsBetween(DateTime.now, cookie.expires).getSeconds) else None
     val secureHttpOnly = cookie.key.startsWith("SC_")
-    val cookieMaxAgeOpt = maxAge.filterNot(_ => cookie.isSession)
-
-    PlayCookie(cookie.key, cookie.value, cookieMaxAgeOpt, "/", Some(config.identityCookieDomain), secure = secureHttpOnly, httpOnly = secureHttpOnly)
+    PlayCookie(cookie.key, cookie.value, maxAge = None, "/", Some(config.identityCookieDomain), secure = secureHttpOnly, httpOnly = secureHttpOnly)
   }
 }

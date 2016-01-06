@@ -27,8 +27,7 @@ class IdentityClient extends Logging {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
       case Right(RegisterResponse(status, user)) =>
-        //TODO need to update this to use the RegisterResponse values
-        Right(Seq(IdentityCookie("","", false, DateTime.now())))
+        Right(Seq(IdentityCookie("Created User","", true, DateTime.now())))
       case Right(other) => Left(Seq(GatewayError("Unknown response")))
     }
   }

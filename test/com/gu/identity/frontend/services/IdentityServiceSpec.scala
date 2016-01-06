@@ -26,5 +26,11 @@ class IdentityServiceSpec extends PlaySpec with MockitoSugar {
       val playCookie = identityService.createPlayCookie(identityCookie)
       playCookie.secure mustEqual false
     }
+
+    "Not have a max age value" in {
+      val identityCookie = IdentityCookie("SC_123","",true, new DateTime())
+      val playCookie = identityService.createPlayCookie(identityCookie)
+      playCookie.maxAge mustEqual None
+    }
   }
 }

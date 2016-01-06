@@ -50,13 +50,15 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
           case e: GatewayError => ServiceGatewayError(e.message, e.description)
         }
       }
-      case Right(cookies) => Right(cookies.map { c =>
-        val maxAge = if (false) Some(Seconds.secondsBetween(DateTime.now, c.expires).getSeconds) else None
-        val secureHttpOnly = c.key.startsWith("SC_")
-        val cookieMaxAgeOpt = maxAge.filterNot(_ => c.isSession)
-
-        PlayCookie(c.key, c.value, cookieMaxAgeOpt, "/", Some(config.identityCookieDomain), secure = secureHttpOnly, httpOnly = secureHttpOnly)
-      })
+      case Right(cookies) => Right(cookies.map { c => createPlayCookie(c)})
     }
+  }
+
+  def createPlayCookie(cookie: IdentityCookie): PlayCookie = {
+    val maxAge = if (false) Some(Seconds.secondsBetween(DateTime.now, cookie.expires).getSeconds) else None
+    val secureHttpOnly = cookie.key.startsWith("SC_")
+    val cookieMaxAgeOpt = maxAge.filterNot(_ => cookie.isSession)
+
+    PlayCookie(cookie.key, cookie.value, cookieMaxAgeOpt, "/", Some(config.identityCookieDomain), secure = secureHttpOnly, httpOnly = secureHttpOnly)
   }
 }

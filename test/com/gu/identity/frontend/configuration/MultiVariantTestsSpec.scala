@@ -54,6 +54,42 @@ class MultiVariantTestsSpec extends WordSpec with Matchers {
         activeVariantForTest(test, 1, 100) shouldEqual None
       }
     }
+
+    "it has multiple variants" should {
+      val variantA = RuntimeMultiVariantTestVariant("A")
+      val variantB = RuntimeMultiVariantTestVariant("B")
+      val variantC = RuntimeMultiVariantTestVariant("C")
+
+      "yield correct variant when two variants available" in {
+        val test = RuntimeMultiVariantTest(
+          name = "test",
+          audience = 0.1,
+          audienceOffset = 0.5,
+          variants = Seq(variantA, variantB)
+        )
+
+        activeVariantForTest(test, 51, 100) shouldEqual Some(variantB)
+        activeVariantForTest(test, 52, 100) shouldEqual Some(variantA)
+        activeVariantForTest(test, 53, 100) shouldEqual Some(variantB)
+        activeVariantForTest(test, 54, 100) shouldEqual Some(variantA)
+      }
+
+      "yield correct variant when three variants available" in {
+        val test = RuntimeMultiVariantTest(
+          name = "test",
+          audience = 0.1,
+          audienceOffset = 0.5,
+          variants = Seq(variantA, variantB, variantC)
+        )
+
+        activeVariantForTest(test, 51, 100) shouldEqual Some(variantA)
+        activeVariantForTest(test, 52, 100) shouldEqual Some(variantB)
+        activeVariantForTest(test, 53, 100) shouldEqual Some(variantC)
+        activeVariantForTest(test, 54, 100) shouldEqual Some(variantA)
+        activeVariantForTest(test, 55, 100) shouldEqual Some(variantB)
+        activeVariantForTest(test, 56, 100) shouldEqual Some(variantC)
+      }
+    }
   }
 
 }

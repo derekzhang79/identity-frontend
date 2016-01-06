@@ -13,9 +13,10 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
     Redirect(routes.Application.signIn())
   }
 
-  def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = Action { implicit req =>
-    Cached{
-      Ok(renderSignIn(configuration, error, returnUrl, skipConfirmation))
+  def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = Action { req =>
+    Cached {
+      val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"))
+      Ok(renderSignIn(configuration, error, returnUrlActual, skipConfirmation))
     }
   }
 

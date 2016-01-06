@@ -1,6 +1,9 @@
-# Identity-frontend
+# identity-frontend
 
 [![Circle CI](https://circleci.com/gh/guardian/identity-frontend/tree/master.svg?style=shield)](https://circleci.com/gh/guardian/identity-frontend/tree/master)
+
+Web frontend for Sign in and Registration at [theguardian.com](http://theguardian.com).
+
 
 # Application configuration
 
@@ -9,7 +12,7 @@ Configuration files:
 - Application configuration (`conf/application.conf`)
 - System file with additional properties (`/etc/gu/identity-frontend.conf`)
 
-# Setting up Identity Frontend locally
+# Local development
 
 ## Hosts
 
@@ -72,24 +75,28 @@ aws s3 cp --profile identity s3://gu-identity-frontend-private/DEV/identity-fron
 
 ## Running the application
 
-```
-sbt devrun
-```
+Requires:
+
+ - [JDK 8](http://openjdk.java.net)
+ - [sbt](http://www.scala-sbt.org)
+ - [Node.js 4.x](https://nodejs.org)
+
+To run the application in development mode use:
+
+    sbt devrun
+
+This command will automatically pull down all dependencies for the Scala app,
+and client-side dependencies with Node.js. Sources will automatically be watched,
+so making changes locally will result in compile being triggered automatically.
+
+Client side sources will automatically be compiled using the `npm run build` command.
 
 ## Testing
 
-### Functional tests
+To run unit tests:
 
-`sbt "project functional-tests" test`
+    sbt test
 
-These are browser driving Selenium tests.
+To run functional selenium tests in a browser:
 
-### Unit tests
-
-`sbt test`
-
-### Guidelines
-
-- Tests should complete in under five minutes.
-- Prefer unit tests to integration/functional tests.
-- Unstable tests should be removed.
+    sbt "project functional-tests" test

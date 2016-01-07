@@ -25,14 +25,6 @@ case class RegisterRequest(
 
 class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
 
-  private val username: Mapping[String] = text.verifying(
-    "error.username", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
-  )
-
-  private val password: Mapping[String] = text.verifying(
-    "error.password", pwd => pwd.length > 5 && pwd.length < 21
-  )
-
   val registerForm = Form(
     mapping(
       "firstName" -> nonEmptyText,

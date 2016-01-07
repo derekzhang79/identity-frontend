@@ -1,7 +1,8 @@
 package com.gu.identity.frontend.controllers
 
+import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
-import org.mockito.Matchers.{any => argAny}
+import org.mockito.Matchers.{any => argAny, eq => argEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
@@ -9,8 +10,6 @@ import play.api.i18n.MessagesApi
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import org.mockito.Matchers._
-import org.scalatest._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,7 +45,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
   }
 
   "POST /register" should {
-    "redirect to theguardian.com when registration is successful" in new WithControllerMockedDependencies {
+    "redirect to theguardian.com and sign user in when registration is successful" in new WithControllerMockedDependencies {
       val firstName = "first"
       val lastName = "last"
       val email = "test@email.com"
@@ -55,13 +54,21 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val receiveGnmMarketing = false
       val receive3rdPartyMarketing = false
       val returnUrl = Some("http://www.theguardian.com/test")
-
+      val rememberMe = Some(true)
       val testCookie = Cookie("SC_GU_U", "##hash##")
+      val testCookieSignIn = Cookie("SC_GU_U1", "##hash1##")
 
       when(mockIdentityService.register(anyObject(), anyString())(argAny[ExecutionContext]))
         .thenReturn{
           Future.successful {
-           Right(Seq(testCookie))
+            Right(Seq(testCookie))
+          }
+        }
+
+      when(mockIdentityService.authenticate(argEq(Some(email)), argEq(Some(password)), argEq(rememberMe.isDefined), argAny[TrackingData])(argAny[ExecutionContext]))
+        .thenReturn {
+          Future.successful {
+            Right(Seq(testCookieSignIn))
           }
         }
 
@@ -70,12 +77,12 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual Some("http://www.theguardian.com/test")
-
-      resultCookies.size mustEqual 1
-      resultCookies.head mustEqual testCookie
+      resultCookies.size mustEqual 2
+      resultCookies.get("SC_GU_U") mustEqual Some(testCookie)
+      resultCookies.get("SC_GU_U1") mustEqual Some(testCookieSignIn)
     }
 
-    "redirect to register page when failed to create account" in new WithControllerMockedDependencies {
+    "redirect to register page when failed to create account (Service Bad Request)" in new WithControllerMockedDependencies {
       val firstName = "first"
       val lastName = "last"
       val email = "test@email.com"
@@ -98,7 +105,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
 
-    "redirect to register page when service error" in new WithControllerMockedDependencies {
+    "redirect to register page when service error (Service Gateway Error)" in new WithControllerMockedDependencies {
       val firstName = "first"
       val lastName = "last"
       val email = "test@email.com"

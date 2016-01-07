@@ -53,9 +53,4 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
       case Right(user) => Right(user)
     }
   }
-
-  def createPlayCookie(cookie: IdentityCookie): PlayCookie = {
-    val secureHttpOnly = cookie.key.startsWith("SC_")
-    PlayCookie(cookie.key, cookie.value, maxAge = None, "/", Some(config.identityCookieDomain), secure = secureHttpOnly, httpOnly = secureHttpOnly)
-  }
 }

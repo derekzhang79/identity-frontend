@@ -105,6 +105,8 @@ object MultiVariantTests {
 
   def all = Set[MultiVariantTest](SignInV2Test).filter(_.active)
 
+  def allServerSide = all.filter(_.isServerSide)
+
   def isInTest(test: MultiVariantTest, mvtId: Int, maxId: Int = MAX_ID): Boolean = {
     val minBound = maxId * test.audienceOffset
     val maxBound = minBound + maxId * test.audience
@@ -120,7 +122,7 @@ object MultiVariantTests {
   }
 
   def activeTests(mvtId: Int, maxId: Int = MAX_ID): Set[(MultiVariantTest, MultiVariantTestVariant)] =
-    all.flatMap { test =>
+    allServerSide.flatMap { test =>
       activeVariantForTest(test, mvtId, maxId).map(test -> _)
     }
 }

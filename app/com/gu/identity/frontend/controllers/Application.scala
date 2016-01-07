@@ -1,13 +1,12 @@
 package com.gu.identity.frontend.controllers
 
-import com.gu.identity.frontend.configuration.{MultiVariantTests, Configuration}
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.views.ViewRenderer.renderSignIn
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.mvc._
 
-import scala.util.Try
 
 class Application (configuration: Configuration, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
 
@@ -15,14 +14,10 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
     Redirect(routes.Application.signIn())
   }
 
-  def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = Action { req =>
-    Cached {
-      val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"))
-      val mvtCookie = getMvtCookie(req)
-      val activeTests = mvtCookie.map(id => MultiVariantTests.activeTests(id)).getOrElse(Nil)
+  def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = MultiVariantTestAction { req =>
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"))
 
-      Ok(renderSignIn(configuration, activeTests, error, returnUrlActual, skipConfirmation))
-    }
+    Ok(renderSignIn(configuration, req.activeTests, error, returnUrlActual, skipConfirmation))
   }
 
   def register(error: Seq[String], returnUrl: Option[String]) = Action {
@@ -31,8 +26,4 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
     }
   }
 
-  private def getMvtCookie(req: RequestHeader) =
-    req.cookies.get(MultiVariantTests.MVT_COOKIE_NAME).flatMap { mvtId =>
-      Try(Integer.parseInt(mvtId.value)).toOption
-    }
 }

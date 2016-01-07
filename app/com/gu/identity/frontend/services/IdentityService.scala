@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
  */
 trait IdentityService {
   def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
-  def register(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
+  def register(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]]
 }
 
 
@@ -41,7 +41,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
     }
   }
 
-  override def register(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]] = {
+  override def register(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]] = {
     val apiRequest = RegisterApiRequest(request, clientIp)
     client.register(apiRequest).map {
       case Left(errors) => Left {
@@ -50,7 +50,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
           case e: GatewayError => ServiceGatewayError(e.message, e.description)
         }
       }
-      case Right(cookies) => Right(cookies.map { c => createPlayCookie(c)})
+      case Right(user) => Right(user)
     }
   }
 

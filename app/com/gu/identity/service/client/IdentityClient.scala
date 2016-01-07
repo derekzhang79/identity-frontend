@@ -23,11 +23,11 @@ class IdentityClient extends Logging {
       case Right(other) => Left(Seq(GatewayError("Unknown response")))
     }
 
-  def register(request: RegisterApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] = {
+  def register(request: RegisterApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, RegisterResponseUser]] = {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
-      case Right(RegisterResponse(status)) =>
-        Right(Seq(IdentityCookie("GU_CreatedUser","", true, DateTime.now())))
+      case Right(RegisterResponse(user)) =>
+        Right(user)
       case Right(other) => Left(Seq(GatewayError("Unknown response")))
     }
   }

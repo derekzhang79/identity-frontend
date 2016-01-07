@@ -50,11 +50,10 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
           identityService.register(successForm, clientIp).flatMap {
             case Left(errors) =>
               Future.successful(SeeOther(routes.Application.register(Seq("error-registration"), Some(returnUrl.url)).url))
-            case Right(cookies) => {
+            case Right(user) => {
               signIn(successForm.email, successForm.password, trackingData)
                 .map(signInCookies => {
-                  val allCookies = cookies ++ signInCookies
-                  SeeOther(returnUrl.url).withCookies(allCookies: _*)
+                  SeeOther(returnUrl.url).withCookies(signInCookies: _*)
                 })
             }
           }.recover {

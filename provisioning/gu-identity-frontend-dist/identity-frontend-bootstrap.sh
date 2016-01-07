@@ -1,6 +1,8 @@
 #!/bin/bash
 
 source /set-env.sh
+source /identity-functions.sh
+
 installScriptFromBucket gu-identity-dist/$stagetag identity-bootstrap.sh
 installScriptFromBucket gu-identity-dist/$stagetag logstash-setup.sh
 

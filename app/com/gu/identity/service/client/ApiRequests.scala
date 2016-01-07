@@ -1,7 +1,7 @@
 package com.gu.identity.service.client
 
 import com.gu.identity.frontend.controllers.RegisterRequest
-import com.gu.identity.frontend.models.TrackingData
+import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 
 sealed trait ApiRequest {
   val method: HttpMethod = GET
@@ -60,7 +60,7 @@ case class RegisterApiRequest(url: String, extraHeaders: HttpParameters = Nil, o
 }
 
 object RegisterApiRequest {
-  def apply(request: RegisterRequest, clientIp: String)(implicit configuration: IdentityClientConfiguration): RegisterApiRequest ={
+  def apply(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit configuration: IdentityClientConfiguration): RegisterApiRequest ={
     RegisterApiRequest(
       ApiRequest.apiEndpoint("user"),
       body = Some(RegisterRequestBody(
@@ -72,7 +72,7 @@ object RegisterApiRequest {
           request.lastName,
           request.receiveGnmMarketing,
           request.receive3rdPartyMarketing,
-          clientIp
+          clientIp.ip
         )
       )),
       extraHeaders = ApiRequest.apiKeyHeaders

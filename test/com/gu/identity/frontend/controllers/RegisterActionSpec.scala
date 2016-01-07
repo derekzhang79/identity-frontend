@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.controllers
 
-import com.gu.identity.frontend.models.TrackingData
+import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
 import org.mockito.Matchers.{any => argAny, eq => argEq, _}
 import org.mockito.Mockito._
@@ -58,7 +58,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val testCookie = Cookie("SC_GU_U", "##hash##")
       val testCookieSignIn = Cookie("SC_GU_U1", "##hash1##")
 
-      when(mockIdentityService.register(anyObject(), anyString())(argAny[ExecutionContext]))
+      when(mockIdentityService.register(anyObject(), argAny[ClientRegistrationIp])(argAny[ExecutionContext]))
         .thenReturn{
           Future.successful {
             Right(Seq(testCookie))
@@ -94,7 +94,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val rememberMe = Some(true)
       val testCookie = Cookie("SC_GU_U", "##hash##")
 
-      when(mockIdentityService.register(anyObject(), anyString())(argAny[ExecutionContext]))
+      when(mockIdentityService.register(anyObject(), argAny[ClientRegistrationIp])(argAny[ExecutionContext]))
         .thenReturn{
           Future.successful {
             Right(Seq(testCookie))
@@ -125,7 +125,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val receive3rdPartyMarketing = false
       val returnUrl = Some("http://www.theguardian.com/test")
 
-      when(mockIdentityService.register(anyObject(), anyString())(argAny[ExecutionContext]))
+      when(mockIdentityService.register(anyObject(), argAny[ClientRegistrationIp])(argAny[ExecutionContext]))
         .thenReturn{
           Future.successful {
             Left(Seq(ServiceBadRequest("User could not be registered, invalid fields in form.")))
@@ -148,7 +148,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val receive3rdPartyMarketing = false
       val returnUrl = Some("http://www.theguardian.com/test")
 
-      when(mockIdentityService.register(anyObject(), anyString())(argAny[ExecutionContext]))
+      when(mockIdentityService.register(anyObject(), argAny[ClientRegistrationIp])(argAny[ExecutionContext]))
         .thenReturn{
           Future.successful {
             Left(Seq(ServiceGatewayError("Unexpected 500 error")))
@@ -171,7 +171,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val receive3rdPartyMarketing = false
       val returnUrl = Some("http://www.theguardian.com/test")
 
-      when(mockIdentityService.register(anyObject(), anyString())(argAny[ExecutionContext]))
+      when(mockIdentityService.register(anyObject(), argAny[ClientRegistrationIp])(argAny[ExecutionContext]))
         .thenReturn{
           Future.failed {
             new RuntimeException("Unexpected 500 error")

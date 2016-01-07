@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.logging.Logging
-import com.gu.identity.frontend.models.{TrackingData, ReturnUrl}
+import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData, ReturnUrl}
 import com.gu.identity.frontend.services.IdentityService
 import play.api.data.{Mapping, Form}
 import play.api.data.Forms._
@@ -40,7 +40,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
 
   def register = Action.async { implicit request =>
     NoCache {
-      val clientIp = request.remoteAddress
+      val clientIp = ClientRegistrationIp(request)
       registerForm.bindFromRequest.fold(
         errorForm => Future.successful(SeeOther(routes.Application.register(Seq("error-registration"), None).url)),
         successForm => {

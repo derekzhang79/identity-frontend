@@ -2,7 +2,7 @@ package com.gu.identity.frontend.services
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.RegisterRequest
-import com.gu.identity.frontend.models.TrackingData
+import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 import com.gu.identity.service.client._
 import org.joda.time.{DateTime, Seconds}
 import play.api.mvc.{Cookie => PlayCookie}
@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
  */
 trait IdentityService {
   def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
-  def register(request: RegisterRequest, clientIp: String)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
+  def register(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
 }
 
 
@@ -41,7 +41,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
     }
   }
 
-  override def register(request: RegisterRequest, clientIp: String)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]] = {
+  override def register(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]] = {
     val apiRequest = RegisterApiRequest(request, clientIp)
     client.register(apiRequest).map {
       case Left(errors) => Left {

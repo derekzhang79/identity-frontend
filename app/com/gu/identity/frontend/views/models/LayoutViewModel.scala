@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.configuration.{MultiVariantTests, MultiVariantTest, Configuration}
 import controllers.routes
 import play.api.i18n.Messages
 import play.api.libs.json.Json
@@ -11,17 +11,27 @@ case class LayoutViewModel(inlineJsConfig: InlineSource, styles: Seq[String], ja
     Map("inlineJsConfig" -> inlineJsConfig.toMap, "styles" -> styles, "javascripts" -> javascripts, "favicons" -> LayoutFaviconsViewModel.icons)
 }
 
+/**
+ * Config that will be exposed as Javascript inlined into the html response.
+ */
+case class JavascriptConfig(omnitureAccount: String, mvtTests: Seq[MultiVariantTest])
+
 object LayoutViewModel {
+
+  import MultiVariantTest.jsonWrites
 
   val styleFiles = Seq("bundle.css")
   val javascriptFiles = Seq("main.bundle.js")
+
+  implicit val jsConfigJsonFormat = Json.writes[JavascriptConfig]
 
   def apply(configuration: Configuration): LayoutViewModel = {
     val styleUrls = styleFiles.map(routes.Assets.at(_).url)
     val javascriptUrls = javascriptFiles.map(routes.Assets.at(_).url)
 
-    val config = Map(
-      "omnitureAccount" -> configuration.omnitureAccount
+    val config = JavascriptConfig(
+      omnitureAccount = configuration.omnitureAccount,
+      mvtTests = MultiVariantTests.all.toSeq
     )
 
     val jsConfig = Json.stringify(Json.toJson(config))

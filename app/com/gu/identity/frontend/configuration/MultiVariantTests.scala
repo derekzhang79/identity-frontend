@@ -21,9 +21,37 @@ sealed trait MultiVariantTest {
   val audienceOffset: Double
 
   /**
+   * Flag enabling a test. Can be overridden to only enable a test for a
+   * period of time.
+   */
+  def active: Boolean = true
+
+  /**
+   * Mark a test as server-side only. Server-side tests should only be used
+   * for non-cacheable routes.
+   */
+  val isServerSide: Boolean
+
+  /**
    * Variants available to the test which will be exposed to user's in the test.
    */
   val variants: Seq[MultiVariantTestVariant]
+}
+
+
+object MultiVariantTest {
+
+  import play.api.libs.json._
+  import MultiVariantTestVariant.{jsonWrites => mvtVariantJsonWrites}
+
+  implicit val jsonWrites: Writes[MultiVariantTest] = new Writes[MultiVariantTest] {
+    override def writes(o: MultiVariantTest): JsValue = Json.obj(
+      "name" -> o.name,
+      "audience" -> o.audience,
+      "audienceOffset" -> o.audienceOffset,
+      "variants" -> o.variants
+    )
+  }
 }
 
 
@@ -34,11 +62,22 @@ case class RuntimeMultiVariantTest(
   name: String,
   audience: Double,
   audienceOffset: Double,
+  isServerSide: Boolean = true,
   variants: Seq[MultiVariantTestVariant]) extends MultiVariantTest
 
 
 sealed trait MultiVariantTestVariant {
   val id: String
+}
+
+object MultiVariantTestVariant {
+  import play.api.libs.json._
+
+  implicit val jsonWrites: Writes[MultiVariantTestVariant] = new Writes[MultiVariantTestVariant] {
+    override def writes(o: MultiVariantTestVariant): JsValue = Json.obj(
+      "id" -> o.id
+    )
+  }
 }
 
 
@@ -52,6 +91,7 @@ case object SignInV2Test extends MultiVariantTest {
   val name = "SignInV2"
   val audience = 1.0
   val audienceOffset = 0.0
+  val isServerSide = true
   val variants = Seq(SignInV2TestVariantA, SignInV2TestVariantB)
 }
 
@@ -60,9 +100,10 @@ case object SignInV2TestVariantB extends MultiVariantTestVariant { val id = "B" 
 
 
 object MultiVariantTests {
+  val MVT_COOKIE_NAME = "GU_mvt_id"
   val MAX_ID = 899999
 
-  val all = Set(SignInV2Test)
+  def all = Set[MultiVariantTest](SignInV2Test).filter(_.active)
 
   def isInTest(test: MultiVariantTest, mvtId: Int, maxId: Int = MAX_ID): Boolean = {
     val minBound = maxId * test.audienceOffset
@@ -78,6 +119,8 @@ object MultiVariantTests {
     else None
   }
 
-  def activeTests(mvtId: Int, maxId: Int = MAX_ID) =
-    all.map(isInTest(_, mvtId, maxId))
+  def activeTests(mvtId: Int, maxId: Int = MAX_ID): Set[(MultiVariantTest, MultiVariantTestVariant)] =
+    all.flatMap { test =>
+      activeVariantForTest(test, mvtId, maxId).map(test -> _)
+    }
 }

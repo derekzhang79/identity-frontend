@@ -277,11 +277,9 @@
               "#!/bin/bash -ev\n",
 
               "source /identity-functions.sh",
+              "source /set-env.sh",
 
-              "installScript identity-bootstrap.sh",
-              "installScript logstash-setup.sh",
-
-              "installScriptFromS3 s3://gu-identity-frontend-dist/identity-frontend-bootstrap.sh identity-frontend-bootstrap.sh",
+              "installScriptFromBucket gu-identity-frontend-dist/$stacktag/$stagetag identity-frontend-bootstrap.sh",
 
               "service identity-frontend start"
             ]]

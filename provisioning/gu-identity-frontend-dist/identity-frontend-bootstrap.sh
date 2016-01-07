@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source set-env.sh
+source /set-env.sh
+installScriptFromBucket gu-identity-dist/$stagetag identity-bootstrap.sh
+installScriptFromBucket gu-identity-dist/$stagetag logstash-setup.sh
 
 aws s3 cp s3://gu-$apptag-dist/$stacktag/$stagetag/$apptag/$apptag.tgz /$apptag/$apptag.tar.gz
 aws s3 cp s3://gu-$apptag-private/$stagetag/$apptag.conf /etc/gu/$apptag.conf

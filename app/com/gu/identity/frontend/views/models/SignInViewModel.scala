@@ -4,7 +4,6 @@ import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.models.Text._
 import play.api.i18n.Messages
-import play.api.mvc.{RequestHeader, Request}
 
 case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguardian.com/facebook/signin",
                                 socialGoogle: String = "https://oauth.theguardian.com/google/signin") extends ViewModel {
@@ -23,7 +22,6 @@ object SignInLinksViewModel {
 
 case class SignInViewModel(showPrelude: Boolean = false,
                            errors: Seq[ErrorViewModel] = Seq.empty,
-                           email: String = "",
                            returnUrl: String = "",
                            skipConfirmation: Boolean = false,
                            registerUrl: String = "",
@@ -39,7 +37,6 @@ case class SignInViewModel(showPrelude: Boolean = false,
       "footerText" -> FooterText.toMap,
       "showPrelude" -> showPrelude,
       "errors" -> errors.map(_.toMap),
-      "email" -> email,
       "returnUrl" -> returnUrl,
       "skipConfirmation" -> skipConfirmation,
       "registerUrl" -> registerUrl,
@@ -49,12 +46,11 @@ case class SignInViewModel(showPrelude: Boolean = false,
 }
 
 object SignInViewModel {
-  def apply(errors: Seq[ErrorViewModel], email: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): SignInViewModel = {
+  def apply(errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): SignInViewModel = {
     val urlParams: Seq[(String, String)] = Seq(Some("returnUrl" -> returnUrl.url), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
 
     SignInViewModel(
       errors = errors,
-      email = email,
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
       registerUrl = UrlBuilder("/register", urlParams),

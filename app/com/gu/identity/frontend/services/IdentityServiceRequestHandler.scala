@@ -26,6 +26,8 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val registerRequestBodyPrivateFieldsFormat = Json.format[RegisterRequestBodyPrivateFields]
   implicit val registerRequestBodyFormat = Json.format[RegisterRequestBody]
 
+  implicit val registerResponseUserGroupsFormat = Json.format[RegisterResponseUserGroups]
+  implicit val registerResponseUserFormat = Json.format[RegisterResponseUser]
   implicit val registerResponseFormat = Json.format[RegisterResponse]
 
 

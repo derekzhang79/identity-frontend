@@ -12,5 +12,5 @@ case class AuthenticationCookiesResponseCookieList(expiresAt: DateTime, values: 
 case class AuthenticationCookiesResponseCookie(key: String, value: String, sessionCookie: Option[Boolean] = None)
 
 case class RegisterResponse(user: RegisterResponseUser) extends ApiResponse
-case class RegisterResponseUser(userGroups: RegisterResponseUserGroups)
+case class RegisterResponseUser(userGroups: List[RegisterResponseUserGroups])
 case class RegisterResponseUserGroups(packageCode: String, path: String)

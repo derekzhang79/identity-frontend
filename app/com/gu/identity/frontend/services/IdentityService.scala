@@ -67,7 +67,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
         authenticate(Some(request.email), Some(request.password), true, trackingData).map {
           case Left(signInErrors) => {
             logger.warn(s"User could not be logged in after registering: ${signInErrors}")
-            Left(signInErrors)
+            Right(Seq.empty)
           }
           case Right(cookies) => Right(cookies)
         }

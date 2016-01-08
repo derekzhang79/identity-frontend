@@ -1,14 +1,45 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.{MultiVariantTests, MultiVariantTest, Configuration}
+import com.gu.identity.frontend.models.Text.LayoutText
 import controllers.routes
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 
 
-case class LayoutViewModel(inlineJsConfig: InlineSource, styles: Seq[String], javascripts: Seq[String]) extends ViewModel {
+case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
+
+  override def toMap(implicit messages: Messages): Map[String, Any] = ???
+
+  val resources: Seq[PageResource with Product] = Seq(
+    LocalCSSResource.fromAsset("bundle.css"),
+    LocalJavascriptResource.fromAsset("main.bundle.js", isInHead = false)
+  )
+
+  val indirectResources: Seq[PageResource with Product] = Seq(
+    IndirectlyLoadedInlinedFontResources,
+    IndirectlyLoadedFontResources,
+    IndirectlyLoadedImageResources,
+    IndirectlyLoadedInlinedImageResources,
+    IndirectlyLoadedExternalScriptResources("https://j.ophan.co.uk"),
+    IndirectlyLoadedExternalImageResources("https://hits-secure.theguardian.com"),
+    IndirectlyLoadedExternalImageResources("https://sb.scorecardresearch.com"),
+    IndirectlyLoadedExternalImageResources("https://ophan.theguardian.com")
+  )
+}
+
+
+case class LayoutViewModel(
+    text: Map[String,String],
+    resources: Seq[PageResource with Product],
+    indirectResources: Seq[PageResource with Product],
+    favicons: Seq[Favicon] = LayoutFaviconsViewModel.icons)
+  extends ViewModel
+  with ViewModelResources {
+
+  // todo remove
   def toMap(implicit messages: Messages) =
-    Map("inlineJsConfig" -> inlineJsConfig.toMap, "styles" -> styles, "javascripts" -> javascripts, "favicons" -> LayoutFaviconsViewModel.icons)
+    Map.empty
 }
 
 /**
@@ -20,14 +51,9 @@ object LayoutViewModel {
 
   import MultiVariantTest.jsonWrites
 
-  val styleFiles = Seq("bundle.css")
-  val javascriptFiles = Seq("main.bundle.js")
-
   implicit val jsConfigJsonFormat = Json.writes[JavascriptConfig]
 
-  def apply(configuration: Configuration): LayoutViewModel = {
-    val styleUrls = styleFiles.map(routes.Assets.at(_).url)
-    val javascriptUrls = javascriptFiles.map(routes.Assets.at(_).url)
+  def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel = {
 
     val config = JavascriptConfig(
       omnitureAccount = configuration.omnitureAccount,
@@ -37,12 +63,17 @@ object LayoutViewModel {
     val jsConfig = Json.stringify(Json.toJson(config))
     val jsConfigScript = s"""this._idConfig=$jsConfig;"""
 
-    LayoutViewModel(InlineSource(jsConfigScript), styleUrls, javascriptUrls)
+    val inlinedJSConfig = InlinedJavascriptResource(jsConfigScript, isInHead = true)
+
+    val resources: Seq[PageResource with Product] = BaseLayoutViewModel.resources :+ inlinedJSConfig
+
+    LayoutViewModel(LayoutText.toMap, resources, BaseLayoutViewModel.indirectResources)
   }
 }
 
+case class Favicon(filename: String, rel: String, url: String, sizes: Option[String] = None)
+
 object LayoutFaviconsViewModel {
-  case class Favicon(filename: String, rel: String, url: String, sizes: Option[String] = None)
 
   private val iconFiles = Seq(
     "32x32.ico",

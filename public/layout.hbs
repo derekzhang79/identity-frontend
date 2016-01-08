@@ -1,16 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>{{ signInPageText.pageTitle }} {{layoutText.layoutPageTitle}}</title>
+  <title>{{ signInPageText.pageTitle }} {{layout.text.layoutPageTitle}}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   {{> components/favicons/_favicons }}
 
-  <script type="text/javascript">{{{ inlineJsConfig.source }}}</script>
+  {{#each layout.resources}}
 
-  {{#each styles}}
-    <link href="{{ this }}" type="text/css" rel="stylesheet">
+    {{#isCSS}}
+      <link href="{{ url }}" type="text/css" rel="stylesheet">
+    {{/isCSS}}
+
+    {{#isJavascript}}
+      {{#isInHead}}
+
+        {{#isInline}}
+          <script type="text/javascript">{{{ source }}}</script>
+        {{/isInline}}
+
+        {{^isInline}}
+          <script src="{{ url }}" type="text/javascript" async></script>
+        {{/isInline}}
+
+      {{/isInHead}}
+    {{/isJavascript}}
+
   {{/each}}
+
 </head>
 <body>
   {{> components/header/_header }}
@@ -21,8 +38,12 @@
 
   {{> components/footer/_footer }}
 
-  {{#each javascripts}}
-    <script src="{{ this }}" type="text/javascript" async></script>
+  {{#each layout.resources}}
+    {{#isJavascript}}
+      {{^isInHead}}
+        <script src="{{ url }}" type="text/javascript" async></script>
+      {{/isInHead}}
+    {{/isJavascript}}
   {{/each}}
 </body>
 </html>

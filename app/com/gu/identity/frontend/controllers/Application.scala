@@ -17,7 +17,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
   def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = MultiVariantTestAction { req =>
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"))
 
-    Ok(renderSignIn(configuration, req.activeTests, error, returnUrlActual, skipConfirmation))
+    renderSignIn(configuration, req.activeTests, error, returnUrlActual, skipConfirmation)
   }
 
   def register(error: Seq[String], returnUrl: Option[String]) = Action {
@@ -27,3 +27,4 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
   }
 
 }
+

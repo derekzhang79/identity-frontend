@@ -25,8 +25,6 @@ case class SignInViewModel(
     layout: LayoutViewModel,
     signInPageText: Map[String, String],
     socialSignInText: Map[String, String],
-    headerText: Map[String, String],
-    footerText: Map[String, String],
     showPrelude: Boolean = false,
     errors: Seq[ErrorViewModel] = Seq.empty,
     returnUrl: String = "",
@@ -38,12 +36,8 @@ case class SignInViewModel(
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product])
   extends ViewModel
-  with ViewModelResources {
+  with ViewModelResources
 
-  // todo remove
-  def toMap(implicit messages: Messages) =
-    Map.empty
-}
 
 object SignInViewModel {
   def apply(configuration: Configuration, errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
@@ -55,8 +49,6 @@ object SignInViewModel {
       layout = layout,
       signInPageText = SignInPageText.toMap,
       socialSignInText = SocialSignInText.toMap,
-      headerText = HeaderText.toMap,
-      footerText = FooterText.toMap,
       errors = errors,
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),

@@ -1,15 +1,13 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.{MultiVariantTests, MultiVariantTest, Configuration}
-import com.gu.identity.frontend.models.Text.LayoutText
+import com.gu.identity.frontend.models.Text.{FooterText, HeaderText, LayoutText}
 import controllers.routes
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 
 
 case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
-
-  override def toMap(implicit messages: Messages): Map[String, Any] = ???
 
   val resources: Seq[PageResource with Product] = Seq(
     LocalCSSResource.fromAsset("bundle.css"),
@@ -31,16 +29,14 @@ case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
 
 case class LayoutViewModel(
     text: Map[String,String],
+    headerText: Map[String, String],
+    footerText: Map[String, String],
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product],
-    favicons: Seq[Favicon] = LayoutFaviconsViewModel.icons)
+    favicons: Seq[Favicon] = Favicons())
   extends ViewModel
-  with ViewModelResources {
+  with ViewModelResources
 
-  // todo remove
-  def toMap(implicit messages: Messages) =
-    Map.empty
-}
 
 /**
  * Config that will be exposed as Javascript inlined into the html response.
@@ -67,13 +63,18 @@ object LayoutViewModel {
 
     val resources: Seq[PageResource with Product] = BaseLayoutViewModel.resources :+ inlinedJSConfig
 
-    LayoutViewModel(LayoutText.toMap, resources, BaseLayoutViewModel.indirectResources)
+    LayoutViewModel(
+      text = LayoutText.toMap,
+      headerText = HeaderText.toMap,
+      footerText = FooterText.toMap,
+      resources = resources,
+      indirectResources = BaseLayoutViewModel.indirectResources)
   }
 }
 
 case class Favicon(filename: String, rel: String, url: String, sizes: Option[String] = None)
 
-object LayoutFaviconsViewModel {
+object Favicons {
 
   private val iconFiles = Seq(
     "32x32.ico",
@@ -89,7 +90,7 @@ object LayoutFaviconsViewModel {
 
   private val iconUrls = iconFiles.map(f => f -> routes.Assets.at(s"$iconBaseDir/$f").url)
 
-  val icons = iconUrls.map {
+  def apply(): Seq[Favicon] = iconUrls.map {
     case (file, url) if file.endsWith(".png") => Favicon(file, "apple-touch-icon", url)
     case (file, url) => Favicon(file, "shortcut icon", url)
   }

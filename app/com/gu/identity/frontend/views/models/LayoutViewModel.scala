@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.configuration.{MultiVariantTests, MultiVariantTest, Configuration}
+import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTests, MultiVariantTest, Configuration}
 import com.gu.identity.frontend.models.Text.{FooterText, HeaderText, LayoutText}
 import controllers.routes
 import play.api.i18n.Messages
@@ -41,27 +41,58 @@ case class LayoutViewModel(
 /**
  * Config that will be exposed as Javascript inlined into the html response.
  */
-case class JavascriptConfig(omnitureAccount: String, mvtTests: Seq[MultiVariantTest])
+case class JavascriptConfig(omnitureAccount: String, mvtTests: Seq[MultiVariantTest]) {
+  self =>
+
+  import MultiVariantTest.{jsonWrites => mvtJsonWrites}
+  implicit val jsonWrites = Json.writes[JavascriptConfig]
+
+  def toJSON =
+    Json.toJson(self)
+
+  def toJSONString: String =
+    Json.stringify(toJSON)
+
+  def toJavascript: String =
+    s"this._idConfig=$toJSONString;"
+}
+
+case class JavascriptRuntimeParams(activeTests: Map[String, String]) {
+  self =>
+
+  implicit val jsonWrites = Json.writes[JavascriptRuntimeParams]
+
+  def toJSON =
+    Json.toJson(self)
+
+  def toJSONString: String =
+    Json.stringify(toJSON)
+
+  def toJavascript: String =
+    s"this._idRuntimeParams=$toJSONString;"
+}
 
 object LayoutViewModel {
 
-  import MultiVariantTest.jsonWrites
-
-  implicit val jsConfigJsonFormat = Json.writes[JavascriptConfig]
-
-  def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel = {
+  def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)])(implicit messages: Messages): LayoutViewModel = {
 
     val config = JavascriptConfig(
       omnitureAccount = configuration.omnitureAccount,
       mvtTests = MultiVariantTests.all.toSeq
     )
 
-    val jsConfig = Json.stringify(Json.toJson(config))
-    val jsConfigScript = s"""this._idConfig=$jsConfig;"""
+    val runtime = activeTests.headOption.map { _ =>
+      JavascriptRuntimeParams(activeTests.map {
+        case (key, value) => key.name -> value.id
+      }.toMap)
+    }
 
-    val inlinedJSConfig = InlinedJavascriptResource(jsConfigScript, isInHead = true)
+    val inlinedJSConfig = InlinedJavascriptResource(config.toJavascript, isInHead = true)
+    val inlinedJSRuntimeParams = runtime.map { r =>
+      InlinedJavascriptResource(r.toJavascript, isInHead = true)
+    }
 
-    val resources: Seq[PageResource with Product] = BaseLayoutViewModel.resources :+ inlinedJSConfig
+    val resources: Seq[PageResource with Product] = BaseLayoutViewModel.resources ++ Seq(Some(inlinedJSConfig), inlinedJSRuntimeParams).flatten
 
     LayoutViewModel(
       text = LayoutText.toMap,

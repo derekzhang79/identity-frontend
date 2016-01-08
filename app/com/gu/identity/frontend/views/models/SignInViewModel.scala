@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.models.Text._
@@ -40,10 +40,10 @@ case class SignInViewModel(
 
 
 object SignInViewModel {
-  def apply(configuration: Configuration, errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
+  def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
     val urlParams: Seq[(String, String)] = Seq(Some("returnUrl" -> returnUrl.url), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
 
-    val layout = LayoutViewModel(configuration)
+    val layout = LayoutViewModel(configuration, activeTests)
 
     SignInViewModel(
       layout = layout,

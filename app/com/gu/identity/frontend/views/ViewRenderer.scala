@@ -19,6 +19,7 @@ object ViewRenderer {
 
     renderViewModel("signin-page", SignInViewModel(
       configuration = configuration,
+      activeTests = activeTests,
       errors = errors,
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation

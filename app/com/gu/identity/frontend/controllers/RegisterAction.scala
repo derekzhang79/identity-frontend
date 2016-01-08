@@ -46,15 +46,12 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
         successForm => {
           val trackingData = TrackingData(request, successForm.returnUrl)
           val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"))
-
-          identityService.register(successForm, clientIp).flatMap {
+          identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
             case Left(errors) =>
-              Future.successful(SeeOther(routes.Application.register(Seq("error-registration"), Some(returnUrl.url)).url))
-            case Right(user) => {
-              signIn(successForm.email, successForm.password, trackingData)
-                .map(signInCookies => {
-                  SeeOther(returnUrl.url).withCookies(signInCookies: _*)
-                })
+              SeeOther(routes.Application.register(Seq("error-registration"), Some(returnUrl.url)).url)
+            case Right(cookies) => {
+                SeeOther(returnUrl.url)
+                  .withCookies(cookies: _*)
             }
           }.recover {
             case NonFatal(ex) => {
@@ -65,17 +62,6 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
           }
         }
       )
-    }
-  }
-
-  private def signIn(email: String, password: String, trackingData: TrackingData): Future[Seq[PlayCookie]] = {
-    identityService.authenticate(Some(email), Some(password), true, trackingData)
-    .map {
-      case Right(cookies) => cookies
-      case Left(errors) => {
-        logger.warn(s"User could not be logged in after registration ${errors}")
-        Seq.empty
-      }
     }
   }
 }

@@ -3,11 +3,11 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData, ReturnUrl}
 import com.gu.identity.frontend.services.IdentityService
-import play.api.data.{Mapping, Form}
+import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Cookie => PlayCookie, Result, Action, Controller}
+import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal

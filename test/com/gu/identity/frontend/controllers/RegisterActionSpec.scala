@@ -75,31 +75,6 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       resultCookies.head mustEqual testCookie
     }
 
-    "not sign in user after successful registration if authenticate fails" in new WithControllerMockedDependencies {
-      val firstName = "first"
-      val lastName = "last"
-      val email = "test@email.com"
-      val username = "username"
-      val password = "password"
-      val receiveGnmMarketing = false
-      val receive3rdPartyMarketing = false
-      val returnUrl = Some("http://www.theguardian.com/test")
-      val rememberMe = Some(true)
-      val registerResponseUser = RegisterResponseUser(List.empty)
-
-      when(mockIdentityService.registerThenSignIn(anyObject(), argAny[ClientRegistrationIp], argAny[TrackingData])(argAny[ExecutionContext]))
-        .thenReturn{
-          Future.successful {
-            Right(Seq.empty)
-          }
-        }
-
-      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl))
-      val resultCookies = cookies(result)
-
-      resultCookies.size mustEqual 0
-    }
-
     "redirect to register page when failed to create account (Service Bad Request)" in new WithControllerMockedDependencies {
       val firstName = "first"
       val lastName = "last"

@@ -7,5 +7,6 @@ target
 project/target
 
 # local certificates
+/nginxCerts
 *.crt
 *.key

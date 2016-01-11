@@ -56,7 +56,6 @@ sealed trait ApiRequestBody
 case class RegisterApiRequest(url: String, extraHeaders: HttpParameters = Nil, override val body: Option[ApiRequestBody]) extends ApiRequest {
   override val method = POST
   override val headers = Seq("Content-Type" -> "application/json") ++ extraHeaders
-  override val parameters = Seq("format" -> "cookies")
 }
 
 object RegisterApiRequest {

@@ -51,7 +51,7 @@ object AuthenticateCookiesRequest {
 
 }
 
-trait ApiRequestBody
+sealed trait ApiRequestBody
 
 case class RegisterApiRequest(url: String, extraHeaders: HttpParameters = Nil, override val body: Option[ApiRequestBody]) extends ApiRequest {
   override val method = POST

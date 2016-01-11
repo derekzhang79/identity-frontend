@@ -1,28 +1,22 @@
 package test
 
 import test.pages.RegisterConfirm
-import test.util.{TestUser, WebBrowserUtil, Config}
+import test.util.{TestUser, Browser, Config, Driver}
 import org.scalatest.selenium.WebBrowser
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FeatureSpec, GivenWhenThen}
 import org.slf4j.LoggerFactory
 
-class SigninSpec extends FeatureSpec with WebBrowser with WebBrowserUtil
+class SigninSpec extends FeatureSpec with WebBrowser with Browser
   with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll  {
 
   def logger = LoggerFactory.getLogger(this.getClass)
 
-  before { // Before each test
-    resetDriver()
-  }
+  before { /* each test */ Driver.reset() }
 
-  override def beforeAll() = {
-    Config.printSummary()
-  }
+  override def beforeAll() = Config.printSummary()
 
   // After all tests execute, close all windows, and exit the driver
-  override def afterAll() = {
-    Config.driver.quit()
-  }
+  override def afterAll() = Driver.quit()
 
   feature("Sign in") {
     scenario("User signs in with newly created Identity account") {
@@ -52,7 +46,7 @@ class SigninSpec extends FeatureSpec with WebBrowser with WebBrowserUtil
 
       And("I should have Identity cookies.")
       Seq("GU_U", "SC_GU_U", "SC_GU_LA").foreach { idCookie =>
-        assert(cookiesSet.map(_.getName).contains(idCookie))
+        assert(Driver.cookiesSet.map(_.getName).contains(idCookie))
       }
 
       When("I click 'Confirm Registration' button")
@@ -72,7 +66,8 @@ class SigninSpec extends FeatureSpec with WebBrowser with WebBrowserUtil
       assert(homepage.pageHasLoaded())
 
       And("I should be signed in.")
-      assert(homepage.userDisplayName == testUser.username)
+      assert(elementHasText(
+        className("js-profile-info"), testUser.username))
     }
   }
 }

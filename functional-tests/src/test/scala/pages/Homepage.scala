@@ -1,9 +1,9 @@
 package test.pages
 
-import test.util.WebBrowserUtil
+import test.util.Browser
 import org.scalatest.selenium.{Page, WebBrowser}
 
-class Homepage extends Page with WebBrowser with WebBrowserUtil {
+class Homepage extends Page with WebBrowser with Browser {
   val url = "www.theguardian.com"
 
   def userDisplayName: String = {

@@ -1,9 +1,9 @@
 package test.pages
 
-import test.util.{WebBrowserUtil, TestUser, Config}
+import test.util.{Browser, TestUser, Config}
 import org.scalatest.selenium.{Page, WebBrowser}
 
-class Register(val testUser: TestUser) extends Page with WebBrowser with WebBrowserUtil {
+class Register(val testUser: TestUser) extends Page with WebBrowser with Browser {
   val url = s"${Config.baseUrl}/register"
 
   def fillInPersonalDetails(): Unit = {

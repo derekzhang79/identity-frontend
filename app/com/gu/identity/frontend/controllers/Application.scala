@@ -18,4 +18,10 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
       Ok(renderSignIn(configuration, error, returnUrl, skipConfirmation))
     }
   }
+
+  def register(error: Seq[String], returnUrl: Option[String]) = Action {
+    Cached{
+      Ok("Hello, This is the Registration Page")
+    }
+  }
 }

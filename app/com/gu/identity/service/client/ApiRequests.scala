@@ -1,13 +1,14 @@
 package com.gu.identity.service.client
 
-import com.gu.identity.frontend.models.TrackingData
+import com.gu.identity.frontend.controllers.RegisterRequest
+import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 
 sealed trait ApiRequest {
   val method: HttpMethod = GET
   val headers: HttpParameters = Nil
   val url: String
   val parameters: HttpParameters = Nil
-  val body: Option[String] = None
+  val body: Option[ApiRequestBody] = None
 }
 
 object ApiRequest {
@@ -28,9 +29,10 @@ case class AuthenticateCookiesRequest(url: String, email: String, password: Stri
   override val method = POST
   override val headers = Seq("Content-Type" -> "application/x-www-form-urlencoded") ++ extraHeaders
   override val parameters = Seq("format" -> "cookies", "persistent" -> rememberMe.toString) ++ trackingData.parameters
-  override val body = Some(ApiRequest.encodeBody("email" -> email, "password" -> password))
+  override val body = Some(AuthenticateCookiesRequestBody(email, password))
 }
 
+case class AuthenticateCookiesRequestBody(email: String, password: String) extends ApiRequestBody
 
 object AuthenticateCookiesRequest {
   private val emailRegex = "^.+@.+$".r
@@ -48,3 +50,37 @@ object AuthenticateCookiesRequest {
     }
 
 }
+
+sealed trait ApiRequestBody
+
+case class RegisterApiRequest(url: String, extraHeaders: HttpParameters = Nil, override val body: Option[ApiRequestBody]) extends ApiRequest {
+  override val method = POST
+  override val headers = Seq("Content-Type" -> "application/json") ++ extraHeaders
+}
+
+object RegisterApiRequest {
+  def apply(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit configuration: IdentityClientConfiguration): RegisterApiRequest ={
+    RegisterApiRequest(
+      ApiRequest.apiEndpoint("user"),
+      body = Some(RegisterRequestBody(
+        request.email,
+        request.password,
+        RegisterRequestBodyPublicFields(request.username),
+        RegisterRequestBodyPrivateFields(
+          request.firstName,
+          request.lastName,
+          request.receiveGnmMarketing,
+          request.receive3rdPartyMarketing,
+          clientIp.ip
+        )
+      )),
+      extraHeaders = ApiRequest.apiKeyHeaders
+    )
+  }
+}
+
+case class RegisterRequestBody(primaryEmailAddress: String, password: String, publicFields: RegisterRequestBodyPublicFields, privateFields: RegisterRequestBodyPrivateFields) extends ApiRequestBody
+
+case class RegisterRequestBodyPublicFields(username: String)
+
+case class RegisterRequestBodyPrivateFields(firstName: String, lastName: String, receiveGnmMarketing: Boolean, receive3rdPartyMarketing: Boolean,  registrationIp: String)

@@ -4,11 +4,17 @@
 
 # Home page
 GET        /                              com.gu.identity.frontend.controllers.Application.index
+
 GET        /signin                        com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None)
+
+GET        /register                      com.gu.identity.frontend.controllers.Application.register(error: Seq[String], returnUrl: Option[String])
 
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 
+POST       /actions/register              com.gu.identity.frontend.controllers.RegisterAction.register
+
 GET        /management/healthcheck        com.gu.identity.frontend.controllers.HealthCheck.healthCheck
+
 GET        /management/manifest           com.gu.identity.frontend.controllers.Manifest.manifest
 
 GET        /static/*file                  controllers.Assets.at(path="/public", file)

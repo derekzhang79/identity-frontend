@@ -22,13 +22,21 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val responseCookiesListReads = Json.format[AuthenticationCookiesResponseCookieList]
   implicit val responseReads = Json.format[AuthenticationCookiesResponse]
 
+  implicit val registerRequestBodyPublicFieldsFormat = Json.format[RegisterRequestBodyPublicFields]
+  implicit val registerRequestBodyPrivateFieldsFormat = Json.format[RegisterRequestBodyPrivateFields]
+  implicit val registerRequestBodyFormat = Json.format[RegisterRequestBody]
+
+  implicit val registerResponseUserGroupsFormat = Json.format[RegisterResponseUserGroups]
+  implicit val registerResponseUserFormat = Json.format[RegisterResponseUser]
+  implicit val registerResponseFormat = Json.format[RegisterResponse]
+
 
   def handleRequest(request: ApiRequest): Future[Either[IdentityClientErrors, ApiResponse]] =
     ws.url(request.url)
       .withHeaders(request.headers.toSeq: _*)
       .withQueryString(request.parameters.toSeq: _*)
       .withRequestTimeout(10000)
-      .withBody(request.body.getOrElse(""))
+      .withBody(request.body.map(handleRequestBody).getOrElse(""))
       .execute(request.method.toString)
         .map(handleResponse(request))
         .recoverWith {
@@ -41,6 +49,17 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
           }
         }
 
+  def handleRequestBody(body: ApiRequestBody): String = body match {
+    case b:RegisterRequestBody => Json.stringify(Json.toJson(b))
+    case AuthenticateCookiesRequestBody(email, password) => encodeBody("email" -> email, "password" -> password)
+  }
+
+  private def encodeBody(params: (String, String)*) = {
+    def encode = java.net.URLEncoder.encode(_: String, "UTF8")
+
+    params.map(p => s"${p._1}=${encode(p._2)}").mkString("&")
+  }
+
   def handleResponse(request: ApiRequest)(response: WSResponse): Either[IdentityClientErrors, ApiResponse] = request match {
     case r if isErrorResponse(response) => Left {
       handleErrorResponse(response)
@@ -48,6 +67,14 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
 
     case r: AuthenticateCookiesRequest =>
       response.json.asOpt[AuthenticationCookiesResponse]
+        .map(Right.apply)
+        .getOrElse {
+          logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
+          Left(Seq(GatewayError("Unexpected response from server")))
+        }
+      
+    case r: RegisterApiRequest =>
+      response.json.asOpt[RegisterResponse]
         .map(Right.apply)
         .getOrElse {
           logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")

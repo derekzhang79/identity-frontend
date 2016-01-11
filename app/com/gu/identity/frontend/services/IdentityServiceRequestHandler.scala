@@ -72,13 +72,14 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
           logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
           Left(Seq(GatewayError("Unexpected response from server")))
         }
+      
     case r: RegisterApiRequest =>
       response.json.asOpt[RegisterResponse]
-      .map(Right.apply)
-      .getOrElse {
-        logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
-        Left(Seq(GatewayError("Unexpected response from server")))
-      }
+        .map(Right.apply)
+        .getOrElse {
+          logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
+          Left(Seq(GatewayError("Unexpected response from server")))
+        }
 
     case _ => Left(Seq(GatewayError("Unsupported request")))
   }

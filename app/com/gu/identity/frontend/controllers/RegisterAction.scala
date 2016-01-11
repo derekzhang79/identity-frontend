@@ -13,15 +13,14 @@ import scala.concurrent.Future
 import scala.util.control.NonFatal
 
 case class RegisterRequest(
-                            firstName: String,
-                            lastName: String,
-                            email: String,
-                            username: String,
-                            password: String,
-                            receiveGnmMarketing: Boolean,
-                            receive3rdPartyMarketing: Boolean,
-                            returnUrl: Option[String]
-                            )
+    firstName: String,
+    lastName: String,
+    email: String,
+    username: String,
+    password: String,
+    receiveGnmMarketing: Boolean,
+    receive3rdPartyMarketing: Boolean,
+    returnUrl: Option[String])
 
 class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
 

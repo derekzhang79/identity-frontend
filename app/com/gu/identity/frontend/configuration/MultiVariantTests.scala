@@ -82,10 +82,7 @@ object MultiVariantTestVariant {
 }
 
 
-/**
- * Define a MVT variant at runtime - should only be used for tests.
- */
-case class RuntimeMultiVariantTestVariant(id: String) extends MultiVariantTestVariant
+
 
 
 case object SignInV2Test extends MultiVariantTest {
@@ -93,12 +90,16 @@ case object SignInV2Test extends MultiVariantTest {
   val audience = 1.0
   val audienceOffset = 0.0
   val isServerSide = true
-  val variants = Seq(SignInV2TestVariantA, SignInV2TestVariantB)
+  val variants = Seq(SignInV2TestVariantA)
 }
 
 case object SignInV2TestVariantA extends MultiVariantTestVariant { val id = "A" }
-case object SignInV2TestVariantB extends MultiVariantTestVariant { val id = "B" }
 
+
+/**
+ * Define a MVT variant at runtime - should only be used for tests.
+ */
+case class RuntimeMultiVariantTestVariant(id: String) extends MultiVariantTestVariant
 
 object MultiVariantTests {
   val MVT_COOKIE_NAME = "GU_mvt_id"

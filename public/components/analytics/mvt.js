@@ -2,6 +2,8 @@
  * Multi-variant testing.
  */
 
+/*global window*/
+
 import cookies from 'cookie-cutter';
 
 const MULTIVARIATE_ID_COOKIE = 'GU_mvt_id',
@@ -51,9 +53,16 @@ export function getMvtFullId() {
  * Retrieves a map of active test id and the variant result.
  */
 function getActiveTestsAndResults() {
-  return {
-    'SignInV2': 'A'
-  };
+  const serverSideResults = getServerSideActiveTestResults();
+
+  return serverSideResults;
+}
+
+function getServerSideActiveTestResults() {
+  if (window._idRuntimeParams && typeof (window._idRuntimeParams.activeTests) === 'object') {
+    return window._idRuntimeParams.activeTests;
+  }
+  return {};
 }
 
 

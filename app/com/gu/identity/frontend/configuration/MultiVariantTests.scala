@@ -49,6 +49,7 @@ object MultiVariantTest {
       "name" -> o.name,
       "audience" -> o.audience,
       "audienceOffset" -> o.audienceOffset,
+      "isServerSide" -> o.isServerSide,
       "variants" -> o.variants
     )
   }

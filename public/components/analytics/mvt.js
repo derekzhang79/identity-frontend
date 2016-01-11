@@ -5,20 +5,24 @@
 /*global window*/
 
 import cookies from 'cookie-cutter';
+import { MultiVariantTest } from './mvt-model';
+
 
 const MULTIVARIATE_ID_COOKIE = 'GU_mvt_id',
   VISITOR_ID_COOKIE = 's_vi',
   BROWSER_ID_COOKIE = 'bwid',
 
   AB_PREFIX = 'ab',
-  AB_TEST_NAMESPACE = 'Identity';
+  AB_TEST_NAMESPACE = 'Identity',
+
+  allTests = MultiVariantTest.initFromPageConfig();
 
 function getBrowserId() {
   return cookies.get(BROWSER_ID_COOKIE);
 }
 
 function getMvtId() {
-  return cookies.get(MULTIVARIATE_ID_COOKIE);
+  return parseInt(cookies.get(MULTIVARIATE_ID_COOKIE), 10);
 }
 
 function getVisitorId() {
@@ -53,9 +57,10 @@ export function getMvtFullId() {
  * Retrieves a map of active test id and the variant result.
  */
 function getActiveTestsAndResults() {
-  const serverSideResults = getServerSideActiveTestResults();
+  const serverSideResults = getServerSideActiveTestResults(),
+    clientSideResults = getClientSideActiveTestResults();
 
-  return serverSideResults;
+  return mergeObjects(serverSideResults, clientSideResults);
 }
 
 function getServerSideActiveTestResults() {
@@ -63,6 +68,18 @@ function getServerSideActiveTestResults() {
     return window._idRuntimeParams.activeTests;
   }
   return {};
+}
+
+function getClientSideActiveTestResults() {
+  const mvtId = getMvtId(),
+
+    activeTests = allTests.filter(t => !t.isServerSide && t.isInTest(mvtId)),
+
+    out = {};
+
+  activeTests.forEach(t => out[t.name] = t.activeVariant(mvtId));
+
+  return out;
 }
 
 
@@ -94,3 +111,11 @@ export function getActiveTestsAndResultsForOmniture() {
     .join(',');
 }
 
+function mergeObjects(first, second) {
+  const merged = {};
+
+  Object.keys(first).forEach(key => merged[key] = first[key]);
+  Object.keys(second).forEach(key => merged[key] = second[key]);
+
+  return merged;
+}

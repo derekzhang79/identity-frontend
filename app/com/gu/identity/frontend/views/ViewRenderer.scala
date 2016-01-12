@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.views
 
-import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
+import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
@@ -14,10 +14,16 @@ object ViewRenderer {
   def render(view: String, attributes: Map[String, Any] = Map.empty) =
     HBS(view, attributes)
 
-  def renderSignIn(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)], errorIds: Seq[String], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages) = {
+  def renderSignIn(configuration: Configuration, activeTests: Map[MultiVariantTest, MultiVariantTestVariant], errorIds: Seq[String], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages) = {
     val errors = errorIds.map(ErrorViewModel.apply)
 
-    renderViewModel("signin-page", SignInViewModel(
+    val defaultView = "signin-page"
+    val view = activeTests.get(SignInV2Test) match {
+      case Some(SignInV2TestVariantB) => "signin-page-b"
+      case _ => defaultView
+    }
+
+    renderViewModel(view, SignInViewModel(
       configuration = configuration,
       activeTests = activeTests,
       errors = errors,

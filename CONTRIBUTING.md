@@ -170,6 +170,9 @@ an example.
 All tests are prefixed automatically with `ab` when recorded, and tests defined
 in this repo are automatically namespaced with `Identity`.
 
+#### Manually testing variants
+Append `?mvt_<testName>=<variantId>` to a route with a `MultiVariantTestAction`.
+
 ### Test guidelines
 
 - Tests should complete in under five minutes.

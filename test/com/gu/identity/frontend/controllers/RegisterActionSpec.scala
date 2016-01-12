@@ -32,7 +32,8 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
      receiveGnmMarketing: Boolean = true,
      receive3rdPartyMarketing: Boolean = true,
      returnUrl: Option[String] = Some("http://www.theguardian.com"),
-     skipConfirmation: Option[Boolean] = None) = {
+     skipConfirmation: Option[Boolean] = None,
+     group: Option[String] = None) = {
     val bodyParams = Seq(
       "firstName" -> firstName,
       "lastName" -> lastName,
@@ -42,7 +43,8 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "receiveGnmMarketing" -> receiveGnmMarketing.toString,
       "receive3rdPartyMarketing" -> receive3rdPartyMarketing.toString,
       "returnUrl" -> returnUrl.getOrElse("http://none.com"),
-      "skipConfirmation" -> skipConfirmation.getOrElse(false).toString)
+      "skipConfirmation" -> skipConfirmation.getOrElse(false).toString,
+      "group" -> group.getOrElse(""))
 
     FakeRequest("POST", "/actions/register").withFormUrlEncodedBody(bodyParams: _*)
   }
@@ -130,7 +132,6 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
     "include skip confirmation in params for failed registration redirect if the value is specified on the request" in new WithControllerMockedDependencies {
       val skipConfirmation = Some(true)
-      val testCookie = Cookie("SC_GU_U", "##hash##")
 
       when(fakeRegisterThenSignIn(mockIdentityService))
         .thenReturn{
@@ -144,6 +145,23 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
       queryParams.contains("skipConfirmation") mustEqual true
       queryParams.get("skipConfirmation") mustEqual Some("true")
+    }
+
+    "include group in params for failed registration redirect if the value is specified on the request" in new WithControllerMockedDependencies {
+      val group = Some("ABC")
+
+      when(fakeRegisterThenSignIn(mockIdentityService))
+        .thenReturn{
+          Future.successful(
+            Left(Seq(ServiceGatewayError("Unexpected 500 error")))
+          )
+        }
+
+      val result = call(controller.register, fakeRegisterRequest(group = group))
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
+
+      queryParams.contains("group") mustEqual true
+      queryParams.get("group") mustEqual group
     }
   }
 }

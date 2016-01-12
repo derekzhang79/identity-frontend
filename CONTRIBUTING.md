@@ -158,6 +158,18 @@ import { getClientSideActiveTestResults } from 'components/analytics/mvt';
 const results = getClientSideActiveTestResults();
 ```
 
+#### Recording test results
+Test results will be recorded on page view automatically in Omniture and Ophan.
+But to have test results recorded correctly by the data team, a test definition
+must be created in the [guardian/frontend]() repo.
+
+See [ab-testing.md](https://github.com/guardian/frontend/blob/master/docs/ab-testing.md)
+for more info, and [#11372](https://github.com/guardian/frontend/pull/11372) as
+an example.
+
+All tests are prefixed automatically with `ab` when recorded, and tests defined
+in this repo are automatically namespaced with `Identity`.
+
 ### Test guidelines
 
 - Tests should complete in under five minutes.

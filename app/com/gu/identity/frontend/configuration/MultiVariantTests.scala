@@ -1,5 +1,32 @@
 package com.gu.identity.frontend.configuration
 
+/**
+ * Define a Multi Variant Test for testing different logic on Users to
+ * determine which is best based on the user's behaviour.
+ *
+ * To define a test, create a {{case object}} which extends from
+ * {{MultiVariantTest}} and add it to {{MultiVariantTests.all}}.
+ *
+ * For example:
+ * {{{
+ * case object MyABTest extends MultiVariantTest {
+ *   val name = "MyAB"
+ *   val audience = 0.2
+ *   val audienceOffset = 0.6
+ *   val isServerSide = true
+ *   val variants = Seq(MyABTestVariantA, MyABTestVariantB)
+ * }
+ *
+ * case object MyABTestVariantA extends MultiVariantTestVariant { val id = "A" }
+ * case object MyABTestVariantB extends MultiVariantTestVariant { val id = "B" }
+ *
+ * object MultiVariantTests {
+ *   def all: Set[MultiVariantTest] = Set(MyABTest)
+ * }
+ * }}}
+ * Which creates a test with two variants against 20% of the audience, using
+ * the segment of users with ids from 60% to 80% of the population.
+ */
 sealed trait MultiVariantTest {
 
   /**
@@ -56,17 +83,6 @@ object MultiVariantTest {
 }
 
 
-/**
- * Define a MVT at runtime - should only be used for tests.
- */
-case class RuntimeMultiVariantTest(
-  name: String,
-  audience: Double,
-  audienceOffset: Double,
-  isServerSide: Boolean = true,
-  variants: Seq[MultiVariantTestVariant]) extends MultiVariantTest
-
-
 sealed trait MultiVariantTestVariant {
   val id: String
 }
@@ -83,8 +99,6 @@ object MultiVariantTestVariant {
 
 
 
-
-
 case object SignInV2Test extends MultiVariantTest {
   val name = "SignInV2"
   val audience = 1.0
@@ -96,18 +110,33 @@ case object SignInV2Test extends MultiVariantTest {
 case object SignInV2TestVariantA extends MultiVariantTestVariant { val id = "A" }
 
 
+
+/**
+ * Define a MVT at runtime - should only be used for tests.
+ */
+case class RuntimeMultiVariantTest(
+  name: String,
+  audience: Double,
+  audienceOffset: Double,
+  isServerSide: Boolean = true,
+  variants: Seq[MultiVariantTestVariant]) extends MultiVariantTest
+
 /**
  * Define a MVT variant at runtime - should only be used for tests.
  */
 case class RuntimeMultiVariantTestVariant(id: String) extends MultiVariantTestVariant
 
+
+
 object MultiVariantTests {
   val MVT_COOKIE_NAME = "GU_mvt_id"
   val MAX_ID = 899999
 
-  def all = Set[MultiVariantTest](SignInV2Test).filter(_.active)
+  def all: Set[MultiVariantTest] = Set(SignInV2Test)
 
-  def allServerSide = all.filter(_.isServerSide)
+  def allActive = all.filter(_.active)
+
+  def allServerSide = allActive.filter(_.isServerSide)
 
   def isInTest(test: MultiVariantTest, mvtId: Int, maxId: Int = MAX_ID): Boolean = {
     val minBound = maxId * test.audienceOffset
@@ -123,6 +152,9 @@ object MultiVariantTests {
     else None
   }
 
+  /**
+   * Retrieve active server-side tests and the selected variant for an mvtId.
+   */
   def activeTests(mvtId: Int, maxId: Int = MAX_ID): Set[(MultiVariantTest, MultiVariantTestVariant)] =
     allServerSide.flatMap { test =>
       activeVariantForTest(test, mvtId, maxId).map(test -> _)

@@ -1,15 +1,14 @@
 {{# partial "content" }}
 
-  {{#showPrelude}}
-    <div class="signin__prelude">
-      <p>{{signInPageText.prelude}}</p>
-      <p> {{signInPageText.preludeMoreInfo}} <a href="http://www.theguardian.com/help/identity-faq"> {{signInPageText.preludeFaq}} </a>.</p>
-    </div>
-  {{/showPrelude}}
-
   <h1 class="signin__heading">{{ signInPageText.title }}</h1>
 
   {{> components/social-signin/_social-signin }}
+
+  <a class="signin_form__show-toggle" id="signin_form_show" name="signin_form_show"></a>
+
+  <div class="signin__cta--email">
+      <a class="signin-cta-link--email" id="signin_cta_email" href="#signin_form_show">Sign in with Email</a>
+  </div>
 
   <form id="signin_form" class="signin-form" action="{{ actions.signIn }}" method="POST">
     <input type="hidden" name="returnUrl" value="{{returnUrl}}">
@@ -40,12 +39,14 @@
         <button class="signin-form__submit-button" id="signin_submit" type="submit">{{signInPageText.signIn}}</button>
       </div>
 
-      <p class="signin-form__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
-
-
-      <p class="signin-form__terms">{{signInPageText.conditions}} <a href="http://www.theguardian.com/help/terms-of-service">{{signInPageText.termsOfService}}</a> &amp; <a href="http://www.theguardian.com/help/privacy-policy">{{signInPageText.privacyPolicy}}</a>.</p>
     </fieldset>
   </form>
+
+  <div class="signin__epilogue">
+    <p class="signin-form__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
+
+    <p class="signin-form__terms">{{signInPageText.conditions}} <a href="http://www.theguardian.com/help/terms-of-service">{{signInPageText.termsOfService}}</a> &amp; <a href="http://www.theguardian.com/help/privacy-policy">{{signInPageText.privacyPolicy}}</a>.</p>
+  </div>
 
 {{/partial}}
 

@@ -20,7 +20,8 @@ case class RegisterRequest(
     password: String,
     receiveGnmMarketing: Boolean,
     receive3rdPartyMarketing: Boolean,
-    returnUrl: Option[String])
+    returnUrl: Option[String],
+    skipConfirmation: Option[Boolean])
 
 class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
 
@@ -33,7 +34,8 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
       "password" -> nonEmptyText,
       "receiveGnmMarketing" -> boolean,
       "receive3rdPartyMarketing" -> boolean,
-      "returnUrl" -> optional(text)
+      "returnUrl" -> optional(text),
+      "skipConfirmation" -> optional(boolean)
     )(RegisterRequest.apply)(RegisterRequest.unapply)
   )
 
@@ -41,13 +43,13 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     NoCache {
       val clientIp = ClientRegistrationIp(request)
       registerForm.bindFromRequest.fold(
-        errorForm => Future.successful(SeeOther(routes.Application.register(Seq("error-registration"), None).url)),
+        errorForm => Future.successful(SeeOther(routes.Application.register(Seq("error-registration")).url)),
         successForm => {
           val trackingData = TrackingData(request, successForm.returnUrl)
           val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"))
           identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
             case Left(errors) =>
-              redirectToRegisterPageWithErrors(errors, returnUrl)
+              redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation)
             case Right(cookies) => {
                 SeeOther(returnUrl.url)
                   .withCookies(cookies: _*)
@@ -55,7 +57,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
           }.recover {
             case NonFatal(ex) => {
               logger.warn(s"Unexpected error while registering: ${ex.getMessage}", ex)
-              redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl)
+              redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, successForm.skipConfirmation)
             }
 
           }
@@ -64,8 +66,8 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     }
   }
 
-  private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl) = {
+  private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]) = {
     val idErrors = errors.map("register-" + _.id)
-    SeeOther(routes.Application.register(idErrors, Some(returnUrl.url)).url)
+    SeeOther(routes.Application.register(idErrors, Some(returnUrl.url), skipConfirmation).url)
   }
 }

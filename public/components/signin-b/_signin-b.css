@@ -50,6 +50,10 @@
   }
 }
 
+.signin-form--with-errors ~ .signin__cta--email {
+  display: none;
+}
+
 .signin__epilogue {
   @extend %signin-container;
 }

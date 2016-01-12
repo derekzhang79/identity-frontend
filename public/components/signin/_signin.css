@@ -32,6 +32,10 @@ $error-color: #dd4b39;
   position: relative;
 }
 
+.signin-form--with-errors {
+  @extend .signin-form;
+}
+
 
 .signin-form__prelude {
   @extend %font-text-1;

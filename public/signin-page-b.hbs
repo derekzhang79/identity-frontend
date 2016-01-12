@@ -6,11 +6,13 @@
 
   <a class="signin_form__show-toggle" id="signin_form_show" name="signin_form_show"></a>
 
-  <div class="signin__cta--email">
+  {{^ hasErrors }}
+    <div class="signin__cta--email">
       <a class="signin-cta-link--email" id="signin_cta_email" href="#signin_form_show">{{signInPageText.signInWithEmail}}</a>
-  </div>
+    </div>
+  {{/ hasErrors }}
 
-  <form id="signin_form" class="signin-form" action="{{ actions.signIn }}" method="POST">
+  <form id="signin_form" class="signin-form{{# hasErrors }}--with-errors{{/ hasErrors }}" action="{{ actions.signIn }}" method="POST">
     <input type="hidden" name="returnUrl" value="{{returnUrl}}">
     <input type="hidden" name="skipConfirmation" value="{{skipConfirmation}}">
     <p class="signin-form__prelude">{{signInPageText.divideText}}</p>

@@ -20,9 +20,10 @@
   margin-bottom: 0 0 1.5rem;
   border: 1px solid #dcdcdc;
   border-radius: 1.5rem;
-  background-color: #eeeeee;
+  background-color: #fff;
   background-repeat: no-repeat;
   background-position: 1rem center;
+  background-image: inline('email.svg');
 }
 
 .signin_form__show-toggle {

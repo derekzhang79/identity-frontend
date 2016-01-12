@@ -2,7 +2,7 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData, ReturnUrl}
-import com.gu.identity.frontend.services.IdentityService
+import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceError, IdentityService}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -47,7 +47,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
           val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"))
           identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
             case Left(errors) =>
-              SeeOther(routes.Application.register(Seq("error-registration"), Some(returnUrl.url)).url)
+              redirectToRegisterPageWithErrors(errors, returnUrl)
             case Right(cookies) => {
                 SeeOther(returnUrl.url)
                   .withCookies(cookies: _*)
@@ -55,12 +55,17 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
           }.recover {
             case NonFatal(ex) => {
               logger.warn(s"Unexpected error while registering: ${ex.getMessage}", ex)
-              SeeOther(routes.Application.register(Seq("error-registration"), None).url)
+              redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl)
             }
 
           }
         }
       )
     }
+  }
+
+  private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl) = {
+    val idErrors = errors.map("register-" + _.id)
+    SeeOther(routes.Application.register(idErrors, Some(returnUrl.url)).url)
   }
 }

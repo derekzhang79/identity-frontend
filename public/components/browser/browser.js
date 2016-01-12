@@ -17,5 +17,11 @@ export const isSupported =
 
 
 export function getElementById( id ) {
-  return domElement( document.getElementById( id ) );
+  const elem = document.getElementById( id );
+
+  if ( elem && elem.nodeType === 1 ) {
+    return domElement( elem );
+  }
+
+  return undefined;
 }

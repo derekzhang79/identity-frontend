@@ -8,6 +8,9 @@
   @extend %signin-container;
 
   margin-bottom: 2rem;
+
+  /* hide the link for old browsers */
+  display: none;
 }
 
 .signin-cta-link--email {
@@ -32,6 +35,10 @@
 }
 
 #signin_form_show:not(:target) {
+  & ~ .signin__cta--email {
+    display: block;
+  }
+
   & ~ .signin-form {
     display: none;
   }

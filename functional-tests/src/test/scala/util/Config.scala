@@ -10,7 +10,7 @@ object Config {
   private val conf = ConfigFactory.load()
 
   private val baseUrlsByStage = Map(
-    "PROD" -> "https://profile-beta.theguardian.com"
+    "PROD" -> "https://profile.theguardian.com"
   )
   val stage = conf.getString("stage")
 
@@ -21,6 +21,12 @@ object Config {
   val webDriverRemoteUrl = Try(conf.getString("webDriverRemoteUrl")) match {
     case Success(url) => url
     case Failure(e) => ""
+  }
+
+  object FacebookCredentials {
+    val email = conf.getString("facebook.test.email")
+    val password = conf.getString("facebook.test.password")
+    val name = conf.getString("facebook.test.name")
   }
 
   def debug() = conf.root().render()

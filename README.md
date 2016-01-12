@@ -101,3 +101,5 @@ To run unit tests:
 To run functional selenium tests in a browser:
 
     sbt "project functional-tests" test
+
+Credentials for social functional tests are in private `DEV/identity-frontend.conf`.

@@ -6,22 +6,20 @@ import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.models.Text._
 import play.api.i18n.Messages
 
-case class SignInLinksViewModel(socialFacebook: String = "https://oauth.theguardian.com/facebook/signin",
-                                socialGoogle: String = "https://oauth.theguardian.com/google/signin") extends ViewModel {
-  def toMap(implicit messages: Messages) =
-    Map("socialFacebook" -> socialFacebook, "socialGoogle" -> socialGoogle)
-}
+case class SignInLinksViewModel private(
+    socialFacebook: String,
+    socialGoogle: String)
+  extends ViewModel
 
 object SignInLinksViewModel {
-  def apply(urlParams: Seq[(String, String)]): SignInLinksViewModel = {
-      SignInLinksViewModel(
-        socialFacebook = UrlBuilder("https://oauth.theguardian.com/facebook/signin", urlParams),
-        socialGoogle = UrlBuilder("https://oauth.theguardian.com/google/signin", urlParams)
+  def apply(urlParams: Seq[(String, String)]): SignInLinksViewModel =
+    SignInLinksViewModel(
+      socialFacebook = UrlBuilder("https://oauth.theguardian.com/facebook/signin", urlParams),
+      socialGoogle = UrlBuilder("https://oauth.theguardian.com/google/signin", urlParams)
     )
-  }
 }
 
-case class SignInViewModel(
+case class SignInViewModel private(
     layout: LayoutViewModel,
     signInPageText: Map[String, String],
     socialSignInText: Map[String, String],
@@ -31,7 +29,7 @@ case class SignInViewModel(
     skipConfirmation: Boolean = false,
     registerUrl: String = "",
     forgotPasswordUrl: String = "",
-    links: SignInLinksViewModel = SignInLinksViewModel(),
+    links: SignInLinksViewModel,
     actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url),
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product])

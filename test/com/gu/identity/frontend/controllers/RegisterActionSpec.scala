@@ -24,15 +24,15 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
   }
 
   def fakeRegisterRequest(
-     firstName: String,
-     lastName: String,
-     email: String,
-     username: String,
-     password: String,
-     receiveGnmMarketing: Boolean,
-     receive3rdPartyMarketing: Boolean,
-     returnUrl: Option[String],
-     skipConfirmation: Option[Boolean]) = {
+     firstName: String = "first",
+     lastName: String = "last",
+     email: String = "test@email.com",
+     username: String = "username",
+     password: String = "password",
+     receiveGnmMarketing: Boolean = true,
+     receive3rdPartyMarketing: Boolean = true,
+     returnUrl: Option[String] = Some("http://www.theguardian.com"),
+     skipConfirmation: Option[Boolean] = None) = {
     val bodyParams = Seq(
       "firstName" -> firstName,
       "lastName" -> lastName,
@@ -52,17 +52,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
   "POST /register" should {
     "redirect to theguardian.com and sign user in when registration is successful" in new WithControllerMockedDependencies {
-      val firstName = "first"
-      val lastName = "last"
-      val email = "test@email.com"
-      val username = "username"
-      val password = "password"
-      val receiveGnmMarketing = false
-      val receive3rdPartyMarketing = false
       val returnUrl = Some("http://www.theguardian.com/test")
-      val skipConfirmation = None
-      val rememberMe = Some(true)
-      val registerResponseUser = RegisterResponseUser(List.empty)
       val testCookie = Cookie("SC_GU_U", "##hash##")
 
       when(fakeRegisterThenSignIn(mockIdentityService))
@@ -72,26 +62,16 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
         )
       }
 
-      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl, skipConfirmation))
+      val result = call(controller.register, fakeRegisterRequest(returnUrl = returnUrl))
       val resultCookies = cookies(result)
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result) mustEqual Some("http://www.theguardian.com/test")
+      redirectLocation(result) mustEqual returnUrl
       resultCookies.size mustEqual 1
       resultCookies.head mustEqual testCookie
     }
 
     "redirect to register page when failed to create account (Service Bad Request)" in new WithControllerMockedDependencies {
-      val firstName = "first"
-      val lastName = "last"
-      val email = "test@email.com"
-      val username = "username"
-      val password = "password"
-      val receiveGnmMarketing = false
-      val receive3rdPartyMarketing = false
-      val returnUrl = Some("http://www.theguardian.com/test")
-      val skipConfirmation = None
-
       when(fakeRegisterThenSignIn(mockIdentityService))
         .thenReturn{
           Future.successful {
@@ -99,7 +79,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           }
         }
 
-      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl, skipConfirmation))
+      val result = call(controller.register, fakeRegisterRequest())
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       status(result) mustEqual SEE_OTHER
@@ -111,16 +91,6 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "redirect to register page when service error (Service Gateway Error)" in new WithControllerMockedDependencies {
-      val firstName = "first"
-      val lastName = "last"
-      val email = "test@email.com"
-      val username = "username"
-      val password = "password"
-      val receiveGnmMarketing = false
-      val receive3rdPartyMarketing = false
-      val returnUrl = Some("http://www.theguardian.com/test")
-      val skipConfirmation = None
-
       when(fakeRegisterThenSignIn(mockIdentityService))
         .thenReturn{
           Future.successful {
@@ -128,7 +98,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           }
         }
 
-      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl, skipConfirmation))
+      val result = call(controller.register, fakeRegisterRequest())
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       status(result) mustEqual SEE_OTHER
@@ -140,16 +110,6 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "redirect to register page when error from the future" in new WithControllerMockedDependencies {
-      val firstName = "first"
-      val lastName = "last"
-      val email = "test@email.com"
-      val username = "username"
-      val password = "password"
-      val receiveGnmMarketing = false
-      val receive3rdPartyMarketing = false
-      val returnUrl = Some("http://www.theguardian.com/test")
-      val skipConfirmation = None
-
       when(fakeRegisterThenSignIn(mockIdentityService))
         .thenReturn{
           Future.failed {
@@ -157,7 +117,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           }
         }
 
-      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl, skipConfirmation))
+      val result = call(controller.register, fakeRegisterRequest())
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       status(result) mustEqual SEE_OTHER
@@ -169,18 +129,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "include skip confirmation in params for failed registration redirect if the value is specified on the request" in new WithControllerMockedDependencies {
-      val firstName = "first"
-      val lastName = "last"
-      val email = "test@email.com"
-      val username = "username"
-      val password = "password"
-      val receiveGnmMarketing = false
-      val receive3rdPartyMarketing = false
-      val returnUrl = Some("http://www.theguardian.com/test")
       val skipConfirmation = Some(true)
-
-      val rememberMe = Some(true)
-      val registerResponseUser = RegisterResponseUser(List.empty)
       val testCookie = Cookie("SC_GU_U", "##hash##")
 
       when(fakeRegisterThenSignIn(mockIdentityService))
@@ -190,7 +139,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl, skipConfirmation))
+      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation))
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       queryParams.contains("skipConfirmation") mustEqual true

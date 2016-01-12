@@ -4,6 +4,7 @@ signin.prelude=Creating an account means you can save articles for later, leave 
 signin.prelude.moreinfo=Want to know more?
 signin.prelude.faq=Read our FAQs
 signin.dividetext=or
+signin.signInWithEmail=Sign in with Email
 signin.email=Email address
 signin.password=Password
 signin.forgottenpassword=Forgotten password?

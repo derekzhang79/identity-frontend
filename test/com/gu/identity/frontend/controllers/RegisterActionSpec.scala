@@ -2,6 +2,7 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
+import com.gu.identity.frontend.utils.UrlDecoder
 import com.gu.identity.service.client.RegisterResponseUser
 import org.mockito.Matchers.{any => argAny, eq => argEq, _}
 import org.mockito.Mockito._
@@ -96,8 +97,13 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
         }
 
       val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl))
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       status(result) mustEqual SEE_OTHER
+
+      queryParams.contains("error") mustEqual true
+      queryParams.get("error") mustEqual Some("register-error-bad-request")
+
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
 
@@ -119,8 +125,13 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
         }
 
       val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl))
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       status(result) mustEqual SEE_OTHER
+
+      queryParams.contains("error") mustEqual true
+      queryParams.get("error") mustEqual Some("register-error-gateway")
+
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
 
@@ -142,8 +153,13 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
         }
 
       val result = call(controller.register, fakeRegisterRequest(firstName, lastName, email, username, password, receiveGnmMarketing, receive3rdPartyMarketing, returnUrl))
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       status(result) mustEqual SEE_OTHER
+
+      queryParams.contains("error") mustEqual true
+      queryParams.get("error") mustEqual Some("register-error-gateway")
+
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
   }

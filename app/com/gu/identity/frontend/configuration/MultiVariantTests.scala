@@ -66,35 +66,8 @@ sealed trait MultiVariantTest {
 }
 
 
-object MultiVariantTest {
-
-  import play.api.libs.json._
-  import MultiVariantTestVariant.{jsonWrites => mvtVariantJsonWrites}
-
-  implicit val jsonWrites: Writes[MultiVariantTest] = new Writes[MultiVariantTest] {
-    override def writes(o: MultiVariantTest): JsValue = Json.obj(
-      "name" -> o.name,
-      "audience" -> o.audience,
-      "audienceOffset" -> o.audienceOffset,
-      "isServerSide" -> o.isServerSide,
-      "variants" -> o.variants
-    )
-  }
-}
-
-
 sealed trait MultiVariantTestVariant {
   val id: String
-}
-
-object MultiVariantTestVariant {
-  import play.api.libs.json._
-
-  implicit val jsonWrites: Writes[MultiVariantTestVariant] = new Writes[MultiVariantTestVariant] {
-    override def writes(o: MultiVariantTestVariant): JsValue = Json.obj(
-      "id" -> o.id
-    )
-  }
 }
 
 
@@ -129,6 +102,27 @@ case class RuntimeMultiVariantTestVariant(id: String) extends MultiVariantTestVa
 
 
 object MultiVariantTests {
+
+  object Implicits {
+    import play.api.libs.json._
+
+    implicit val mvtVariantJsonWrites: Writes[MultiVariantTestVariant] = new Writes[MultiVariantTestVariant] {
+      override def writes(o: MultiVariantTestVariant): JsValue = Json.obj(
+        "id" -> o.id
+      )
+    }
+
+    implicit val mvtJsonWrites: Writes[MultiVariantTest] = new Writes[MultiVariantTest] {
+      override def writes(o: MultiVariantTest): JsValue = Json.obj(
+        "name" -> o.name,
+        "audience" -> o.audience,
+        "audienceOffset" -> o.audienceOffset,
+        "isServerSide" -> o.isServerSide,
+        "variants" -> o.variants
+      )
+    }
+  }
+
   val MVT_COOKIE_NAME = "GU_mvt_id"
   val MAX_ID = 899999
 

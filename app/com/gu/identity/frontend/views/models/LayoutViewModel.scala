@@ -44,7 +44,7 @@ case class LayoutViewModel(
 case class JavascriptConfig(omnitureAccount: String, mvtTests: Seq[MultiVariantTest]) {
   self =>
 
-  import MultiVariantTest.{jsonWrites => mvtJsonWrites}
+  import MultiVariantTests.Implicits._
   implicit val jsonWrites = Json.writes[JavascriptConfig]
 
   def toJSON =

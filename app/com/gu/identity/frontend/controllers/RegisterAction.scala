@@ -76,6 +76,9 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   private def redirectRegisterSuccess(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
     val groupCode = validateGroupCode(group)
     (groupCode, skipConfirmation.getOrElse(false)) match {
+      case(Some(group), true) => {
+        SeeOther(build3rdPartyUrl(group, returnUrl, true)).withCookies(cookies: _*)
+      }
       case (None, false) => {
         SeeOther(routes.Application.confirm(returnUrl.url).url).withCookies(cookies: _*)
       }
@@ -92,5 +95,11 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
       case Some("GTNF") => Some("GTNF")
       case _ => None
     }
+  }
+
+  private def build3rdPartyUrl(group: String, returnUrl: ReturnUrl, skipConfirmation: Boolean) = {
+    val baseUrl = s"${config.identityProfileBase}/agree/$group"
+    val fullUrl = s"$baseUrl?returnUrl=${returnUrl.url}&skipConfirmation=${skipConfirmation.toString}&skipThirdPartyLandingPage=true"
+    fullUrl
   }
 }

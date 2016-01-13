@@ -8,6 +8,8 @@ trait Configuration {
   val identityApiKey: String
   val identityApiHost: String
 
+  val identityProfileBase: String
+
   val omnitureAccount: String
 
   val appConfiguration: PlayConfiguration
@@ -22,6 +24,8 @@ class ApplicationConfiguration(val appConfiguration: PlayConfiguration) extends 
 
   val identityApiKey = getString("identity.api.key")
   val identityApiHost = getString("identity.api.host")
+
+  val identityProfileBase = getString("identity.frontend.tandCsBase")
 
   val omnitureAccount = getString("omniture.account")
 }

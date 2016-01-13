@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.controllers
 
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
 import com.gu.identity.frontend.utils.UrlDecoder
@@ -8,6 +9,7 @@ import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.i18n.MessagesApi
+import play.api.{Configuration => PlayConfiguration}
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -20,7 +22,15 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
-    val controller = new RegisterAction(mockIdentityService, messages)
+    val config = new Configuration {
+      override val identityApiHost: String = "identityApiHost"
+      override val identityApiKey: String = "identityApiKey"
+      override val identityCookieDomain: String = "theguardian.com"
+      override val identityProfileBase: String = "profile.theguardian.com"
+      override val omnitureAccount: String = "omnitureAccount"
+      override val appConfiguration: PlayConfiguration = null
+    }
+    val controller = new RegisterAction(mockIdentityService, messages, config)
   }
 
   def fakeRegisterRequest(

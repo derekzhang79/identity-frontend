@@ -16,6 +16,7 @@ class BetaUserGroupFilterSpec extends WordSpec with Matchers {
     override val identityApiHost: String = "identityApiHost"
     override val identityApiKey: String = "identityApiKey"
     override val identityCookieDomain: String = "theguardian.com"
+    override val identityProfileBase: String = "profile.theguardian.com"
     override val omnitureAccount: String = "omnitureAccount"
     override val appConfiguration: PlayConfiguration = null
   }

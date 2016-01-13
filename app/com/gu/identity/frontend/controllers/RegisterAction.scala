@@ -73,7 +73,23 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   }
 
   private def redirectRegisterSuccess(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
-    SeeOther(returnUrl.url)
-      .withCookies(cookies: _*)
+    val groupCode = validateGroupCode(group)
+    (groupCode, skipConfirmation.getOrElse(false)) match {
+      case (None, false) => {
+        SeeOther(routes.Application.confirm(returnUrl.url).url).withCookies(cookies: _*)
+      }
+      case (None, true) => {
+        SeeOther(returnUrl.url).withCookies(cookies: _*)
+      }
+      case _ => SeeOther(returnUrl.url).withCookies(cookies: _*)
+    }
+  }
+
+  private def validateGroupCode(group: Option[String]): Option[String] = {
+    group match {
+      case Some("GRS") => Some("GRS")
+      case Some("GTNF") => Some("GTNF")
+      case _ => None
+    }
   }
 }

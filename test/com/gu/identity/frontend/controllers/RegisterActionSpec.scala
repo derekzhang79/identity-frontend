@@ -3,8 +3,7 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
 import com.gu.identity.frontend.utils.UrlDecoder
-import com.gu.identity.service.client.RegisterResponseUser
-import org.mockito.Matchers.{any => argAny, eq => argEq, _}
+import org.mockito.Matchers.{any => argAny, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
@@ -12,6 +11,7 @@ import play.api.i18n.MessagesApi
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.utils.UriEncoding
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -53,9 +53,10 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     mockIdentityService.registerThenSignIn(anyObject(), argAny[ClientRegistrationIp], argAny[TrackingData])(argAny[ExecutionContext])
 
   "POST /register" should {
-    "redirect to theguardian.com and sign user in when registration is successful" in new WithControllerMockedDependencies {
+    "redirect to theguardian.com and sign user in when registration is successful skipConfirmation is true and no group code" in new WithControllerMockedDependencies {
       val returnUrl = Some("http://www.theguardian.com/test")
       val testCookie = Cookie("SC_GU_U", "##hash##")
+      val skipConfirmation = Some(true)
 
       when(fakeRegisterThenSignIn(mockIdentityService))
       .thenReturn{
@@ -64,14 +65,86 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
         )
       }
 
-      val result = call(controller.register, fakeRegisterRequest(returnUrl = returnUrl))
-      val resultCookies = cookies(result)
+      val result = call(controller.register, fakeRegisterRequest(returnUrl = returnUrl, skipConfirmation = skipConfirmation))
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual returnUrl
+    }
+
+    "have a cookie when registration is successful skipConfirmation is true and no group code" in new WithControllerMockedDependencies {
+      val returnUrl = Some("http://www.theguardian.com/test")
+      val testCookie = Cookie("SC_GU_U", "##hash##")
+      val skipConfirmation = Some(true)
+
+      when(fakeRegisterThenSignIn(mockIdentityService))
+        .thenReturn{
+          Future.successful(
+            Right(Seq(testCookie))
+          )
+        }
+
+      val result = call(controller.register, fakeRegisterRequest(returnUrl = returnUrl, skipConfirmation = skipConfirmation))
+      val resultCookies = cookies(result)
+
       resultCookies.size mustEqual 1
       resultCookies.head mustEqual testCookie
     }
+
+    "redirect to confirmation page when registration is successful skipConfirmation is false and no group code" in new WithControllerMockedDependencies {
+      val testCookie = Cookie("SC_GU_U", "##hash##")
+      val skipConfirmation = Some(false)
+
+      when(fakeRegisterThenSignIn(mockIdentityService))
+        .thenReturn{
+          Future.successful(
+            Right(Seq(testCookie))
+          )
+        }
+
+      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation))
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).get must startWith (routes.Application.confirm().url)
+    }
+
+    "have a sign in cookie when registration is successful skipConfirmation is false and no group code" in new WithControllerMockedDependencies {
+      val testCookie = Cookie("SC_GU_U", "##hash##")
+      val skipConfirmation = Some(false)
+
+      when(fakeRegisterThenSignIn(mockIdentityService))
+        .thenReturn{
+          Future.successful(
+            Right(Seq(testCookie))
+          )
+        }
+
+      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation))
+      val resultCookies = cookies(result)
+
+      resultCookies.size mustEqual 1
+      resultCookies.head mustEqual testCookie
+    }
+
+    "include a return url when registration is successful skipConfirmation is false and no group code" in new WithControllerMockedDependencies {
+      val returnUrl = Some("http://www.theguardian.com/test")
+      val testCookie = Cookie("SC_GU_U", "##hash##")
+      val skipConfirmation = Some(false)
+
+      when(fakeRegisterThenSignIn(mockIdentityService))
+        .thenReturn{
+          Future.successful(
+            Right(Seq(testCookie))
+          )
+        }
+
+      val result = call(controller.register, fakeRegisterRequest(returnUrl = returnUrl, skipConfirmation = skipConfirmation))
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
+
+      queryParams.contains("returnUrl") mustEqual true
+      val url = UriEncoding.decodePath(queryParams.get("returnUrl").get, "UTF-8")
+      Some(url) mustEqual returnUrl
+    }
+
 
     "redirect to register page when failed to create account (Service Bad Request)" in new WithControllerMockedDependencies {
       when(fakeRegisterThenSignIn(mockIdentityService))

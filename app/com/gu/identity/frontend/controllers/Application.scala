@@ -24,4 +24,10 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
       Ok("Hello, This is the Registration Page")
     }
   }
+
+  def confirm(returnUrl: String) = Action {
+    Cached{
+      Ok("Hello, This is the Registration Confirmation Page")
+    }
+  }
 }

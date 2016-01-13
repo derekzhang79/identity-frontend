@@ -9,6 +9,8 @@ GET        /signin                        com.gu.identity.frontend.controllers.A
 
 GET        /register                      com.gu.identity.frontend.controllers.Application.register(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, group: Option[String] ?= None)
 
+GET        /register/confirm              com.gu.identity.frontend.controllers.Application.confirm(returnUrl: String ?= "http://www.theguardian.com")
+
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 
 POST       /actions/register              com.gu.identity.frontend.controllers.RegisterAction.register

@@ -109,6 +109,67 @@ Pixel fallbacks for `rem` units are added with PostCSS automatically via the
 [cssnext](http://cssnext.io/) plugin. Vendor prefixes for "Modern" CSS are
 also automatically added via PostCSS and cssnext with autoprefixer.
 
+
+### Multi-Variant Tests
+All Multi-Variant tests are defined server-side in [MultiVariantTests.scala](https://github.com/guardian/identity-frontend/blob/master/app/com/gu/identity/frontend/configuration/MultiVariantTests.scala).
+
+For example:
+```scala
+case object MyABTest extends MultiVariantTest {
+  val name = "MyAB"
+  val audience = 0.2
+  val audienceOffset = 0.6
+  val isServerSide = true
+  val variants = Seq(MyABTestVariantA, MyABTestVariantB)
+}
+
+case object MyABTestVariantA extends MultiVariantTestVariant { val id = "A" }
+case object MyABTestVariantB extends MultiVariantTestVariant { val id = "B" }
+
+object MultiVariantTests {
+  def all: Set[MultiVariantTest] = Set(MyABTest)
+}
+```
+Which creates a test with two variants against 20% of the audience, using
+the segment of users with ids from 60% to 80% of the population.
+
+When using a server-side only test, the `MultiVariantTestAction` action
+composition should be used to access which tests are active for the
+user for a particular route.
+
+```scala
+def myAction() = MultiVariantTestAction { request =>
+
+  val tests: Map[MultiVariantTest, MultiVariantTestVariant] = request.activeTests
+
+  // do things with the active tests
+}
+```
+`MultiVariantTestAction` will force the response to be non-cacheable.
+
+Each `MultiVariantTestAction` must also work without any active tests.
+
+**Client-side** only tests are Javascript only, and should be cacheable. To
+access test results for client-side tests, use:
+
+```js
+import { getClientSideActiveTestResults } from 'components/analytics/mvt';
+
+const results = getClientSideActiveTestResults();
+```
+
+#### Recording test results
+Test results will be recorded on page view automatically in Omniture and Ophan.
+But to have test results recorded correctly by the data team, a test definition
+must be created in the [guardian/frontend]() repo.
+
+See [ab-testing.md](https://github.com/guardian/frontend/blob/master/docs/ab-testing.md)
+for more info, and [#11372](https://github.com/guardian/frontend/pull/11372) as
+an example.
+
+All tests are prefixed automatically with `ab` when recorded, and tests defined
+in this repo are automatically namespaced with `Identity`.
+
 ### Test guidelines
 
 - Tests should complete in under five minutes.

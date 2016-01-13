@@ -92,6 +92,9 @@ so making changes locally will result in compile being triggered automatically.
 
 Client side sources will automatically be compiled using the `npm run build` command.
 
+## Development and Contributing
+See [CONTRIBUTING.MD](https://github.com/guardian/identity-frontend/blob/master/CONTRIBUTING.md).
+
 ## Testing
 
 To run unit tests:

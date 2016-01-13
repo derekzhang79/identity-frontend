@@ -2,10 +2,7 @@ package com.gu.identity.frontend.views.models
 
 import play.api.i18n.Messages
 
-case class ErrorViewModel(id: String, message: String) extends ViewModel {
-  def toMap(implicit messages: Messages) =
-    Map("id" -> id, "message" -> message)
-}
+case class ErrorViewModel(id: String, message: String) extends ViewModel
 
 object ErrorViewModel {
 

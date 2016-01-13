@@ -7,7 +7,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{Action, Controller, Cookie => PlayCookie}
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
@@ -53,8 +53,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
             case Left(errors) =>
               redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.group)
             case Right(cookies) => {
-                SeeOther(returnUrl.url)
-                  .withCookies(cookies: _*)
+              redirectRegisterSuccess(cookies, returnUrl, successForm.skipConfirmation, successForm.group)
             }
           }.recover {
             case NonFatal(ex) => {
@@ -71,5 +70,10 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
     val idErrors = errors.map("register-" + _.id)
     SeeOther(routes.Application.register(idErrors, Some(returnUrl.url), skipConfirmation, group).url)
+  }
+
+  private def redirectRegisterSuccess(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
+    SeeOther(returnUrl.url)
+      .withCookies(cookies: _*)
   }
 }

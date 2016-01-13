@@ -1,19 +1,14 @@
 package test.pages
 
-import test.util.WebBrowserUtil
-import org.scalatest.selenium.{Page, WebBrowser}
+import test.util.Browser
+import org.scalatest.selenium.Page
 
-class Homepage extends Page with WebBrowser with WebBrowserUtil {
+class Homepage extends Page with Browser {
   val url = "www.theguardian.com"
 
-  def userDisplayName: String = {
-    assert(pageHasElement(signIn))
-    signIn.element.text
-  }
-
   def pageHasLoaded(): Boolean = {
-    pageHasElement(signIn)
+    pageHasElement(signInName)
   }
 
-  private lazy val signIn = className("js-profile-info")
+  private lazy val signInName = className("js-profile-info")
 }

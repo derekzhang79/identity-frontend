@@ -5,8 +5,11 @@ import org.openqa.selenium.By
 import org.scalatest.selenium.WebBrowser
 import scala.util.Try
 
-trait Browser extends WebBrowser { this: WebBrowser =>
+trait Browser extends WebBrowser {
+
   lazy implicit val driver = Driver()
+
+  private val timeOutSec = 30
 
   def pageHasText(text: String): Boolean = {
     waitUntil(ExpectedConditions.textToBePresentInElementLocated(By.tagName("body"), text))
@@ -27,6 +30,4 @@ trait Browser extends WebBrowser { this: WebBrowser =>
   def waitUntil[T](pred: ExpectedCondition[T]) = {
     Try(new WebDriverWait(driver, timeOutSec).until(pred)).isSuccess
   }
-
-  private val timeOutSec = 30
 }

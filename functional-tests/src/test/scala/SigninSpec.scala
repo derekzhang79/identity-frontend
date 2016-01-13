@@ -64,10 +64,8 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
     }
 
     scenario("User signs in with Facebook") {
-      val testUser = new TestUser
-
       When("I visit 'Sign in' page ")
-      val signin = new pages.Signin(testUser)
+      val signin = new pages.Signin(new TestUser)
       go.to(signin)
       assert(signin.pageHasLoaded())
 

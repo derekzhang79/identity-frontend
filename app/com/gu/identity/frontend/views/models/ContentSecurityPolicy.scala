@@ -26,13 +26,13 @@ object ContentSecurityPolicy {
       case r: FontResource => CSP_FONT_SRC
     }
 
-    val transformed = grouped.mapValues(_.map(cspForResource).distinct)
+    val transformed = grouped.mapValues(_.map(cspStatementForResource).distinct)
 
     "Content-Security-Policy" -> toCSPHeader(defaultCsp ++ transformed)
   }
 
 
-  private def cspForResource(resource: PageResource): String = resource match {
+  private def cspStatementForResource(resource: PageResource): String = resource match {
     case r: LocalResource => CSP_SELF_DOMAIN
     case r: ScriptResource with InlinedSource => toCSPShaDefinition(r.sha256)
     case r: InlinedResource => CSP_DATA_PROTOCOL
@@ -40,13 +40,13 @@ object ContentSecurityPolicy {
   }
 
 
-  def toCSPHeader(csp: Map[String, Seq[String]]) =
+  private def toCSPHeader(csp: Map[String, Seq[String]]) =
     csp.map {
       case (key, value) => s"$key ${value.mkString(" ")}"
     }.mkString("; ")
 
 
-  def toCSPShaDefinition(in: String) =
+  private def toCSPShaDefinition(in: String) =
     s"'sha256-$in'"
 
 }

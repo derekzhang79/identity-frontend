@@ -1,9 +1,11 @@
 package com.gu.identity.frontend.models
 
-import java.net.URI
+import java.net.{URLEncoder, URI}
 import scala.util.Try
 
-case class ReturnUrl(url: String)
+case class ReturnUrl(url: String) {
+  val encodedUrl = URLEncoder.encode(url, "UTF-8")
+}
 
 object ReturnUrl {
 

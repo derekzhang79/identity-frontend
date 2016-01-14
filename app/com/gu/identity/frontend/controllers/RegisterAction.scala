@@ -1,5 +1,7 @@
 package com.gu.identity.frontend.controllers
 
+import java.net.URLEncoder
+
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData, ReturnUrl}
@@ -70,22 +72,26 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
 
   private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
     val idErrors = errors.map("register-" + _.id)
-    SeeOther(routes.Application.register(idErrors, Some(returnUrl.url), skipConfirmation, group).url)
+    SeeOther(routes.Application.register(idErrors, Some(returnUrl.encodedUrl), skipConfirmation, group).url)
   }
 
   private def redirectRegisterSuccess(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
     val groupCode = validateGroupCode(group)
     (groupCode, skipConfirmation.getOrElse(false)) match {
+      case(Some(group), false) => {
+        val skipConfirmationUrl = routes.Application.confirm(returnUrl.encodedUrl).url
+        val skipConfirmationEncodedUrl = URLEncoder.encode(skipConfirmationUrl, "UTF-8")
+        SeeOther(build3rdPartyUrl(group, skipConfirmationEncodedUrl, true)).withCookies(cookies: _*)
+      }
       case(Some(group), true) => {
-        SeeOther(build3rdPartyUrl(group, returnUrl, true)).withCookies(cookies: _*)
+        SeeOther(build3rdPartyUrl(group, returnUrl.encodedUrl, true)).withCookies(cookies: _*)
       }
       case (None, false) => {
-        SeeOther(routes.Application.confirm(returnUrl.url).url).withCookies(cookies: _*)
+        SeeOther(routes.Application.confirm(returnUrl.encodedUrl).url).withCookies(cookies: _*)
       }
       case (None, true) => {
         SeeOther(returnUrl.url).withCookies(cookies: _*)
       }
-      case _ => SeeOther(returnUrl.url).withCookies(cookies: _*)
     }
   }
 
@@ -97,9 +103,9 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     }
   }
 
-  private def build3rdPartyUrl(group: String, returnUrl: ReturnUrl, skipConfirmation: Boolean) = {
+  private def build3rdPartyUrl(group: String, returnUrl: String, skipConfirmation: Boolean) = {
     val baseUrl = s"${config.identityProfileBase}/agree/$group"
-    val fullUrl = s"$baseUrl?returnUrl=${returnUrl.url}&skipConfirmation=${skipConfirmation.toString}&skipThirdPartyLandingPage=true"
+    val fullUrl = s"$baseUrl?returnUrl=${returnUrl}&skipConfirmation=${skipConfirmation.toString}&skipThirdPartyLandingPage=true"
     fullUrl
   }
 }

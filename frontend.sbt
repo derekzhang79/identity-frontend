@@ -1,4 +1,12 @@
 
+// Configure npm commands to build frontend assets
+buildCommands in build in Assets := Seq(
+  BuildCommand("npm run build -s")
+)
+
+// Views not currently used in client-side assets
+excludeFilter in build in Assets := "*.hbs"
+
 // Ensure frontend build task is a source generator task
 sourceGenerators in Assets <+= build in Assets
 

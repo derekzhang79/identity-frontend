@@ -15,29 +15,40 @@ object FrontendBuildPlugin extends AutoPlugin {
   object autoImport {
     val build = taskKey[Seq[File]]("Compiles Frontend assets using npm")
     val buildOutputDirectory: SettingKey[File] = settingKey[File]("Output directory for generated sources from npm build task")
+    val buildCommands: SettingKey[Seq[BuildCommand]] = settingKey[Seq[BuildCommand]]("Commands to run as part of the asset build process")
 
-    case class BuildCommand(command: String, generatedFiles: () => Seq[File])
+    case class BuildCommand(
+        command: String,
+        includeFilter: Option[FileFilter] = None,
+        excludeFilter: Option[FileFilter] = None,
+        sourceDirectory: Option[File] = None
+    )
   }
 
   override lazy val projectSettings = inConfig(Assets) {
     Seq(
       build := buildAssetsTask.value,
 
-      buildOutputDirectory in build := webTarget.value / "build"
+      includeFilter in build := "*.*",
+      excludeFilter in build := NothingFilter,
+
+      sourceDirectory in build := resourceDirectory.value,
+      buildOutputDirectory in build := webTarget.value / "build",
+
+      buildCommands in build := Seq.empty
     )
   }
 
   lazy val buildAssetsTask = Def.task {
     val log = streams.value.log
 
-    val sourceDir = (resourceDirectory in Assets).value
+    val _includeFilter = (includeFilter in build in Assets).value
+    val _excludeFilter = (excludeFilter in build in Assets).value
+
+    val _sourceDirectory = (sourceDirectory in build in Assets).value
     val targetDir = (buildOutputDirectory in build in Assets).value
-    val sources = (sourceDir ** "*.*").get
 
-
-    val commands = Seq(
-      BuildCommand("npm run build -s", () => (targetDir ** "*.*").get )
-    )
+    val commands = (buildCommands in build in Assets).value
 
     def runProcess(cmd: BuildCommand) = {
       log.info(s"Running ${cmd.command}")
@@ -73,7 +84,16 @@ object FrontendBuildPlugin extends AutoPlugin {
       val results = ops.map(op => op -> runProcess(op))
 
       val opResults = results.map {
-        case (op, Right(_)) => op -> OpSuccess(sources.toSet, op.generatedFiles().toSet)
+        case (op, Right(_)) => {
+          val sourceDir = op.sourceDirectory.getOrElse(_sourceDirectory)
+          val includeF = op.includeFilter.getOrElse(_includeFilter)
+          val excludeF = op.excludeFilter.getOrElse(_excludeFilter)
+
+          val filesRead = (sourceDir ** (includeF -- excludeF)).get
+          val filesWritten = (targetDir ** (includeF -- excludeF)).get
+
+          op -> OpSuccess(filesRead.toSet, filesWritten.toSet)
+        }
         case (op, Left(_)) => op -> OpFailure
       }.toMap
 

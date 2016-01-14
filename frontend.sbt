@@ -2,6 +2,10 @@ import WebKeys._
 import com.typesafe.sbt.web.incremental
 import com.typesafe.sbt.web.incremental._
 
+import scala.collection.mutable.ArrayBuffer
+import scala.util.control.NoStackTrace
+
+
 val build = taskKey[Seq[File]]("Compiles Frontend assets using npm")
 
 val buildOutputDirectory: SettingKey[File] = settingKey[File]("Output directory for generated sources from npm build task")
@@ -15,31 +19,69 @@ build in Assets := {
   val targetDir = (buildOutputDirectory in Assets).value
   val sources = (sourceDir ** "*.*").get
 
-  // use sbt-web compile incremental API to only build when needed
-  val results = incremental.syncIncremental((streams in Assets).value.cacheDirectory / "npm-build", Seq("npm-build")) {
-    ops =>
-      ops.map { op =>
-        log.info("Running npm run build")
-        val startTime = System.currentTimeMillis
+  case class BuildCommand(command: String, generatedFiles: () => Seq[File])
+  case class BuildError(
+      command: String,
+      exitCode: Int,
+      output: String)
+    extends RuntimeException(s"Exit code $exitCode whilst executing '$command':\n$output")
+    with FeedbackProvidedException
+    with NoStackTrace
 
-        val cmd = Process("npm run build -s", baseDirectory.value) !< log
-        val targetFiles = (targetDir ** "*.*").get
-        val result = {
-          if (cmd == 0) OpSuccess(sources.toSet, targetFiles.toSet)
-          else {
-            log.error(s"Non-zero error code for `npm run build`: $cmd")
-            OpFailure
-          }
-        }
+  val commands = Seq(
+    BuildCommand("npm run build -s", () => (targetDir ** "*.*").get )
+  )
 
-        log.info(s"Finished npm build in ${System.currentTimeMillis - startTime}ms")
+  def runProcess(cmd: BuildCommand) = {
+    log.info(s"Running ${cmd.command}")
+    val startTime = System.currentTimeMillis
 
-        op -> result
-      }.toMap -> Set.empty
+    val out = new ArrayBuffer[(String, String)]
 
+    val logger = new ProcessLogger {
+      def info(output: => String) = out.append("info" -> output)
+      def error(error: => String) = out.append("error" -> error)
+      def buffer[T](f: => T): T = f
+    }
+
+    val exitCode = Process(cmd.command, baseDirectory.value) !< logger
+
+    log.info(s"Finished ${cmd.command} in ${System.currentTimeMillis - startTime}ms")
+
+    if (exitCode == 0) {
+      out.foreach {
+        case ("error", msg) => log.warn(msg)
+        case (_, msg) => log.info(msg)
+      }
+      Right()
+    }
+    else
+      Left(BuildError(cmd.command, exitCode, out.map(_._2).mkString("\n")))
   }
 
-  (results._1 ++ results._2).toSeq
+  val cacheDirectory = (streams in Assets).value.cacheDirectory / "npm-build"
+
+  // use sbt-web compile incremental API to only build when needed
+  val (products, errors) = incremental.syncIncremental(cacheDirectory, commands) { ops =>
+    val results = ops.map(op => op -> runProcess(op))
+
+    val opResults = results.map {
+      case (op, Right(_)) => op -> OpSuccess(sources.toSet, op.generatedFiles().toSet)
+      case (op, Left(_)) => op -> OpFailure
+    }.toMap
+
+    val errors = results.collect {
+      case (_, Left(e)) => e
+    }
+
+    (opResults, errors)
+  }
+
+  errors.headOption.map { error =>
+    throw error
+  }
+
+  products.to[Seq]
 }
 
 build in Assets := (build in Assets).dependsOn(nodeModules in Assets).value

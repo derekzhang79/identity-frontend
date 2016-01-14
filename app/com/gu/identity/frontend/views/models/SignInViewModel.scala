@@ -63,12 +63,18 @@ object SignInViewModel {
 
 object UrlBuilder {
 
-  def apply(baseUrl: String, params: Seq[(String, String)]) = {
-    val paramString = params.map(x => s"${x._1}=${x._2}").mkString("&")
-     paramString match {
-       case "" => baseUrl
-       case paramString => s"$baseUrl?$paramString"
-     }
+  private def encode = java.net.URLEncoder.encode(_: String, "UTF8")
 
-  }
+  def apply(baseUrl: String, params: Seq[(String, String)]) =
+    params.headOption match {
+      case None => baseUrl
+      case _ => {
+        val paramString = params.map {
+          case (key, value) => s"$key=${encode(value)}"
+        }.mkString("&")
+
+        s"$baseUrl?$paramString"
+      }
+    }
+
 }

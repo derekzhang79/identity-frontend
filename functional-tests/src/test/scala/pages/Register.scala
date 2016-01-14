@@ -1,9 +1,9 @@
 package test.pages
 
-import test.util.{Browser, TestUser, Config}
-import org.scalatest.selenium.Page
+import test.util.user.EmailTestUser
+import test.util.{LoadablePage, Browser, Config}
 
-class Register(val testUser: TestUser) extends Page with Browser {
+class Register(val testUser: EmailTestUser) extends LoadablePage with Browser {
   val url = s"${Config.baseUrl}/register"
 
   def fillInPersonalDetails(): Unit = RegisterFields.fillIn()
@@ -11,11 +11,16 @@ class Register(val testUser: TestUser) extends Page with Browser {
   def submit(): Unit = {
     val selector = className("submit-input")
     assert(pageHasElement(selector))
-    click.on(selector)
+    click on selector
   }
 
-  def pageHasLoaded(): Boolean = {
+  def hasLoaded(): Boolean = {
     pageHasElement(className("submit-input"))
+  }
+
+  def registerWithFacebook(): Unit = {
+    assert(pageHasElement(registerWithFacebookButton))
+    click.on(registerWithFacebookButton)
   }
 
   private object RegisterFields {
@@ -28,11 +33,14 @@ class Register(val testUser: TestUser) extends Page with Browser {
     def fillIn() = {
       assert(pageHasElement(id("user_password")))
 
-      firstName.value = testUser.username
-      lastName.value = testUser.username
-      email.value = s"${testUser.username}@gu.com"
-      username.value = testUser.username
-      password.value = testUser.username
+      firstName.value = testUser.name
+      lastName.value = testUser.name
+      email.value = s"${testUser.name}@gu.com"
+      username.value = testUser.name
+      password.value = testUser.name
     }
   }
+
+  private lazy val registerWithFacebookButton =
+    cssSelector("a[data-test-id='facebook-sign-in']")
 }

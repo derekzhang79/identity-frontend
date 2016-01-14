@@ -10,8 +10,8 @@ object Config {
   private val conf = ConfigFactory.load()
 
   private val baseUrlsByStage = Map(
-    "PROD" -> "https://profile.theguardian.com"
-  )
+    "PROD" -> "https://profile.theguardian.com")
+
   val stage = conf.getString("stage")
 
   val baseUrl = baseUrlsByStage(stage)
@@ -23,10 +23,9 @@ object Config {
     case Failure(e) => ""
   }
 
-  object FacebookCredentials {
-    val email = conf.getString("facebook.test.email")
-    val password = conf.getString("facebook.test.password")
-    val name = conf.getString("facebook.test.name")
+  object FacebookAppCredentials {
+    val id = conf.getString(s"facebook.app.id")
+    val secret = conf.getString(s"facebook.app.secret")
   }
 
   def debug() = conf.root().render()

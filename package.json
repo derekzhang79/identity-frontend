@@ -13,7 +13,7 @@
     "build": "npm run build-css && npm run build-js",
     "prebuild-css": "npm run lint-css",
     "build-css": "postcss -c postcss.json",
-    "build-js": "webpack -p",
+    "build-js": "webpack -p --bail",
     "lint-css": "stylelint 'public/**/*.css'"
   },
   "devDependencies": {

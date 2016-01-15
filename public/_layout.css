@@ -13,7 +13,7 @@ body {
   min-height: 100%;
 }
 
-%content-block {
+%page-block {
   margin: 0 auto;
   box-sizing: border-box;
   padding: 0 1rem;
@@ -35,12 +35,17 @@ body {
 
 }
 
+%content-container {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
 
 @import "components/header/_header.css";
 @import "components/footer/_footer.css";
 
 .content {
-  @extend %content-block;
+  @extend %page-block;
   background-color: #fff;
   padding: 2rem;
   flex-grow: 1;

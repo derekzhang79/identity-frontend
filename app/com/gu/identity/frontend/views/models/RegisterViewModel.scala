@@ -7,6 +7,36 @@ import play.api.i18n.Messages
 case class RegisterViewModel(
     layout: LayoutViewModel,
 
+    socialSignInText: Map[String, String] = Map(
+      "facebook" -> "Sign up with Facebook",
+      "google" -> "Sign up with Google"
+    ),
+
+    registerPageText: Map[String, String] = Map(
+      "divideText" -> "or",
+      "name" -> "Name",
+      "firstName" -> "First name",
+      "lastName" -> "Last name",
+      "username" -> "Username",
+      "usernameHelp" -> "6 to 20 characters, letters and numbers only",
+      "email" -> "Email address",
+      "password" -> "Password",
+      "passwordHelp" -> "6 to 20 characters",
+      "gnmMarketing" -> "Keep me up to date with offers from the Guardian",
+      "3rdPartyMarketing" -> "Send me messages from 3rd party organisations screened by the Guardian",
+      "signInCta" -> "Already have an account?",
+      "signIn" -> "Sign in",
+      "createAccount" -> "Create account"
+    ),
+
+    terms: Map[String, String] = Map(
+      "conditionsText" -> "By proceeding, you agree to the Guardian's",
+      "termsOfServiceText" -> "Terms of Service",
+      "privacyPolicyText" -> "Privacy Policy"
+    ),
+
+    actions: Map[String, String] = Map("register" -> "/actions/register"),
+
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product])
   extends ViewModel with ViewModelResources

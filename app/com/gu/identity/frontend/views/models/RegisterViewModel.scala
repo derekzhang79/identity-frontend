@@ -12,22 +12,7 @@ case class RegisterViewModel(
       "google" -> "Sign up with Google"
     ),
 
-    registerPageText: Map[String, String] = Map(
-      "divideText" -> "or",
-      "name" -> "Name",
-      "firstName" -> "First name",
-      "lastName" -> "Last name",
-      "username" -> "Username",
-      "usernameHelp" -> "6 to 20 characters, letters and numbers only",
-      "email" -> "Email address",
-      "password" -> "Password",
-      "passwordHelp" -> "6 to 20 characters",
-      "gnmMarketing" -> "Keep me up to date with offers from the Guardian",
-      "3rdPartyMarketing" -> "Send me messages from 3rd party organisations screened by the Guardian",
-      "signInCta" -> "Already have an account?",
-      "signIn" -> "Sign in",
-      "createAccount" -> "Create account"
-    ),
+    registerPageText: Map[String, String],
 
     terms: Map[String, String] = Map(
       "conditionsText" -> "By proceeding, you agree to the Guardian's",
@@ -44,15 +29,27 @@ case class RegisterViewModel(
 
 object RegisterViewModel {
 
+  val globalTextKeys = Seq("signIn", "sign")
+
+  val registerTextKeys = Seq(
+    "divideText", "name", "firstName", "lastName", "username", "usernameHelp",
+    "email", "emailHelp", "password", "passwordHelp", "gnmMarketing",
+    "3rdPartyMarketing", "signInCta", "signIn", "createAccount"
+  )
+
   def apply(
       configuration: Configuration,
       activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)])
       (implicit messages: Messages): RegisterViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests)
+    val registerPageText = registerTextKeys.map(k => k -> messages(s"register.$k")).toMap
 
     RegisterViewModel(
       layout = layout,
+
+      registerPageText = registerPageText,
+
       resources = layout.resources,
       indirectResources = layout.indirectResources
     )

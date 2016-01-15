@@ -28,12 +28,12 @@
 
     <div class="register-form__control--email">
       <label class="register-form__label--email" for="register_field_email">{{ registerPageText.email }}</label>
-      <input class="register-form__field--email" id="register_field_email" type="email" name="email" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
+      <input class="register-form__field--email" id="register_field_email" type="email" name="email" placeholder="{{ registerPageText.emailHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
     </div>
 
     <div class="register-form__control--password">
       <label class="register-form__label--password" for="register_field_password">{{ registerPageText.password }}</label>
-      <input class="register-form__field--password" id="register_field_password" type="password" name="password" />
+      <input class="register-form__field--password" id="register_field_password" type="password" name="password" placeholder="{{ registerPageText.passwordHelp }}" />
     </div>
 
     <div class="register-form__control--gnm-marketing">

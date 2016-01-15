@@ -1,3 +1,5 @@
+layout.pagetitle=| Identity | The Guardian
+
 signin.title=Sign in to the Guardian
 signin.pagetitle=Sign in
 signin.prelude=Creating an account means you can save articles for later, leave comments, enter competitions, become a member and lots more.
@@ -16,7 +18,22 @@ signin.conditions=By proceeding, you agree to the Guardian''s
 signin.termsofservice=Terms of Service
 signin.privacypolicy=Privacy Policy
 
-layout.pagetitle=| Identity | The Guardian
+register.divideText=or
+register.name=Name
+register.firstName=First name
+register.lastName=Last name
+register.username=Username
+register.usernameHelp=6 to 20 characters, letters and numbers only
+register.email=Email address
+register.emailHelp=example@emailaddress.com
+register.password=Password
+register.passwordHelp=6 to 20 characters
+register.gnmMarketing=Keep me up to date with offers from the Guardian
+register.3rdPartyMarketing=Send me messages from 3rd party organisations screened by the Guardian
+register.signInCta=Already have an account?
+register.signIn=Sign in
+register.createAccount=Create account
+
 
 socialsignin.description=Sign in with {0}
 

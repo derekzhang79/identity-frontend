@@ -78,7 +78,10 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   }
 
   private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
-    val idErrors = errors.map(error => "error" -> ("register-" + error.id))
+
+    val idErrors = errors.map{
+      error => "error" -> (checkUserDataIsUnique(error))
+    }
     val params = Seq(
       "returnUrl" -> returnUrl.url,
       "skipConfirmation" -> skipConfirmation.map(_.toString).getOrElse(""),
@@ -87,6 +90,14 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     SeeOther(
       UrlBuilder(routes.Application.register(), params)
     )
+  }
+
+  private def checkUserDataIsUnique(error: ServiceError): String = {
+    error.message match {
+      case "Username in use" => "register-error-username-in-use"
+      case "Email in use" => "register-error-email-in-use"
+      case _ => s"register-${error.id}"
+    }
   }
 
   private def redirectRegisterSuccess(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {

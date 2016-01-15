@@ -2,7 +2,7 @@ package com.gu.identity.frontend.controllers
 
 import org.joda.time.{DateTimeZone, DateTime}
 import org.joda.time.format.DateTimeFormat
-import play.api.mvc.Result
+import play.api.mvc.{Request, ActionBuilder, Result}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -36,6 +36,11 @@ object Cached {
   //http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.3.1
   private val HTTPDateFormat = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'").withZone(DateTimeZone.UTC)
   def toHttpDateTimeString(dateTime: DateTime): String = dateTime.toString(HTTPDateFormat)
+}
+
+object CachedAction extends ActionBuilder[Request] {
+  override def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]): Future[Result] =
+    Cached(block(request))
 }
 
 object NoCache {

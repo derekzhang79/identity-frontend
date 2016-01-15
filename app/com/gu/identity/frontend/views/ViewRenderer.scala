@@ -1,11 +1,11 @@
 package com.gu.identity.frontend.views
 
-import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.models.ReturnUrl
-import com.gu.identity.frontend.views.models.{ErrorViewModel, LayoutViewModel, SignInViewModel}
+import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
 import play.api.i18n.Messages
-import play.api.mvc.RequestHeader
+import play.api.mvc.{Result, Results}
 
 /**
  * Adapter for Handlebars view renderer
@@ -14,14 +14,29 @@ object ViewRenderer {
   def render(view: String, attributes: Map[String, Any] = Map.empty) =
     HBS(view, attributes)
 
-  def renderSignIn(configuration: Configuration, errorIds: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean])(implicit request: RequestHeader, messages: Messages) = {
+  def renderSignIn(configuration: Configuration, activeTests: Map[MultiVariantTest, MultiVariantTestVariant], errorIds: Seq[String], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages) = {
     val errors = errorIds.map(ErrorViewModel.apply)
-    val attrs = LayoutViewModel(configuration).toMap ++
-      SignInViewModel(
-        errors = errors,
-        returnUrl = ReturnUrl(returnUrl, request.headers.get("Referer")),
-        skipConfirmation = skipConfirmation
-      ).toMap
-    render("signin-page", attrs)
+
+    val defaultView = "signin-page"
+    val view = activeTests.get(SignInV2Test) match {
+      case Some(SignInV2TestVariantB) => "signin-page-b"
+      case _ => defaultView
+    }
+
+    renderViewModel(view, SignInViewModel(
+      configuration = configuration,
+      activeTests = activeTests,
+      errors = errors,
+      returnUrl = returnUrl,
+      skipConfirmation = skipConfirmation
+    ))
   }
+
+  def renderViewModel(view: String, model: ViewModel with ViewModelResources with Product): Result = {
+    val html = HBS.withProduct(view, model)
+
+    Results.Ok(html)
+      .withHeaders(ContentSecurityPolicy.cspForViewModel(model))
+  }
+
 }

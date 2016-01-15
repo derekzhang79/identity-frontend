@@ -32,6 +32,10 @@ $error-color: #dd4b39;
   position: relative;
 }
 
+.signin-form--with-errors {
+  @extend .signin-form;
+}
+
 
 .signin-form__prelude {
   @extend %font-text-1;
@@ -128,19 +132,22 @@ $error-color: #dd4b39;
 }
 
 .signin-form__checkbox--remember-me {
+
   /* Only display nicer checkbox when browser supports CSS3 - should fallback nicely */
-  &:checked, &:not(:checked) {
+
+  &:checked,
+  &:not(:checked) {
     display: none;
   }
 
   &:checked + .signin-form__label--remember::before {
     @extend %signin-form__checkbox;
-    content: '\2713'; /* tick character */
+    content: "\2713"; /* tick character */
   }
 
   &:not(:checked) + .signin-form__label--remember::before {
     @extend %signin-form__checkbox;
-    content: '\00A0';
+    content: "\00A0";
   }
 }
 

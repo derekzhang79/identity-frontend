@@ -2,7 +2,7 @@ package com.gu.identity.frontend.models
 
 import org.scalatest.{Matchers, FlatSpec}
 
-class ReturnUrl$Test extends FlatSpec with Matchers {
+class ReturnUrlSpec extends FlatSpec with Matchers {
 
   import ReturnUrl._
 

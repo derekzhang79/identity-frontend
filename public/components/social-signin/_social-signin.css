@@ -1,12 +1,11 @@
+/**
+ * Social Signin Component styles
+ */
+
 .social-signin {
   @extend %row;
   margin: 0 auto 2rem;
   max-width: 40rem;
-}
-
-
-.social-signin__cta-wrapper {
-
 }
 
 %social-signin__cta {
@@ -29,11 +28,11 @@
 
 .social-signin__cta--google {
   @extend %social-signin__cta;
-  background-image: inline('icon-google.svg');
+  background-image: inline("icon-google.svg");
   margin-bottom: 0;
 }
 
 .social-signin__cta--facebook {
   @extend %social-signin__cta;
-  background-image: inline('icon-facebook.svg');
+  background-image: inline("icon-facebook.svg");
 }

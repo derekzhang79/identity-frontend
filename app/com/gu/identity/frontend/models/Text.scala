@@ -12,6 +12,7 @@ object Text {
         "preludeMoreInfo" -> messages("signin.prelude.moreinfo"),
         "preludeFaq" -> messages("signin.prelude.faq"),
         "email" -> messages("signin.email"),
+        "signInWithEmail" -> messages("signin.signInWithEmail"),
         "divideText" -> messages("signin.dividetext"),
         "password" -> messages("signin.password"),
         "forgottenPassword" -> messages("signin.forgottenpassword"),

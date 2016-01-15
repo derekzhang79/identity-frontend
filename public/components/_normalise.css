@@ -3,4 +3,5 @@
  * For now, include the whole of normalize.css
  * TODO: only use what we need from normalize to keep the size down;
  */
-@import '../../node_modules/normalize.css/normalize.css';
+
+@import "normalize.css";

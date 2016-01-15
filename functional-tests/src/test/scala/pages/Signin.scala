@@ -1,13 +1,10 @@
 package test.pages
 
-import test.util.{TestUser, WebBrowserUtil, Config}
-import org.scalatest.selenium.{Page, WebBrowser}
+import test.util.{Browser, TestUser, Config}
+import org.scalatest.selenium.Page
 
-class Signin(val testUser: TestUser) extends Page with WebBrowser with WebBrowserUtil {
+class Signin(val testUser: TestUser) extends Page with Browser {
   val url = s"${Config.baseUrl}/signin"
-
-  private lazy val signUpLink = cssSelector(s"a[href='/register']")
-  private lazy val signInButton = id("signin_submit")
 
   def signUp() = {
     assert(pageHasElement(signUpLink))
@@ -17,6 +14,11 @@ class Signin(val testUser: TestUser) extends Page with WebBrowser with WebBrowse
   def signIn() = {
     assert(pageHasElement(signInButton))
     click.on(signInButton)
+  }
+
+  def signInWithFacebook() = {
+    assert(pageHasElement(signInWithFacebookButton))
+    click.on(signInWithFacebookButton)
   }
 
   def pageHasLoaded(): Boolean = {
@@ -38,4 +40,10 @@ class Signin(val testUser: TestUser) extends Page with WebBrowser with WebBrowse
       password.value = testUser.username
     }
   }
+
+  private lazy val signUpLink = id("register_cta")
+
+  private lazy val signInButton = id("signin_submit")
+
+  private lazy val signInWithFacebookButton = id("social_signin_cta_facebook")
 }

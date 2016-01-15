@@ -1,0 +1,59 @@
+/** styles for sign in v2 B variant */
+
+.social-signin {
+  margin-bottom: 1.5rem;
+}
+
+.signin__cta--email {
+  @extend %signin-container;
+
+  margin-bottom: 2rem;
+
+  /* hide the link for old browsers */
+  display: none;
+}
+
+.signin-cta-link--email {
+  @extend %font-text-sans-1;
+
+  color: black;
+  display: block;
+  text-decoration: none;
+  padding: 1rem 1rem 0.8rem 3.8rem;
+  margin-bottom: 0 0 1.5rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 1.5rem;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: 1rem center;
+  background-image: inline("email.svg");
+}
+
+.signin_form__show-toggle {
+  position: fixed;
+  display: none;
+}
+
+#signin_form_show:not(:target) {
+  & ~ .signin__cta--email {
+    display: block;
+  }
+
+  & ~ .signin-form {
+    display: none;
+  }
+}
+
+#signin_form_show:target {
+  & ~ .signin__cta--email {
+    display: none;
+  }
+}
+
+.signin-form--with-errors ~ .signin__cta--email {
+  display: none;
+}
+
+.signin__epilogue {
+  @extend %signin-container;
+}

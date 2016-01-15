@@ -1,6 +1,5 @@
 import com.typesafe.sbt.web.Import._
 import com.typesafe.sbt.web.Import.WebKeys._
-import com.typesafe.sbt.web.incremental
 import com.typesafe.sbt.web.incremental._
 import sbt._
 import Keys._
@@ -18,6 +17,7 @@ object FrontendBuildPlugin extends AutoPlugin {
     val buildCommands: SettingKey[Seq[BuildCommand]] = settingKey[Seq[BuildCommand]]("Commands to run as part of the asset build process")
 
     case class BuildCommand(
+        id: String,
         command: String,
         includeFilter: Option[FileFilter] = None,
         excludeFilter: Option[FileFilter] = None,
@@ -25,6 +25,7 @@ object FrontendBuildPlugin extends AutoPlugin {
     )
   }
 
+  // Default settings for the task
   override lazy val projectSettings = inConfig(Assets) {
     Seq(
       build := buildAssetsTask.value,
@@ -48,10 +49,12 @@ object FrontendBuildPlugin extends AutoPlugin {
     val _sourceDirectory = (sourceDirectory in build in Assets).value
     val targetDir = (buildOutputDirectory in build in Assets).value
 
+    val cacheDirectory = (streams in Assets).value.cacheDirectory / "npm-build"
+
     val commands = (buildCommands in build in Assets).value
 
     def runProcess(cmd: BuildCommand) = {
-      log.info(s"Running ${cmd.command}")
+      log.info(s"[${cmd.id}] Running `${cmd.command}`")
       val startTime = System.currentTimeMillis
 
       val out = new ArrayBuffer[(String, String)]
@@ -64,12 +67,12 @@ object FrontendBuildPlugin extends AutoPlugin {
 
       val exitCode = Process(cmd.command, baseDirectory.value) !< logger
 
-      log.info(s"Finished ${cmd.command} in ${System.currentTimeMillis - startTime}ms")
+      log.info(s"[${cmd.id}] Finished `${cmd.command}` in ${System.currentTimeMillis - startTime}ms")
 
       if (exitCode == 0) {
         out.foreach {
-          case ("error", msg) => log.warn(msg)
-          case (_, msg) => log.info(msg)
+          case ("error", msg) => log.warn(s"[${cmd.id}] $msg")
+          case (_, msg) => log.info(s"[${cmd.id}] $msg")
         }
         Right()
       }
@@ -77,10 +80,9 @@ object FrontendBuildPlugin extends AutoPlugin {
         Left(FrontendBuildError(cmd.command, exitCode, out.map(_._2).mkString("\n")))
     }
 
-    val cacheDirectory = (streams in Assets).value.cacheDirectory / "npm-build"
 
     // use sbt-web compile incremental API to only build when needed
-    val (products, errors) = incremental.syncIncremental(cacheDirectory, commands) { ops =>
+    val (products, errors) = syncIncremental(cacheDirectory, commands) { ops =>
       val results = ops.map(op => op -> runProcess(op))
 
       val opResults = results.map {

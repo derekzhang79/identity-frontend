@@ -4,8 +4,8 @@
 
 // Configure npm commands to build frontend assets
 buildCommands in build in Assets := Seq(
-  BuildCommand("npm run build-css -s", excludeFilter = Some("*.js" | "*.hbs")),
-  BuildCommand("npm run build-js -s", includeFilter = Some("*.js"))
+  BuildCommand("build-css", "npm run build-css -s", excludeFilter = Some("*.js" | "*.hbs")),
+  BuildCommand("build-js", "npm run build-js -s", includeFilter = Some("*.js"))
 )
 
 // Ensure frontend build task is a source generator task

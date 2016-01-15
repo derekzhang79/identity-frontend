@@ -3,7 +3,7 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.ReturnUrl
-import com.gu.identity.frontend.views.ViewRenderer.renderSignIn
+import com.gu.identity.frontend.views.ViewRenderer.{renderSignIn, renderRegister}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.mvc._
 
@@ -20,10 +20,10 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
     renderSignIn(configuration, req.activeTests, error, returnUrlActual, skipConfirmation)
   }
 
-  def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], group: Option[String]) = Action {
-    Cached{
-      Ok("Hello, This is the Registration Page")
-    }
+  def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], group: Option[String]) = MultiVariantTestAction { req =>
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"))
+
+    renderRegister(configuration, req.activeTests, error, returnUrlActual, skipConfirmation)
   }
 
   def confirm(returnUrl: Option[String]) = Action {

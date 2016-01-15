@@ -32,6 +32,17 @@ object ViewRenderer {
     ))
   }
 
+  def renderRegister(
+      configuration: Configuration,
+      activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
+      errorIds: Seq[String],
+      returnUrl: ReturnUrl,
+      skipConfirmation: Option[Boolean])
+      (implicit messages: Messages) = {
+
+    renderViewModel("register-page", RegisterViewModel(configuration, activeTests))
+  }
+
   def renderViewModel(view: String, model: ViewModel with ViewModelResources with Product): Result = {
     val html = HBS.withProduct(view, model)
 

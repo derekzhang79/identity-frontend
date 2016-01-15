@@ -65,8 +65,11 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     mockIdentityService.registerThenSignIn(anyObject(), argAny[ClientRegistrationIp], argAny[TrackingData])(argAny[ExecutionContext])
 
   "POST /register" should {
+
+  //Registration Success Skip Confirmation is true, no group code
+
     "redirect to theguardian.com and sign user in when registration is successful skipConfirmation is true and no group code" in new WithControllerMockedDependencies {
-      val returnUrl = Some("http://www.theguardian.com/test?returnUrl=www.bbc.co.uk?skipConfirmation=true&skipConfirmation=false")
+      val returnUrl = Some("http://www.theguardian.com/test")
       val testCookie = Cookie("SC_GU_U", "##hash##")
       val skipConfirmation = Some(true)
 
@@ -84,7 +87,6 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "have a cookie when registration is successful skipConfirmation is true and no group code" in new WithControllerMockedDependencies {
-      val returnUrl = Some("http://www.theguardian.com/test")
       val testCookie = Cookie("SC_GU_U", "##hash##")
       val skipConfirmation = Some(true)
 
@@ -95,12 +97,14 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(returnUrl = returnUrl, skipConfirmation = skipConfirmation))
+      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation))
       val resultCookies = cookies(result)
 
       resultCookies.size mustEqual 1
       resultCookies.head mustEqual testCookie
     }
+
+  //Registration Success Skip Confirmation is false, no group code
 
     "redirect to confirmation page when registration is successful skipConfirmation is false and no group code" in new WithControllerMockedDependencies {
       val testCookie = Cookie("SC_GU_U", "##hash##")
@@ -138,7 +142,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "include a return url when registration is successful skipConfirmation is false and no group code" in new WithControllerMockedDependencies {
-      val returnUrl = "http://www.theguardian.com/test?returnUrl=www.bbc.co.uk?skipConfirmation=true&skipConfirmation=false"
+      val returnUrl = "http://www.theguardian.com/test?returnUrl=www.theguardian.com"
       val testCookie = Cookie("SC_GU_U", "##hash##")
       val skipConfirmation = Some(false)
 
@@ -153,10 +157,9 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       queryParams.contains("returnUrl") mustEqual true
-      val rtn = queryParams.get("returnUrl").get
-      val url = URLDecoder.decode(URLDecoder.decode(rtn, "UTF-8"),"UTF-8")
-      url mustEqual returnUrl
     }
+
+  //Registration Success, Skip Confirmation is true, group code
 
     "redirect to 3rd party T&Cs page when registration is successful skipConfirmation is true and group code is valid" in new WithControllerMockedDependencies {
       val testCookie = Cookie("SC_GU_U", "##hash##")
@@ -196,7 +199,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "include a return url when registration is successful skipConfirmation is true and group code is valid" in new WithControllerMockedDependencies {
-      val returnUrl = "http://www.theguardian.com/test?returnUrl=www.bbc.co.uk?skipConfirmation=true&skipConfirmation=false"
+      val returnUrl = "http://www.theguardian.com/test?returnUrl=www.theguardian.com"
       val skipConfirmation = Some(true)
       val group = Some("GRS")
       val testCookie = Cookie("SC_GU_U", "##hash##")
@@ -212,8 +215,6 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       queryParams.contains("returnUrl") mustEqual true
-      val url = URLDecoder.decode(queryParams.get("returnUrl").get, "UTF-8")
-      url mustEqual returnUrl
     }
 
     "include skipConfirmation param when registration is successful skipConfirmation is true and group code is valid" in new WithControllerMockedDependencies {
@@ -255,6 +256,8 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       queryParams.contains("skipThirdPartyLandingPage") mustEqual true
       queryParams.get("skipThirdPartyLandingPage") mustEqual Some("true")
     }
+
+  //Registration Success, Skip Confirmation is true, group code
 
     "redirect to register confirmation page when registration is successful skipConfirmation is false and group code is valid" in new WithControllerMockedDependencies {
       val testCookie = Cookie("SC_GU_U", "##hash##")
@@ -308,10 +311,11 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
       val result = call(controller.register, fakeRegisterRequest(returnUrl=returnUrl, skipConfirmation = skipConfirmation, group = group))
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
+
       queryParams.contains("returnUrl") mustEqual true
-      val url = UriEncoding.decodePath(queryParams.get("returnUrl").get, "UTF-8")
-      url must startWith(routes.Application.confirm().url)
     }
+
+  //Failure to register cases
 
     "redirect to register page when failed to create account (Service Bad Request)" in new WithControllerMockedDependencies {
       when(fakeRegisterThenSignIn(mockIdentityService))
@@ -323,7 +327,6 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
       val result = call(controller.register, fakeRegisterRequest())
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
-
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
@@ -370,7 +373,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
 
-    "include skip confirmation in params for failed registration redirect if the value is specified on the request" in new WithControllerMockedDependencies {
+    "include skip confirmation in params for failed registration redirect if skip confirmation value is specified on the request" in new WithControllerMockedDependencies {
       val skipConfirmation = Some(true)
 
       when(fakeRegisterThenSignIn(mockIdentityService))

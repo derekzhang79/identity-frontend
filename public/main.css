@@ -1,4 +1,9 @@
 @import "_layout.css";
+@import "components/form-foundations/_form_foundations.css";
+
+/** Terms and conditions **/
+
+@import "components/terms/_terms.css";
 
 /** Sign in page **/
 

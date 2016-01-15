@@ -11,14 +11,19 @@
     {{/ errors }}
 
     <div class="register-form__control--name">
-        <label class="register-form__label--name" for="register_field_firstname">{{ registerPageText.name }}</label>
+      <label class="register-form__label--name" for="register_field_firstname">{{ registerPageText.name }}</label>
+
+      <div class="register-form__control-column--firstname">
         <input class="register-form__field--firstname" id="register_field_firstname" type="text" name="firstName" placeholder="{{ registerPageText.firstName }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
+      </div>
+      <div class="register-form__control-column--lastname">
         <input class="register-form__field--lastname" id="register_field_lastname" type="text" name="lastName" placeholder="{{ registerPageText.lastName }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
+      </div>
     </div>
 
     <div class="register-form__control--username">
-        <label class="register-form__label--username" for="register_field_username">{{ registerPageText.username }}</label>
-        <input class="register-form__field--username" id="register_field_username" type="text" name="username" placeholder="{{ registerPageText.usernameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
+      <label class="register-form__label--username" for="register_field_username">{{ registerPageText.username }}</label>
+      <input class="register-form__field--username" id="register_field_username" type="text" name="username" placeholder="{{ registerPageText.usernameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
     </div>
 
     <div class="register-form__control--email">
@@ -35,6 +40,7 @@
       <input class="register-form__checkbox--gnm-marketing" id="register_field_gnm_marketing" type="checkbox" name="receiveGnmMarketing" checked="checked" value="true"/>
       <label class="register-form__label--gnm-marketing" for="register_field_gnm_marketing" tabindex="0">{{ registerPageText.gnmMarketing }}</label>
     </div>
+
     <div class="register-form__control--3rd-party-marketing">
         <input class="register-form__checkbox--3rd-party-marketing" id="register_field_3rd-party_marketing" type="checkbox" name="receive3rdPartyMarketing" value="true"/>
         <label class="register-form__label--3rd-party-marketing" for="register_field_3rd-party_marketing" tabindex="0">{{ registerPageText.3rdPartyMarketing }}</label>
@@ -44,9 +50,7 @@
       <button class="register-form__submit-button" id="register_submit" type="submit">{{ registerPageText.createAccount }}</button>
     </div>
 
+    <p class="register-form__cta--sign-in">{{ registerPageText.signInCta }} <a href="/signin">{{ registerPageText.signIn }}</a></p>
+
   </fieldset>
-
-  <p>{{ registerPageText.signInCta }} <a href="/signin">{{ registerPageText.signIn }}</a></p>
-
-  <p class="terms">{{terms.conditionsText}} <a href="http://www.theguardian.com/help/terms-of-service">{{terms.termsOfServiceText}}</a> &amp; <a href="http://www.theguardian.com/help/privacy-policy">{{terms.privacyPolicyText}}</a>.</p>
-
+</form>

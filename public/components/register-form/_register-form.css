@@ -1,3 +1,133 @@
 .register-form {
   @extend %content-container;
 }
+
+.register-form__prelude {
+  @extend %form__prelude;
+}
+
+.register-form__fieldset {
+  @extend %form__fieldset;
+}
+
+.register-form__control--name {
+  @extend %form__control;
+}
+
+
+/** Field: Name **/
+
+.register-form__label--name {
+  @extend %form__label;
+}
+
+.register-form__control-column--firstname {
+  @extend %column-6;
+  padding-right: 1rem;
+}
+
+.register-form__control-column--lastname {
+  @extend %column-6;
+  padding-left: 1rem;
+}
+
+.register-form__field--firstname {
+  @extend %form__text-field;
+}
+
+.register-form__field--lastname {
+  @extend %form__text-field;
+}
+
+
+/** Field: Username **/
+
+.register-form__control--username {
+  @extend %form__control;
+}
+
+.register-form__label--username {
+  @extend %form__label;
+}
+
+.register-form__field--username {
+  @extend %form__text-field;
+}
+
+
+/** Field: Email **/
+
+.register-form__control--email {
+  @extend %form__control;
+}
+
+.register-form__label--email {
+  @extend %form__label;
+}
+
+.register-form__field--email {
+  @extend %form__text-field;
+}
+
+/** Field: Password **/
+
+.register-form__control--password {
+  @extend %form__control;
+}
+
+.register-form__label--password {
+  @extend %form__label;
+}
+
+.register-form__field--password {
+  @extend %form__text-field;
+}
+
+
+/** Field: GNM Marketing **/
+
+.register-form__control--gnm-marketing {
+  @extend %form__control;
+}
+
+.register-form__checkbox--gnm-marketing {
+  @mixin formCheckbox .register-form__label--gnm-marketing;
+}
+
+.register-form__label--gnm-marketing {
+  @extend %form__label--checkbox;
+}
+
+
+/** Field: 3rd Party Marketing **/
+
+.register-form__control--3rd-party-marketing {
+  @extend %form__control;
+}
+
+.register-form__checkbox--3rd-party-marketing {
+  @mixin formCheckbox .register-form__label--3rd-party-marketing;
+}
+
+.register-form__label--3rd-party-marketing {
+  @extend %form__label--checkbox;
+}
+
+
+/** Button: Submit **/
+
+.register-form__control--submit {
+  margin: 2rem 0;
+}
+
+.register-form__submit-button {
+  @extend %form__button--submit;
+}
+
+
+/** CTA: Sign in **/
+
+.register-form__cta--sign-in {
+  @extend %font-text-1;
+  margin: 1rem 0;
+}

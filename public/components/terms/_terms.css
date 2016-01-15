@@ -1,0 +1,8 @@
+/** Component: terms and conditions **/
+
+.terms {
+  @extend %font-text-1;
+  @extend %content-container;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}

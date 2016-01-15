@@ -9,9 +9,8 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "prebuild": "mkdir -p ./target/web/build",
     "build": "npm run build-css && npm run build-js",
-    "prebuild-css": "npm run lint-css",
+    "prebuild-css": "npm run lint-css && mkdir -p ./target/web/build",
     "build-css": "postcss -c postcss.json",
     "build-js": "webpack -p --bail",
     "lint-css": "stylelint 'public/**/*.css'"

@@ -5,7 +5,7 @@ import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{UrlBuilder, ClientRegistrationIp, TrackingData, ReturnUrl}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceError, IdentityService}
-import play.api.data.Form
+import play.api.data.{Mapping, Form}
 import play.api.data.Forms._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -28,13 +28,21 @@ case class RegisterRequest(
 
 class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi, val config: Configuration) extends Controller with Logging with I18nSupport {
 
+  private val username: Mapping[String] = text.verifying(
+    "error.username", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
+  )
+
+  private val password: Mapping[String] = text.verifying(
+    "error.password", name => name.length > 5 && name.length < 21
+  )
+
   val registerForm = Form(
     mapping(
       "firstName" -> nonEmptyText,
       "lastName" -> nonEmptyText,
       "email" -> email,
-      "username" -> nonEmptyText,
-      "password" -> nonEmptyText,
+      "username" -> username,
+      "password" -> password,
       "receiveGnmMarketing" -> boolean,
       "receive3rdPartyMarketing" -> boolean,
       "returnUrl" -> optional(text),

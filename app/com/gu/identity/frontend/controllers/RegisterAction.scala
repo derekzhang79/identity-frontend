@@ -36,6 +36,10 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     "error.password", name => name.length > 5 && name.length < 21
   )
 
+  private val group: Mapping[String] = text.verifying(
+    "error.group", name => name == "GRS" || name == "GTNF"
+  )
+
   val registerForm = Form(
     mapping(
       "firstName" -> nonEmptyText,
@@ -47,7 +51,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
       "receive3rdPartyMarketing" -> boolean,
       "returnUrl" -> optional(text),
       "skipConfirmation" -> optional(boolean),
-      "group" -> optional(text)
+      "group" -> optional(group)
     )(RegisterRequest.apply)(RegisterRequest.unapply)
   )
 
@@ -103,8 +107,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   }
 
   private def registerSuccessRedirectUrl(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
-    val groupCode = validateGroupCode(group)
-    (groupCode, skipConfirmation.getOrElse(false)) match {
+    (group, skipConfirmation.getOrElse(false)) match {
       case(Some(group), false) => {
         val skipConfirmationUrl = UrlBuilder(routes.Application.confirm(), Seq("returnUrl" -> returnUrl.url))
         val url = build3rdPartyUrl(group, skipConfirmationUrl, skipConfirmation = false)
@@ -126,14 +129,6 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
 
   private def registerSuccessResult(url: String, cookies: Seq[PlayCookie]) = {
     SeeOther(url).withCookies(cookies: _*)
-  }
-
-  private def validateGroupCode(group: Option[String]): Option[String] = {
-    group match {
-      case Some("GRS") => Some("GRS")
-      case Some("GTNF") => Some("GTNF")
-      case _ => None
-    }
   }
 
   private def build3rdPartyUrl(group: String, returnUrl: String, skipConfirmation: Boolean) = {

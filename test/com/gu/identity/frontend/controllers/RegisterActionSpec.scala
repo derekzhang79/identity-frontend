@@ -391,7 +391,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "include group in params for failed registration redirect if the value is specified on the request" in new WithControllerMockedDependencies {
-      val group = Some("ABC")
+      val group = Some("GTNF")
 
       when(fakeRegisterThenSignIn(mockIdentityService))
         .thenReturn{
@@ -407,7 +407,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       queryParams.get("group") mustEqual group
     }
 
-    "return error-registration if username is too short" in new WithControllerMockedDependencies {
+    "return register-error-username if username is too short" in new WithControllerMockedDependencies {
       val username = "12"
 
       val result = call(controller.register, fakeRegisterRequest(username = username))
@@ -421,7 +421,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
 
-    "return error-registration if username is too long" in new WithControllerMockedDependencies {
+    "return register-error-username if username is too long" in new WithControllerMockedDependencies {
       val username = "123456789012345678901"
 
       val result = call(controller.register, fakeRegisterRequest(username = username))
@@ -435,7 +435,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
 
-    "return error-registration if username contains a non alphanumeric character" in new WithControllerMockedDependencies {
+    "return register-error-username if username contains a non alphanumeric character" in new WithControllerMockedDependencies {
       val username = "123456$"
 
       val result = call(controller.register, fakeRegisterRequest(username = username))
@@ -449,7 +449,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
 
-    "return error-registration if password is too short" in new WithControllerMockedDependencies {
+    "return register-error-password if password is too short" in new WithControllerMockedDependencies {
       val password = "12"
 
       val result = call(controller.register, fakeRegisterRequest(password = password))
@@ -463,7 +463,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
 
-    "return error-registration if password is too long" in new WithControllerMockedDependencies {
+    "return register-error-password if password is too long" in new WithControllerMockedDependencies {
       val password = "123456789012345678901"
 
       val result = call(controller.register, fakeRegisterRequest(password = password))
@@ -473,6 +473,20 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
       queryParams.contains("error") mustEqual true
       queryParams.get("error") mustEqual Some("register-error-password")
+
+      redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
+    }
+
+    "return register-error-group if the group code is not a valid code" in new WithControllerMockedDependencies {
+      val group = "ABC"
+
+      val result = call(controller.register, fakeRegisterRequest(group = Some(group)))
+
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
+      status(result) mustEqual SEE_OTHER
+
+      queryParams.contains("error") mustEqual true
+      queryParams.get("error") mustEqual Some("register-error-group")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }

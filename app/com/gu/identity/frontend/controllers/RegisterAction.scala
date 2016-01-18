@@ -128,7 +128,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   }
 
   private def build3rdPartyUrl(group: String, returnUrl: String, skipConfirmation: Boolean) = {
-    val baseUrl = s"${config.identityProfileBase}/agree/$group"
+    val baseUrl = s"${config.identityProfileBaseUrl}/agree/$group"
     val params = Seq(
       "returnUrl" -> returnUrl,
       "skipConfirmation" -> skipConfirmation.toString,

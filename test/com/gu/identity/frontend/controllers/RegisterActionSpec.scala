@@ -28,7 +28,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       override val identityApiHost: String = "identityApiHost"
       override val identityApiKey: String = "identityApiKey"
       override val identityCookieDomain: String = "theguardian.com"
-      override val identityProfileBase: String = "profile.theguardian.com"
+      override val identityProfileBaseUrl: String = "profile.theguardian.com"
       override val omnitureAccount: String = "omnitureAccount"
       override val appConfiguration: PlayConfiguration = null
     }
@@ -176,7 +176,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation, group = group))
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get must startWith (s"${config.identityProfileBase}/agree/${group.get}")
+      redirectLocation(result).get must startWith (s"${config.identityProfileBaseUrl}/agree/${group.get}")
     }
 
     "have a sign in cookie when registration is successful skipConfirmation is true and group code is valid" in new WithControllerMockedDependencies {
@@ -274,7 +274,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation, group = group))
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get must startWith (s"${config.identityProfileBase}/agree/${group.get}")
+      redirectLocation(result).get must startWith (s"${config.identityProfileBaseUrl}/agree/${group.get}")
     }
 
     "have a sign in cookie when registration is successful skipConfirmation is false and group code is valid" in new WithControllerMockedDependencies {

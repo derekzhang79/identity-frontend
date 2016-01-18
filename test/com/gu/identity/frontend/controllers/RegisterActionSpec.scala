@@ -406,5 +406,75 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       queryParams.contains("group") mustEqual true
       queryParams.get("group") mustEqual group
     }
+
+    "return error-registration if username is too short" in new WithControllerMockedDependencies {
+      val username = "12"
+
+      val result = call(controller.register, fakeRegisterRequest(username = username))
+
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
+      status(result) mustEqual SEE_OTHER
+
+      queryParams.contains("error") mustEqual true
+      queryParams.get("error") mustEqual Some("error-registration")
+
+      redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
+    }
+
+    "return error-registration if username is too long" in new WithControllerMockedDependencies {
+      val username = "123456789012345678901"
+
+      val result = call(controller.register, fakeRegisterRequest(username = username))
+
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
+      status(result) mustEqual SEE_OTHER
+
+      queryParams.contains("error") mustEqual true
+      queryParams.get("error") mustEqual Some("error-registration")
+
+      redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
+    }
+
+    "return error-registration if username contains a non alphanumeric character" in new WithControllerMockedDependencies {
+      val username = "123456$"
+
+      val result = call(controller.register, fakeRegisterRequest(username = username))
+
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
+      status(result) mustEqual SEE_OTHER
+
+      queryParams.contains("error") mustEqual true
+      queryParams.get("error") mustEqual Some("error-registration")
+
+      redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
+    }
+
+    "return error-registration if password is too short" in new WithControllerMockedDependencies {
+      val password = "12"
+
+      val result = call(controller.register, fakeRegisterRequest(password = password))
+
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
+      status(result) mustEqual SEE_OTHER
+
+      queryParams.contains("error") mustEqual true
+      queryParams.get("error") mustEqual Some("error-registration")
+
+      redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
+    }
+
+    "return error-registration if password is too long" in new WithControllerMockedDependencies {
+      val password = "123456789012345678901"
+
+      val result = call(controller.register, fakeRegisterRequest(password = password))
+
+      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
+      status(result) mustEqual SEE_OTHER
+
+      queryParams.contains("error") mustEqual true
+      queryParams.get("error") mustEqual Some("error-registration")
+
+      redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
+    }
   }
 }

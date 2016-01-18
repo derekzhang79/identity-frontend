@@ -11,5 +11,7 @@ libraryDependencies ++= Seq(
   "org.seleniumhq.selenium" % "selenium-java" % "2.48.2" % "test",
   "com.gu" %% "identity-test-users" % "0.5",
   "com.squareup.okhttp" % "okhttp" % "2.7.2",
-  "com.typesafe.play" %% "play-json" % "2.4.4"
+  "com.typesafe.play" %% "play-json" % "2.4.4",
+  "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
+  ws
 )

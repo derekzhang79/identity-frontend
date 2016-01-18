@@ -1,7 +1,7 @@
 package test.pages
 
+import test.util.user.FacebookTestUser
 import test.util.{LoadablePage, Browser}
-import util.user.FacebookTestUser
 
 class FacebookLogin extends LoadablePage with Browser {
   val url = "https://www.facebook.com/login.php"
@@ -12,7 +12,7 @@ class FacebookLogin extends LoadablePage with Browser {
 
   (fbTestUser.email, fbTestUser.password) match {
       case (Some(email), Some(password)) => CredentialsFields.fillIn(email, password)
-      case _ => new IllegalStateException("FacebookTestUser missing password.")
+      case _ => throw new IllegalStateException("FacebookTestUser missing password.")
     }
   }
 

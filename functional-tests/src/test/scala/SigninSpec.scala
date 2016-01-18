@@ -1,15 +1,14 @@
 package test
 
-import _root_.util.user.FacebookTestUserService
+import test.util.user.{FacebookTestUserService, EmailTestUser}
 import test.pages.{FacebookAuthDialog, FacebookLogin, RegisterConfirm}
 import test.util._
 import org.scalatest.selenium.WebBrowser
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FeatureSpec, GivenWhenThen}
 import org.slf4j.LoggerFactory
-import test.util.user.EmailTestUser
 
 class SigninSpec extends FeatureSpec with WebBrowser with Browser
-  with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll  {
+  with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll {
 
   def logger = LoggerFactory.getLogger(this.getClass)
 

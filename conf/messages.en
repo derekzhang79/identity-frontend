@@ -18,6 +18,7 @@ signin.conditions=By proceeding, you agree to the Guardian''s
 signin.termsofservice=Terms of Service
 signin.privacypolicy=Privacy Policy
 
+# com.gu.identity.frontend.models.text.RegisterText
 register.divideText=or
 register.name=Name
 register.firstName=First name
@@ -33,6 +34,11 @@ register.3rdPartyMarketing=Send me messages from 3rd party organisations screene
 register.signInCta=Already have an account?
 register.signIn=Sign in
 register.createAccount=Create account
+
+# com.gu.identity.frontend.models.text.TermsText
+terms.conditions=By proceeding, you agree to the Guardian''s
+terms.termsOfService=Terms of Service
+terms.privacyPolicy=Privacy Policy
 
 
 socialsignin.description=Sign in with {0}

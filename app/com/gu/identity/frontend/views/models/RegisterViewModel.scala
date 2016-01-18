@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
+import com.gu.identity.frontend.models.text.RegisterText
 import play.api.i18n.Messages
 
 
@@ -12,13 +13,8 @@ case class RegisterViewModel(
       "google" -> "Sign up with Google"
     ),
 
-    registerPageText: Map[String, String],
-
-    terms: Map[String, String] = Map(
-      "conditionsText" -> "By proceeding, you agree to the Guardian's",
-      "termsOfServiceText" -> "Terms of Service",
-      "privacyPolicyText" -> "Privacy Policy"
-    ),
+    registerPageText: RegisterText,
+    terms: TermsViewModel,
 
     actions: Map[String, String] = Map("register" -> "/actions/register"),
 
@@ -29,26 +25,18 @@ case class RegisterViewModel(
 
 object RegisterViewModel {
 
-  val globalTextKeys = Seq("signIn", "sign")
-
-  val registerTextKeys = Seq(
-    "divideText", "name", "firstName", "lastName", "username", "usernameHelp",
-    "email", "emailHelp", "password", "passwordHelp", "gnmMarketing",
-    "3rdPartyMarketing", "signInCta", "signIn", "createAccount"
-  )
-
   def apply(
       configuration: Configuration,
       activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)])
       (implicit messages: Messages): RegisterViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests)
-    val registerPageText = registerTextKeys.map(k => k -> messages(s"register.$k")).toMap
 
     RegisterViewModel(
       layout = layout,
 
-      registerPageText = registerPageText,
+      registerPageText = RegisterText(),
+      terms = TermsViewModel(),
 
       resources = layout.resources,
       indirectResources = layout.indirectResources

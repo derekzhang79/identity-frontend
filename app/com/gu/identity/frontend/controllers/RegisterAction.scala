@@ -65,7 +65,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
             case Left(errors) =>
               redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.group)
             case Right(cookies) => {
-              redirectRegisterSuccess(cookies, returnUrl, successForm.skipConfirmation, successForm.group)
+              registerSuccessRedirectUrl(cookies, returnUrl, successForm.skipConfirmation, successForm.group)
             }
           }.recover {
             case NonFatal(ex) => {
@@ -102,23 +102,30 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     }
   }
 
-  private def redirectRegisterSuccess(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
+  private def registerSuccessRedirectUrl(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
     val groupCode = validateGroupCode(group)
     (groupCode, skipConfirmation.getOrElse(false)) match {
       case(Some(group), false) => {
         val skipConfirmationUrl = UrlBuilder(routes.Application.confirm(), Seq("returnUrl" -> returnUrl.url))
-        SeeOther(build3rdPartyUrl(group, skipConfirmationUrl, skipConfirmation = false)).withCookies(cookies: _*)
+        val url = build3rdPartyUrl(group, skipConfirmationUrl, skipConfirmation = false)
+        registerSuccessResult(url, cookies)
       }
       case(Some(group), true) => {
-        SeeOther(build3rdPartyUrl(group, returnUrl.url, skipConfirmation = true)).withCookies(cookies: _*)
+        val url = build3rdPartyUrl(group, returnUrl.url, skipConfirmation = true)
+        registerSuccessResult(url, cookies)
       }
       case (None, false) => {
-        SeeOther(UrlBuilder(routes.Application.confirm(), Seq("returnUrl" -> returnUrl.url))).withCookies(cookies: _*)
+        val url = UrlBuilder(routes.Application.confirm(), Seq("returnUrl" -> returnUrl.url))
+        registerSuccessResult(url, cookies)
       }
       case (None, true) => {
-        SeeOther(returnUrl.url).withCookies(cookies: _*)
+        registerSuccessResult(returnUrl.url, cookies)
       }
     }
+  }
+
+  private def registerSuccessResult(url: String, cookies: Seq[PlayCookie]) = {
+    SeeOther(url).withCookies(cookies: _*)
   }
 
   private def validateGroupCode(group: Option[String]): Option[String] = {

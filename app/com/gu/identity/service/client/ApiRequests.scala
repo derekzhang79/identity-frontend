@@ -53,13 +53,14 @@ object AuthenticateCookiesRequest {
 
 sealed trait ApiRequestBody
 
-case class RegisterApiRequest(url: String, extraHeaders: HttpParameters = Nil, override val body: Option[ApiRequestBody]) extends ApiRequest {
+case class RegisterApiRequest(url: String, extraHeaders: HttpParameters = Nil, trackingData: TrackingData, override val body: Option[ApiRequestBody]) extends ApiRequest {
   override val method = POST
   override val headers = Seq("Content-Type" -> "application/json") ++ extraHeaders
+  override val parameters = trackingData.parameters
 }
 
 object RegisterApiRequest {
-  def apply(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit configuration: IdentityClientConfiguration): RegisterApiRequest ={
+  def apply(request: RegisterRequest, clientIp: ClientRegistrationIp, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): RegisterApiRequest ={
     RegisterApiRequest(
       ApiRequest.apiEndpoint("user"),
       body = Some(RegisterRequestBody(
@@ -74,7 +75,8 @@ object RegisterApiRequest {
           clientIp.ip
         )
       )),
-      extraHeaders = ApiRequest.apiKeyHeaders
+      extraHeaders = ApiRequest.apiKeyHeaders,
+      trackingData = trackingData
     )
   }
 }

@@ -18,24 +18,11 @@ class Signin(val testUser: EmailTestUser) extends Page with Browser {
   }
 
   def signInWithFacebook() = {
-
-    if (Config.stage == "CODE") {
-      val selector = cssSelector("a[data-test-id='facebook-sign-in']")
-      pageHasElement(selector)
-      click.on(selector)
-    } else { // PROD
-      assert(pageHasElement(signInWithFacebookButton))
-      click.on(signInWithFacebookButton)
-    }
+    assert(pageHasElement(signInWithFacebookButton))
+    click.on(signInWithFacebookButton)
   }
 
-  def pageHasLoaded(): Boolean = {
-
-    if (Config.stage == "CODE")
-      pageHasElement(cssSelector("a[data-test-id='register-link']"))
-    else // PROD
-      pageHasElement(signUpLink)
-  }
+  def pageHasLoaded(): Boolean = pageHasElement(signUpLink)
 
   def fillInCredentials() = {
     SigninFields.fillIn()
@@ -47,7 +34,6 @@ class Signin(val testUser: EmailTestUser) extends Page with Browser {
 
     def fillIn() = {
       assert(pageHasElement(id("signin_field_password")))
-
       emailAddress.value = s"${testUser.name}@gu.com"
       password.value = testUser.name
     }

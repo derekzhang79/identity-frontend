@@ -14,9 +14,7 @@ class Register(val testUser: EmailTestUser) extends LoadablePage with Browser {
     click on selector
   }
 
-  def hasLoaded(): Boolean = {
-    pageHasElement(className("submit-input"))
-  }
+  def hasLoaded(): Boolean = pageHasElement(className("submit-input"))
 
   def registerWithFacebook(): Unit = {
     assert(pageHasElement(registerWithFacebookButton))

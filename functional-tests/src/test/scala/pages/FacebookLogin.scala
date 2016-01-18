@@ -1,7 +1,7 @@
 package test.pages
 
-import test.util.user.FacebookTestUser
 import test.util.{LoadablePage, Browser}
+import test.util.user.FacebookTestUser
 
 class FacebookLogin extends LoadablePage with Browser {
   val url = "https://www.facebook.com/login.php"

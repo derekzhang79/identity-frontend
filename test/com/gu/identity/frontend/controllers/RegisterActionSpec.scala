@@ -416,7 +416,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("error-registration")
+      queryParams.get("error") mustEqual Some("register-error-username")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
@@ -430,7 +430,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("error-registration")
+      queryParams.get("error") mustEqual Some("register-error-username")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
@@ -444,7 +444,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("error-registration")
+      queryParams.get("error") mustEqual Some("register-error-username")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
@@ -458,7 +458,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("error-registration")
+      queryParams.get("error") mustEqual Some("register-error-password")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
@@ -472,7 +472,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("error-registration")
+      queryParams.get("error") mustEqual Some("register-error-password")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }

@@ -55,7 +55,9 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     NoCache {
       val clientIp = ClientRegistrationIp(request)
       registerForm.bindFromRequest.fold(
-        errorForm => Future.successful(SeeOther(routes.Application.register(Seq("error-registration")).url)),
+        errorForm => {
+          val errors = errorForm.errors.map(error => s"register-error-${error.key}")
+          Future.successful(SeeOther(routes.Application.register(errors).url))},
         successForm => {
           val trackingData = TrackingData(request, successForm.returnUrl)
           val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"))

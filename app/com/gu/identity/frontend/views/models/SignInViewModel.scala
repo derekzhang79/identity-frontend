@@ -6,19 +6,6 @@ import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.Text._
 import play.api.i18n.Messages
 
-case class SignInLinksViewModel private(
-    socialFacebook: String,
-    socialGoogle: String)
-  extends ViewModel
-
-object SignInLinksViewModel {
-  def apply(urlParams: Seq[(String, String)]): SignInLinksViewModel =
-    SignInLinksViewModel(
-      socialFacebook = UrlBuilder("https://oauth.theguardian.com/facebook/signin", urlParams),
-      socialGoogle = UrlBuilder("https://oauth.theguardian.com/google/signin", urlParams)
-    )
-}
-
 case class SignInViewModel private(
     layout: LayoutViewModel,
     signInPageText: Map[String, String],
@@ -32,7 +19,7 @@ case class SignInViewModel private(
     skipConfirmation: Boolean = false,
     registerUrl: String = "",
     forgotPasswordUrl: String = "",
-    links: SignInLinksViewModel,
+
     actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url),
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product])
@@ -58,7 +45,7 @@ object SignInViewModel {
       skipConfirmation = skipConfirmation.getOrElse(false),
       registerUrl = UrlBuilder("/register", urlParams),
       forgotPasswordUrl = UrlBuilder("/reset", urlParams),
-      links = SignInLinksViewModel(urlParams),
+
       resources = layout.resources,
       indirectResources = layout.indirectResources
     )

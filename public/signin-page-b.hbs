@@ -17,7 +17,7 @@
     <input type="hidden" name="skipConfirmation" value="{{skipConfirmation}}">
     <p class="signin-form__prelude">{{signInPageText.divideText}}</p>
 
-    <fieldset class="signin-form__fieldset">
+    <fieldset class="signin-form__fieldset--b">
 
       {{#each errors}}
           <p id="{{id}}" class="signin-form__error">{{message}}</p>
@@ -35,7 +35,7 @@
 
       <div class="signin-form__control--remember-me">
         <input class="signin-form__checkbox--remember-me" id="signin_field_remember_me" type="checkbox" name="keepMeSignedIn" checked="checked" value="true"/>
-        <label class="signin-form__label--remember" for="signin_field_remember_me" tabindex="0">{{signInPageText.rememberMe}}</label>
+        <label class="signin-form__label--remember-me" for="signin_field_remember_me" tabindex="0">{{signInPageText.rememberMe}}</label>
       </div>
       <div class="signin-form__control--submit">
         <button class="signin-form__submit-button" id="signin_submit" type="submit">{{signInPageText.signIn}}</button>

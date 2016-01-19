@@ -10,12 +10,12 @@
   @extend %form__fieldset;
 }
 
+
+/** Field: Name **/
+
 .register-form__control--name {
   @extend %form__control;
 }
-
-
-/** Field: Name **/
 
 .register-form__label--name {
   @extend %form__label;
@@ -84,7 +84,7 @@
 }
 
 
-/** Field: GNM Marketing **/
+/** Field (checkbox): GNM Marketing **/
 
 .register-form__control--gnm-marketing {
   @extend %form__control;
@@ -99,7 +99,7 @@
 }
 
 
-/** Field: 3rd Party Marketing **/
+/** Field (checkbox): 3rd Party Marketing **/
 
 .register-form__control--3rd-party-marketing {
   @extend %form__control;

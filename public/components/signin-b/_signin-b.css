@@ -1,11 +1,11 @@
 /** styles for sign in v2 B variant */
 
-.social-signin {
+.oauth {
   margin-bottom: 1.5rem;
 }
 
 .signin__cta--email {
-  @extend %signin-container;
+  @extend %content-container;
 
   margin-bottom: 2rem;
 
@@ -54,6 +54,14 @@
   display: none;
 }
 
+.signin-form__fieldset--b {
+  @extend .signin-form__fieldset;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
 .signin__epilogue {
-  @extend %signin-container;
+  @extend %content-container;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
 }

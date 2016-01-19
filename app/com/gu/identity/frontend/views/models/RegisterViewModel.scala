@@ -15,6 +15,11 @@ case class RegisterViewModel(
     registerPageText: RegisterText,
     terms: TermsViewModel,
 
+    hasErrors: Boolean,
+    errors: Seq[ErrorViewModel],
+    returnUrl: String,
+    skipConfirmation: Boolean,
+
     actions: RegisterActions,
     links: RegisterLinks,
 
@@ -28,6 +33,7 @@ object RegisterViewModel {
   def apply(
       configuration: Configuration,
       activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)],
+      errors: Seq[ErrorViewModel],
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean])
       (implicit messages: Messages): RegisterViewModel = {
@@ -41,6 +47,11 @@ object RegisterViewModel {
 
       registerPageText = RegisterText(),
       terms = TermsViewModel(),
+
+      hasErrors = errors.nonEmpty,
+      errors = errors,
+      returnUrl = returnUrl.url,
+      skipConfirmation = skipConfirmation.getOrElse(false),
 
       actions = RegisterActions(),
       links = RegisterLinks(returnUrl, skipConfirmation),

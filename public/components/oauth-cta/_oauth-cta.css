@@ -1,14 +1,14 @@
 /**
- * Social CTA Component styles
+ * OAuth CTA Component styles
  */
 
-.social {
+.oauth {
   @extend %row;
   margin: 0 auto 2rem;
   max-width: 40rem;
 }
 
-%social__cta {
+%oauth__cta {
   @extend %font-text-sans-1;
   color: black;
   display: block;
@@ -26,13 +26,13 @@
   }
 }
 
-.social__cta--google {
-  @extend %social__cta;
+.oauth__cta--google {
+  @extend %oauth__cta;
   background-image: inline("icon-google.svg");
   margin-bottom: 0;
 }
 
-.social__cta--facebook {
-  @extend %social__cta;
+.oauth__cta--facebook {
+  @extend %oauth__cta;
   background-image: inline("icon-facebook.svg");
 }

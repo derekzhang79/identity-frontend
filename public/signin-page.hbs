@@ -9,7 +9,7 @@
 
   <h1 class="signin__heading">{{ signInPageText.title }}</h1>
 
-  {{> components/social-cta/_social-cta }}
+  {{> components/oauth-cta/_oauth-cta }}
 
   <form id="signin_form" class="signin-form" action="{{ actions.signIn }}" method="POST">
     <input type="hidden" name="returnUrl" value="{{returnUrl}}">

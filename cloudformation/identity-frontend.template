@@ -82,7 +82,7 @@
     },
     "CertsMap": {
       "CODE": {
-        "ssl": "arn:aws:iam::942464564246:server-certificate/sites.code.dev-theguardian.com-exp2023-08-04"
+        "ssl": "arn:aws:iam::942464564246:server-certificate/idapi.code.dev-theguardian.com-exp2018-09-15-utn"
       },
       "PROD": {
         "ssl": "arn:aws:iam::942464564246:server-certificate/sites.theguardian.com-exp2017-05-31"

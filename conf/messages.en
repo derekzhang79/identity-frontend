@@ -40,8 +40,10 @@ terms.conditions=By proceeding, you agree to the Guardian''s
 terms.termsOfService=Terms of Service
 terms.privacyPolicy=Privacy Policy
 
-
-socialsignin.description=Sign in with {0}
+oauth.signIn=Sign in with {0}
+oauth.register=Sign up with {0}
+oauth.facebook=Facebook
+oauth.google=Google
 
 header.backtext=Back to the Guardian
 header.logo=The Guardian

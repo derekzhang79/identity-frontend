@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
+import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.models.text.RegisterText
 import play.api.i18n.Messages
 
@@ -8,10 +9,7 @@ import play.api.i18n.Messages
 case class RegisterViewModel(
     layout: LayoutViewModel,
 
-    socialSignInText: Map[String, String] = Map(
-      "facebook" -> "Sign up with Facebook",
-      "google" -> "Sign up with Google"
-    ),
+    oauth: OAuthRegistrationViewModel,
 
     registerPageText: RegisterText,
     terms: TermsViewModel,
@@ -27,13 +25,17 @@ object RegisterViewModel {
 
   def apply(
       configuration: Configuration,
-      activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)])
+      activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)],
+      returnUrl: ReturnUrl,
+      skipConfirmation: Option[Boolean])
       (implicit messages: Messages): RegisterViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests)
 
     RegisterViewModel(
       layout = layout,
+
+      oauth = OAuthRegistrationViewModel(returnUrl, skipConfirmation),
 
       registerPageText = RegisterText(),
       terms = TermsViewModel(),

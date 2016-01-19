@@ -1,14 +1,14 @@
 /**
- * Social Signin Component styles
+ * Social CTA Component styles
  */
 
-.social-signin {
+.social {
   @extend %row;
   margin: 0 auto 2rem;
   max-width: 40rem;
 }
 
-%social-signin__cta {
+%social__cta {
   @extend %font-text-sans-1;
   color: black;
   display: block;
@@ -26,13 +26,13 @@
   }
 }
 
-.social-signin__cta--google {
-  @extend %social-signin__cta;
+.social__cta--google {
+  @extend %social__cta;
   background-image: inline("icon-google.svg");
   margin-bottom: 0;
 }
 
-.social-signin__cta--facebook {
-  @extend %social-signin__cta;
+.social__cta--facebook {
+  @extend %social__cta;
   background-image: inline("icon-facebook.svg");
 }

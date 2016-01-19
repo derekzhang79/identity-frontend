@@ -8,7 +8,7 @@
 /** Sign in page **/
 
 @import "components/signin/_signin.css";
-@import "components/social-signin/_social-signin.css";
+@import "components/social-cta/_social-cta.css";
 
 /** MVT: Sign in v2 variant B **/
 

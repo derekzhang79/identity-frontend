@@ -40,7 +40,13 @@ object ViewRenderer {
       skipConfirmation: Option[Boolean])
       (implicit messages: Messages) = {
 
-    renderViewModel("register-page", RegisterViewModel(configuration, activeTests))
+    val model = RegisterViewModel(
+      configuration = configuration,
+      activeTests = activeTests,
+      returnUrl = returnUrl,
+      skipConfirmation = skipConfirmation)
+
+    renderViewModel("register-page", model)
   }
 
   def renderViewModel(view: String, model: ViewModel with ViewModelResources with Product): Result = {

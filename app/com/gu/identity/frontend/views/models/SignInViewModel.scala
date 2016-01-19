@@ -22,7 +22,9 @@ object SignInLinksViewModel {
 case class SignInViewModel private(
     layout: LayoutViewModel,
     signInPageText: Map[String, String],
-    socialSignInText: Map[String, String],
+
+    oauth: OAuthSignInViewModel,
+
     showPrelude: Boolean = false,
     hasErrors: Boolean = false,
     errors: Seq[ErrorViewModel] = Seq.empty,
@@ -47,7 +49,9 @@ object SignInViewModel {
     SignInViewModel(
       layout = layout,
       signInPageText = SignInPageText.toMap,
-      socialSignInText = SocialSignInText.toMap,
+
+      oauth = OAuthSignInViewModel(returnUrl, skipConfirmation),
+
       hasErrors = errors.nonEmpty,
       errors = errors,
       returnUrl = returnUrl.url,

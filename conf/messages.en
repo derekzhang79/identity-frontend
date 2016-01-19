@@ -14,9 +14,6 @@ signin.rememberme=Remember me
 signin.signin=Sign in
 signin.noaccount=Don''t have an account?
 signin.signup=Sign up
-signin.conditions=By proceeding, you agree to the Guardian''s
-signin.termsofservice=Terms of Service
-signin.privacypolicy=Privacy Policy
 
 # com.gu.identity.frontend.models.text.RegisterText
 register.divideText=or
@@ -40,6 +37,7 @@ terms.conditions=By proceeding, you agree to the Guardian''s
 terms.termsOfService=Terms of Service
 terms.privacyPolicy=Privacy Policy
 
+# com.gu.identity.frontend.models.text.OAuthText
 oauth.signIn=Sign in with {0}
 oauth.register=Sign up with {0}
 oauth.facebook=Facebook

@@ -8,9 +8,11 @@ import play.api.i18n.Messages
 
 case class SignInViewModel private(
     layout: LayoutViewModel,
-    signInPageText: Map[String, String],
 
     oauth: OAuthSignInViewModel,
+
+    signInPageText: Map[String, String],
+    terms: TermsViewModel,
 
     showPrelude: Boolean = false,
     hasErrors: Boolean = false,
@@ -35,9 +37,11 @@ object SignInViewModel {
 
     SignInViewModel(
       layout = layout,
-      signInPageText = SignInPageText.toMap,
 
       oauth = OAuthSignInViewModel(returnUrl, skipConfirmation),
+
+      signInPageText = SignInPageText.toMap,
+      terms = TermsViewModel(),
 
       hasErrors = errors.nonEmpty,
       errors = errors,

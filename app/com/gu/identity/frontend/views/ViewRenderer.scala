@@ -32,9 +32,10 @@ object ViewRenderer {
     ))
   }
 
-  def renderRegisterConfirmation() = {
-    val html = render("register-confirmation")
-    Results.Ok(html)
+  def renderRegisterConfirmation(configuration: Configuration)(implicit messages: Messages) = {
+    renderViewModel(
+      "register-confirmation",
+      RegisterConfirmationViewModel(configuration))
   }
 
   def renderViewModel(view: String, model: ViewModel with ViewModelResources with Product): Result = {

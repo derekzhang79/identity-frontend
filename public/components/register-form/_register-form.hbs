@@ -5,10 +5,9 @@
   <p class="register-form__prelude">{{ registerPageText.divideText }}</p>
 
   <fieldset class="register-form__fieldset">
-
-    {{# errors }}
+    {{#each errors }}
       <p id="{{ id }}" class="register-form__error">{{ message }}</p>
-    {{/ errors }}
+    {{/ each }}
 
     <div class="register-form__control--name">
       <label class="register-form__label--name" for="register_field_firstname">{{ registerPageText.name }}</label>

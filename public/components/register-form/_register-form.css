@@ -14,6 +14,10 @@
   @extend %form__fieldset;
 }
 
+.register-form__error {
+  @extend %form__error;
+}
+
 
 /** Field: Name **/
 

@@ -1,5 +1,3 @@
-$error-color: #dd4b39;
-
 
 .signin__prelude {
   @extend %font-text-1;
@@ -35,6 +33,11 @@ $error-color: #dd4b39;
 
 .signin-form__fieldset {
   @extend %form__fieldset;
+}
+
+
+.signin-form__error {
+  @extend %form__error;
 }
 
 
@@ -94,11 +97,7 @@ $error-color: #dd4b39;
 }
 
 
-.signin-form__error {
-  @extend %font-text-3;
-  color: $error-color;
-}
-
+/** CTA: Sign up **/
 
 .signin-form__cta--signup {
   @extend %font-text-1;
@@ -106,6 +105,8 @@ $error-color: #dd4b39;
   clear: both;
 }
 
+
+/** CTA: Reset password **/
 
 .signin-form__cta--reset {
   @extend %font-text-1;

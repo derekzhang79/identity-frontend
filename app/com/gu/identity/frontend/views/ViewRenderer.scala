@@ -32,6 +32,11 @@ object ViewRenderer {
     ))
   }
 
+  def renderRegisterConfirmation() = {
+    val html = render("register-confirmation")
+    Results.Ok(html)
+  }
+
   def renderViewModel(view: String, model: ViewModel with ViewModelResources with Product): Result = {
     val html = HBS.withProduct(view, model)
 

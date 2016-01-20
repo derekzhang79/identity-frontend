@@ -3,7 +3,7 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.ReturnUrl
-import com.gu.identity.frontend.views.ViewRenderer.renderSignIn
+import com.gu.identity.frontend.views.ViewRenderer.{renderSignIn, renderRegisterConfirmation}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.mvc._
 
@@ -27,9 +27,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
   }
 
   def confirm(returnUrl: Option[String]) = Action {
-    Cached{
-      Ok("Hello, This is the Registration Confirmation Page")
-    }
+    renderRegisterConfirmation()
   }
 }
 

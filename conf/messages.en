@@ -1,4 +1,4 @@
-layout.pagetitle=| Identity | The Guardian
+layout.pagetitle=Identity | The Guardian
 
 signin.title=Sign in to the Guardian
 signin.pagetitle=Sign in
@@ -16,6 +16,8 @@ signin.noaccount=Don''t have an account?
 signin.signup=Sign up
 
 # com.gu.identity.frontend.models.text.RegisterText
+register.pageTitle=Register
+register.title=Create your Guardian account
 register.divideText=or
 register.name=Name
 register.firstName=First name

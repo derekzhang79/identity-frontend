@@ -16,11 +16,7 @@ $error-color: #dd4b39;
 
 
 .signin__heading {
-  @extend %font-heading-1;
-  @extend %content-container;
-  font-weight: normal;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  @extend %page-heading;
 }
 
 .signin-form {

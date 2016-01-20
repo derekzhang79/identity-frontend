@@ -12,10 +12,12 @@ case class RegisterText private(
     gnmMarketing: String,
     lastName: String,
     name: String,
+    pageTitle: String,
     password: String,
     passwordHelp: String,
     signIn: String,
     signInCta: String,
+    title: String,
     username: String,
     usernameHelp: String)
 
@@ -31,10 +33,12 @@ object RegisterText {
       gnmMarketing = messages("register.gnmMarketing"),
       lastName = messages("register.lastName"),
       name = messages("register.name"),
+      pageTitle = messages("register.pageTitle"),
       password = messages("register.password"),
       passwordHelp = messages("register.passwordHelp"),
       signIn = messages("register.signIn"),
       signInCta = messages("register.signInCta"),
+      title = messages("register.title"),
       username = messages("register.username"),
       usernameHelp = messages("register.usernameHelp")
     )

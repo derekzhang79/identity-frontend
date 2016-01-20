@@ -1,4 +1,4 @@
-package com.gu.identity.frontend.views.models
+package com.gu.identity.frontend.models
 
 import org.scalatest.{FlatSpec, Matchers}
 

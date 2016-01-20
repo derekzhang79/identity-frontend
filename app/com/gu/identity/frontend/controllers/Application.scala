@@ -20,11 +20,16 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
     renderSignIn(configuration, req.activeTests, error, returnUrlActual, skipConfirmation)
   }
 
-  def register(error: Seq[String], returnUrl: Option[String]) = Action {
+  def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], group: Option[String]) = Action {
     Cached{
       Ok("Hello, This is the Registration Page")
     }
   }
 
+  def confirm(returnUrl: Option[String]) = Action {
+    Cached{
+      Ok("Hello, This is the Registration Confirmation Page")
+    }
+  }
 }
 

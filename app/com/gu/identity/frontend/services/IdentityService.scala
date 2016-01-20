@@ -18,7 +18,7 @@ import scala.concurrent.{ExecutionContext, Future}
 trait IdentityService {
   def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
   def registerThenSignIn(request:RegisterRequest, clientIp: ClientRegistrationIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
-  def register(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]]
+  def register(request: RegisterRequest, clientIp: ClientRegistrationIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]]
 }
 
 
@@ -44,8 +44,8 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
     }
   }
 
-  override def register(request: RegisterRequest, clientIp: ClientRegistrationIp)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]] = {
-    val apiRequest = RegisterApiRequest(request, clientIp)
+  override def register(request: RegisterRequest, clientIp: ClientRegistrationIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]] = {
+    val apiRequest = RegisterApiRequest(request, clientIp, trackingData)
     client.register(apiRequest).map {
       case Left(errors) => Left {
         errors.map {
@@ -61,7 +61,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
                                   clientIp: ClientRegistrationIp,
                                   trackingData: TrackingData
                                  )(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]] = {
-    register(request, clientIp).flatMap{
+    register(request, clientIp, trackingData).flatMap{
       case Left(errors) => Future.successful(Left(errors))
       case Right(user) => {
         authenticate(Some(request.email), Some(request.password), true, trackingData).map {

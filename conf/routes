@@ -7,7 +7,9 @@ GET        /                              com.gu.identity.frontend.controllers.A
 
 GET        /signin                        com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None)
 
-GET        /register                      com.gu.identity.frontend.controllers.Application.register(error: Seq[String], returnUrl: Option[String])
+GET        /register                      com.gu.identity.frontend.controllers.Application.register(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, group: Option[String] ?= None)
+
+GET        /register/confirm              com.gu.identity.frontend.controllers.Application.confirm(returnUrl: Option[String] ?= None)
 
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 

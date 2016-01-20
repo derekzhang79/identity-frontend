@@ -2,7 +2,7 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
 import com.gu.identity.frontend.controllers.routes
-import com.gu.identity.frontend.models.ReturnUrl
+import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.Text._
 import play.api.i18n.Messages
 
@@ -59,22 +59,4 @@ object SignInViewModel {
       indirectResources = layout.indirectResources
     )
   }
-}
-
-object UrlBuilder {
-
-  private def encode = java.net.URLEncoder.encode(_: String, "UTF8")
-
-  def apply(baseUrl: String, params: Seq[(String, String)]) =
-    params.headOption match {
-      case None => baseUrl
-      case _ => {
-        val paramString = params.map {
-          case (key, value) => s"$key=${encode(value)}"
-        }.mkString("&")
-
-        s"$baseUrl?$paramString"
-      }
-    }
-
 }

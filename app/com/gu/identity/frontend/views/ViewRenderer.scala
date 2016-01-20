@@ -34,7 +34,7 @@ object ViewRenderer {
 
   def renderRegisterConfirmation(configuration: Configuration)(implicit messages: Messages) = {
     renderViewModel(
-      "register-confirmation",
+      "register-confirmation-page",
       RegisterConfirmationViewModel(configuration))
   }
 

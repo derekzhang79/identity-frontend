@@ -36,7 +36,7 @@ object SignInViewModel {
     SignInViewModel(
       layout = layout,
 
-      oauth = OAuthSignInViewModel(returnUrl, skipConfirmation),
+      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation),
 
       signInPageText = SignInPageText.toMap,
       terms = TermsViewModel(),

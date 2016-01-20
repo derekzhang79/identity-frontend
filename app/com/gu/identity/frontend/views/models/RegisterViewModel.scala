@@ -43,7 +43,7 @@ object RegisterViewModel {
     RegisterViewModel(
       layout = layout,
 
-      oauth = OAuthRegistrationViewModel(returnUrl, skipConfirmation),
+      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation),
 
       registerPageText = RegisterText(),
       terms = TermsViewModel(),

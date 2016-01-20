@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.views.models
 
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.text.{OAuthText, OAuthRegistrationText, OAuthSignInText}
 import play.api.i18n.Messages
@@ -17,17 +18,20 @@ case class OAuthProviderViewModel(
 object OAuthProviderViewModel {
   def apply(
       provider: SupportedOAuthProvider,
+      configuration: Configuration,
       text: OAuthText,
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean])
       (implicit messages: Messages): OAuthProviderViewModel = {
 
-    provider match {
-      case p @ GoogleOAuth =>
-        OAuthProviderViewModel(p.id, text.google, UrlBuilder(p.url, returnUrl, skipConfirmation))
+    val baseUrl = configuration.identityFederationApiHost + provider.authPath
 
-      case p @ FacebookOAuth =>
-        OAuthProviderViewModel(p.id, text.facebook, UrlBuilder(p.url, returnUrl, skipConfirmation))
+    provider match {
+      case GoogleOAuth =>
+        OAuthProviderViewModel(provider.id, text.google, UrlBuilder(baseUrl, returnUrl, skipConfirmation))
+
+      case FacebookOAuth =>
+        OAuthProviderViewModel(provider.id, text.facebook, UrlBuilder(baseUrl, returnUrl, skipConfirmation))
     }
   }
 
@@ -35,7 +39,7 @@ object OAuthProviderViewModel {
 
 sealed trait SupportedOAuthProvider {
   val id: String
-  val url: String
+  val authPath: String
 }
 
 object SupportedOAuthProvider {
@@ -44,12 +48,12 @@ object SupportedOAuthProvider {
 
 case object FacebookOAuth extends SupportedOAuthProvider {
   val id = "facebook"
-  val url = "https://oauth.theguardian.com/facebook/signin"
+  val authPath = "/facebook/signin"
 }
 
 case object GoogleOAuth extends SupportedOAuthProvider {
   val id = "google"
-  val url = "https://oauth.theguardian.com/google/signin"
+  val authPath = "/google/signin"
 }
 
 
@@ -59,11 +63,11 @@ case class OAuthSignInViewModel private(
 
 object OAuthSignInViewModel {
 
-  def apply(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): OAuthSignInViewModel = {
+  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): OAuthSignInViewModel = {
     val text = OAuthSignInText()
 
     OAuthSignInViewModel(
-      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, text, returnUrl, skipConfirmation))
+      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation))
     )
   }
 
@@ -76,11 +80,11 @@ case class OAuthRegistrationViewModel(
 
 object OAuthRegistrationViewModel {
 
-  def apply(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): OAuthRegistrationViewModel = {
+  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): OAuthRegistrationViewModel = {
     val text = OAuthRegistrationText()
 
     OAuthRegistrationViewModel(
-      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, text, returnUrl, skipConfirmation))
+      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation))
     )
   }
 

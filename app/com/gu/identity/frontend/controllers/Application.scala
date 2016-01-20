@@ -27,7 +27,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi) e
   }
 
   def confirm(returnUrl: Option[String]) = Action {
-    renderRegisterConfirmation(configuration)
+    renderRegisterConfirmation(configuration, returnUrl)
   }
 }
 

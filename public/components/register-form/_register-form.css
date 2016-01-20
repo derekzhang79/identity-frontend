@@ -29,14 +29,29 @@
   @extend %form__label;
 }
 
-.register-form__control-column--firstname {
+%register-form__control-column {
   @extend %column-6;
-  padding-right: 1rem;
+
+  @media all and (max-width: 480px) {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+.register-form__control-column--firstname {
+  @extend %register-form__control-column;
+
+  @media all and (min-width: 480px) {
+    padding-right: 1rem;
+  }
 }
 
 .register-form__control-column--lastname {
-  @extend %column-6;
-  padding-left: 1rem;
+  @extend %register-form__control-column;
+
+  @media all and (min-width: 480px) {
+    padding-left: 1rem;
+  }
 }
 
 .register-form__field--firstname {

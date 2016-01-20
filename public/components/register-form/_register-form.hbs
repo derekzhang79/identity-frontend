@@ -13,26 +13,26 @@
       <label class="register-form__label--name" for="register_field_firstname">{{ registerPageText.name }}</label>
 
       <div class="register-form__control-column--firstname">
-        <input class="register-form__field--firstname" id="register_field_firstname" type="text" name="firstName" placeholder="{{ registerPageText.firstName }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
+        <input class="register-form__field--firstname" id="register_field_firstname" type="text" name="firstName" placeholder="{{ registerPageText.firstName }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
       </div>
       <div class="register-form__control-column--lastname">
-        <input class="register-form__field--lastname" id="register_field_lastname" type="text" name="lastName" placeholder="{{ registerPageText.lastName }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
+        <input class="register-form__field--lastname" id="register_field_lastname" type="text" name="lastName" placeholder="{{ registerPageText.lastName }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
       </div>
     </div>
 
     <div class="register-form__control--username">
       <label class="register-form__label--username" for="register_field_username">{{ registerPageText.username }}</label>
-      <input class="register-form__field--username" id="register_field_username" type="text" name="username" placeholder="{{ registerPageText.usernameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
+      <input class="register-form__field--username" id="register_field_username" type="text" name="username" placeholder="{{ registerPageText.usernameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="6" maxlength="20" pattern="[a-zA-Z0-9]+" />
     </div>
 
     <div class="register-form__control--email">
       <label class="register-form__label--email" for="register_field_email">{{ registerPageText.email }}</label>
-      <input class="register-form__field--email" id="register_field_email" type="email" name="email" placeholder="{{ registerPageText.emailHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
+      <input class="register-form__field--email" id="register_field_email" type="email" name="email" placeholder="{{ registerPageText.emailHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required />
     </div>
 
     <div class="register-form__control--password">
       <label class="register-form__label--password" for="register_field_password">{{ registerPageText.password }}</label>
-      <input class="register-form__field--password" id="register_field_password" type="password" name="password" placeholder="{{ registerPageText.passwordHelp }}" />
+      <input class="register-form__field--password" id="register_field_password" type="password" name="password" placeholder="{{ registerPageText.passwordHelp }}" required minlength="6" />
     </div>
 
     <div class="register-form__control--gnm-marketing">

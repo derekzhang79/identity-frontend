@@ -1,6 +1,14 @@
 {{# partial "content" }}
 
-  <h1>Hello World</h1>
+  <h1>Now check your email</h1>
+  <p>Follow the link in the email to validate your email address.</p>
+  <a href="{{returnUrl}}">Complete registration</a>
 
+  <ul>
+      <li class="register__nav-bar"><a href="http://www.theguardian.com/help/identity-faq">FAQ</a></li>
+      <li class="register__nav-bar"><a href="mailto:userhelp@theguardian.com?subject=Account help">Email userhelp</a></li>
+      <li class="register__nav-bar"><a href="https://profile.theguardian.com/reset?returnUrl={{returnUrl}}">Reset password</a></li>
+      <li class="register__nav-bar"><a href="https://profile.theguardian.com/signout?returnUrl={{returnUrl}}">Sign out</a></li>
+  </ul>
 {{/partial}}
 {{> layout}}

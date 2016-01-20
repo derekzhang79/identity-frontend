@@ -31,8 +31,6 @@ case class SignInViewModel private(
 
 object SignInViewModel {
   def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
-    val urlParams: Seq[(String, String)] = Seq(Some("returnUrl" -> returnUrl.url), skipConfirmation.map(bool => ("skipConfirmation", bool.toString))).flatten
-
     val layout = LayoutViewModel(configuration, activeTests)
 
     SignInViewModel(
@@ -47,8 +45,8 @@ object SignInViewModel {
       errors = errors,
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
-      registerUrl = UrlBuilder("/register", urlParams),
-      forgotPasswordUrl = UrlBuilder("/reset", urlParams),
+      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation),
+      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation),
 
       resources = layout.resources,
       indirectResources = layout.indirectResources

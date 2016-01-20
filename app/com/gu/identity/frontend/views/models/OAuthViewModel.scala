@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.models.ReturnUrl
+import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.text.{OAuthText, OAuthRegistrationText, OAuthSignInText}
 import play.api.i18n.Messages
 
@@ -22,23 +22,14 @@ object OAuthProviderViewModel {
       skipConfirmation: Option[Boolean])
       (implicit messages: Messages): OAuthProviderViewModel = {
 
-    val params = getOAuthEndpointParams(returnUrl, skipConfirmation)
-
     provider match {
       case p @ GoogleOAuth =>
-        OAuthProviderViewModel(p.id, text.google, UrlBuilder(p.url, params))
+        OAuthProviderViewModel(p.id, text.google, UrlBuilder(p.url, returnUrl, skipConfirmation))
 
       case p @ FacebookOAuth =>
-        OAuthProviderViewModel(p.id, text.facebook, UrlBuilder(p.url, params))
+        OAuthProviderViewModel(p.id, text.facebook, UrlBuilder(p.url, returnUrl, skipConfirmation))
     }
   }
-
-  private def getOAuthEndpointParams(
-      returnUrl: ReturnUrl,
-      skipConfirmation: Option[Boolean]): Seq[(String, String)] = Seq(
-    Some("returnUrl" -> returnUrl.url),
-    skipConfirmation.map("skipConfirmation" -> _.toString)
-  ).flatten
 
 }
 

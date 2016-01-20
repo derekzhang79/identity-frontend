@@ -2,7 +2,7 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
 import com.gu.identity.frontend.controllers.routes
-import com.gu.identity.frontend.models.ReturnUrl
+import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.text.RegisterText
 import play.api.i18n.Messages
 
@@ -64,7 +64,7 @@ object RegisterViewModel {
 }
 
 
-case class RegisterActions(
+case class RegisterActions private(
     register: String)
 
 object RegisterActions {
@@ -75,18 +75,12 @@ object RegisterActions {
 }
 
 
-case class RegisterLinks(
+case class RegisterLinks private(
     signIn: String)
 
 object RegisterLinks {
-  def apply(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): RegisterLinks = {
-    val params = Seq(
-      Some("returnUrl" -> returnUrl.url),
-      skipConfirmation.map("skipConfirmation" -> _.toString)
-    ).flatten
-
+  def apply(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): RegisterLinks =
     RegisterLinks(
-      signIn = UrlBuilder(routes.Application.signIn().url, params)
+      signIn = UrlBuilder(routes.Application.signIn().url, returnUrl, skipConfirmation)
     )
-  }
 }

@@ -1,9 +1,10 @@
 package test.pages
 
-import test.util.{Browser, TestUser, Config}
+import test.util.user.EmailTestUser
+import test.util.{Browser, Config}
 import org.scalatest.selenium.Page
 
-class Signin(val testUser: TestUser) extends Page with Browser {
+class Signin(val testUser: EmailTestUser) extends Page with Browser {
   val url = s"${Config.baseUrl}/signin"
 
   def signUp() = {
@@ -17,12 +18,23 @@ class Signin(val testUser: TestUser) extends Page with Browser {
   }
 
   def signInWithFacebook() = {
-    assert(pageHasElement(signInWithFacebookButton))
-    click.on(signInWithFacebookButton)
+
+    if (Config.stage == "CODE") {
+      val selector = cssSelector("a[data-test-id='facebook-sign-in']")
+      pageHasElement(selector)
+      click.on(selector)
+    } else { // PROD
+      assert(pageHasElement(signInWithFacebookButton))
+      click.on(signInWithFacebookButton)
+    }
   }
 
   def pageHasLoaded(): Boolean = {
-    pageHasElement(signUpLink)
+
+    if (Config.stage == "CODE")
+      pageHasElement(cssSelector("a[data-test-id='register-link']"))
+    else // PROD
+      pageHasElement(signUpLink)
   }
 
   def fillInCredentials() = {
@@ -36,8 +48,8 @@ class Signin(val testUser: TestUser) extends Page with Browser {
     def fillIn() = {
       assert(pageHasElement(id("signin_field_password")))
 
-      emailAddress.value = s"${testUser.username}@gu.com"
-      password.value = testUser.username
+      emailAddress.value = s"${testUser.name}@gu.com"
+      password.value = testUser.name
     }
   }
 

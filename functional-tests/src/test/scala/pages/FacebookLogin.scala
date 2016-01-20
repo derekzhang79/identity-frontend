@@ -1,14 +1,20 @@
 package test.pages
 
-import test.util.{Browser, Config}
-import org.scalatest.selenium.Page
+import test.util.user.FacebookTestUser
+import test.util.{LoadablePage, Browser}
 
-class FacebookLogin extends Page with Browser {
+class FacebookLogin extends LoadablePage with Browser {
   val url = "https://www.facebook.com/login.php"
 
-  def pageHasLoaded(): Boolean = pageHasElement(logInButton)
+  def hasLoaded(): Boolean = pageHasElement(logInButton)
 
-  def fillInCredentials(): Unit = CredentialsFields.fillIn()
+  def fillInCredentials(fbTestUser: FacebookTestUser): Unit = {
+
+  (fbTestUser.email, fbTestUser.password) match {
+      case (Some(email), Some(password)) => CredentialsFields.fillIn(email, password)
+      case _ => throw new IllegalStateException("FacebookTestUser missing password.")
+    }
+  }
 
   def logIn(): Unit = click.on(logInButton)
 
@@ -16,14 +22,12 @@ class FacebookLogin extends Page with Browser {
     val email = textField(id("email"))
     val password = pwdField(id("pass"))
 
-    def fillIn() = {
-      assert(pageHasElement(logInButton))
-
-      email.value = Config.FacebookCredentials.email
-      password.value = Config.FacebookCredentials.password
+    def fillIn(email: String, password: String) = {
+      this.email.value = email
+      this.password.value = password
     }
   }
 
-  private lazy val logInButton = id("u_0_2")
+  private lazy val logInButton = name("login")
 }
 

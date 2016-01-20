@@ -1,13 +1,14 @@
 package test
 
-import test.pages.{FacebookLogin, RegisterConfirm}
-import test.util.{TestUser, Browser, Config, Driver}
+import test.util.user.{FacebookTestUserService, EmailTestUser}
+import test.pages.{FacebookAuthDialog, FacebookLogin, RegisterConfirm}
+import test.util._
 import org.scalatest.selenium.WebBrowser
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FeatureSpec, GivenWhenThen}
 import org.slf4j.LoggerFactory
 
 class SigninSpec extends FeatureSpec with WebBrowser with Browser
-  with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll  {
+  with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll {
 
   def logger = LoggerFactory.getLogger(this.getClass)
 
@@ -22,72 +23,89 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
   override def afterAll() = Driver.quit()
 
   feature("Sign in") {
-    scenario("User signs in with newly created Identity account") {
-      val testUser = new TestUser
+    scenario("Users register with Email") {
+      val testUser = new EmailTestUser
 
-      When("I visit 'Sign in' page ")
+      Given("users have not registered with email before,")
+
+      When("they visit 'Sign in' page,")
       val signin = new pages.Signin(testUser)
       go.to(signin)
       assert(signin.pageHasLoaded())
 
-      And("I click on 'Sign up' link")
+      And("click on 'Sign up' link,")
       signin.signUp()
 
-      Then("I should land on 'Register' page.")
+      Then("they should land on 'Register' page.")
       val register = new pages.Register(testUser)
-      assert(register.pageHasLoaded())
+      assert(register.hasLoaded())
 
-      When("I fill in personal details")
+      When("Users fill in personal details,")
       register.fillInPersonalDetails()
 
-      And("I submit the form to create my new Identity account")
+      And("click on 'Create account' button,")
       register.submit()
 
-      Then("I should land on 'Registration Confirmation' page")
+      Then("they should land on 'Registration Confirmation' page,")
       val registerConfirm = new RegisterConfirm
-      assert(registerConfirm.pageHasLoaded())
+      assert(registerConfirm.hasLoaded())
 
-      And("I should have Identity cookies.")
+      And("they should have Identity cookies.")
       Seq("GU_U", "SC_GU_U", "SC_GU_LA").foreach { idCookie =>
         assert(Driver.cookiesSet.map(_.getName).contains(idCookie))
       }
 
-      When("I click 'Confirm Registration' button")
+      When("Users click on 'Confirm Registration' button,")
       registerConfirm.confirmRegistration()
 
-      Then("I should land on 'Guardian Homepage'")
+      Then("they should land on 'Guardian Homepage',")
       val homepage = new pages.Homepage
-      assert(homepage.pageHasLoaded())
+      assert(homepage.hasLoaded())
 
-      And("I should be signed in.")
-      assert(elementHasText(className("js-profile-info"), testUser.username))
+      And("should be signed in.")
+      assert(elementHasText(className("js-profile-info"), testUser.name))
     }
 
-    scenario("User signs in with Facebook") {
-      When("I visit 'Sign in' page ")
-      val signin = new pages.Signin(new TestUser)
+    scenario("Users register with Facebook") {
+      val fbTestUser = FacebookTestUserService.createUser()
+      assert(fbTestUser.created)
+
+      Given("users have not registered with Facebook before,")
+
+      When("they visit 'Sign in' page")
+      val signin = new pages.Signin(new EmailTestUser)
       go.to(signin)
       assert(signin.pageHasLoaded())
 
-      And("I click on 'Sign in with Facebook' button")
+      And("click on 'Sign in with Facebook' button")
       signin.signInWithFacebook()
 
-      Then("I should land on 'Facebook Login' page.")
+      Then("they should land on 'Facebook Login' page.")
       val facebookLogin = new FacebookLogin()
-      assert(facebookLogin.pageHasLoaded())
+      assert(facebookLogin.hasLoaded())
 
-      When("I fill in Facebook credentials")
-      facebookLogin.fillInCredentials()
+      When("users fill in Facebook credentials")
+      facebookLogin.fillInCredentials(fbTestUser)
 
-      And("I click on 'Log In' button")
+      And("click on 'Log In' button")
       facebookLogin.logIn()
 
-      Then("I should land on 'Guardian Homepage'")
-      val homepage = new pages.Homepage
-      assert(homepage.pageHasLoaded())
+      Then("Facebook auth dialog should open.")
+      val facebookAuthDialog = new FacebookAuthDialog
+      assert(facebookAuthDialog.hasLoaded())
 
-      And("I should be signed in.")
-      assert(elementHasText(className("js-profile-info"), Config.FacebookCredentials.name))
+      When("users clicks on 'Okay' button")
+      facebookAuthDialog.confirm()
+
+      Then("they should land on 'Guardian Homepage'")
+      val homepage = new pages.Homepage
+      assert(homepage.hasLoaded())
+
+      And("should be signed in.")
+      assert(elementHasText(className("js-profile-info"), fbTestUser.name))
+
+      val fbTestUserIsDeleted = FacebookTestUserService.deleteUser(fbTestUser)
+      assert(fbTestUserIsDeleted)
     }
   }
 }

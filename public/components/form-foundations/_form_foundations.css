@@ -91,6 +91,12 @@ $c-form-focus-border: #6e99b3;
   border-radius: 15px;
   margin: 5px 0;
   width: 100%;
+
+  &:focus {
+    box-shadow: 0 0 2px 2px rgba(110, 153, 179, 0.5);
+    border-color: $c-form-focus-border;
+    outline: none;
+  }
 }
 
 
@@ -129,6 +135,7 @@ $c-form-focus-border: #6e99b3;
 
   &:focus + $labelClass::before {
     border-color: $c-form-focus-border;
+    box-shadow: 0 0 2px 2px rgba(110, 153, 179, 0.5);
   }
 
   &:checked + $labelClass::before {

@@ -23,7 +23,7 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
   override def afterAll() = Driver.quit()
 
   feature("Sign in") {
-    scenario("Users register with Email") {
+    scenario("Users register with Email.") {
       val testUser = new EmailTestUser
 
       Given("users have not registered with email before,")
@@ -66,7 +66,7 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
       assert(elementHasText(className("js-profile-info"), testUser.name))
     }
 
-    scenario("Users register with Facebook") {
+    scenario("Users register with Facebook.") {
       val fbTestUser = FacebookTestUserService.createUser()
       assert(fbTestUser.created)
 
@@ -103,6 +103,58 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
 
       And("should be signed in.")
       assert(elementHasText(className("js-profile-info"), fbTestUser.name))
+
+      val fbTestUserIsDeleted = FacebookTestUserService.deleteUser(fbTestUser)
+      assert(fbTestUserIsDeleted)
+    }
+
+    scenario("Users attempt to register with Facebook without granting email permissions.") {
+      val fbTestUser = FacebookTestUserService.createUser()
+      assert(fbTestUser.created)
+
+      Given("users have not registered with Facebook before,")
+
+      When("they visit 'Sign in' page,")
+      val signin = new pages.Signin(new EmailTestUser)
+      go.to(signin)
+      assert(signin.pageHasLoaded())
+
+      And("click on 'Sign in with Facebook' button")
+      signin.signInWithFacebook()
+
+      Then("they should land on 'Facebook Login' page.")
+      val facebookLogin = new FacebookLogin()
+      assert(facebookLogin.hasLoaded())
+
+      When("users fill in Facebook credentials,")
+      facebookLogin.fillInCredentials(fbTestUser)
+
+      And("click on 'Log In' button,")
+      facebookLogin.logIn()
+
+      Then("'Facebook Auth Dialog' should open.")
+      val facebookAuthDialog = new FacebookAuthDialog
+      assert(facebookAuthDialog.hasLoaded())
+
+      When("users click on 'Edit the info you provide' link,")
+      facebookAuthDialog.editProvidedInfo()
+
+      Then("'Edit Provided Info' dialog should open.")
+      val facebookProvidedInfoDialog = new pages.FacebookProvidedInfoDialog
+      assert(facebookProvidedInfoDialog.hasLoaded())
+
+      When("users un-check granting email permissions to Guardian,")
+      facebookProvidedInfoDialog.uncheckEmailPermission()
+
+      And("click on 'Okay' button,")
+      facebookAuthDialog.confirm()
+
+      Then("they should be rejected back to 'Guardian Register' page,")
+      val register = new pages.Register(new EmailTestUser)
+      assert(register.hasLoaded())
+
+      And("should see Facebook error message.")
+      pageHasUrl("error=fbEmail")
 
       val fbTestUserIsDeleted = FacebookTestUserService.deleteUser(fbTestUser)
       assert(fbTestUserIsDeleted)

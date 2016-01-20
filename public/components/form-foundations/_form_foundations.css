@@ -56,7 +56,10 @@ $c-form-error: #dd4b39;
 
 %form__label--checkbox {
   @extend %font-text-1;
+  display: block;
+  position: relative;
   cursor: pointer;
+  padding-left: 2.5rem;
 }
 
 
@@ -96,9 +99,9 @@ $c-form-error: #dd4b39;
 %form__fancy-checkbox {
   @extend %font-text-sans-2;
   display: block;
-  position: relative;
+  position: absolute;
   top: -0.2rem;
-  float: left;
+  left: 0;
   border: 1px solid #989898;
   border-radius: 3px;
   box-sizing: border-box;

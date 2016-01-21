@@ -74,7 +74,8 @@ a,
     border-bottom: 1px solid #dcdcdc;
     transition: border-color 0.15s ease-out;
 
-    &:hover {
+    &:hover,
+    &:focus {
       text-decoration: none;
       border-color: #6e99b3;
     }

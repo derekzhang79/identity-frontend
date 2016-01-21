@@ -24,8 +24,14 @@ object Config {
   }
 
   object FacebookAppCredentials {
-    val id = conf.getString(s"facebook.app.id")
-    val secret = conf.getString(s"facebook.app.secret")
+    val id = conf.getString("facebook.app.id")
+    val secret = conf.getString("facebook.app.secret")
+  }
+
+  object GoogleTestUserCredentials {
+    val email = conf.getString("google.test.user.email")
+    val password = conf.getString("google.test.user.password")
+    val name = conf.getString("google.test.user.name")
   }
 
   def debug() = conf.root().render()

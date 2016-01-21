@@ -8,13 +8,9 @@ class FacebookLogin extends LoadablePage with Browser {
 
   def hasLoaded(): Boolean = pageHasElement(logInButton)
 
-  def fillInCredentials(fbTestUser: FacebookTestUser): Unit = {
+  def fillInCredentials(fbTestUser: FacebookTestUser): Unit =
+    CredentialsFields.fillIn(fbTestUser.email, fbTestUser.password)
 
-  (fbTestUser.email, fbTestUser.password) match {
-      case (Some(email), Some(password)) => CredentialsFields.fillIn(email, password)
-      case _ => throw new IllegalStateException("FacebookTestUser missing password.")
-    }
-  }
 
   def logIn(): Unit = click.on(logInButton)
 

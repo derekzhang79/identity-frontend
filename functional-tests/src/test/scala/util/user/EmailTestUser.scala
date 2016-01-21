@@ -11,6 +11,6 @@ class EmailTestUser extends TestUser{
   )
 
   val name = testUsers.generate()
-  val email = Some(s"${name}@gu.com")
-  val password = Some(name)
+  val email = s"${name}@gu.com"
+  val password = name
 }

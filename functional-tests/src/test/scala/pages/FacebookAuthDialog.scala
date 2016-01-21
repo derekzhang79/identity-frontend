@@ -7,15 +7,9 @@ class FacebookAuthDialog extends LoadablePage with Browser {
 
   def hasLoaded(): Boolean = pageHasElement(confirmButton)
 
-  def confirm(): Unit = {
-    assert(pageHasElement(confirmButton))
-    click.on(confirmButton)
-  }
+  def confirm(): Unit = clickOn(confirmButton)
 
-  def editProvidedInfo(): Unit = {
-    assert(pageHasElement(editInfoLink))
-    click.on(editInfoLink)
-  }
+  def editProvidedInfo(): Unit = clickOn(editInfoLink)
 
   private lazy val confirmButton = name("__CONFIRM__")
 

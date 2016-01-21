@@ -7,6 +7,7 @@
 
 $c-form-error: #dd4b39;
 $c-form-focus-border: #6e99b3;
+$c-form-button--submit: #005689;
 
 /** Form prelude - the "or" text before a form **/
 
@@ -67,7 +68,7 @@ $c-form-focus-border: #6e99b3;
 
 %form__button--submit {
   @extend %font-text-sans-2;
-  background-color: #005689;
+  background-color: $c-form-button--submit;
   border: 0;
   border-radius: 15px;
   color: white;
@@ -75,6 +76,11 @@ $c-form-focus-border: #6e99b3;
   text-align: left;
   padding: 1rem 1rem 0.8rem 2rem;
   width: 100%;
+
+  &:focus {
+    box-shadow: 0 0 2px 2px color($c-form-button--submit a(0.5));
+    outline: none;
+  }
 }
 
 

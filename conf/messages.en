@@ -30,3 +30,11 @@ footer.privacy=privacy policy
 footer.techfeedback=report technical issue
 footer.cookies=cookie policy
 footer.copyright=© 2015 Guardian News and Media Limited or its affiliated companies. All rights reserved.
+
+registerConfirmation.title=Now check your email
+registerConfirmation.instruction=Follow the link in the email to validate your email address.
+registerConfirmation.completeRegistration=Complete registration
+registerConfirmation.faq=FAQ
+registerConfirmation.emailUserhelp=Email userhelp
+registerConfirmation.resetPassword=Reset password
+registerConfirmation.signOut=Sign out

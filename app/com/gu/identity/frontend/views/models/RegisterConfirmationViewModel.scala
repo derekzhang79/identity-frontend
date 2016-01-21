@@ -1,12 +1,14 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.models.Text.RegisterConfirmationText
 import com.gu.identity.frontend.models.UrlBuilder
 import play.api.i18n.Messages
 
 case class RegisterConfirmationViewModel private(
     layout: LayoutViewModel,
     returnUrl: String,
+    registerConfirmationPageText: Map[String, String],
     faqUrl: String = "http://www.theguardian.com/help/identity-faq",
     emailUserHelpUrl: String = "mailto:userhelp@theguardian.com?subject=Account help",
     resetPasswordUrl: String,
@@ -24,6 +26,7 @@ object RegisterConfirmationViewModel {
     RegisterConfirmationViewModel(
       layout = layout,
       returnUrl = returnUrl.getOrElse("http://www.theguardian.com"),
+      registerConfirmationPageText = RegisterConfirmationText.toMap,
       resetPasswordUrl = UrlBuilder("https://profile.theguardian.com/reset",urlParams),
       signOutUrl = UrlBuilder("https://profile.theguardian.com/signout",urlParams),
       resources = layout.resources,

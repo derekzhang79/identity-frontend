@@ -1,15 +1,17 @@
 {{# partial "content" }}
 
   <div class="register-confirm">
-    <h1 class="register-confirm__heading">Now check your email</h1>
-    <p class="register-confirm__instruction">Follow the link in the email to validate your email address.</p>
-    <a class="register-confirm__complete-registration-button" href="{{returnUrl}}">Complete registration</a>
+    <h1 class="register-confirm__heading">{{registerConfirmationPageText.title}}</h1>
+    <p class="register-confirm__instruction">{{registerConfirmationPageText.instruction}}</p>
+    <a class="register-confirm__complete-registration-button" href="{{returnUrl}}">
+      {{registerConfirmationPageText.completeRegistration}}
+    </a>
   </div>
   <ul class="register-confirm__nav-bar">
-      <li class="register-confirm__nav-bar-item"><a href="{{faqUrl}}">FAQ</a></li>
-      <li class="register-confirm__nav-bar-item"><a href="{{emailUserHelpUrl}}">Email userhelp</a></li>
-      <li class="register-confirm__nav-bar-item"><a href="{{resetPasswordUrl}}">Reset password</a></li>
-      <li class="register-confirm__nav-bar-item"><a href="{{signOutUrl}}">Sign out</a></li>
+      <li class="register-confirm__nav-bar-item"><a href="{{faqUrl}}">{{registerConfirmationPageText.faq}}</a></li>
+      <li class="register-confirm__nav-bar-item"><a href="{{emailUserHelpUrl}}">{{registerConfirmationPageText.emailUserhelp}}</a></li>
+      <li class="register-confirm__nav-bar-item"><a href="{{resetPasswordUrl}}">{{registerConfirmationPageText.resetPassword}}</a></li>
+      <li class="register-confirm__nav-bar-item"><a href="{{signOutUrl}}">{{registerConfirmationPageText.signOut}}</a></li>
   </ul>
 {{/partial}}
 {{> layout}}

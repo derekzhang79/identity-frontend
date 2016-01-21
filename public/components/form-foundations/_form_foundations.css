@@ -5,15 +5,21 @@
 
 /** Form colours **/
 
-$c-form-error: #dd4b39;
-$c-form-focus-border: #6e99b3;
-$c-form-button--submit: #005689;
+:root {
+  --c-form-prelude: #989898;
+  --c-form-fieldset-border: #eee;
+  --c-form-error: #dd4b39;
+  --c-form-field-border: #989898;
+  --c-form-field-border--focus: #6e99b3;
+  --c-form-button--submit: #005689;
+}
+
 
 /** Form prelude - the "or" text before a form **/
 
 %form__prelude {
   @extend %font-text-1;
-  color: #989898;
+  color: var(--c-form-prelude);
   margin: 0 0 0.5rem;
   text-align: center;
 }
@@ -23,8 +29,8 @@ $c-form-button--submit: #005689;
 
 %form__fieldset {
   border: none;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
+  border-top: 1px solid var(--c-form-fieldset-border);
+  border-bottom: 1px solid var(--c-form-fieldset-border);
   margin: 0;
   padding: 1rem 0;
 }
@@ -34,7 +40,7 @@ $c-form-button--submit: #005689;
 
 %form__error {
   @extend %font-text-3;
-  color: $c-form-error;
+  color: var(--c-form-error);
 }
 
 
@@ -68,7 +74,7 @@ $c-form-button--submit: #005689;
 
 %form__button--submit {
   @extend %font-text-sans-2;
-  background-color: $c-form-button--submit;
+  background-color: var(--c-form-button--submit);
   border: 0;
   border-radius: 15px;
   color: white;
@@ -78,7 +84,7 @@ $c-form-button--submit: #005689;
   width: 100%;
 
   &:focus {
-    box-shadow: 0 0 2px 2px color($c-form-button--submit a(0.5));
+    box-shadow: 0 0 2px 2px color(var(--c-form-button--submit) a(0.5));
     outline: none;
   }
 }
@@ -91,7 +97,7 @@ $c-form-button--submit: #005689;
   box-sizing: border-box;
   display: block;
   background-color: #fff;
-  border: 1px solid #989898;
+  border: 1px solid var(--c-form-field-border);
   color: #000;
   padding: 5px 15px;
   border-radius: 15px;
@@ -99,8 +105,8 @@ $c-form-button--submit: #005689;
   width: 100%;
 
   &:focus {
-    box-shadow: 0 0 2px 2px rgba(110, 153, 179, 0.5);
-    border-color: $c-form-focus-border;
+    box-shadow: 0 0 2px 2px color(var(--c-form-field-border--focus) a(0.5));
+    border-color: var(--c-form-field-border--focus);
     outline: none;
   }
 }
@@ -114,7 +120,7 @@ $c-form-button--submit: #005689;
   position: absolute;
   top: -0.2rem;
   left: 0;
-  border: 1px solid #989898;
+  border: 1px solid var(--c-form-field-border);
   border-radius: 3px;
   box-sizing: border-box;
   cursor: pointer;
@@ -140,8 +146,8 @@ $c-form-button--submit: #005689;
   }
 
   &:focus + $labelClass::before {
-    border-color: $c-form-focus-border;
-    box-shadow: 0 0 2px 2px rgba(110, 153, 179, 0.5);
+    border-color: var(--c-form-field-border--focus);
+    box-shadow: 0 0 2px 2px color(var(--c-form-field-border--focus) a(0.5));
   }
 
   &:checked + $labelClass::before {

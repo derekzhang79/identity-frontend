@@ -1,14 +1,15 @@
 {{# partial "content" }}
 
-  <h1>Now check your email</h1>
-  <p>Follow the link in the email to validate your email address.</p>
-  <a href="{{returnUrl}}">Complete registration</a>
-
-  <ul>
-      <li class="register__nav-bar"><a href="http://www.theguardian.com/help/identity-faq">FAQ</a></li>
-      <li class="register__nav-bar"><a href="mailto:userhelp@theguardian.com?subject=Account help">Email userhelp</a></li>
-      <li class="register__nav-bar"><a href="https://profile.theguardian.com/reset?returnUrl={{returnUrl}}">Reset password</a></li>
-      <li class="register__nav-bar"><a href="https://profile.theguardian.com/signout?returnUrl={{returnUrl}}">Sign out</a></li>
+  <div class="register-confirm">
+    <h1 class="register-confirm__heading">Now check your email</h1>
+    <p class="register-confirm__instruction">Follow the link in the email to validate your email address.</p>
+    <a class="register-confirm__complete-registration-button" href="{{returnUrl}}">Complete registration</a>
+  </div>
+  <ul class="register-confirm__nav-bar">
+      <li class="register-confirm__nav-bar-item"><a href="{{faqUrl}}">FAQ</a></li>
+      <li class="register-confirm__nav-bar-item"><a href="{{emailUserHelpUrl}}">Email userhelp</a></li>
+      <li class="register-confirm__nav-bar-item"><a href="{{resetPasswordUrl}}">Reset password</a></li>
+      <li class="register-confirm__nav-bar-item"><a href="{{signOutUrl}}">Sign out</a></li>
   </ul>
 {{/partial}}
 {{> layout}}

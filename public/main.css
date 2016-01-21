@@ -1,6 +1,7 @@
 @import "_layout.css";
 @import "components/signin/_signin.css";
 @import "components/social-signin/_social-signin.css";
+@import "components/register-confirmation/_register-confirmation.css";
 
 /* MVT: Sign in v2 variant B */
 

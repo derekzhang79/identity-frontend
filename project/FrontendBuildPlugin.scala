@@ -42,6 +42,7 @@ object FrontendBuildPlugin extends AutoPlugin {
 
   lazy val buildAssetsTask = Def.task {
     val log = streams.value.log
+    val cacheDirectory = streams.value.cacheDirectory
 
     val _includeFilter = (includeFilter in build in Assets).value
     val _excludeFilter = (excludeFilter in build in Assets).value
@@ -51,26 +52,20 @@ object FrontendBuildPlugin extends AutoPlugin {
 
     val _baseDirectory = (baseDirectory in build in Assets).value
 
-    val cacheDirectory = (streams in Assets).value.cacheDirectory / "npm-build"
-
     val commands = (buildCommands in build in Assets).value
 
 
-    // use sbt-web compile incremental API to only build when needed
-    val (products, errors) = syncIncremental(cacheDirectory, commands) { ops =>
+    /**
+     * Runs the given BuildCommands extracting the output into OpResults used
+     * by sbt-web's compile incremental API to cache outcomes between subsequent
+     * compiles. `ops` will be a subset of all commands if the files in
+     * OpSuccess.filesRead haven't been changed between task execution.
+     */
+    def runOperations(ops: Seq[BuildCommand]): (Map[BuildCommand, OpResult], Seq[FrontendBuildError]) = {
       val results = ops.map(op => op -> runProcess(op, _baseDirectory, log))
 
       val opResults = results.map {
-        case (op, Right(_)) => {
-          val sourceDir = op.sourceDirectory.getOrElse(_sourceDirectory)
-          val includeF = op.includeFilter.getOrElse(_includeFilter)
-          val excludeF = op.excludeFilter.getOrElse(_excludeFilter)
-
-          val filesRead = (sourceDir ** (includeF -- excludeF)).get
-          val filesWritten = (targetDir ** (includeF -- excludeF)).get
-
-          op -> OpSuccess(filesRead.toSet, filesWritten.toSet)
-        }
+        case (op, Right(_)) => op -> toOpSuccess(op)
         case (op, Left(_)) => op -> OpFailure
       }.toMap
 
@@ -81,11 +76,36 @@ object FrontendBuildPlugin extends AutoPlugin {
       (opResults, errors)
     }
 
+
+    /**
+     * Convert a BuildCommand to a OpSuccess by determining the files
+     * read and written by the command.
+     */
+    def toOpSuccess(op: BuildCommand): OpSuccess = {
+      val includeF = op.includeFilter.getOrElse(_includeFilter)
+      val excludeF = op.excludeFilter.getOrElse(_excludeFilter)
+      val fileFilter = includeF -- excludeF
+
+      val sourceDir = op.sourceDirectory.getOrElse(_sourceDirectory)
+
+      val filesRead = (sourceDir ** fileFilter).get
+      val filesWritten = (targetDir ** fileFilter).get
+
+      OpSuccess(filesRead.toSet, filesWritten.toSet)
+    }
+
+
+    // sbt-web's syncIncremental will return new files written, or
+    // cached files if the filesRead for each operation have not
+    // been modified.
+    val (filesWritten, errors): (Set[File], Seq[FrontendBuildError]) =
+      syncIncremental(cacheDirectory, commands)(runOperations)
+
     errors.headOption.map { error =>
       throw error
     }
 
-    products.to[Seq]
+    filesWritten.to[Seq]
 
   }.dependsOn(nodeModules in Assets)
 

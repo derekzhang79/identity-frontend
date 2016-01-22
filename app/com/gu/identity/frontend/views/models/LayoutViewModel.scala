@@ -119,7 +119,7 @@ object Favicons {
 
   private val iconBaseDir = "components/favicons"
 
-  private val iconUrls = iconFiles.map(f => f -> routes.Assets.at(s"$iconBaseDir/$f").url)
+  private val iconUrls = iconFiles.map(f => f -> routes.Assets.versioned(s"$iconBaseDir/$f").url)
 
   def apply(): Seq[Favicon] = iconUrls.map {
     case (file, url) if file.endsWith(".png") => Favicon(file, "apple-touch-icon", url)

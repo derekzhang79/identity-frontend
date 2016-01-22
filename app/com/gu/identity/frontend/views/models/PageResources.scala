@@ -27,7 +27,7 @@ sealed trait LocalResource
 
 object LocalResource {
   def resolveAssetUrl(path: String) =
-    routes.Assets.at(path).url
+    routes.Assets.versioned(path).url
 }
 
 sealed trait LinkedResource {

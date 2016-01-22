@@ -32,7 +32,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val applicationController = new Application(frontendConfiguration, messagesApi, csrfConfig)
   lazy val healthcheckController = new HealthCheck()
   lazy val manifestController = new Manifest()
-  lazy val signinController = new SigninAction(identityService, messagesApi)
+  lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig)
   lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
   lazy val assets = new controllers.Assets(httpErrorHandler)
 

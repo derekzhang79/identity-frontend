@@ -16,10 +16,12 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     Redirect(routes.Application.signIn())
   }
 
-  def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = MultiVariantTestAction { req =>
+  def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"))
 
-    renderSignIn(configuration, req.activeTests, error, returnUrlActual, skipConfirmation)
+    val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
+
+    renderSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation)
   }
 
   def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>

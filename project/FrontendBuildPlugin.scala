@@ -49,41 +49,16 @@ object FrontendBuildPlugin extends AutoPlugin {
     val _sourceDirectory = (sourceDirectory in build in Assets).value
     val targetDir = (buildOutputDirectory in build in Assets).value
 
+    val _baseDirectory = (baseDirectory in build in Assets).value
+
     val cacheDirectory = (streams in Assets).value.cacheDirectory / "npm-build"
 
     val commands = (buildCommands in build in Assets).value
 
-    def runProcess(cmd: BuildCommand) = {
-      log.info(s"[${cmd.id}] Running `${cmd.command}`")
-      val startTime = System.currentTimeMillis
-
-      val out = new ArrayBuffer[(String, String)]
-
-      val logger = new ProcessLogger {
-        def info(output: => String) = out.append("info" -> output)
-        def error(error: => String) = out.append("error" -> error)
-        def buffer[T](f: => T): T = f
-      }
-
-      val exitCode = Process(cmd.command, baseDirectory.value) !< logger
-
-      log.info(s"[${cmd.id}] Finished `${cmd.command}` in ${System.currentTimeMillis - startTime}ms")
-
-      if (exitCode == 0) {
-        out.foreach {
-          case ("error", msg) => log.warn(s"[${cmd.id}] $msg")
-          case (_, msg) => log.info(s"[${cmd.id}] $msg")
-        }
-        Right()
-      }
-      else
-        Left(FrontendBuildError(cmd.command, exitCode, out.map(_._2).mkString("\n")))
-    }
-
 
     // use sbt-web compile incremental API to only build when needed
     val (products, errors) = syncIncremental(cacheDirectory, commands) { ops =>
-      val results = ops.map(op => op -> runProcess(op))
+      val results = ops.map(op => op -> runProcess(op, _baseDirectory, log))
 
       val opResults = results.map {
         case (op, Right(_)) => {
@@ -113,6 +88,34 @@ object FrontendBuildPlugin extends AutoPlugin {
     products.to[Seq]
 
   }.dependsOn(nodeModules in Assets)
+
+
+  def runProcess(cmd: BuildCommand, baseDirectory: File, log: Logger): Either[FrontendBuildError, Any] = {
+    log.info(s"[${cmd.id}] Running `${cmd.command}`")
+    val startTime = System.currentTimeMillis
+
+    val out = new ArrayBuffer[(String, String)]
+
+    val logger = new ProcessLogger {
+      def info(output: => String) = out.append("info" -> output)
+      def error(error: => String) = out.append("error" -> error)
+      def buffer[T](f: => T): T = f
+    }
+
+    val exitCode = Process(cmd.command, baseDirectory) !< logger
+
+    log.info(s"[${cmd.id}] Finished `${cmd.command}` in ${System.currentTimeMillis - startTime}ms")
+
+    if (exitCode == 0) {
+      out.foreach {
+        case ("error", msg) => log.warn(s"[${cmd.id}] $msg")
+        case (_, msg) => log.info(s"[${cmd.id}] $msg")
+      }
+      Right()
+    }
+    else
+      Left(FrontendBuildError(cmd.command, exitCode, out.map(_._2).mkString("\n")))
+  }
 }
 
 case class FrontendBuildError(

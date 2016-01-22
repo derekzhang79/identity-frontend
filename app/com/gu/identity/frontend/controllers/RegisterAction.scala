@@ -58,31 +58,29 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   )
 
   def register = CSRFCheck(csrfConfig).async { implicit request =>
-    NoCache {
-      val clientIp = ClientRegistrationIp(request)
-      registerForm.bindFromRequest.fold(
-        errorForm => {
-          val errors = errorForm.errors.map(error => s"register-error-${error.key}")
-          Future.successful(SeeOther(routes.Application.register(errors).url))},
-        successForm => {
-          val trackingData = TrackingData(request, successForm.returnUrl)
-          val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"))
-          identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
-            case Left(errors) =>
-              redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.group)
-            case Right(cookies) => {
-              registerSuccessRedirectUrl(cookies, returnUrl, successForm.skipConfirmation, successForm.group)
-            }
-          }.recover {
-            case NonFatal(ex) => {
-              logger.warn(s"Unexpected error while registering: ${ex.getMessage}", ex)
-              redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, successForm.skipConfirmation, successForm.group)
-            }
-
+    val clientIp = ClientRegistrationIp(request)
+    registerForm.bindFromRequest.fold(
+      errorForm => {
+        val errors = errorForm.errors.map(error => s"register-error-${error.key}")
+        Future.successful(SeeOther(routes.Application.register(errors).url))},
+      successForm => {
+        val trackingData = TrackingData(request, successForm.returnUrl)
+        val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"))
+        identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
+          case Left(errors) =>
+            redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.group)
+          case Right(cookies) => {
+            registerSuccessRedirectUrl(cookies, returnUrl, successForm.skipConfirmation, successForm.group)
           }
+        }.recover {
+          case NonFatal(ex) => {
+            logger.warn(s"Unexpected error while registering: ${ex.getMessage}", ex)
+            redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, successForm.skipConfirmation, successForm.group)
+          }
+
         }
-      )
-    }
+      }
+    )
   }
 
   private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {

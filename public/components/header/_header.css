@@ -6,7 +6,7 @@
 
 .header__inner {
   @extend %clearfix;
-  @extend %content-block;
+  @extend %page-block;
 }
 
 .header__logo-link {

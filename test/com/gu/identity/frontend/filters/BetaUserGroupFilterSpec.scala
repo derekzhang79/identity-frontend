@@ -19,6 +19,7 @@ class BetaUserGroupFilterSpec extends WordSpec with Matchers {
     override val identityProfileBaseUrl: String = "profile.theguardian.com"
     override val omnitureAccount: String = "omnitureAccount"
     override val appConfiguration: PlayConfiguration = null
+    override val identityFederationApiHost: String = "https://oauth.theguardian.com"
   }
 
   val filter = new BetaUserGroupFilter(config)

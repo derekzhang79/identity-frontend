@@ -9,7 +9,7 @@
 }
 
 .footer__inner {
-  @extend %content-block;
+  @extend %page-block;
 }
 
 .footer__copyright {

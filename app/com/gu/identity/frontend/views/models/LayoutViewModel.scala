@@ -2,7 +2,6 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTests, MultiVariantTest, Configuration}
 import com.gu.identity.frontend.models.Text.{FooterText, HeaderText, LayoutText}
-import controllers.routes
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 
@@ -107,6 +106,8 @@ case class Favicon(filename: String, rel: String, url: String, sizes: Option[Str
 
 object Favicons {
 
+  import LocalResource.resolveAssetUrl
+
   private val iconFiles = Seq(
     "32x32.ico",
     "57x57.png",
@@ -119,7 +120,7 @@ object Favicons {
 
   private val iconBaseDir = "components/favicons"
 
-  private val iconUrls = iconFiles.map(f => f -> routes.Assets.versioned(s"$iconBaseDir/$f").url)
+  private val iconUrls = iconFiles.map(f => f -> resolveAssetUrl(s"$iconBaseDir/$f"))
 
   def apply(): Seq[Favicon] = iconUrls.map {
     case (file, url) if file.endsWith(".png") => Favicon(file, "apple-touch-icon", url)

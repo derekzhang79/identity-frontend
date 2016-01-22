@@ -5,7 +5,7 @@ import test.util.{Browser, Config}
 import org.scalatest.selenium.Page
 
 class Signin(val testUser: EmailTestUser = new EmailTestUser) extends Page with Browser {
-  val url = s"${Config.baseUrl}/signin"
+  val url = s"${Config.baseUrl}/signin?mvt_signinv2=a"
 
   def signUp() = clickOn(signUpLink)
 
@@ -31,6 +31,6 @@ class Signin(val testUser: EmailTestUser = new EmailTestUser) extends Page with 
 
   private lazy val signUpLink = id("register_cta")
   private lazy val signInButton = id("signin_submit")
-  private lazy val signInWithFacebookButton = id("social_signin_cta_facebook")
-  private lazy val signInWithGoogleButton = id("social_signin_cta_google")
+  private lazy val signInWithFacebookButton = id("oauth_cta_facebook")
+  private lazy val signInWithGoogleButton = id("oauth_cta_google")
 }

@@ -28,6 +28,10 @@
         </encoder>
     </appender>
 
+    <logger name="com.gu.identity.frontend.filters.LogRequestsFilter" level="INFO" additivity="false">
+        <appender-ref ref="ACCESSLOGFILE"/>
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="LOGFILE"/>
     </root>

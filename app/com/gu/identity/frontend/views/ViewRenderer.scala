@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.views
 
 import com.gu.identity.frontend.configuration._
+import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
@@ -36,6 +37,7 @@ object ViewRenderer {
       configuration: Configuration,
       activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
       errorIds: Seq[String],
+      csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean])
       (implicit messages: Messages) = {
@@ -44,6 +46,7 @@ object ViewRenderer {
       configuration = configuration,
       activeTests = activeTests,
       errors = errorIds.map(ErrorViewModel.apply),
+      csrfToken = csrfToken,
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation)
 

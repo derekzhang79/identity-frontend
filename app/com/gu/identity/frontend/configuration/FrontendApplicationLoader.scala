@@ -6,6 +6,7 @@ import com.gu.identity.frontend.services.{IdentityServiceRequestHandler, Identit
 import com.gu.identity.service.client.IdentityClient
 import jp.co.bizreach.play2handlebars.HandlebarsPlugin
 import play.api.i18n.I18nComponents
+import play.filters.csrf.CSRFComponents
 import play.filters.gzip.GzipFilter
 import router.Routes
 import play.api.libs.ws.ning.NingWSComponents
@@ -21,18 +22,18 @@ class FrontendApplicationLoader extends ApplicationLoader {
   }
 }
 
-class ApplicationComponents(context: Context) extends BuiltInComponentsFromContext(context) with NingWSComponents with I18nComponents {
+class ApplicationComponents(context: Context) extends BuiltInComponentsFromContext(context) with NingWSComponents with I18nComponents with CSRFComponents {
   lazy val frontendConfiguration = new ApplicationConfiguration(configuration)
 
   lazy val identityServiceRequestHandler = new IdentityServiceRequestHandler(wsClient)
   lazy val identityClient: IdentityClient = new IdentityClient
   lazy val identityService: IdentityService = new IdentityServiceImpl(frontendConfiguration, identityServiceRequestHandler, identityClient)
 
-  lazy val applicationController = new Application(frontendConfiguration, messagesApi)
+  lazy val applicationController = new Application(frontendConfiguration, messagesApi, csrfConfig)
   lazy val healthcheckController = new HealthCheck()
   lazy val manifestController = new Manifest()
   lazy val signinController = new SigninAction(identityService, messagesApi)
-  lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration)
+  lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
   lazy val assets = new controllers.Assets(httpErrorHandler)
 
   override lazy val httpFilters = new Filters(new SecurityHeadersFilter(

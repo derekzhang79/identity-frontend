@@ -11,6 +11,9 @@ trait Browser extends WebBrowser {
 
   private val timeOutSec = 30
 
+  case class MissingPageElementException(q: Query)
+    extends Exception(s"Could not find WebElement with locator: ${q.queryString}")
+
   def pageHasText(text: String): Boolean = {
     waitUntil(ExpectedConditions.textToBePresentInElementLocated(By.tagName("body"), text))
   }
@@ -29,5 +32,19 @@ trait Browser extends WebBrowser {
 
   def waitUntil[T](pred: ExpectedCondition[T]) = {
     Try(new WebDriverWait(driver, timeOutSec).until(pred)).isSuccess
+  }
+
+  def clickOn(q: Query): Unit = {
+    if (pageHasElement(q))
+      click.on(q)
+    else
+      throw new MissingPageElementException(q)
+  }
+
+  def setValue(q: Query, value: String): Unit = {
+    if (pageHasElement(q))
+      q.webElement.sendKeys(value)
+    else
+      throw new MissingPageElementException(q)
   }
 }

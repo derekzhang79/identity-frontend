@@ -13,18 +13,22 @@ import play.api.test._
 case class FacebookTestUser(
     name: String = "John Doe",
     installed: String = "false",
-    password: Option[String] = None,
+    password: String = "",
     locale: String = "en_US",
     permissions: String = "read_stream",
     method: String = "post",
-    id: Option[String] = None,
-    email: Option[String] = None,
-    loginUrl: Option[String] = None,
+    id: String = "",
+    email: String = "",
+    loginUrl: String = "",
     created: Boolean = false)
   extends TestUser
 
 case class FaceBookTestUserException(msg: String) extends Exception(msg)
 
+/**
+  * Facebook Test User API
+  * https://developers.facebook.com/docs/graph-api/reference/v2.5/app/accounts/test-users
+  */
 object FacebookTestUserService {
 
   def logger = LoggerFactory.getLogger(this.getClass)
@@ -33,7 +37,14 @@ object FacebookTestUserService {
 
   private def GET(url: String): WSResponse = {
     implicit val app: play.api.test.FakeApplication = new FakeApplication()
-    Await.result(WS.url(url).get(), 10.second)
+
+    val response = Await.result(WS.url(url).get(), 10.second)
+
+    // try one more time if it fails
+    response.status match {
+      case 200 => response
+      case _ => Await.result(WS.url(url).get(), 10.second)
+    }
   }
 
   private val accessToken = {
@@ -85,13 +96,13 @@ object FacebookTestUserService {
     val mergedFacebookTestUser = FacebookTestUser(
       facebookTestUser.name,
       facebookTestUser.installed,
-      Some(fbUserResponse.password),
+      fbUserResponse.password,
       facebookTestUser.locale,
       facebookTestUser.permissions,
       facebookTestUser.method,
-      Some(fbUserResponse.id),
-      Some(fbUserResponse.email),
-      Some(fbUserResponse.login_url),
+      fbUserResponse.id,
+      fbUserResponse.email,
+      fbUserResponse.login_url,
       created = true)
 
     mergedFacebookTestUser
@@ -104,14 +115,11 @@ object FacebookTestUserService {
       "method" -> "delete"
     ).map { case (k, v) => s"$k=$v" }.mkString("&")
 
-    val fbTestUserid = fbTestUser.id.getOrElse( throw new IllegalStateException(
-          "FacebookTestUser is missing ID. Cannot delete FacebookTestUser."))
-
-    val response = GET(s"$graphApiUrl/${fbTestUserid}?${queryString}")
+    val response = GET(s"$graphApiUrl/${fbTestUser.id}?${queryString}")
 
     if (response.status != 200)
       throw new FaceBookTestUserException(
-        s"Could not delete Facebook Test User with ID ${fbTestUserid}. ${response.body}")
+        s"Could not delete Facebook Test User with ID ${fbTestUser.id}. ${response.body}")
 
     response.body.toBoolean
   }

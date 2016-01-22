@@ -11,17 +11,19 @@ import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import org.scalatest.Matchers._
+import play.filters.csrf.CSRFConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
 class SigninActionSpec extends PlaySpec with MockitoSugar {
+  val fakeCsrfConfig = CSRFConfig()
 
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
 
-    val controller = new SigninAction(mockIdentityService, messages)
+    val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig)
   }
 
   def fakeSigninRequest(email: Option[String], password: Option[String], rememberMe: Option[String], returnUrl: Option[String]) = {
@@ -30,6 +32,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       .map(p => p._1 -> p._2.get)
 
     FakeRequest("POST", "/actions/signin")
+      .withHeaders(fakeCsrfConfig.headerName -> "nocheck")
       .withFormUrlEncodedBody(bodyParams: _*)
   }
 

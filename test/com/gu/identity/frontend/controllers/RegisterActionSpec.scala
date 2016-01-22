@@ -15,11 +15,14 @@ import play.api.{Configuration => PlayConfiguration}
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.filters.csrf.CSRFConfig
 import play.utils.UriEncoding
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegisterActionSpec extends PlaySpec with MockitoSugar {
+
+  val fakeCsrfConfig = CSRFConfig()
 
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
@@ -33,7 +36,8 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       override val appConfiguration: PlayConfiguration = null
       override val identityFederationApiHost: String = "https://oauth.theguardian.com"
     }
-    val controller = new RegisterAction(mockIdentityService, messages, config)
+
+    val controller = new RegisterAction(mockIdentityService, messages, config, fakeCsrfConfig)
   }
 
   def fakeRegisterRequest(
@@ -59,7 +63,9 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "skipConfirmation" -> skipConfirmation.getOrElse(false).toString,
       "group" -> group.getOrElse(""))
 
-    FakeRequest("POST", "/actions/register").withFormUrlEncodedBody(bodyParams: _*)
+    FakeRequest("POST", "/actions/register")
+      .withHeaders(fakeCsrfConfig.headerName -> "nocheck")
+      .withFormUrlEncodedBody(bodyParams: _*)
   }
 
   def fakeRegisterThenSignIn(mockIdentityService: IdentityService) =

@@ -90,33 +90,57 @@ object FrontendBuildPlugin extends AutoPlugin {
   }.dependsOn(nodeModules in Assets)
 
 
-  def runProcess(cmd: BuildCommand, baseDirectory: File, log: Logger): Either[FrontendBuildError, Any] = {
+  def runProcess(cmd: BuildCommand, baseDirectory: File, log: Logger): Either[FrontendBuildError, String] = {
     log.info(s"[${cmd.id}] Running `${cmd.command}`")
     val startTime = System.currentTimeMillis
 
-    val out = new ArrayBuffer[(String, String)]
+    val processLog = CommandProcessLogger(cmd)
 
-    val logger = new ProcessLogger {
-      def info(output: => String) = out.append("info" -> output)
-      def error(error: => String) = out.append("error" -> error)
-      def buffer[T](f: => T): T = f
-    }
-
-    val exitCode = Process(cmd.command, baseDirectory) !< logger
+    val exitCode = Process(cmd.command, baseDirectory) !< processLog
 
     log.info(s"[${cmd.id}] Finished `${cmd.command}` in ${System.currentTimeMillis - startTime}ms")
 
     if (exitCode == 0) {
-      out.foreach {
-        case ("error", msg) => log.warn(s"[${cmd.id}] $msg")
-        case (_, msg) => log.info(s"[${cmd.id}] $msg")
-      }
-      Right()
+      processLog.sendToLogger(log)
+
+      Right(processLog.stdOut)
     }
     else
-      Left(FrontendBuildError(cmd.command, exitCode, out.map(_._2).mkString("\n")))
+      Left(FrontendBuildError(cmd.command, exitCode, processLog.mkString))
+  }
+
+
+  /**
+   * Captures stdout and stderr from a process.
+   */
+  private case class CommandProcessLogger(cmd: BuildCommand) extends ProcessLogger {
+    private val out = new ArrayBuffer[(Level.Value, String)]
+
+    def info(output: => String) = out.append(Level.Info -> output)
+    def error(error: => String) = out.append(Level.Error -> error)
+    def buffer[T](f: => T): T = f
+
+    /**
+     * Send captured output to a sbt task stream logger.
+     * stderr output from the process is output as WARN level.
+     */
+    def sendToLogger(log: Logger) =
+      out.foreach {
+        case (Level.Error, msg) => log.warn(s"[${cmd.id}] $msg")
+        case (_, msg) => log.info(s"[${cmd.id}] $msg")
+      }
+
+    def stdOut =
+      asString(out.filter(_._1 == Level.Info))
+
+    def mkString =
+      asString(out)
+
+    private def asString(in: ArrayBuffer[(Level.Value, String)]) =
+      in.map(_._2).mkString("\n")
   }
 }
+
 
 case class FrontendBuildError(
                        command: String,

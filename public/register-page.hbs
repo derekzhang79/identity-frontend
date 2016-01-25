@@ -1,0 +1,15 @@
+{{# partial "pageTitle" }}{{ registerPageText.pageTitle }}{{/ partial }}
+
+{{# partial "content" }}
+
+  <h1 class="register__heading">{{ registerPageText.title }}</h1>
+
+  {{> components/oauth-cta/_oauth-cta }}
+
+  {{> components/register-form/_register-form }}
+
+  {{> components/terms/_terms }}
+
+{{/ partial }}
+
+{{> layout}}

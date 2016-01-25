@@ -9,7 +9,7 @@ import play.api.i18n.I18nComponents
 import play.filters.gzip.GzipFilter
 import router.Routes
 import play.api.libs.ws.ning.NingWSComponents
-import play.api.{BuiltInComponentsFromContext, ApplicationLoader}
+import play.api.{Mode, Logger, BuiltInComponentsFromContext, ApplicationLoader}
 import play.api.ApplicationLoader.Context
 import com.mohiva.play.htmlcompressor.DefaultHTMLCompressorFilter
 
@@ -41,6 +41,11 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
     new DefaultHTMLCompressorFilter(configuration, environment),
     new BetaUserGroupFilter(frontendConfiguration)
   ).filters
+
+  // Makes sure the logback.xml file is being found in DEV environments
+  if(environment.mode == Mode.Dev) {
+    Logger.configure(environment)
+  }
 
   override lazy val router = new Routes(httpErrorHandler, applicationController, signinController, registerController, healthcheckController, manifestController, assets)
 }

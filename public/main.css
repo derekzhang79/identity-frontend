@@ -1,8 +1,24 @@
 @import "_layout.css";
-@import "components/signin/_signin.css";
-@import "components/social-signin/_social-signin.css";
-@import "components/register-confirmation/_register-confirmation.css";
+@import "components/form-foundations/_form_foundations.css";
 
-/* MVT: Sign in v2 variant B */
+/** Terms and conditions **/
+
+@import "components/terms/_terms.css";
+
+/** Sign in page **/
+
+@import "components/signin/_signin.css";
+@import "components/oauth-cta/_oauth-cta.css";
+
+/** MVT: Sign in v2 variant B **/
 
 @import "components/signin-b/_signin-b.css";
+
+
+/** Register page **/
+
+@import "components/register-form/_register-form.css";
+
+/** Register Confirmation page **/
+
+@import "components/register-confirmation/_register-confirmation";

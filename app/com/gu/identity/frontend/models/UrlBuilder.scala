@@ -18,7 +18,20 @@ object UrlBuilder {
       }
     }
 
-  def apply(call: Call, params: Seq[(String, String)]): String = {
+  def apply(call: Call, params: Seq[(String, String)]): String =
     apply(call.url, params)
+
+
+  def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): String =
+    apply(call.url, returnUrl, skipConfirmation)
+
+
+  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): String = {
+    val params = Seq(
+      Some("returnUrl" -> returnUrl.url),
+      skipConfirmation.map("skipConfirmation" -> _.toString)
+    ).flatten
+
+    apply(baseUrl, params)
   }
 }

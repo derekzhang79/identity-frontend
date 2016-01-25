@@ -1,19 +1,13 @@
 package test.pages
 
-import test.util.{Browser, Config}
-import org.scalatest.selenium.{Page, WebBrowser}
+import test.util.{LoadablePage, Browser, Config}
 
-class RegisterConfirm extends Page with WebBrowser with Browser {
+class RegisterConfirm extends LoadablePage with Browser {
   val url = s"""${Config.baseUrl}/register/confirm?returnUrl=${Config.baseUrl}/register"""
 
-  def confirmRegistration() = {
-    assert(pageHasElement(confirmRegistrationButton))
-    click.on(confirmRegistrationButton)
-  }
+  def hasLoaded(): Boolean = pageHasElement(confirmRegistrationButton)
 
-  def pageHasLoaded(): Boolean = {
-    pageHasElement(confirmRegistrationButton)
-  }
+  def confirmRegistration() = clickOn(confirmRegistrationButton)
 
   private lazy val confirmRegistrationButton = className(s"submit-input")
 }

@@ -10,5 +10,5 @@ class Filters (securityHeadersFilter: SecurityHeadersFilter,
                          betaUserGroupFilter: BetaUserGroupFilter) extends HttpFilters {
   // Note: filters are processed in reverse (foldRight), so need to explicitly
   //       put htmlCompressorFilter at end so that its processed first
-  def filters = Seq(betaUserGroupFilter, StrictTransportSecurityHeaderFilter, securityHeadersFilter, gzipFilter, htmlCompressorFilter)
+  def filters = Seq(LogRequestsFilter, betaUserGroupFilter, StrictTransportSecurityHeaderFilter, securityHeadersFilter, gzipFilter, htmlCompressorFilter)
 }

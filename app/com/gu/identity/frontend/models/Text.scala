@@ -35,15 +35,6 @@ object Text {
     }
   }
 
-  object SocialSignInText {
-    def toMap(implicit messages: Messages): Map[String, String] = {
-      Map(
-        "facebook" -> messages("socialsignin.description", "Facebook"),
-        "google" -> messages("socialsignin.description", "Google")
-      )
-    }
-  }
-
   object HeaderText {
     def toMap(implicit messages: Messages): Map[String, String] = {
       Map(

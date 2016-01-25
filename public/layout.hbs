@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>{{ signInPageText.pageTitle }} {{layout.text.layoutPageTitle}}</title>
+  <title>{{# block "pageTitle" }}{{/ block }} | {{ layout.text.layoutPageTitle }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   {{> components/favicons/_favicons }}

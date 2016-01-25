@@ -13,6 +13,7 @@ object ErrorViewModel {
   val errorMessages = Map(
     "signin-error-gateway" -> "There was a problem signing in; please try again.",
     "signin-error-bad-request" -> "Incorrect email or password; please try again.",
+    "signin-error-csrf" -> "Forgery token invalid; please try again.",
     "register-error-gateway" -> "There was a problem creating your account; please try again.",
     "register-error-bad-request" -> "One or more inputs was not valid; please try again.",
     "register-error-username-in-use" -> "The username you selected is already in use; please choose another one.",
@@ -22,7 +23,8 @@ object ErrorViewModel {
     "register-error-lastName" -> nonEmptyField("last name"),
     "register-error-email" -> "Invalid email address; please try again.",
     "register-error-username" -> "Invalid username; your username must be between 6 and 20 characters long and contain only letters and numbers.",
-    "register-error-password" -> "Invalid password; your password must be between 6 and 20 characters long."
+    "register-error-password" -> "Invalid password; your password must be between 6 and 20 characters long.",
+    "register-error-csrf" -> "Forgery token invalid; please try again."
   )
 
   private def nonEmptyField(fieldName: String) = s"${fieldName.capitalize} field must not be blank."

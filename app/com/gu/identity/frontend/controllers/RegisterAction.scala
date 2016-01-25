@@ -10,7 +10,7 @@ import play.api.data.{Mapping, Form}
 import play.api.data.Forms._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Controller, Cookie => PlayCookie}
+import play.api.mvc.{Cookie => PlayCookie, RequestHeader, Controller}
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
@@ -56,7 +56,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     )(RegisterRequest.apply)(RegisterRequest.unapply)
   )
 
-  def register = CSRFCheck(csrfConfig).async { implicit request =>
+  def register = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
     val clientIp = ClientRegistrationIp(request)
     registerForm.bindFromRequest.fold(
       errorForm => {
@@ -138,5 +138,16 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
       "skipThirdPartyLandingPage" -> "true"
     )
     UrlBuilder(baseUrl, params)
+  }
+
+
+  // Note: Limitation
+  //       Error Handler only accepts RequestHeader instead of Request, so we cannot
+  //       pass ReturnUrl and skipConfirmation as they're on the Request body.
+  private def handleCSRFError(request: RequestHeader, msg: String) = Future.successful {
+    logger.error(s"CSRF error during Registration: $msg")
+    val errors = Seq("register-error-csrf")
+
+    SeeOther(routes.Application.register(errors).url)
   }
 }

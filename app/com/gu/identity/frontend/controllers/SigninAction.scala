@@ -8,8 +8,9 @@ import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{RequestHeader, Action, Controller}
 
+import scala.concurrent.Future
 import scala.util.control.NonFatal
 import play.api.i18n.Messages.Implicits._
 
@@ -31,7 +32,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     )(SignInRequest.apply)(SignInRequest.unapply)
   )
 
-  def signIn = CSRFCheck(csrfConfig).async { implicit request =>
+  def signIn = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
     val formParams = signInFormBody.bindFromRequest()(request).get
     val trackingData = TrackingData(request, formParams.returnUrl)
     val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"))
@@ -55,6 +56,17 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
   private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]) = {
     val query = errors.map("signin-" + _.id)
     SeeOther(routes.Application.signIn(query, Some(returnUrl.url), skipConfirmation).url)
+  }
+
+
+  // Note: Limitation
+  //       Error Handler only accepts RequestHeader instead of Request, so we cannot
+  //       pass ReturnUrl and skipConfirmation as they're on the Request body.
+  private def handleCSRFError(request: RequestHeader, msg: String) = Future.successful {
+    logger.error(s"CSRF error during Sign-in: $msg")
+    val errors = Seq("signin-error-csrf")
+
+    SeeOther(routes.Application.signIn(errors).url)
   }
 
 }

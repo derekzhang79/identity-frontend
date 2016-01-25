@@ -23,14 +23,18 @@ case class CSRFAddToken(config: CSRFConfig) extends ActionBuilder[Request] with 
 
 }
 
-case class CSRFCheck(config: CSRFConfig, errorHandler: ErrorHandler = CSRF.DefaultErrorHandler) extends ActionBuilder[Request] with CSRFActions {
+case class CSRFCheck(config: CSRFConfig, errorHandler: CSRFErrorHandler = defaultErrorHandler) extends ActionBuilder[Request] with CSRFActions {
   def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]): Future[Result] =
     NoCache(block(request))
 
   override def composeAction[A](action: Action[A]) =
     if (config.enabled)
-      PlayCSRFCheck(action, errorHandler, config.underlying)
+      PlayCSRFCheck(action, playErrorHandler, config.underlying)
 
     else
       action
+
+  lazy val playErrorHandler = new ErrorHandler {
+    def handle(req: RequestHeader, msg: String): Future[Result] = errorHandler(req, msg)
+  }
 }

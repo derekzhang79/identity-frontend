@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.controllers
 
-import com.gu.identity.frontend.csrf.CSRFCheck
+import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ReturnUrl, TrackingData}
 import com.gu.identity.frontend.services.{IdentityService, ServiceError, ServiceGatewayError}
@@ -9,7 +9,6 @@ import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{Action, Controller}
-import play.filters.csrf.CSRFConfig
 
 import scala.util.control.NonFatal
 import play.api.i18n.Messages.Implicits._

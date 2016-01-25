@@ -1,16 +1,16 @@
 package com.gu.identity.frontend.csrf
 
 import play.api.mvc.RequestHeader
-import play.filters.csrf.{CSRF, CSRFConfig}
+import play.filters.csrf.CSRF.{Token, getToken}
 
-case class CSRFToken(fieldName: String, value: String)
+case class CSRFToken private(fieldName: String, value: String)
 
 object CSRFToken {
-  def apply(config: CSRFConfig, token: CSRF.Token): CSRFToken =
+  def apply(config: CSRFConfig, token: Token): CSRFToken =
     CSRFToken(config.tokenName, token.value)
 
   def fromRequest(config: CSRFConfig, request: RequestHeader): Option[CSRFToken] =
-    CSRF.getToken(request, config)
+    getToken(request, config.underlying)
       .map(CSRFToken(config, _))
 
 }

@@ -1,13 +1,12 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.csrf.{CSRFToken, CSRFAddToken}
+import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFToken, CSRFAddToken}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.views.ViewRenderer.{renderSignIn, renderRegisterConfirmation, renderRegister}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.mvc._
-import play.filters.csrf.CSRFConfig
 
 
 class Application (configuration: Configuration, val messagesApi: MessagesApi, csrfConfig: CSRFConfig) extends Controller with Logging with I18nSupport {

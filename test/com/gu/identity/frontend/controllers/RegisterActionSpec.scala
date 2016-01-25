@@ -3,6 +3,7 @@ package com.gu.identity.frontend.controllers
 import java.net.{URLDecoder, URLEncoder}
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
 import com.gu.identity.frontend.utils.UrlDecoder
@@ -15,14 +16,13 @@ import play.api.{Configuration => PlayConfiguration}
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.filters.csrf.CSRFConfig
 import play.utils.UriEncoding
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
-  val fakeCsrfConfig = CSRFConfig()
+  val fakeCsrfConfig = CSRFConfig.disabled
 
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
@@ -64,7 +64,6 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "group" -> group.getOrElse(""))
 
     FakeRequest("POST", "/actions/register")
-      .withHeaders(fakeCsrfConfig.headerName -> "nocheck")
       .withFormUrlEncodedBody(bodyParams: _*)
   }
 

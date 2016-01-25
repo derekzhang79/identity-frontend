@@ -2,7 +2,7 @@ package com.gu.identity.frontend.controllers
 
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.csrf.CSRFCheck
+import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{UrlBuilder, ClientRegistrationIp, TrackingData, ReturnUrl}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceError, IdentityService}
@@ -11,7 +11,6 @@ import play.api.data.Forms._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Controller, Cookie => PlayCookie}
-import play.filters.csrf.CSRFConfig
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal

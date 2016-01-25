@@ -1,12 +1,12 @@
 package com.gu.identity.frontend.configuration
 
 import com.gu.identity.frontend.controllers.{Manifest, RegisterAction, SigninAction, HealthCheck, Application}
+import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.filters.{BetaUserGroupFilter, SecurityHeadersFilter, Filters}
 import com.gu.identity.frontend.services.{IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import com.gu.identity.service.client.IdentityClient
 import jp.co.bizreach.play2handlebars.HandlebarsPlugin
 import play.api.i18n.I18nComponents
-import play.filters.csrf.CSRFComponents
 import play.filters.gzip.GzipFilter
 import router.Routes
 import play.api.libs.ws.ning.NingWSComponents
@@ -22,8 +22,9 @@ class FrontendApplicationLoader extends ApplicationLoader {
   }
 }
 
-class ApplicationComponents(context: Context) extends BuiltInComponentsFromContext(context) with NingWSComponents with I18nComponents with CSRFComponents {
+class ApplicationComponents(context: Context) extends BuiltInComponentsFromContext(context) with NingWSComponents with I18nComponents {
   lazy val frontendConfiguration = new ApplicationConfiguration(configuration)
+  lazy val csrfConfig = CSRFConfig(configuration)
 
   lazy val identityServiceRequestHandler = new IdentityServiceRequestHandler(wsClient)
   lazy val identityClient: IdentityClient = new IdentityClient

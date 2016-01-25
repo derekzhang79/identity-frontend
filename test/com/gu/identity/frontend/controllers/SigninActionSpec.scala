@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.controllers
 
+import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services._
 import org.mockito.Mockito._
@@ -11,13 +12,12 @@ import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import org.scalatest.Matchers._
-import play.filters.csrf.CSRFConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
 class SigninActionSpec extends PlaySpec with MockitoSugar {
-  val fakeCsrfConfig = CSRFConfig()
+  val fakeCsrfConfig = CSRFConfig.disabled
 
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
@@ -32,7 +32,6 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       .map(p => p._1 -> p._2.get)
 
     FakeRequest("POST", "/actions/signin")
-      .withHeaders(fakeCsrfConfig.headerName -> "nocheck")
       .withFormUrlEncodedBody(bodyParams: _*)
   }
 

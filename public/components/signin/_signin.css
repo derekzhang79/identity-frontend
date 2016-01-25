@@ -83,6 +83,7 @@
 
 .signin-form__label--remember-me {
   @extend %form__label--checkbox;
+  float: left;
 }
 
 

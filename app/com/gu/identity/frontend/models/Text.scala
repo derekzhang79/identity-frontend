@@ -57,18 +57,4 @@ object Text {
       )
     }
   }
-
-  object RegisterConfirmationText {
-    def toMap(implicit messages: Messages): Map[String, String] = {
-      Map(
-        "title" -> messages("registerConfirmation.title"),
-        "instruction" -> messages("registerConfirmation.instruction"),
-        "completeRegistration" -> messages("registerConfirmation.completeRegistration"),
-        "faq" -> messages("registerConfirmation.faq"),
-        "emailUserhelp" -> messages("registerConfirmation.emailUserhelp"),
-        "resetPassword" -> messages("registerConfirmation.resetPassword"),
-        "signOut" -> messages("registerConfirmation.signOut")
-      )
-    }
-  }
 }

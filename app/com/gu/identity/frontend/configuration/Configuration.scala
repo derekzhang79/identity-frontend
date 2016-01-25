@@ -14,6 +14,10 @@ trait Configuration {
 
   val omnitureAccount: String
 
+  val googleRecaptchaSiteKey: String
+
+  val googleRecaptchaSecretKey: String
+
   val appConfiguration: PlayConfiguration
 }
 
@@ -32,4 +36,8 @@ class ApplicationConfiguration(val appConfiguration: PlayConfiguration) extends 
   val identityProfileBaseUrl = getString("identity.frontend.baseUrl")
 
   val omnitureAccount = getString("omniture.account")
+
+  val googleRecaptchaSiteKey = getString("google.recaptcha.site")
+
+  val googleRecaptchaSecretKey = getString("google.recaptcha.secret")
 }

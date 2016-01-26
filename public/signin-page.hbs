@@ -39,7 +39,9 @@
         <label class="signin-form__label--remember-me" for="signin_field_remember_me" tabindex="0">{{signInPageText.rememberMe}}</label>
       </div>
 
-        <div class="g-recaptcha" data-sitekey="{{googleSiteKey}}"></div>
+      {{#if recaptchaEnabled}}
+        <div class="g-recaptcha" data-sitekey="{{recaptchaSiteKey}}"></div>
+      {{/if}}
 
       <div class="signin-form__control--submit">
         <button class="signin-form__submit-button" id="signin_submit" type="submit">{{signInPageText.signIn}}</button>

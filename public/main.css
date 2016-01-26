@@ -18,3 +18,7 @@
 /** Register page **/
 
 @import "components/register-form/_register-form.css";
+
+/** Register Confirmation page **/
+
+@import "components/register-confirmation/_register-confirmation";

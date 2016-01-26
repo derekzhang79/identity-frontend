@@ -50,6 +50,12 @@ object ViewRenderer {
     renderViewModel("register-page", model)
   }
 
+  def renderRegisterConfirmation(configuration: Configuration, returnUrl: Option[String])(implicit messages: Messages) = {
+    renderViewModel(
+      "register-confirmation-page",
+      RegisterConfirmationViewModel(configuration, returnUrl))
+  }
+
   def renderViewModel(view: String, model: ViewModel with ViewModelResources with Product): Result = {
     val html = HBS.withProduct(view, model)
 

@@ -22,6 +22,8 @@ case class SignInViewModel private(
     registerUrl: String = "",
     forgotPasswordUrl: String = "",
 
+    googleSiteKey: String,
+
     actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url),
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product])
@@ -32,6 +34,13 @@ case class SignInViewModel private(
 object SignInViewModel {
   def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
     val layout = LayoutViewModel(configuration, activeTests)
+    val resources = layout.resources ++
+     Seq(JavascriptResource("https://www.google.com/recaptcha/api.js", "https://www.google.com", isInHead = true),
+       IndirectlyLoadedExternalScriptResources("https://www.gstatic.com"),
+       IndirectlyLoadedExternalFrameResource("https://www.google.com"),
+       UnsafeInlineCSSResource)
+
+
 
     SignInViewModel(
       layout = layout,
@@ -48,7 +57,9 @@ object SignInViewModel {
       registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation),
       forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation),
 
-      resources = layout.resources,
+      googleSiteKey = configuration.googleRecaptchaSiteKey,
+
+      resources = resources,
       indirectResources = layout.indirectResources
     )
   }

@@ -6,9 +6,8 @@ import play.filters.gzip.GzipFilter
 
 class Filters (securityHeadersFilter: SecurityHeadersFilter,
                          gzipFilter: GzipFilter,
-                         htmlCompressorFilter: HTMLCompressorFilter,
-                         betaUserGroupFilter: BetaUserGroupFilter) extends HttpFilters {
+                         htmlCompressorFilter: HTMLCompressorFilter) extends HttpFilters {
   // Note: filters are processed in reverse (foldRight), so need to explicitly
   //       put htmlCompressorFilter at end so that its processed first
-  def filters = Seq(LogRequestsFilter, betaUserGroupFilter, StrictTransportSecurityHeaderFilter, securityHeadersFilter, gzipFilter, htmlCompressorFilter)
+  def filters = Seq(LogRequestsFilter, StrictTransportSecurityHeaderFilter, securityHeadersFilter, gzipFilter, htmlCompressorFilter)
 }

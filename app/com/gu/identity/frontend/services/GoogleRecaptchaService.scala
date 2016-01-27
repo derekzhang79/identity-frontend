@@ -10,16 +10,9 @@ import scala.util.control.NonFatal
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
+class GoogleRecaptchaServiceHandler(ws: WSClient, configuration: Configuration) extends Logging{
 
-trait GoogleRecaptchaService {
   implicit val googleResponseFormat = Json.format[GoogleResponse]
-
-  def isValidRecaptchaResponse(captchaResponseCode: String): Future[Boolean]
-
-  def getRecaptchaResponseFromGoogle(captchaResponseCode: String): Future[GoogleResponse]
-}
-
-class GoogleRecaptchaServiceHandler(ws: WSClient, configuration: Configuration) extends GoogleRecaptchaService with Logging{
 
   def isValidRecaptchaResponse(captchaResponseCode: String): Future[Boolean] = {
     val googleResponse = getRecaptchaResponseFromGoogle(captchaResponseCode)

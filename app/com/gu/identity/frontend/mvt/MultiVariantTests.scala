@@ -114,26 +114,6 @@ case class RuntimeMultiVariantTestVariant(id: String) extends MultiVariantTestVa
 
 object MultiVariantTests {
 
-  object Implicits {
-    import play.api.libs.json._
-
-    implicit val mvtVariantJsonWrites: Writes[MultiVariantTestVariant] = new Writes[MultiVariantTestVariant] {
-      override def writes(o: MultiVariantTestVariant): JsValue = Json.obj(
-        "id" -> o.id
-      )
-    }
-
-    implicit val mvtJsonWrites: Writes[MultiVariantTest] = new Writes[MultiVariantTest] {
-      override def writes(o: MultiVariantTest): JsValue = Json.obj(
-        "name" -> o.name,
-        "audience" -> o.audience,
-        "audienceOffset" -> o.audienceOffset,
-        "isServerSide" -> o.isServerSide,
-        "variants" -> o.variants
-      )
-    }
-  }
-
   val MVT_COOKIE_NAME = "GU_mvt_id"
   val MAX_ID = 899999
 
@@ -143,25 +123,4 @@ object MultiVariantTests {
 
   def allServerSide = allActive.filter(_.isServerSide)
 
-  def isInTest(test: MultiVariantTest, mvtId: Int, maxId: Int = MAX_ID): Boolean = {
-    val minBound = maxId * test.audienceOffset
-    val maxBound = minBound + maxId * test.audience
-
-    minBound < mvtId && mvtId <= maxBound
-  }
-
-  def activeVariantForTest(test: MultiVariantTest, mvtId: Int, maxId: Int = MAX_ID): Option[MultiVariantTestVariant] = {
-    if (isInTest(test, mvtId, maxId))
-      Some(test.variants(mvtId % test.variants.size))
-
-    else None
-  }
-
-  /**
-   * Retrieve active server-side tests and the selected variant for an mvtId.
-   */
-  def activeTests(mvtId: Int, maxId: Int = MAX_ID): Set[(MultiVariantTest, MultiVariantTestVariant)] =
-    allServerSide.flatMap { test =>
-      activeVariantForTest(test, mvtId, maxId).map(test -> _)
-    }
 }

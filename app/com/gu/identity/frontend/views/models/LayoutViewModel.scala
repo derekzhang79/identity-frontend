@@ -2,6 +2,7 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.Text.{FooterText, HeaderText, LayoutText}
+import com.gu.identity.frontend.mvt
 import com.gu.identity.frontend.mvt.{MultiVariantTests, MultiVariantTestVariant, MultiVariantTest}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
@@ -44,7 +45,7 @@ case class LayoutViewModel(
 case class JavascriptConfig(omnitureAccount: String, mvtTests: Seq[MultiVariantTest]) {
   self =>
 
-  import MultiVariantTests.Implicits._
+  import mvt.Implicits._
   implicit val jsonWrites = Json.writes[JavascriptConfig]
 
   def toJSON =

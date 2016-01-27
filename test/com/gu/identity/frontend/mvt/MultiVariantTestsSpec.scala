@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.mvt
 
-import com.gu.identity.frontend.mvt.MultiVariantTests.{activeVariantForTest, isInTest}
+import com.gu.identity.frontend.mvt.TestResults._
 import org.scalatest.{Matchers, WordSpec}
 
 

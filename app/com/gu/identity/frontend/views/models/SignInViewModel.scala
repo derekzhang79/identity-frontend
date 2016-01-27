@@ -37,7 +37,7 @@ object SignInViewModel {
 
     val layout = LayoutViewModel(configuration, activeTests)
 
-    if(errors.isEmpty) {
+    if(errors.isEmpty || configuration.googleRecaptchaIsDisabled) {
       val resources = layout.resources
       createSignInViewModel(layout, configuration, returnUrl, skipConfirmation, errors, resources)
     } else {

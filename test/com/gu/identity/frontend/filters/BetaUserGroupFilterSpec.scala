@@ -22,6 +22,7 @@ class BetaUserGroupFilterSpec extends WordSpec with Matchers {
     override val identityFederationApiHost: String = "https://oauth.theguardian.com"
     override val googleRecaptchaSiteKey: String = "siteKey"
     override val googleRecaptchaSecretKey: String = "secret"
+    override val googleRecaptchaIsDisabled: Boolean = false
   }
 
   val filter = new BetaUserGroupFilter(config)

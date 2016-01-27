@@ -34,6 +34,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       override val identityFederationApiHost: String = "https://oauth.theguardian.com"
       override val googleRecaptchaSiteKey: String = "siteKey"
       override val googleRecaptchaSecretKey: String = "secret"
+      override val googleRecaptchaIsDisabled: Boolean = false
     }
     val controller = new RegisterAction(mockIdentityService, messages, config)
   }

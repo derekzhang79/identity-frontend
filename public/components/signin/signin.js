@@ -2,31 +2,76 @@
 
 import { getElementById, sessionStorage } from '../browser/browser';
 
-export function init() {
-  const form = getElementById( 'signin_form' );
-  const emailField = getElementById( 'signin_field_email' );
+const STORAGE_KEY = 'gu_id_signIn_state';
 
-  const STORAGE_KEY = 'gu_id_state';
 
-  if (!form) { throw new Error( 'Could not find signin form' ); }
+class SignInFormModel {
+  constructor( formElement, emailField ) {
+    this.formElement = formElement;
+    this.emailFieldElement = emailField;
 
-  form.on( 'submit', () => {
-    const email = emailField.value();
+    this.state = SignInFormState.fromStorage();
+    this.addFormListeners();
+  }
 
-    if ( email && email.length > 0 ) {
-      sessionStorage.set( STORAGE_KEY, JSON.stringify( { email } ) );
-    }
-  } );
+  addFormListeners() {
+    this.formElement.on( 'submit', this.formSubmitted.bind( this ) );
+  }
 
-  if ( !emailField.value() ) {
-    const existingState = sessionStorage.get( STORAGE_KEY );
-
-    if ( existingState ) {
-      const parsedState = JSON.parse( existingState );
-
-      if ( parsedState && parsedState.email ) {
-        emailField.setValue( parsedState.email );
-      }
+  loadState() {
+    if ( !this.emailFieldElement.value() && this.state.email ) {
+      this.emailFieldElement.setValue( this.state.email );
     }
   }
+
+  saveState() {
+    const email = this.emailFieldElement.value();
+
+    this.state.save( email );
+  }
+
+  formSubmitted() {
+    this.saveState();
+  }
+
+  static fromDocument() {
+    const form = getElementById( 'signin_form' );
+    const emailField = getElementById( 'signin_field_email' );
+
+    if ( form && emailField ) {
+      return new SignInFormModel( form, emailField );
+    }
+  }
+}
+
+
+class SignInFormState {
+  constructor( email ) {
+    this.email = email;
+  }
+
+  save( email ) {
+    if ( typeof email === 'string' && email.length > 0 ) {
+      sessionStorage.setJSON( STORAGE_KEY, { email } );
+    }
+  }
+
+  static fromStorage() {
+    const existingState = sessionStorage.getJSON( STORAGE_KEY );
+
+    const email = typeof existingState === 'object' && existingState.email || undefined;
+
+    return new SignInFormState( email );
+  }
+}
+
+
+export function init() {
+
+  const form = SignInFormModel.fromDocument();
+
+  if ( form ) {
+    form.loadState();
+  }
+
 }

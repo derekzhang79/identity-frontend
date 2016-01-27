@@ -3,7 +3,7 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ReturnUrl, TrackingData}
-import com.gu.identity.frontend.services.{ServiceBadRequest, IdentityService, ServiceError, ServiceGatewayError}
+import com.gu.identity.frontend.services._
 import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.i18n.{MessagesApi, I18nSupport}
@@ -43,9 +43,14 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       val trackingData = TrackingData(request, formParams.returnUrl)
       val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"))
 
+      
       formParams.googleRecaptchaResponse match {
         case Some(recaptchaResponseCode) => {
-          isValidRecaptchaResponse(recaptchaResponseCode).flatMap{
+
+          val googleRecaptchaServiceHander = GoogleRecaptchaServiceHandler(ws, configuration)
+          val isValidResponse = googleRecaptchaServiceHander.isValidRecaptchaResponse(recaptchaResponseCode)
+
+          isValidResponse.flatMap{
             case true => authenticate(formParams.email, formParams.password, formParams.rememberMe, formParams.skipConfirmation, returnUrl, trackingData)
             case false => Future.successful(redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation))
           }
@@ -53,34 +58,6 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
         case None => {
           authenticate(formParams.email, formParams.password, formParams.rememberMe, formParams.skipConfirmation, returnUrl, trackingData)
         }
-      }
-    }
-  }
-
-  private def isValidRecaptchaResponse(captchaResponseCode: String): Future[Boolean] = {
-    val googleResponse = checkRecaptchaCodeWithGoogle(captchaResponseCode)
-    googleResponse.map {
-      case GoogleResponse(true, _) => true
-      case GoogleResponse(false, errors) => {
-        logger.warn(s"Google Recaptcha failed to authenticate ${errors}")
-        false
-      }
-    }.recover{
-      case NonFatal(ex) => {
-        logger.warn(s"Unexpected error from google recaptcha: ${ex.getMessage}", ex)
-        false
-      }
-    }
-
-  }
-
-  private def checkRecaptchaCodeWithGoogle(captchaResponseCode: String): Future[GoogleResponse] = {
-    ws.url("https://www.google.com/recaptcha/api/siteverify").post(
-      Map("secret" -> Seq(configuration.googleRecaptchaSecretKey), "response" -> Seq(captchaResponseCode))
-    ).map{
-      googleResponse => {
-        val body = googleResponse.body
-        Json.parse(body).as[GoogleResponse]
       }
     }
   }
@@ -113,6 +90,4 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
   }
 
 }
-
-case class GoogleResponse(success: Boolean, errorCodes: Option[List[String]])
 

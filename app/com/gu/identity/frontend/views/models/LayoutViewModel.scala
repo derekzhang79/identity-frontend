@@ -1,7 +1,8 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTests, MultiVariantTest, Configuration}
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.Text.{FooterText, HeaderText, LayoutText}
+import com.gu.identity.frontend.mvt.{MultiVariantTests, MultiVariantTestVariant, MultiVariantTest}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 

@@ -1,4 +1,4 @@
-package com.gu.identity.frontend.configuration
+package com.gu.identity.frontend.mvt
 
 /**
  * Define a Multi Variant Test for testing different logic on Users to

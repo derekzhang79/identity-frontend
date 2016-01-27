@@ -1,7 +1,7 @@
-package com.gu.identity.frontend.configuration
+package com.gu.identity.frontend.mvt
 
+import com.gu.identity.frontend.mvt.MultiVariantTests.{activeVariantForTest, isInTest}
 import org.scalatest.{Matchers, WordSpec}
-import MultiVariantTests.{activeVariantForTest, isInTest}
 
 
 class MultiVariantTestsSpec extends WordSpec with Matchers {

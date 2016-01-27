@@ -1,10 +1,11 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.Text._
+import com.gu.identity.frontend.mvt.{MultiVariantTestVariant, MultiVariantTest}
 import play.api.i18n.Messages
 
 case class SignInViewModel private(

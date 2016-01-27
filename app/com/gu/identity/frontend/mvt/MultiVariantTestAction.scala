@@ -1,7 +1,7 @@
-package com.gu.identity.frontend.controllers
+package com.gu.identity.frontend.mvt
 
-import com.gu.identity.frontend.configuration.{MultiVariantTests, MultiVariantTestVariant, MultiVariantTest}
-import play.api.mvc.{Result, ActionBuilder, WrappedRequest, Request}
+import com.gu.identity.frontend.controllers.NoCache
+import play.api.mvc.{ActionBuilder, Request, Result, WrappedRequest}
 
 import scala.concurrent.Future
 import scala.util.Try

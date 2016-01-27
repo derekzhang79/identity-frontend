@@ -8,7 +8,6 @@ import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Result, Action, Controller}
 
@@ -21,8 +20,6 @@ import play.api.i18n.Messages.Implicits._
  * Form actions controller
  */
 class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, ws: WSClient, configuration: Configuration, googleRecaptchaServiceHandler: GoogleRecaptchaServiceHandler) extends Controller with Logging with I18nSupport {
-
-  implicit val googleResponseFormat = Json.format[GoogleResponse]
 
   case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String], skipConfirmation: Option[Boolean], googleRecaptchaResponse: Option[String])
 

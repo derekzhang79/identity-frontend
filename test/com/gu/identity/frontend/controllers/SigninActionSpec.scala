@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.controllers
 
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services._
 import org.mockito.Mockito._
@@ -7,6 +8,7 @@ import org.mockito.Matchers.{any => argAny, eq => argEq}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.i18n.MessagesApi
+import play.api.libs.ws.WSClient
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -20,8 +22,10 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
+    val mockConfig = mock[Configuration]
+    val mockWSClient = mock[WSClient]
 
-    val controller = new SigninAction(mockIdentityService, messages)
+    val controller = new SigninAction(mockIdentityService, messages, mockWSClient, mockConfig)
   }
 
   def fakeSigninRequest(email: Option[String], password: Option[String], rememberMe: Option[String], returnUrl: Option[String]) = {

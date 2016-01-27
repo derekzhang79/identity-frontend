@@ -76,7 +76,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
 
   private def checkRecaptchaCodeWithGoogle(captchaResponseCode: String): Future[GoogleResponse] = {
     ws.url("https://www.google.com/recaptcha/api/siteverify").post(
-      Map("secret" -> Seq("dssddfdf"), "response" -> Seq(captchaResponseCode))
+      Map("secret" -> Seq(configuration.googleRecaptchaSecretKey), "response" -> Seq(captchaResponseCode))
     ).map{
       googleResponse => {
         val body = googleResponse.body

@@ -20,7 +20,7 @@ import play.api.i18n.Messages.Implicits._
 /**
  * Form actions controller
  */
-class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, ws: WSClient, configuration: Configuration) extends Controller with Logging with I18nSupport {
+class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, ws: WSClient, configuration: Configuration, googleRecaptchaServiceHandler: GoogleRecaptchaServiceHandler) extends Controller with Logging with I18nSupport {
 
   implicit val googleResponseFormat = Json.format[GoogleResponse]
 
@@ -43,13 +43,9 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       val trackingData = TrackingData(request, formParams.returnUrl)
       val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"))
 
-      
       formParams.googleRecaptchaResponse match {
         case Some(recaptchaResponseCode) => {
-
-          val googleRecaptchaServiceHander = GoogleRecaptchaServiceHandler(ws, configuration)
-          val isValidResponse = googleRecaptchaServiceHander.isValidRecaptchaResponse(recaptchaResponseCode)
-
+          val isValidResponse = googleRecaptchaServiceHandler.isValidRecaptchaResponse(recaptchaResponseCode)
           isValidResponse.flatMap{
             case true => authenticate(formParams.email, formParams.password, formParams.rememberMe, formParams.skipConfirmation, returnUrl, trackingData)
             case false => Future.successful(redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation))

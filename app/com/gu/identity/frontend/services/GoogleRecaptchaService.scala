@@ -19,7 +19,7 @@ trait GoogleRecaptchaService {
   def getRecaptchaResponseFromGoogle(captchaResponseCode: String): Future[GoogleResponse]
 }
 
-case class GoogleRecaptchaServiceHandler(ws: WSClient, configuration: Configuration) extends GoogleRecaptchaService with Logging{
+class GoogleRecaptchaServiceHandler(ws: WSClient, configuration: Configuration) extends GoogleRecaptchaService with Logging{
 
   def isValidRecaptchaResponse(captchaResponseCode: String): Future[Boolean] = {
     val googleResponse = getRecaptchaResponseFromGoogle(captchaResponseCode)

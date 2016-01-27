@@ -3,7 +3,7 @@ package com.gu.identity.frontend.csrf
 import com.gu.identity.frontend.controllers.NoCache
 import play.api.mvc._
 import play.filters.csrf.CSRF.ErrorHandler
-import play.filters.csrf.{CSRFAddToken => PlayCSRFAddToken, CSRFCheck => PlayCSRFCheck, CSRF}
+import play.filters.csrf.{CSRFAddToken => PlayCSRFAddToken, CSRFCheck => PlayCSRFCheck}
 
 import scala.concurrent.Future
 

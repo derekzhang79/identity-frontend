@@ -15,16 +15,20 @@ class CSRFActionsSpec extends PlaySpec with SimpleAppPerSuite {
   )
   val csrfConfig = CSRFConfig(underlyingCsrfConfig)
 
-  "Add token Action" must {
-
-    val controller = new Controller {
-      def testEndpoint = CSRFAddToken(csrfConfig) {
-        Ok("test response")
-      }
+  val controller = new Controller {
+    def testCSRFAddToken = CSRFAddToken(csrfConfig) {
+      Ok("test add token response")
     }
 
+    def testCSRFCheck = CSRFCheck(csrfConfig) {
+      Ok("test check response")
+    }
+  }
+
+  "Add token Action" must {
+
     "have non-cacheable response" in {
-      val resp = controller.testEndpoint(FakeRequest())
+      val resp = controller.testCSRFAddToken(FakeRequest())
 
       val cacheHeader = header("Cache-Control", resp)
 
@@ -32,12 +36,25 @@ class CSRFActionsSpec extends PlaySpec with SimpleAppPerSuite {
     }
 
     "have token on response" in {
-      val resp = controller.testEndpoint(FakeRequest())
+      val resp = controller.testCSRFAddToken(FakeRequest())
 
       val respCookies = cookies(resp)
       val csrfCookie = respCookies.get(csrfCookieName)
 
       csrfCookie must not be empty
+    }
+
+  }
+
+
+  "Check token Action" must {
+
+    "have non-cacheable response" in {
+      val resp = controller.testCSRFCheck(FakeRequest())
+
+      val cacheHeader = header("Cache-Control", resp)
+
+      cacheHeader.value must include("no-cache")
     }
 
   }

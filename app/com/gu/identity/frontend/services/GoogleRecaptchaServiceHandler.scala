@@ -16,7 +16,12 @@ class GoogleRecaptchaServiceHandler(ws: WSClient, configuration: Configuration) 
 
   def isValidRecaptchaResponse(captchaResponseCode: String): Future[Boolean] = {
     val googleResponse = getRecaptchaResponseFromGoogle(captchaResponseCode)
-    googleResponse.map {
+    handleRecaptchaResponse(googleResponse)
+
+  }
+
+  def handleRecaptchaResponse(response: Future[GoogleResponse]): Future[Boolean] = {
+    response.map {
       case GoogleResponse(true, _) => true
       case GoogleResponse(false, errors) => {
         logger.warn(s"Google Recaptcha failed to authenticate ${errors}")
@@ -28,7 +33,6 @@ class GoogleRecaptchaServiceHandler(ws: WSClient, configuration: Configuration) 
         false
       }
     }
-
   }
 
   def getRecaptchaResponseFromGoogle(captchaResponseCode: String): Future[GoogleResponse] = {

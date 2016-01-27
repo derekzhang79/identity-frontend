@@ -4,7 +4,7 @@ import play.api.Configuration
 import play.filters.csrf.{CSRFConfig => PlayCSRFConfig}
 
 
-case class CSRFConfig private(
+case class CSRFConfig private[csrf](
     underlying: PlayCSRFConfig,
     enabled: Boolean = true) {
   val tokenName = underlying.tokenName

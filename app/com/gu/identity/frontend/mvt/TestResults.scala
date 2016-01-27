@@ -4,16 +4,16 @@ package com.gu.identity.frontend.mvt
 object TestResults {
   import MultiVariantTests._
 
-  def isInTest(test: MultiVariantTest, mvtId: Int, maxId: Int = MAX_ID): Boolean = {
-    val minBound = maxId * test.audienceOffset
-    val maxBound = minBound + maxId * test.audience
+  def isInTest(test: MultiVariantTest, mvtId: MultiVariantTestID): Boolean = {
+    val minBound = mvtId.maxId * test.audienceOffset
+    val maxBound = minBound + mvtId.maxId * test.audience
 
-    minBound < mvtId && mvtId <= maxBound
+    minBound < mvtId.id && mvtId.id <= maxBound
   }
 
-  def activeVariantForTest(test: MultiVariantTest, mvtId: Int, maxId: Int = MAX_ID): Option[MultiVariantTestVariant] = {
-    if (isInTest(test, mvtId, maxId))
-      Some(test.variants(mvtId % test.variants.size))
+  def activeVariantForTest(test: MultiVariantTest, mvtId: MultiVariantTestID): Option[MultiVariantTestVariant] = {
+    if (isInTest(test, mvtId))
+      Some(test.variants(mvtId.id % test.variants.size))
 
     else None
   }
@@ -21,8 +21,8 @@ object TestResults {
   /**
    * Retrieve active server-side tests and the selected variant for an mvtId.
    */
-  def activeTests(mvtId: Int, maxId: Int = MAX_ID): Set[(MultiVariantTest, MultiVariantTestVariant)] =
+  def activeTests(mvtId: MultiVariantTestID): Set[(MultiVariantTest, MultiVariantTestVariant)] =
     allServerSide.flatMap { test =>
-      activeVariantForTest(test, mvtId, maxId).map(test -> _)
+      activeVariantForTest(test, mvtId).map(test -> _)
     }
 }

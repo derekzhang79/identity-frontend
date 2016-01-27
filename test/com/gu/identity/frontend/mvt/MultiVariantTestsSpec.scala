@@ -6,6 +6,8 @@ import org.scalatest.{Matchers, WordSpec}
 
 class MultiVariantTestsSpec extends WordSpec with Matchers {
 
+  def testMvtID = MultiVariantTestID(_: Int, maxId = 100)
+
   "A Multi Variant Test" when {
 
     "determining whether user is in test" should {
@@ -18,21 +20,21 @@ class MultiVariantTestsSpec extends WordSpec with Matchers {
       )
 
       "yield true when in test" in {
-        isInTest(test, 51, 100) shouldBe true
-        isInTest(test, 60, 100) shouldBe true
+        isInTest(test, testMvtID(51)) shouldBe true
+        isInTest(test, testMvtID(60)) shouldBe true
       }
 
       "yield false when below audience offset" in {
-        isInTest(test, 1, 100) shouldBe false
-        isInTest(test, 50, 100) shouldBe false
+        isInTest(test, testMvtID(1)) shouldBe false
+        isInTest(test, testMvtID(50)) shouldBe false
       }
 
       "yield false when outside of audience participation" in {
-        isInTest(test, 61, 100) shouldBe false
+        isInTest(test, testMvtID(61)) shouldBe false
       }
 
       "yield false when mvt id > max" in {
-        isInTest(test, 101, 100) shouldBe false
+        isInTest(test, testMvtID(101)) shouldBe false
       }
     }
 
@@ -47,11 +49,11 @@ class MultiVariantTestsSpec extends WordSpec with Matchers {
       )
 
       "yield variant when in test" in {
-        activeVariantForTest(test, 51, 100) shouldEqual Some(variant)
+        activeVariantForTest(test, testMvtID(51)) shouldEqual Some(variant)
       }
 
       "yield None when not in test" in {
-        activeVariantForTest(test, 1, 100) shouldEqual None
+        activeVariantForTest(test, testMvtID(1)) shouldEqual None
       }
     }
 
@@ -68,10 +70,10 @@ class MultiVariantTestsSpec extends WordSpec with Matchers {
           variants = Seq(variantA, variantB)
         )
 
-        activeVariantForTest(test, 51, 100) shouldEqual Some(variantB)
-        activeVariantForTest(test, 52, 100) shouldEqual Some(variantA)
-        activeVariantForTest(test, 53, 100) shouldEqual Some(variantB)
-        activeVariantForTest(test, 54, 100) shouldEqual Some(variantA)
+        activeVariantForTest(test, testMvtID(51)) shouldEqual Some(variantB)
+        activeVariantForTest(test, testMvtID(52)) shouldEqual Some(variantA)
+        activeVariantForTest(test, testMvtID(53)) shouldEqual Some(variantB)
+        activeVariantForTest(test, testMvtID(54)) shouldEqual Some(variantA)
       }
 
       "yield correct variant when three variants available" in {
@@ -82,12 +84,12 @@ class MultiVariantTestsSpec extends WordSpec with Matchers {
           variants = Seq(variantA, variantB, variantC)
         )
 
-        activeVariantForTest(test, 51, 100) shouldEqual Some(variantA)
-        activeVariantForTest(test, 52, 100) shouldEqual Some(variantB)
-        activeVariantForTest(test, 53, 100) shouldEqual Some(variantC)
-        activeVariantForTest(test, 54, 100) shouldEqual Some(variantA)
-        activeVariantForTest(test, 55, 100) shouldEqual Some(variantB)
-        activeVariantForTest(test, 56, 100) shouldEqual Some(variantC)
+        activeVariantForTest(test, testMvtID(51)) shouldEqual Some(variantA)
+        activeVariantForTest(test, testMvtID(52)) shouldEqual Some(variantB)
+        activeVariantForTest(test, testMvtID(53)) shouldEqual Some(variantC)
+        activeVariantForTest(test, testMvtID(54)) shouldEqual Some(variantA)
+        activeVariantForTest(test, testMvtID(55)) shouldEqual Some(variantB)
+        activeVariantForTest(test, testMvtID(56)) shouldEqual Some(variantC)
       }
     }
   }

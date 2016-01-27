@@ -4,15 +4,18 @@ import com.gu.identity.frontend.controllers.NoCache
 import play.api.mvc.{ActionBuilder, Request, Result, WrappedRequest}
 
 import scala.concurrent.Future
-import scala.util.Try
 
-case class MultiVariantTestRequest[A](mvtCookie: Option[Int], activeTests: Map[MultiVariantTest, MultiVariantTestVariant], request: Request[A]) extends WrappedRequest[A](request)
+case class MultiVariantTestRequest[A](
+    mvtCookie: Option[MultiVariantTestID],
+    activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
+    request: Request[A])
+  extends WrappedRequest[A](request)
 
 object MultiVariantTestRequest {
   private val OVERRIDE_PARAM_PREFIX = "mvt_"
 
   def apply[A](request: Request[A]): MultiVariantTestRequest[A] = {
-    val mvtCookie = getMvtCookie(request)
+    val mvtCookie = MultiVariantTestID.fromRequest(request)
     val activeTests = mvtCookie.map(id => TestResults.activeTests(id)).getOrElse(Nil).toMap
 
     MultiVariantTestRequest[A](mvtCookie, activeTests ++ getTestOverrides(request.queryString), request)
@@ -30,10 +33,6 @@ object MultiVariantTestRequest {
     variant <- test.variants.find(_.id.equalsIgnoreCase(overrideValue))
   } yield test -> variant
 
-  private def getMvtCookie[A](req: Request[A]) =
-    req.cookies.get(MultiVariantTests.MVT_COOKIE_NAME).flatMap { mvtId =>
-      Try(Integer.parseInt(mvtId.value)).toOption
-    }
 }
 
 object MultiVariantTestAction extends ActionBuilder[MultiVariantTestRequest] {

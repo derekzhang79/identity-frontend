@@ -114,9 +114,6 @@ case class RuntimeMultiVariantTestVariant(id: String) extends MultiVariantTestVa
 
 object MultiVariantTests {
 
-  val MVT_COOKIE_NAME = "GU_mvt_id"
-  val MAX_ID = 899999
-
   def all: Set[MultiVariantTest] = Set(SignInV2Test, RegisterV2Test)
 
   def allActive = all.filter(_.active)

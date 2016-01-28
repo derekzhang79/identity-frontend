@@ -84,16 +84,18 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
 
   private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
 
-    val idErrors = errors.map{
+    val idErrors = errors.map {
       error => "error" -> (checkUserDataIsUnique(error))
     }
+
     val params = Seq(
-      "returnUrl" -> returnUrl.url,
-      "skipConfirmation" -> skipConfirmation.map(_.toString).getOrElse(""),
-      "group" -> group.getOrElse("")
-    ) ++ idErrors
+      Some("returnUrl" -> returnUrl.url),
+      skipConfirmation.map("skipConfirmation" -> _.toString),
+      group.map("group" -> _)
+    ).flatten
+
     SeeOther(
-      UrlBuilder(routes.Application.register(), params)
+      UrlBuilder(routes.Application.register(), params ++ idErrors)
     )
   }
 

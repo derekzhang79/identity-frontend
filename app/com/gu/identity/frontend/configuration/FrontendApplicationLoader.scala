@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.configuration
 
 import com.gu.identity.frontend.controllers.{Manifest, RegisterAction, SigninAction, HealthCheck, Application}
+import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.filters.{BetaUserGroupFilter, SecurityHeadersFilter, Filters}
 import com.gu.identity.frontend.services.{IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import com.gu.identity.service.client.IdentityClient
@@ -23,16 +24,17 @@ class FrontendApplicationLoader extends ApplicationLoader {
 
 class ApplicationComponents(context: Context) extends BuiltInComponentsFromContext(context) with NingWSComponents with I18nComponents {
   lazy val frontendConfiguration = new ApplicationConfiguration(configuration)
+  lazy val csrfConfig = CSRFConfig(configuration)
 
   lazy val identityServiceRequestHandler = new IdentityServiceRequestHandler(wsClient)
   lazy val identityClient: IdentityClient = new IdentityClient
   lazy val identityService: IdentityService = new IdentityServiceImpl(frontendConfiguration, identityServiceRequestHandler, identityClient)
 
-  lazy val applicationController = new Application(frontendConfiguration, messagesApi)
+  lazy val applicationController = new Application(frontendConfiguration, messagesApi, csrfConfig)
   lazy val healthcheckController = new HealthCheck()
   lazy val manifestController = new Manifest()
-  lazy val signinController = new SigninAction(identityService, messagesApi)
-  lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration)
+  lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig)
+  lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
   lazy val assets = new controllers.Assets(httpErrorHandler)
 
   override lazy val httpFilters = new Filters(new SecurityHeadersFilter(

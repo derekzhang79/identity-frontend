@@ -1,4 +1,5 @@
 <form id="register_form" class="register-form" action="{{ actions.register }}" method="POST">
+  <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
   <input type="hidden" name="returnUrl" value="{{ returnUrl }}"/>
   <input type="hidden" name="skipConfirmation" value="{{ skipConfirmation }}"/>
 

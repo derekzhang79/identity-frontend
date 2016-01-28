@@ -2,6 +2,7 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
 import com.gu.identity.frontend.controllers.routes
+import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.text.RegisterText
 import play.api.i18n.Messages
@@ -17,6 +18,8 @@ case class RegisterViewModel(
 
     hasErrors: Boolean,
     errors: Seq[ErrorViewModel],
+
+    csrfToken: Option[CSRFToken],
     returnUrl: String,
     skipConfirmation: Boolean,
 
@@ -34,6 +37,7 @@ object RegisterViewModel {
       configuration: Configuration,
       activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)],
       errors: Seq[ErrorViewModel],
+      csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean])
       (implicit messages: Messages): RegisterViewModel = {
@@ -50,6 +54,8 @@ object RegisterViewModel {
 
       hasErrors = errors.nonEmpty,
       errors = errors,
+
+      csrfToken = csrfToken,
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
 

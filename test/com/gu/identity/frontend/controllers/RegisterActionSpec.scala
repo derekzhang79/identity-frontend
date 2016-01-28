@@ -3,6 +3,7 @@ package com.gu.identity.frontend.controllers
 import java.net.{URLDecoder, URLEncoder}
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
 import com.gu.identity.frontend.utils.UrlDecoder
@@ -21,6 +22,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
+  val fakeCsrfConfig = CSRFConfig.disabled
+
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
@@ -33,7 +36,8 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       override val appConfiguration: PlayConfiguration = null
       override val identityFederationApiHost: String = "https://oauth.theguardian.com"
     }
-    val controller = new RegisterAction(mockIdentityService, messages, config)
+
+    val controller = new RegisterAction(mockIdentityService, messages, config, fakeCsrfConfig)
   }
 
   def fakeRegisterRequest(
@@ -59,7 +63,8 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "skipConfirmation" -> skipConfirmation.getOrElse(false).toString,
       "group" -> group.getOrElse(""))
 
-    FakeRequest("POST", "/actions/register").withFormUrlEncodedBody(bodyParams: _*)
+    FakeRequest("POST", "/actions/register")
+      .withFormUrlEncodedBody(bodyParams: _*)
   }
 
   def fakeRegisterThenSignIn(mockIdentityService: IdentityService) =

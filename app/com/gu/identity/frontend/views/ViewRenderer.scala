@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.views
 
 import com.gu.identity.frontend.configuration._
+import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
@@ -14,8 +15,23 @@ object ViewRenderer {
   def render(view: String, attributes: Map[String, Any] = Map.empty) =
     HBS(view, attributes)
 
-  def renderSignIn(configuration: Configuration, activeTests: Map[MultiVariantTest, MultiVariantTestVariant], errorIds: Seq[String], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages) = {
-    val errors = errorIds.map(ErrorViewModel.apply)
+  def renderSignIn(
+      configuration: Configuration,
+      activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
+      csrfToken: Option[CSRFToken],
+      errorIds: Seq[String],
+      returnUrl: ReturnUrl,
+      skipConfirmation: Option[Boolean])
+      (implicit messages: Messages) = {
+
+    val model = SignInViewModel(
+      configuration = configuration,
+      activeTests = activeTests,
+      csrfToken = csrfToken,
+      errors = errorIds.map(ErrorViewModel.apply),
+      returnUrl = returnUrl,
+      skipConfirmation = skipConfirmation
+    )
 
     val defaultView = "signin-page"
     val view = activeTests.get(SignInV2Test) match {
@@ -23,19 +39,14 @@ object ViewRenderer {
       case _ => defaultView
     }
 
-    renderViewModel(view, SignInViewModel(
-      configuration = configuration,
-      activeTests = activeTests,
-      errors = errors,
-      returnUrl = returnUrl,
-      skipConfirmation = skipConfirmation
-    ))
+    renderViewModel(view, model)
   }
 
   def renderRegister(
       configuration: Configuration,
       activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
       errorIds: Seq[String],
+      csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean])
       (implicit messages: Messages) = {
@@ -44,6 +55,7 @@ object ViewRenderer {
       configuration = configuration,
       activeTests = activeTests,
       errors = errorIds.map(ErrorViewModel.apply),
+      csrfToken = csrfToken,
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation)
 

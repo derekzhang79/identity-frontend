@@ -39,7 +39,7 @@ object SignInViewModel {
   def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)], csrfToken: Option[CSRFToken], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
     val layout = LayoutViewModel(configuration, activeTests)
 
-    if(errors.isEmpty || configuration.googleRecaptchaIsDisabled) {
+    if(errors.isEmpty || (!configuration.recaptchaEnabled)) {
       val resources = layout.resources
       createSignInViewModel(layout, configuration, returnUrl, skipConfirmation, errors, csrfToken, resources)
     } else {

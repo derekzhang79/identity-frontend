@@ -14,7 +14,7 @@ trait Configuration {
 
   val omnitureAccount: String
 
-  val googleRecaptchaIsDisabled: Boolean
+  val recaptchaEnabled: Boolean
 
   val googleRecaptchaSiteKey: String
 
@@ -46,5 +46,5 @@ class ApplicationConfiguration(val appConfiguration: PlayConfiguration) extends 
 
   val googleRecaptchaSecretKey = getString("google.recaptcha.secret")
 
-  val googleRecaptchaIsDisabled = getBoolean("google.recaptchaIsDisabled")
+  val recaptchaEnabled = getBoolean("google.recaptchaEnabled")
 }

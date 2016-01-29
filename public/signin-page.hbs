@@ -40,8 +40,8 @@
         <label class="signin-form__label--remember-me" for="signin_field_remember_me">{{signInPageText.rememberMe}}</label>
       </div>
 
-      {{#if recaptchaEnabled}}
-        <div class="g-recaptcha" data-sitekey="{{recaptchaSiteKey}}"></div>
+      {{#if recaptchaModel}}
+        <div class="g-recaptcha" data-sitekey="{{recaptchaModel.googleSiteKey}}"></div>
       {{/if}}
 
       <div class="signin-form__control--submit">

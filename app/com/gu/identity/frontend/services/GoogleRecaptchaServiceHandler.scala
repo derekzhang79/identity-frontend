@@ -6,6 +6,7 @@ import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -20,28 +21,31 @@ class GoogleRecaptchaServiceHandler(ws: WSClient, configuration: Configuration) 
 
   }
 
-  def handleRecaptchaResponse(response: Future[GoogleResponse]): Future[Boolean] = {
+  def handleRecaptchaResponse(response: Future[Try[GoogleResponse]]): Future[Boolean] = {
     response.map {
-      case GoogleResponse(true, _) => true
-      case GoogleResponse(false, errors) => {
-        logger.warn(s"Google Recaptcha failed to authenticate ${errors}")
+      case Success(GoogleResponse(true,_)) => true
+      case Success(GoogleResponse(false, errors)) => {
+        logger.error(s"Google Recaptcha failed to authenticate ${errors}")
+        false
+      }
+      case Failure(ex) => {
+        logger.error(s"Json from google recaptcha could not be parsed ${ex.getMessage}", ex)
         false
       }
     }.recover{
       case NonFatal(ex) => {
-        logger.warn(s"Unexpected error from google recaptcha: ${ex.getMessage}", ex)
+        logger.error(s"Unexpected error from google recaptcha: ${ex.getMessage}", ex)
         false
       }
     }
   }
 
-  def getRecaptchaResponseFromGoogle(captchaResponseCode: String): Future[GoogleResponse] = {
+  def getRecaptchaResponseFromGoogle(captchaResponseCode: String): Future[Try[GoogleResponse]] = {
     ws.url("https://www.google.com/recaptcha/api/siteverify").post(
       Map("secret" -> Seq(configuration.googleRecaptchaSecretKey), "response" -> Seq(captchaResponseCode))
-    ).map{
+    ).map {
       googleResponse => {
-        val body = googleResponse.body
-        Json.parse(body).as[GoogleResponse]
+        Try(googleResponse.json.as[GoogleResponse])
       }
     }
   }

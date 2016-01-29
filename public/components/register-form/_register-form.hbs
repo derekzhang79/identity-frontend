@@ -1,4 +1,5 @@
 <form id="register_form" class="register-form" action="{{ actions.register }}" method="POST">
+  <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
   <input type="hidden" name="returnUrl" value="{{ returnUrl }}"/>
   <input type="hidden" name="skipConfirmation" value="{{ skipConfirmation }}"/>
 
@@ -37,12 +38,12 @@
 
     <div class="register-form__control--gnm-marketing">
       <input class="register-form__checkbox--gnm-marketing" id="register_field_gnm_marketing" type="checkbox" name="receiveGnmMarketing" checked="checked" value="true"/>
-      <label class="register-form__label--gnm-marketing" for="register_field_gnm_marketing" tabindex="0">{{ registerPageText.gnmMarketing }}</label>
+      <label class="register-form__label--gnm-marketing" for="register_field_gnm_marketing">{{ registerPageText.gnmMarketing }}</label>
     </div>
 
     <div class="register-form__control--3rd-party-marketing">
         <input class="register-form__checkbox--3rd-party-marketing" id="register_field_3rd-party_marketing" type="checkbox" name="receive3rdPartyMarketing" value="true"/>
-        <label class="register-form__label--3rd-party-marketing" for="register_field_3rd-party_marketing" tabindex="0">{{ registerPageText.3rdPartyMarketing }}</label>
+        <label class="register-form__label--3rd-party-marketing" for="register_field_3rd-party_marketing">{{ registerPageText.3rdPartyMarketing }}</label>
     </div>
 
     <div class="register-form__control--submit">

@@ -2,6 +2,7 @@ package com.gu.identity.frontend.controllers
 
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{UrlBuilder, ClientRegistrationIp, TrackingData, ReturnUrl}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceError, IdentityService}
@@ -9,7 +10,7 @@ import play.api.data.{Mapping, Form}
 import play.api.data.Forms._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, Controller, Cookie => PlayCookie}
+import play.api.mvc.{Cookie => PlayCookie, RequestHeader, Controller}
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
@@ -26,7 +27,7 @@ case class RegisterRequest(
     skipConfirmation: Option[Boolean],
     group: Option[String])
 
-class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi, val config: Configuration) extends Controller with Logging with I18nSupport {
+class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi, val config: Configuration, csrfConfig: CSRFConfig) extends Controller with Logging with I18nSupport {
 
   private val username: Mapping[String] = text.verifying(
     "error.username", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
@@ -55,46 +56,46 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     )(RegisterRequest.apply)(RegisterRequest.unapply)
   )
 
-  def register = Action.async { implicit request =>
-    NoCache {
-      val clientIp = ClientRegistrationIp(request)
-      registerForm.bindFromRequest.fold(
-        errorForm => {
-          val errors = errorForm.errors.map(error => s"register-error-${error.key}")
-          Future.successful(SeeOther(routes.Application.register(errors).url))},
-        successForm => {
-          val trackingData = TrackingData(request, successForm.returnUrl)
-          val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"))
-          identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
-            case Left(errors) =>
-              redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.group)
-            case Right(cookies) => {
-              registerSuccessRedirectUrl(cookies, returnUrl, successForm.skipConfirmation, successForm.group)
-            }
-          }.recover {
-            case NonFatal(ex) => {
-              logger.warn(s"Unexpected error while registering: ${ex.getMessage}", ex)
-              redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, successForm.skipConfirmation, successForm.group)
-            }
-
+  def register = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
+    val clientIp = ClientRegistrationIp(request)
+    registerForm.bindFromRequest.fold(
+      errorForm => {
+        val errors = errorForm.errors.map(error => s"register-error-${error.key}")
+        Future.successful(SeeOther(routes.Application.register(errors).url))},
+      successForm => {
+        val trackingData = TrackingData(request, successForm.returnUrl)
+        val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"))
+        identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
+          case Left(errors) =>
+            redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.group)
+          case Right(cookies) => {
+            registerSuccessRedirectUrl(cookies, returnUrl, successForm.skipConfirmation, successForm.group)
           }
+        }.recover {
+          case NonFatal(ex) => {
+            logger.warn(s"Unexpected error while registering: ${ex.getMessage}", ex)
+            redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, successForm.skipConfirmation, successForm.group)
+          }
+
         }
-      )
-    }
+      }
+    )
   }
 
   private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String]) = {
 
-    val idErrors = errors.map{
+    val idErrors = errors.map {
       error => "error" -> (checkUserDataIsUnique(error))
     }
+
     val params = Seq(
-      "returnUrl" -> returnUrl.url,
-      "skipConfirmation" -> skipConfirmation.map(_.toString).getOrElse(""),
-      "group" -> group.getOrElse("")
-    ) ++ idErrors
+      Some("returnUrl" -> returnUrl.url),
+      skipConfirmation.map("skipConfirmation" -> _.toString),
+      group.map("group" -> _)
+    ).flatten
+
     SeeOther(
-      UrlBuilder(routes.Application.register(), params)
+      UrlBuilder(routes.Application.register(), params ++ idErrors)
     )
   }
 
@@ -139,5 +140,16 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
       "skipThirdPartyLandingPage" -> "true"
     )
     UrlBuilder(baseUrl, params)
+  }
+
+
+  // Note: Limitation
+  //       Error Handler only accepts RequestHeader instead of Request, so we cannot
+  //       pass ReturnUrl and skipConfirmation as they're on the Request body.
+  private def handleCSRFError(request: RequestHeader, msg: String) = Future.successful {
+    logger.error(s"CSRF error during Registration: $msg")
+    val errors = Seq("register-error-csrf")
+
+    SeeOther(routes.Application.register(errors).url)
   }
 }

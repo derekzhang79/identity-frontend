@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ReturnUrl, TrackingData}
 import com.gu.identity.frontend.services._
@@ -10,6 +11,7 @@ import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Result, Action, Controller}
+import play.api.mvc.{RequestHeader, Action, Controller}
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
@@ -19,7 +21,7 @@ import play.api.i18n.Messages.Implicits._
 /**
  * Form actions controller
  */
-class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, ws: WSClient, configuration: Configuration, googleRecaptchaServiceHandler: GoogleRecaptchaServiceHandler) extends Controller with Logging with I18nSupport {
+class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, ws: WSClient, configuration: Configuration,  csrfConfig: CSRFConfig, googleRecaptchaServiceHandler: GoogleRecaptchaServiceHandler) extends Controller with Logging with I18nSupport {
 
   case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String], skipConfirmation: Option[Boolean], googleRecaptchaResponse: Option[String])
 
@@ -34,8 +36,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     )(SignInRequest.apply)(SignInRequest.unapply)
   )
 
-  def signIn = Action.async { implicit request =>
-    NoCache {
+  def signIn = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
       val formParams = signInFormBody.bindFromRequest()(request).get
       val trackingData = TrackingData(request, formParams.returnUrl)
       val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"))
@@ -51,7 +52,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
         case None => {
           authenticate(formParams.email, formParams.password, formParams.rememberMe, formParams.skipConfirmation, returnUrl, trackingData)
         }
-      }
+
     }
   }
 
@@ -80,6 +81,17 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
   private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]) = {
     val query = errors.map("signin-" + _.id)
     SeeOther(routes.Application.signIn(query, Some(returnUrl.url), skipConfirmation).url)
+  }
+
+
+  // Note: Limitation
+  //       Error Handler only accepts RequestHeader instead of Request, so we cannot
+  //       pass ReturnUrl and skipConfirmation as they're on the Request body.
+  private def handleCSRFError(request: RequestHeader, msg: String) = Future.successful {
+    logger.error(s"CSRF error during Sign-in: $msg")
+    val errors = Seq("signin-error-csrf")
+
+    SeeOther(routes.Application.signIn(errors).url)
   }
 
 }

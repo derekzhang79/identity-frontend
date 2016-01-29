@@ -15,6 +15,7 @@
   {{/ hasErrors }}
 
   <form id="signin_form" class="signin-form{{# hasErrors }}--with-errors{{/ hasErrors }}" action="{{ actions.signIn }}" method="POST">
+    <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
     <input type="hidden" name="returnUrl" value="{{returnUrl}}">
     <input type="hidden" name="skipConfirmation" value="{{skipConfirmation}}">
     <p class="signin-form__prelude">{{signInPageText.divideText}}</p>
@@ -36,8 +37,8 @@
       <div class="signin-form__cta--reset"><a href="{{forgotPasswordUrl}}">{{signInPageText.forgottenPassword}}</a></div>
 
       <div class="signin-form__control--remember-me">
-        <input class="signin-form__checkbox--remember-me" id="signin_field_remember_me" type="checkbox" name="keepMeSignedIn" checked="checked" value="true"/>
-        <label class="signin-form__label--remember-me" for="signin_field_remember_me" tabindex="0">{{signInPageText.rememberMe}}</label>
+        <input class="signin-form__checkbox--remember-me" id="signin_field_remember_me" type="checkbox" name="rememberMe" checked="checked" value="true"/>
+        <label class="signin-form__label--remember-me" for="signin_field_remember_me">{{signInPageText.rememberMe}}</label>
       </div>
       <div class="signin-form__control--submit">
         <button class="signin-form__submit-button" id="signin_submit" type="submit">{{signInPageText.signIn}}</button>

@@ -2,6 +2,7 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
 import com.gu.identity.frontend.controllers.routes
+import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.Text._
 import play.api.i18n.Messages
@@ -17,6 +18,8 @@ case class SignInViewModel private(
     showPrelude: Boolean = false,
     hasErrors: Boolean = false,
     errors: Seq[ErrorViewModel] = Seq.empty,
+
+    csrfToken: Option[CSRFToken],
     returnUrl: String = "",
     skipConfirmation: Boolean = false,
     registerUrl: String = "",
@@ -33,18 +36,17 @@ case class SignInViewModel private(
 
 
 object SignInViewModel {
-  def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
-
+  def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)], csrfToken: Option[CSRFToken], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
     val layout = LayoutViewModel(configuration, activeTests)
 
     if(errors.isEmpty || configuration.googleRecaptchaIsDisabled) {
       val resources = layout.resources
-      createSignInViewModel(layout, configuration, returnUrl, skipConfirmation, errors, resources)
+      createSignInViewModel(layout, configuration, returnUrl, skipConfirmation, errors, csrfToken, resources)
     } else {
       val recaptchaResources = GoogleRecaptchaResources(configuration)
       val resources = layout.resources ++ recaptchaResources.resources
       val recaptchaSiteKey = Some(recaptchaResources.googleSiteKey)
-      createSignInViewModel(layout, configuration, returnUrl, skipConfirmation, errors, resources, recaptchaEnabled = true, recaptchaSiteKey)
+      createSignInViewModel(layout, configuration, returnUrl, skipConfirmation, errors, csrfToken, resources, recaptchaEnabled = true, recaptchaSiteKey)
     }
   }
 
@@ -54,6 +56,7 @@ object SignInViewModel {
        returnUrl: ReturnUrl,
        skipConfirmation: Option[Boolean],
        errors: Seq[ErrorViewModel],
+       csrfToken: Option[CSRFToken],
        resources: Seq[PageResource with Product],
        recaptchaEnabled: Boolean = false,
        recaptchaSiteKey: Option[String] = None)(implicit messages: Messages): SignInViewModel = {
@@ -68,6 +71,8 @@ object SignInViewModel {
 
       hasErrors = errors.nonEmpty,
       errors = errors,
+
+      csrfToken = csrfToken,
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
       registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation),

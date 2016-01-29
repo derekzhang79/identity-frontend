@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services._
 import org.mockito.Mockito._
@@ -17,6 +18,7 @@ import org.scalatest.Matchers._
 import scala.concurrent.{ExecutionContext, Future}
 
 class SigninActionSpec extends PlaySpec with MockitoSugar {
+  val fakeCsrfConfig = CSRFConfig.disabled
 
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
@@ -25,7 +27,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
     val mockWSClient = mock[WSClient]
     val mockGoogleRecaptchaService = mock[GoogleRecaptchaServiceHandler]
 
-    val controller = new SigninAction(mockIdentityService, messages, mockWSClient, mockConfig, mockGoogleRecaptchaService)
+    val controller = new SigninAction(mockIdentityService, messages, mockWSClient, mockConfig, fakeCsrfConfig, mockGoogleRecaptchaService)
   }
 
   def fakeSigninRequest(

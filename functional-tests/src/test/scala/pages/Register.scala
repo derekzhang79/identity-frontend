@@ -13,11 +13,11 @@ class Register(val testUser: EmailTestUser) extends LoadablePage with Browser {
   def createAccount(): Unit = clickOn(createAccountButton)
 
   private object RegisterFields {
-    val firstName = id("user_firstName")
-    val lastName = id("user_secondName")
-    val email = id("user_primaryEmailAddress")
-    val username = id("user_publicFields_username")
-    val password = id("user_password")
+    val firstName = id("register_field_firstname")
+    val lastName = id("register_field_lastname")
+    val email = id("register_field_email")
+    val username = id("register_field_username")
+    val password = id("register_field_password")
 
     def fillIn() = {
       setValue(firstName, testUser.name)
@@ -28,5 +28,5 @@ class Register(val testUser: EmailTestUser) extends LoadablePage with Browser {
     }
   }
 
-  private lazy val createAccountButton = className("submit-input")
+  private lazy val createAccountButton = id("register_submit")
 }

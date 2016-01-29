@@ -8,6 +8,8 @@ buildCommands in build in Assets := Seq(
   BuildCommand("build-js", "npm run build-js -s", includeFilter = Some("*.js"))
 )
 
+pipelineStages := Seq(digest)
+
 // Ensure frontend build task is a source generator task
 sourceGenerators in Assets <+= build in Assets
 

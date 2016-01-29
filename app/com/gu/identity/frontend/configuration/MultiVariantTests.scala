@@ -84,6 +84,16 @@ case object SignInV2TestVariantA extends MultiVariantTestVariant { val id = "A" 
 case object SignInV2TestVariantB extends MultiVariantTestVariant { val id = "B" }
 
 
+case object RegisterV2Test extends MultiVariantTest {
+  val name = "RegisterV2"
+  val audience = 1.0
+  val audienceOffset = 0.0
+  val isServerSide = true
+  val variants = Seq(RegisterTestVariantA)
+}
+
+case object RegisterTestVariantA extends MultiVariantTestVariant { val id = "A" }
+
 
 /**
  * Define a MVT at runtime - should only be used for tests.
@@ -127,7 +137,7 @@ object MultiVariantTests {
   val MVT_COOKIE_NAME = "GU_mvt_id"
   val MAX_ID = 899999
 
-  def all: Set[MultiVariantTest] = Set(SignInV2Test)
+  def all: Set[MultiVariantTest] = Set(SignInV2Test, RegisterV2Test)
 
   def allActive = all.filter(_.active)
 

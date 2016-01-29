@@ -1,6 +1,8 @@
 
 import { getElementById, sessionStorage } from '../browser/browser';
 
+import { mapValues as _mapValues } from '../lib/lodash';
+
 const STORAGE_KEY = 'gu_id_register_state';
 
 
@@ -19,15 +21,12 @@ class RegisterFormFields {
     this.username.setValue( username );
   }
 
-  toJSON() {
-    // TODO use _.mapValues
+  mapValues( callback ) {
+    return _mapValues( this, callback );
+  }
 
-    return {
-      firstName: this.firstName.value(),
-      lastName: this.lastName.value(),
-      email: this.email.value(),
-      username: this.username.value()
-    };
+  toJSON() {
+    return this.mapValues( field => field.value() );
   }
 }
 
@@ -38,10 +37,10 @@ class RegisterFormModel {
 
     this.fields = new RegisterFormFields( firstNameField, lastNameField, emailField, usernameField );
 
-    this.addFormListeners();
+    this.addBindings();
   }
 
-  addFormListeners() {
+  addBindings() {
     this.formElement.on( 'submit', this.formSubmitted.bind( this ) );
   }
 

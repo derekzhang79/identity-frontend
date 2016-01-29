@@ -10,23 +10,22 @@ class SignInFormModel {
     this.formElement = formElement;
     this.emailFieldElement = emailField;
 
-    this.state = SignInFormState.fromStorage();
-    this.addFormListeners();
+    this.addBindings();
   }
 
-  addFormListeners() {
+  addBindings() {
     this.formElement.on( 'submit', this.formSubmitted.bind( this ) );
   }
 
   loadState() {
-    if ( !this.emailFieldElement.value() && this.state.email ) {
-      this.emailFieldElement.setValue( this.state.email );
-    }
+    this.state = SignInFormState.fromStorage();
+    this.emailFieldElement.setValue( this.state.email );
   }
 
   saveState() {
     const email = this.emailFieldElement.value();
 
+    this.state = new SignInFormState( email );
     this.state.save( email );
   }
 
@@ -46,22 +45,25 @@ class SignInFormModel {
 
 
 class SignInFormState {
-  constructor( email ) {
+  constructor( email = "" ) {
     this.email = email;
   }
 
-  save( email ) {
-    if ( typeof email === 'string' && email.length > 0 ) {
-      sessionStorage.setJSON( STORAGE_KEY, { email } );
-    }
+  save() {
+    sessionStorage.setJSON( STORAGE_KEY, this );
+  }
+
+  /**
+   * @return {SignInFormState}
+   */
+  static fromObject( { email } = {} ) {
+    return new SignInFormState( email );
   }
 
   static fromStorage() {
     const existingState = sessionStorage.getJSON( STORAGE_KEY );
 
-    const email = typeof existingState === 'object' && existingState.email || undefined;
-
-    return new SignInFormState( email );
+    return SignInFormState.fromObject( existingState )
   }
 }
 

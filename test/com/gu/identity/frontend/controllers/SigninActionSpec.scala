@@ -17,14 +17,17 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class SigninActionSpec extends PlaySpec with MockitoSugar {
   val fakeCsrfConfig = CSRFConfig.disabled
+  val mockGoogleRecaptchaServiceHandler = mock[GoogleRecaptchaServiceHandler]
 
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
-    val mockGoogleRecaptchaServiceHandler = mock[GoogleRecaptchaServiceHandler]
-    val mockGoogleRecaptchaCheck = new MockRecaptchaCheck(mockGoogleRecaptchaServiceHandler)
+    val mockGoogleRecaptchaCheck = new MockRecaptchaCheck()
+    lazy val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig, mockGoogleRecaptchaCheck)
+  }
 
-    val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig, mockGoogleRecaptchaCheck)
+  trait WithFailedRecaptchaCheck extends WithControllerMockedDependencies{
+    override val mockGoogleRecaptchaCheck = new MockRecaptchaCheck(false)
   }
 
   def fakeSigninRequest(
@@ -41,16 +44,14 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       .withFormUrlEncodedBody(bodyParams: _*)
   }
 
-  class MockRecaptchaCheck(googleRecaptchaServiceHandler: GoogleRecaptchaServiceHandler) extends GoogleRecaptchaCheck(googleRecaptchaServiceHandler) {
+  class MockRecaptchaCheck(stubbedResult: Boolean = true) extends GoogleRecaptchaCheck(mockGoogleRecaptchaServiceHandler) {
 
-    var stubbedResult = true
-
-    override def apply (googleRecaptchaResponse: Option[String],
-    errorHandler: => Future[Result])
-    (result: => Future[Result])
-    (implicit ec: ExecutionContext): Future[Result] = {
+    override def apply (
+        googleRecaptchaResponse: Option[String],
+        errorHandler: => Future[Result])
+        (result: => Future[Result])
+        (implicit ec: ExecutionContext): Future[Result] =
       if (stubbedResult) result else errorHandler
-    }
   }
 
 
@@ -171,14 +172,12 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       resultCookies.head mustEqual testCookie
     }
 
-    "redirect to sign in page when google captcha code is invalid" in new WithControllerMockedDependencies {
+    "redirect to sign in page when google captcha code is invalid" in new WithFailedRecaptchaCheck {
       val email = Some("me@me.com")
       val password = Some("password")
       val rememberMe = None
       val returnUrl = Some("http://www.theguardian.com/yeah")
       val googleRecaptchaResponse = Some("12345")
-
-     mockGoogleRecaptchaCheck.stubbedResult = false
 
       val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl, googleRecaptchaResponse))
       status(result) mustEqual SEE_OTHER

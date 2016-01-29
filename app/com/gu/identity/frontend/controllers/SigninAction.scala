@@ -8,7 +8,7 @@ import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc.{RequestHeader, Result, Controller}
+import play.api.mvc.{RequestHeader, Controller}
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
@@ -18,7 +18,7 @@ import play.api.i18n.Messages.Implicits._
 /**
  * Form actions controller
  */
-class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, csrfConfig: CSRFConfig, googleRecaptchaServiceHandler: GoogleRecaptchaServiceHandler) extends Controller with Logging with I18nSupport {
+class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, csrfConfig: CSRFConfig, googleRecaptchaCheck: GoogleRecaptchaCheck) extends Controller with Logging with I18nSupport {
 
   case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String], skipConfirmation: Option[Boolean], googleRecaptchaResponse: Option[String])
 
@@ -38,38 +38,22 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     val trackingData = TrackingData(request, formParams.returnUrl)
     val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"))
 
-    formParams.googleRecaptchaResponse match {
-      case Some(recaptchaResponseCode) => {
-        val isValidResponse = googleRecaptchaServiceHandler.isValidRecaptchaResponse(recaptchaResponseCode)
-        isValidResponse.flatMap{
-          case true => authenticate(formParams.email, formParams.password, formParams.rememberMe, formParams.skipConfirmation, returnUrl, trackingData)
-          case false => Future.successful(redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation))
+    def googleRecaptchaError = Future.successful(
+      redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation)
+    )
+
+    googleRecaptchaCheck(formParams.googleRecaptchaResponse, googleRecaptchaError) {
+      identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
+        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, returnUrl, formParams.skipConfirmation)
+        case Right(cookies) => {
+          SeeOther(returnUrl.url)
+            .withCookies(cookies: _*)
         }
-      }
-      case None => {
-        authenticate(formParams.email, formParams.password, formParams.rememberMe, formParams.skipConfirmation, returnUrl, trackingData)
-      }
-    }
-  }
-
-  private def authenticate(
-      email: Option[String],
-      password: Option[String],
-      rememberMe: Boolean,
-      skipConfirmation: Option[Boolean],
-      returnUrl: ReturnUrl,
-      trackingData: TrackingData): Future[Result] = {
-
-    identityService.authenticate(email, password, rememberMe, trackingData).map {
-      case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, returnUrl, skipConfirmation)
-      case Right(cookies) => {
-        SeeOther(returnUrl.url)
-          .withCookies(cookies: _*)
-      }
-    }.recover {
-      case NonFatal(ex) => {
-        logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
-        redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, skipConfirmation)
+      }.recover {
+        case NonFatal(ex) => {
+          logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
+          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, formParams.skipConfirmation)
+        }
       }
     }
   }

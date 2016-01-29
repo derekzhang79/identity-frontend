@@ -1,6 +1,5 @@
 package com.gu.identity.frontend.controllers
 
-import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services._
@@ -9,8 +8,7 @@ import org.mockito.Matchers.{any => argAny, eq => argEq}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.i18n.MessagesApi
-import play.api.libs.ws.WSClient
-import play.api.mvc.Cookie
+import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import org.scalatest.Matchers._
@@ -23,9 +21,10 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
-    val mockGoogleRecaptchaService = mock[GoogleRecaptchaServiceHandler]
+    val mockGoogleRecaptchaServiceHandler = mock[GoogleRecaptchaServiceHandler]
+    val mockGoogleRecaptchaCheck = new MockRecaptchaCheck(mockGoogleRecaptchaServiceHandler)
 
-    val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig, mockGoogleRecaptchaService)
+    val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig, mockGoogleRecaptchaCheck)
   }
 
   def fakeSigninRequest(
@@ -40,6 +39,18 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
 
     FakeRequest("POST", "/actions/signin")
       .withFormUrlEncodedBody(bodyParams: _*)
+  }
+
+  class MockRecaptchaCheck(googleRecaptchaServiceHandler: GoogleRecaptchaServiceHandler) extends GoogleRecaptchaCheck(googleRecaptchaServiceHandler) {
+
+    var stubbedResult = true
+
+    override def apply (googleRecaptchaResponse: Option[String],
+    errorHandler: => Future[Result])
+    (result: => Future[Result])
+    (implicit ec: ExecutionContext): Future[Result] = {
+      if (stubbedResult) result else errorHandler
+    }
   }
 
 
@@ -150,11 +161,6 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
           }
         }
 
-      when(mockGoogleRecaptchaService.isValidRecaptchaResponse(argAny[String]))
-          .thenReturn{
-            Future.successful(true)
-          }
-
       val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl, googleRecaptchaResponse))
       val resultCookies = cookies(result)
 
@@ -172,10 +178,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       val returnUrl = Some("http://www.theguardian.com/yeah")
       val googleRecaptchaResponse = Some("12345")
 
-      when(mockGoogleRecaptchaService.isValidRecaptchaResponse(argAny[String]))
-        .thenReturn{
-          Future.successful(false)
-        }
+     mockGoogleRecaptchaCheck.stubbedResult = false
 
       val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl, googleRecaptchaResponse))
       status(result) mustEqual SEE_OTHER

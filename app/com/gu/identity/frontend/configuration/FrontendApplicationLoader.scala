@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.configuration
 
-import com.gu.identity.frontend.controllers.{Manifest, RegisterAction, SigninAction, HealthCheck, Application}
+import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.filters.{BetaUserGroupFilter, SecurityHeadersFilter, Filters}
 import com.gu.identity.frontend.services.{GoogleRecaptchaServiceHandler, IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
@@ -34,7 +34,8 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val healthcheckController = new HealthCheck()
   lazy val manifestController = new Manifest()
   lazy val googleRecaptchaServiceHandler = new GoogleRecaptchaServiceHandler(wsClient, frontendConfiguration)
-  lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaServiceHandler)
+  lazy val googleRecaptchaCheck = new GoogleRecaptchaCheck(googleRecaptchaServiceHandler)
+  lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaCheck)
   lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
   lazy val assets = new controllers.Assets(httpErrorHandler)
 

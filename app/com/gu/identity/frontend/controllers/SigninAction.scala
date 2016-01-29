@@ -1,6 +1,5 @@
 package com.gu.identity.frontend.controllers
 
-import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ReturnUrl, TrackingData}
@@ -9,9 +8,7 @@ import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.ws.WSClient
-import play.api.mvc.{Result, Action, Controller}
-import play.api.mvc.{RequestHeader, Action, Controller}
+import play.api.mvc.{RequestHeader, Result, Controller}
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal

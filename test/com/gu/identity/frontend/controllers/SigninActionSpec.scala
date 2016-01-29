@@ -23,11 +23,9 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
-    val mockConfig = mock[Configuration]
-    val mockWSClient = mock[WSClient]
     val mockGoogleRecaptchaService = mock[GoogleRecaptchaServiceHandler]
 
-    val controller = new SigninAction(mockIdentityService, messages, mockWSClient, mockConfig, fakeCsrfConfig, mockGoogleRecaptchaService)
+    val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig, mockGoogleRecaptchaService)
   }
 
   def fakeSigninRequest(

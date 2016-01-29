@@ -21,7 +21,7 @@ import play.api.i18n.Messages.Implicits._
 /**
  * Form actions controller
  */
-class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, ws: WSClient, configuration: Configuration,  csrfConfig: CSRFConfig, googleRecaptchaServiceHandler: GoogleRecaptchaServiceHandler) extends Controller with Logging with I18nSupport {
+class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, csrfConfig: CSRFConfig, googleRecaptchaServiceHandler: GoogleRecaptchaServiceHandler) extends Controller with Logging with I18nSupport {
 
   case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String], skipConfirmation: Option[Boolean], googleRecaptchaResponse: Option[String])
 

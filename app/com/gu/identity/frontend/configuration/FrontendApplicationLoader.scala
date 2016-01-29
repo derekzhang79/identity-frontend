@@ -34,7 +34,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val healthcheckController = new HealthCheck()
   lazy val manifestController = new Manifest()
   lazy val googleRecaptchaServiceHandler = new GoogleRecaptchaServiceHandler(wsClient, frontendConfiguration)
-  lazy val signinController = new SigninAction(identityService, messagesApi,wsClient, frontendConfiguration, csrfConfig, googleRecaptchaServiceHandler)
+  lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaServiceHandler)
   lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
   lazy val assets = new controllers.Assets(httpErrorHandler)
 

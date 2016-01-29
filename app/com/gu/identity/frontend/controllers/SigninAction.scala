@@ -34,22 +34,21 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
   )
 
   def signIn = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
-      val formParams = signInFormBody.bindFromRequest()(request).get
-      val trackingData = TrackingData(request, formParams.returnUrl)
-      val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"))
+    val formParams = signInFormBody.bindFromRequest()(request).get
+    val trackingData = TrackingData(request, formParams.returnUrl)
+    val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"))
 
-      formParams.googleRecaptchaResponse match {
-        case Some(recaptchaResponseCode) => {
-          val isValidResponse = googleRecaptchaServiceHandler.isValidRecaptchaResponse(recaptchaResponseCode)
-          isValidResponse.flatMap{
-            case true => authenticate(formParams.email, formParams.password, formParams.rememberMe, formParams.skipConfirmation, returnUrl, trackingData)
-            case false => Future.successful(redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation))
-          }
+    formParams.googleRecaptchaResponse match {
+      case Some(recaptchaResponseCode) => {
+        val isValidResponse = googleRecaptchaServiceHandler.isValidRecaptchaResponse(recaptchaResponseCode)
+        isValidResponse.flatMap{
+          case true => authenticate(formParams.email, formParams.password, formParams.rememberMe, formParams.skipConfirmation, returnUrl, trackingData)
+          case false => Future.successful(redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation))
         }
-        case None => {
-          authenticate(formParams.email, formParams.password, formParams.rememberMe, formParams.skipConfirmation, returnUrl, trackingData)
-        }
-
+      }
+      case None => {
+        authenticate(formParams.email, formParams.password, formParams.rememberMe, formParams.skipConfirmation, returnUrl, trackingData)
+      }
     }
   }
 

@@ -8,7 +8,7 @@ object ContentSecurityPolicy {
   val CSP_STYLE_SRC = "style-src"
   val CSP_FONT_SRC = "font-src"
   val CSP_IMG_SRC = "img-src"
-  val CSP_CHILD_SRC = "frame-src"
+  val CSP_FRAME_SRC = "frame-src"
 
   val CSP_SELF_DOMAIN = "'self'"
   val CSP_DATA_PROTOCOL = "data:"
@@ -26,7 +26,7 @@ object ContentSecurityPolicy {
       case r: StylesResource => CSP_STYLE_SRC
       case r: ImageResource => CSP_IMG_SRC
       case r: FontResource => CSP_FONT_SRC
-      case r: FrameResource => CSP_CHILD_SRC
+      case r: FrameResource => CSP_FRAME_SRC
     }
 
     val transformed = grouped.mapValues(_.map(cspStatementForResource).distinct)

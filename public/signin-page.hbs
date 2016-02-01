@@ -41,7 +41,9 @@
       </div>
 
       {{#if recaptchaModel}}
-        <div class="g-recaptcha" data-sitekey="{{recaptchaModel.googleSiteKey}}"></div>
+        <div class="signin-form__recaptcha-wrapper">
+          <div class="g-recaptcha signin-form__recaptcha" data-sitekey="{{recaptchaModel.googleSiteKey}}"></div>
+        </div>
       {{/if}}
 
       <div class="signin-form__control--submit">

@@ -12,8 +12,8 @@ sealed trait ErrorPageText {
 object ErrorPageText {
   def apply(error: HttpError)(implicit messages: Messages): ErrorPageText = error match {
     case NotFoundError(_) => NotFoundErrorPageText()
-    case err: BadRequestError => BadRequestErrorPageText(err)
     case ForbiddenError(_) => ForbiddenErrorPageText()
+    case err: BadRequestError => BadRequestErrorPageText(err)
     case err: UnexpectedError => UnexpectedErrorPageText(err)
   }
 }

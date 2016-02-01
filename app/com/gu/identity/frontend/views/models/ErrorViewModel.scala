@@ -14,6 +14,7 @@ object ErrorViewModel {
     "signin-error-gateway" -> "There was a problem signing in; please try again.",
     "signin-error-bad-request" -> "Incorrect email or password; please try again.",
     "signin-error-csrf" -> "Forgery token invalid; please try again.",
+    "signin-error-captcha" -> "Problem with the captcha process; please try again.",
     "register-error-gateway" -> "There was a problem creating your account; please try again.",
     "register-error-bad-request" -> "One or more inputs was not valid; please try again.",
     "register-error-username-in-use" -> "The username you selected is already in use; please choose another one.",

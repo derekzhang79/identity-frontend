@@ -9,6 +9,8 @@ sealed trait PageResource
 
 sealed trait InlinedResource
 
+sealed trait UnsafeResource
+
 sealed trait InlinedSource {
   val source: String
   val sha256: String
@@ -38,6 +40,7 @@ sealed trait ScriptResource extends PageResource
 sealed trait StylesResource extends PageResource
 sealed trait ImageResource extends PageResource
 sealed trait FontResource extends PageResource
+sealed trait FrameResource extends PageResource
 
 sealed trait EmbeddableResource {
   val isJavascript: Boolean = false
@@ -57,6 +60,13 @@ object LocalJavascriptResource {
   def fromAsset(path: String, isInHead: Boolean): LocalJavascriptResource =
     LocalJavascriptResource(LocalResource.resolveAssetUrl(path), isInHead = isInHead)
 }
+
+case class JavascriptResource (
+  url: String,
+  domain: String,
+  override val isInHead: Boolean,
+  override final val isJavascript: Boolean = true) extends ScriptResource with LinkedResource with EmbeddableResource with ExternalResource
+
 
 case class InlinedJavascriptResource(
   source: String,
@@ -83,6 +93,8 @@ object LocalCSSResource {
     LocalCSSResource(LocalResource.resolveAssetUrl(path))
 }
 
+case object UnsafeInlineCSSResource extends StylesResource with InlinedResource with UnsafeResource
+
 case object IndirectlyLoadedFontResources extends FontResource with LocalResource
 case object IndirectlyLoadedInlinedFontResources extends FontResource with InlinedResource
 case class IndirectlyLoadedExternalFontResources(domain: String) extends FontResource with ExternalResource
@@ -94,3 +106,5 @@ case class IndirectlyLoadedExternalImageResources(domain: String) extends ImageR
 case object IndirectlyLoadedScriptResources extends ScriptResource with LocalResource
 case object IndirectlyLoadedInlinedScriptResources extends ScriptResource with InlinedResource
 case class IndirectlyLoadedExternalScriptResources(domain: String) extends ScriptResource with ExternalResource
+
+case class IndirectlyLoadedExternalFrameResource(domain: String) extends FrameResource with ExternalResource

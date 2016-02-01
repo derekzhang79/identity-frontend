@@ -14,6 +14,12 @@ trait Configuration {
 
   val omnitureAccount: String
 
+  val recaptchaEnabled: Boolean
+
+  val googleRecaptchaSiteKey: String
+
+  val googleRecaptchaSecretKey: String
+
   val appConfiguration: PlayConfiguration
 }
 
@@ -21,6 +27,9 @@ class ApplicationConfiguration(val appConfiguration: PlayConfiguration) extends 
 
   private def getString(path: String) =
     appConfiguration.getString(path).getOrElse(sys.error(s"Missing configuration: $path"))
+
+  private def getBoolean(path: String) =
+    appConfiguration.getBoolean(path).getOrElse(sys.error(s"Missing configuration: $path"))
 
   val identityCookieDomain = getString("identity.frontend.cookieDomain")
 
@@ -32,4 +41,10 @@ class ApplicationConfiguration(val appConfiguration: PlayConfiguration) extends 
   val identityProfileBaseUrl = getString("identity.frontend.baseUrl")
 
   val omnitureAccount = getString("omniture.account")
+
+  val googleRecaptchaSiteKey = getString("google.recaptcha.site")
+
+  val googleRecaptchaSecretKey = getString("google.recaptcha.secret")
+
+  val recaptchaEnabled = getBoolean("google.recaptchaEnabled")
 }

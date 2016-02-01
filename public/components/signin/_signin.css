@@ -115,3 +115,14 @@
   right: 0;
   margin: 0;
 }
+
+/** Recaptcha form **/
+
+.signin-form__recaptcha-wrapper {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.signin-form__recaptcha {
+  display: inline-block;
+}

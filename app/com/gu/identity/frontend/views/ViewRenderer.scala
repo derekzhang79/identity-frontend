@@ -2,6 +2,7 @@ package com.gu.identity.frontend.views
 
 import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
+import com.gu.identity.frontend.errors.HttpError
 import com.gu.identity.frontend.models.ReturnUrl
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
@@ -70,8 +71,8 @@ object ViewRenderer {
   }
 
 
-  def renderErrorPage(configuration: Configuration, resultGenerator: Html => Result)(implicit messages: Messages) =
-    renderViewModel("error-page", ErrorPageViewModel(configuration), resultGenerator)
+  def renderErrorPage(configuration: Configuration, error: HttpError, resultGenerator: Html => Result)(implicit messages: Messages) =
+    renderViewModel("error-page", ErrorPageViewModel(configuration, error), resultGenerator)
 
 
   def renderViewModel(

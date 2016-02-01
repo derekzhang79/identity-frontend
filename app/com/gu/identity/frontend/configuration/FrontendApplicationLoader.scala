@@ -2,6 +2,7 @@ package com.gu.identity.frontend.configuration
 
 import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.csrf.CSRFConfig
+import com.gu.identity.frontend.errors.ErrorHandler
 import com.gu.identity.frontend.filters.{SecurityHeadersFilter, Filters}
 import com.gu.identity.frontend.services.{GoogleRecaptchaServiceHandler, IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import com.gu.identity.service.client.IdentityClient

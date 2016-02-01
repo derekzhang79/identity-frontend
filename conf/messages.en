@@ -65,3 +65,11 @@ registerConfirmation.faq=FAQ
 registerConfirmation.emailUserhelp=Email userhelp
 registerConfirmation.resetPassword=Reset password
 registerConfirmation.signOut=Sign out
+
+errorpage.404.pageTitle=Page not found
+errorpage.404.title=Page not found
+errorpage.404.description=Sorry - we haven't been able to find the page you asked for.
+
+errorpage.5xx.pageTitle=Unexpected error
+errorpage.5xx.title=Unexpected error
+errorpage.5xx.description=Sorry - an unexpected error has occurred, please try again later.

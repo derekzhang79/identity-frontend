@@ -6,7 +6,9 @@ import com.gu.identity.frontend.filters.{SecurityHeadersFilter, Filters}
 import com.gu.identity.frontend.services.{GoogleRecaptchaServiceHandler, IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import com.gu.identity.service.client.IdentityClient
 import jp.co.bizreach.play2handlebars.HandlebarsPlugin
+import play.api.http.HttpErrorHandler
 import play.api.i18n.I18nComponents
+import play.api.routing.Router
 import play.filters.gzip.GzipFilter
 import router.Routes
 import play.api.libs.ws.ning.NingWSComponents
@@ -46,10 +48,12 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
     new DefaultHTMLCompressorFilter(configuration, environment)
   ).filters
 
+  override lazy val httpErrorHandler = new ErrorHandler(frontendConfiguration, messagesApi, environment, sourceMapper, Some(router))
+
   // Makes sure the logback.xml file is being found in DEV environments
   if(environment.mode == Mode.Dev) {
     Logger.configure(environment)
   }
 
-  override lazy val router = new Routes(httpErrorHandler, applicationController, signinController, registerController, healthcheckController, manifestController, assets, cspReporterController)
+  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signinController, registerController, healthcheckController, manifestController, assets, cspReporterController)
 }

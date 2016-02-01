@@ -7,6 +7,7 @@ import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
 import play.api.i18n.Messages
 import play.api.mvc.{Result, Results}
+import play.twirl.api.Html
 
 /**
  * Adapter for Handlebars view renderer
@@ -68,10 +69,19 @@ object ViewRenderer {
       RegisterConfirmationViewModel(configuration, returnUrl))
   }
 
-  def renderViewModel(view: String, model: ViewModel with ViewModelResources with Product): Result = {
+
+  def renderErrorPage(configuration: Configuration, resultGenerator: Html => Result)(implicit messages: Messages) =
+    renderViewModel("error-page", ErrorPageViewModel(configuration), resultGenerator)
+
+
+  def renderViewModel(
+      view: String,
+      model: ViewModel with ViewModelResources with Product,
+      resultGenerator: Html => Result = Results.Ok.apply): Result = {
+
     val html = HBS.withProduct(view, model)
 
-    Results.Ok(html)
+    resultGenerator(html)
       .withHeaders(ContentSecurityPolicy.cspForViewModel(model))
   }
 

@@ -22,7 +22,7 @@ class ContentSecurityPolicySpec extends WordSpec with Matchers {
       val result = ContentSecurityPolicy.cspForViewModel(testModel)
 
       result._1 shouldEqual "Content-Security-Policy"
-      result._2 shouldEqual "default-src 'self'; script-src 'self'"
+      result._2 shouldEqual "default-src 'self'; script-src 'self'; report-uri /csp/report"
     }
 
     "contain hash for inlined resources" in {
@@ -37,7 +37,7 @@ class ContentSecurityPolicySpec extends WordSpec with Matchers {
       val result = ContentSecurityPolicy.cspForViewModel(testModel)
 
       result._1 shouldEqual "Content-Security-Policy"
-      result._2 shouldEqual s"default-src 'self'; script-src 'sha256-$sha256'"
+      result._2 shouldEqual s"default-src 'self'; script-src 'sha256-$sha256'; report-uri /csp/report"
     }
 
   }

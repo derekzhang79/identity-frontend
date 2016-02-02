@@ -26,7 +26,7 @@ class FrontendApplicationLoader extends ApplicationLoader {
 }
 
 class ApplicationComponents(context: Context) extends BuiltInComponentsFromContext(context) with NingWSComponents with I18nComponents {
-  lazy val frontendConfiguration = new ApplicationConfiguration(configuration)
+  lazy val frontendConfiguration = Configuration(configuration)
   lazy val csrfConfig = CSRFConfig(configuration)
 
   lazy val identityServiceRequestHandler = new IdentityServiceRequestHandler(wsClient)

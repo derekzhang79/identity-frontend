@@ -24,7 +24,7 @@ class ErrorHandler(
 
   extends DefaultHttpErrorHandler(
     environment,
-    configuration.appConfiguration,
+    configuration.underlying,
     sourceMapper,
     router)
 

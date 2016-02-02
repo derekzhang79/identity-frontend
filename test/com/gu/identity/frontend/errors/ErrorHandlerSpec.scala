@@ -2,7 +2,6 @@ package com.gu.identity.frontend.errors
 
 import com.gu.identity.frontend.configuration.Configuration
 import org.scalatest.BeforeAndAfter
-import play.api.{Configuration => PlayConfiguration}
 import play.api.mvc.Result
 import play.api._
 import play.api.test._
@@ -17,7 +16,7 @@ class ErrorHandlerSpec extends PlaySpec with BeforeAndAfter {
 
   val env = Environment.simple(mode = Mode.Prod)
 
-  lazy val mockedErrorHandler = new MockedErrorHandler(testAppConfiguration)
+  lazy val mockedErrorHandler = MockedErrorHandler
 
   // crude state holder for error passed to error handler
   var lastError: Option[HttpError] = None
@@ -82,11 +81,9 @@ class ErrorHandlerSpec extends PlaySpec with BeforeAndAfter {
   }
 
 
-  class MockedErrorHandler(
-      configuration: Configuration)
-
+  object MockedErrorHandler
     extends ErrorHandler(
-      configuration,
+      configuration = Configuration.testConfiguration,
       messagesApi = null,
       environment = Environment.simple(mode = Mode.Prod),
       sourceMapper = None,
@@ -97,17 +94,6 @@ class ErrorHandlerSpec extends PlaySpec with BeforeAndAfter {
 
       Future.successful(resultGenerator(Html("mocked error page")))
     }
-  }
-
-
-  lazy val testAppConfiguration = new Configuration {
-    override val identityApiHost: String = "identityApiHost"
-    override val identityApiKey: String = "identityApiKey"
-    override val identityCookieDomain: String = "theguardian.com"
-    override val identityProfileBaseUrl: String = "profile.theguardian.com"
-    override val omnitureAccount: String = "omnitureAccount"
-    override val appConfiguration = PlayConfiguration.empty
-    override val identityFederationApiHost: String = "https://oauth.theguardian.com"
   }
 
 }

@@ -47,7 +47,7 @@ class ErrorHandler(
     renderErrorPage(UnexpectedError(ex), InternalServerError.apply)
 
 
-  private def renderErrorPage(error: HttpError, resultGenerator: Html => Result) =
+  protected def renderErrorPage(error: HttpError, resultGenerator: Html => Result): Future[Result] =
     Future.successful {
       ViewRenderer.renderErrorPage(configuration, error, resultGenerator)
     }

@@ -21,8 +21,27 @@ function storage( type ) {
       checkSupported() && storageActual.setItem( key, value );
     },
 
+    setJSON: function setJSONValue( key, value ) {
+      return this.set( key, JSON.stringify( value ) );
+    },
+
     get: function getValue( key ) {
-      return checkSupported() && storageActual.getItem( key );
+      return checkSupported() && storageActual.getItem( key ) || undefined;
+    },
+
+    getJSON: function getJSONValue( key ) {
+      try {
+        const value = this.get(key);
+
+        if ( typeof value === 'string' ) {
+          return JSON.parse( value );
+        }
+
+      } catch ( err ) {
+        if ( console && console.warn ) {
+          console.warn( `Error parsing JSON from storage for key "${key}": ${err}` );
+        }
+      }
     }
   });
 }

@@ -1,25 +1,23 @@
 package com.gu.identity.frontend.errors
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.test.SimpleAppPerSuite
 import org.scalatest.BeforeAndAfter
-import play.api.ApplicationLoader.Context
-import play.api.i18n.{MessagesApi, I18nComponents}
+import play.api.{Configuration => PlayConfiguration}
 import play.api.mvc.Result
-import play.api.routing.Router
 import play.api._
 import play.api.test._
 import play.api.test.Helpers._
 import org.scalatestplus.play.PlaySpec
-import play.core.SourceMapper
 import play.twirl.api.Html
 
 import scala.concurrent.Future
 
 
-class ErrorHandlerSpec extends PlaySpec with SimpleAppPerSuite with BeforeAndAfter {
+class ErrorHandlerSpec extends PlaySpec with BeforeAndAfter {
 
-  override lazy val app: Application = FakeApplicationWithErrorHandler()
+  val env = Environment.simple(mode = Mode.Prod)
+
+  lazy val mockedErrorHandler = new MockedErrorHandler(testAppConfiguration)
 
   // crude state holder for error passed to error handler
   var lastError: Option[HttpError] = None
@@ -30,25 +28,69 @@ class ErrorHandlerSpec extends PlaySpec with SimpleAppPerSuite with BeforeAndAft
 
   "Error handler" must {
 
+    "display 403 forbidden" in {
+      val resp = mockedErrorHandler.onClientError(FakeRequest(), 403, "go away")
+
+      status(resp) must equal(403)
+      contentAsString(resp) must include("mocked error page")
+
+      lastError.value mustBe a [ForbiddenError]
+      lastError.value.asInstanceOf[ForbiddenError].message must equal("go away")
+    }
+
     "display 404 not found error" in {
-      val Some(resp) = route(FakeRequest(GET, "/iDoNotExist"))
+      val resp = mockedErrorHandler.onClientError(FakeRequest(), 404, "thing not found")
 
       status(resp) must equal(404)
       contentAsString(resp) must include("mocked error page")
 
       lastError.value mustBe a [NotFoundError]
+      lastError.value.asInstanceOf[NotFoundError].message must equal("thing not found")
+    }
+
+    "display 400 bad request error" in {
+      val resp = mockedErrorHandler.onClientError(FakeRequest(), 400, "bad thing")
+
+      status(resp) must equal(400)
+      contentAsString(resp) must include("mocked error page")
+
+      lastError.value mustBe a [BadRequestError]
+      lastError.value.asInstanceOf[BadRequestError].message must equal("bad thing")
+    }
+
+    "display 410 gone error" in {
+      val resp = mockedErrorHandler.onClientError(FakeRequest(), 410, "goooooone")
+
+      status(resp) must equal(410)
+      contentAsString(resp) must include("mocked error page")
+
+      lastError.value mustBe a [BadRequestError]
+      lastError.value.asInstanceOf[BadRequestError].message must equal("goooooone")
+    }
+
+    "display 500 error" in {
+      val err = new RuntimeException("failed!")
+      val resp = mockedErrorHandler.onServerError(FakeRequest(), err)
+
+      status(resp) must equal(500)
+      contentAsString(resp) must include("mocked error page")
+
+      lastError.value mustBe a [UnexpectedError]
+      lastError.value.asInstanceOf[UnexpectedError].description must equal("RuntimeException: failed!")
     }
 
   }
 
 
   class MockedErrorHandler(
-      configuration: Configuration,
-      messagesApi: MessagesApi,
-      environment: Environment,
-      sourceMapper: Option[SourceMapper],
-      router: => Option[Router])
-    extends ErrorHandler(configuration, messagesApi, environment, sourceMapper, router) {
+      configuration: Configuration)
+
+    extends ErrorHandler(
+      configuration,
+      messagesApi = null,
+      environment = Environment.simple(mode = Mode.Prod),
+      sourceMapper = None,
+      router = None) {
 
     override def renderErrorPage(error: HttpError, resultGenerator: Html => Result) = {
       lastError = Some(error)
@@ -58,35 +100,14 @@ class ErrorHandlerSpec extends PlaySpec with SimpleAppPerSuite with BeforeAndAft
   }
 
 
-  object FakeApplicationWithErrorHandler {
-    def apply(): Application = {
-      val env = Environment.simple(mode = Mode.Prod)
-      val context = ApplicationLoader.createContext(env)
-
-      AppLoader.load(context)
-    }
-
-    private object AppLoader extends ApplicationLoader {
-      override def load(context: Context): Application =
-        new ApplicationComponents(context).application
-
-
-      private class ApplicationComponents(context: Context) extends BuiltInComponentsFromContext(context) with I18nComponents {
-        override lazy val router = Router.empty
-
-        override lazy val httpErrorHandler = new MockedErrorHandler(appConfiguration, messagesApi, environment, sourceMapper, Some(router))
-
-        lazy val appConfiguration = new Configuration {
-          override val identityApiHost: String = "identityApiHost"
-          override val identityApiKey: String = "identityApiKey"
-          override val identityCookieDomain: String = "theguardian.com"
-          override val identityProfileBaseUrl: String = "profile.theguardian.com"
-          override val omnitureAccount: String = "omnitureAccount"
-          override val appConfiguration = configuration
-          override val identityFederationApiHost: String = "https://oauth.theguardian.com"
-        }
-      }
-    }
+  lazy val testAppConfiguration = new Configuration {
+    override val identityApiHost: String = "identityApiHost"
+    override val identityApiKey: String = "identityApiKey"
+    override val identityCookieDomain: String = "theguardian.com"
+    override val identityProfileBaseUrl: String = "profile.theguardian.com"
+    override val omnitureAccount: String = "omnitureAccount"
+    override val appConfiguration = PlayConfiguration.empty
+    override val identityFederationApiHost: String = "https://oauth.theguardian.com"
   }
 
 }

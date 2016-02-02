@@ -1,0 +1,14 @@
+.error-content__heading {
+  @extend %font-heading-1;
+  font-weight: normal;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.error-content__desc {
+  @extend %font-text-1;
+}
+
+.error-content__details {
+  @extend %font-text-1;
+}

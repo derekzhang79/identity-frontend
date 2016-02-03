@@ -8,11 +8,22 @@ class MultiVariantTestsSpec extends WordSpec with Matchers {
 
   def testMvtID = MultiVariantTestID(_: Int, maxId = 100)
 
+  case class MockedMVT(
+      name: String,
+      audience: Double,
+      audienceOffset: Double,
+      variants: Seq[MultiVariantTestVariant],
+      isServerSide: Boolean = true)
+    extends RuntimeMultiVariantTest
+
+  case class MockedMVTVariant(id: String) extends RuntimeMultiVariantTestVariant
+
+
   "A Multi Variant Test" when {
 
     "determining whether user is in test" should {
 
-      val test = RuntimeMultiVariantTest(
+      val test = MockedMVT(
         name = "test",
         audience = 0.1,
         audienceOffset = 0.5,
@@ -39,9 +50,9 @@ class MultiVariantTestsSpec extends WordSpec with Matchers {
     }
 
     "it has only a single variant" should {
-      val variant = RuntimeMultiVariantTestVariant("A")
+      val variant = MockedMVTVariant("A")
 
-      val test = RuntimeMultiVariantTest(
+      val test = MockedMVT(
         name = "test",
         audience = 0.1,
         audienceOffset = 0.5,
@@ -58,12 +69,12 @@ class MultiVariantTestsSpec extends WordSpec with Matchers {
     }
 
     "it has multiple variants" should {
-      val variantA = RuntimeMultiVariantTestVariant("A")
-      val variantB = RuntimeMultiVariantTestVariant("B")
-      val variantC = RuntimeMultiVariantTestVariant("C")
+      val variantA = MockedMVTVariant("A")
+      val variantB = MockedMVTVariant("B")
+      val variantC = MockedMVTVariant("C")
 
       "yield correct variant when two variants available" in {
-        val test = RuntimeMultiVariantTest(
+        val test = MockedMVT(
           name = "test",
           audience = 0.1,
           audienceOffset = 0.5,
@@ -77,7 +88,7 @@ class MultiVariantTestsSpec extends WordSpec with Matchers {
       }
 
       "yield correct variant when three variants available" in {
-        val test = RuntimeMultiVariantTest(
+        val test = MockedMVT(
           name = "test",
           audience = 0.1,
           audienceOffset = 0.5,

@@ -98,17 +98,12 @@ case object RegisterTestVariantA extends MultiVariantTestVariant { val id = "A" 
 /**
  * Define a MVT at runtime - should only be used for tests.
  */
-case class RuntimeMultiVariantTest(
-  name: String,
-  audience: Double,
-  audienceOffset: Double,
-  isServerSide: Boolean = true,
-  variants: Seq[MultiVariantTestVariant]) extends MultiVariantTest
+private[mvt] trait RuntimeMultiVariantTest extends MultiVariantTest
 
 /**
  * Define a MVT variant at runtime - should only be used for tests.
  */
-case class RuntimeMultiVariantTestVariant(id: String) extends MultiVariantTestVariant
+private[mvt] trait RuntimeMultiVariantTestVariant extends MultiVariantTestVariant
 
 
 

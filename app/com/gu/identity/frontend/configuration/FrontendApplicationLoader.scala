@@ -55,5 +55,5 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
     Logger.configure(environment)
   }
 
-  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signinController, registerController, healthcheckController, manifestController, assets, cspReporterController)
+  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signinController, registerController, cspReporterController, healthcheckController, manifestController, assets)
 }

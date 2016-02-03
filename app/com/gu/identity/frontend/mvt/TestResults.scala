@@ -21,8 +21,22 @@ object TestResults {
   /**
    * Retrieve active server-side tests and the selected variant for an mvtId.
    */
-  def activeTests(mvtId: MultiVariantTestID): ActiveMultiVariantTests =
-    allServerSide.flatMap { test =>
-      activeVariantForTest(test, mvtId).map(test -> _)
-    }.toMap
+  def activeTests(mvtId: MultiVariantTestID): ActiveMultiVariantTests = (
+    for {
+      test <- allServerSide
+      variant <- activeVariantForTest(test, mvtId)
+    } yield test -> variant
+  ).toMap
+
+
+  def activeTests(mvtId: Option[MultiVariantTestID]): ActiveMultiVariantTests =
+    mvtId.fold(ifEmpty = activeTestsDefaultVariants)(activeTests)
+
+
+  def activeTestsDefaultVariants: ActiveMultiVariantTests = (
+    for {
+      test <- allServerSide
+      variant <- test.defaultVariant
+    } yield test -> variant
+  ).toMap
 }

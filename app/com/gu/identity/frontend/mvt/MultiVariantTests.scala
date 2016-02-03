@@ -63,6 +63,12 @@ sealed trait MultiVariantTest {
    * Variants available to the test which will be exposed to user's in the test.
    */
   val variants: Seq[MultiVariantTestVariant]
+
+  /**
+   * Defines a default variant to use when a MVT ID cannot be determined.
+   * Should only be used in 100% tests.
+   */
+  val defaultVariant: Option[MultiVariantTestVariant] = None
 }
 
 
@@ -78,6 +84,7 @@ case object SignInV2Test extends MultiVariantTest {
   val audienceOffset = 0.0
   val isServerSide = true
   val variants = Seq(SignInV2TestVariantA, SignInV2TestVariantB)
+  override val defaultVariant = Some(SignInV2TestVariantA)
 }
 
 case object SignInV2TestVariantA extends MultiVariantTestVariant { val id = "A" }
@@ -90,6 +97,7 @@ case object RegisterV2Test extends MultiVariantTest {
   val audienceOffset = 0.0
   val isServerSide = true
   val variants = Seq(RegisterTestVariantA)
+  override val defaultVariant = Some(RegisterTestVariantA)
 }
 
 case object RegisterTestVariantA extends MultiVariantTestVariant { val id = "A" }

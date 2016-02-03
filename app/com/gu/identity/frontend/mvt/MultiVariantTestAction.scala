@@ -16,7 +16,7 @@ object MultiVariantTestRequest {
 
   def apply[A](request: Request[A]): MultiVariantTestRequest[A] = {
     val mvtCookie = MultiVariantTestID.fromRequest(request)
-    val activeTests = mvtCookie.map(id => TestResults.activeTests(id)).getOrElse(Nil).toMap
+    val activeTests = TestResults.activeTests(mvtCookie)
 
     MultiVariantTestRequest[A](mvtCookie, activeTests ++ getTestOverrides(request.queryString), request)
   }

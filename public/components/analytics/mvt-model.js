@@ -1,4 +1,4 @@
-/*global window*/
+import { configuration } from '../configuration/configuration';
 
 const MAX_ID = 899999;
 
@@ -34,8 +34,8 @@ export class MultiVariantTest {
   }
 
   static initFromPageConfig() {
-    if (window._idConfig && Array.isArray(window._idConfig.mvtTests)) {
-      return window._idConfig.mvtTests.map(test => MultiVariantTest.fromObject(test));
+    if ( configuration && Array.isArray( configuration.mvtTests ) ) {
+      return configuration.mvtTests.map( test => MultiVariantTest.fromObject( test ) );
     }
 
     return [];

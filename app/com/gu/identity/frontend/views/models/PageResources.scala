@@ -11,6 +11,9 @@ sealed trait InlinedResource
 
 sealed trait UnsafeResource
 
+// Resources without a Content-Security-Policy requirement
+sealed trait NoPolicyRequirement
+
 sealed trait InlinedSource {
   val source: String
   val sha256: String
@@ -82,6 +85,14 @@ object InlinedJavascriptResource {
   def apply(source: String, isInHead: Boolean): InlinedJavascriptResource =
     InlinedJavascriptResource(source, InlinedSource.sha256(source).getOrElse(""), isInHead)
 }
+
+
+case class InlinedJSONResource(
+    id: String,
+    source: String,
+    isInHead: Boolean = true,
+    isJSON: Boolean = true)
+  extends ScriptResource with NoPolicyRequirement
 
 
 case class LocalCSSResource private(

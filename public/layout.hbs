@@ -26,6 +26,12 @@
       {{/isInHead}}
     {{/isJavascript}}
 
+    {{# isJSON }}
+      {{# isInHead }}
+        <script id="{{ id }}" type="application/json">{{{ source }}}</script>
+      {{/ isInHead }}
+    {{/ isJSON }}
+
   {{/each}}
 
 </head>

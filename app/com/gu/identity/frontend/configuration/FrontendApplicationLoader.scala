@@ -2,7 +2,7 @@ package com.gu.identity.frontend.configuration
 
 import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.csrf.CSRFConfig
-import com.gu.identity.frontend.filters.{BetaUserGroupFilter, SecurityHeadersFilter, Filters}
+import com.gu.identity.frontend.filters.{SecurityHeadersFilter, Filters}
 import com.gu.identity.frontend.services.{GoogleRecaptchaServiceHandler, IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import com.gu.identity.service.client.IdentityClient
 import jp.co.bizreach.play2handlebars.HandlebarsPlugin
@@ -42,8 +42,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   override lazy val httpFilters = new Filters(new SecurityHeadersFilter(
     frontendConfiguration),
     new GzipFilter(),
-    new DefaultHTMLCompressorFilter(configuration, environment),
-    new BetaUserGroupFilter(frontendConfiguration)
+    new DefaultHTMLCompressorFilter(configuration, environment)
   ).filters
 
   // Makes sure the logback.xml file is being found in DEV environments

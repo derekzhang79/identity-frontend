@@ -73,6 +73,9 @@ case class JavascriptRuntimeParams(activeTests: Map[String, String]) {
 
 object LayoutViewModel {
 
+  def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel =
+    apply(configuration, Map.empty)
+
   def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)])(implicit messages: Messages): LayoutViewModel = {
 
     val config = JavascriptConfig(

@@ -65,3 +65,22 @@ registerConfirmation.faq=FAQ
 registerConfirmation.emailUserhelp=Email userhelp
 registerConfirmation.resetPassword=Reset password
 registerConfirmation.signOut=Sign out
+
+errors.badRequest.pageTitle=Bad request: {0}
+errors.badRequest.title=Bad request: {0}
+errors.badRequest.description=Your request was not recognised. Please try again.
+errors.unexpected.details=Error details: {0}
+
+errors.forbidden.pageTitle=Forbidden
+errors.forbidden.title=Access denied
+errors.forbidden.description=You do not have permission to access this page.
+
+errors.notFound.pageTitle=Page not found
+errors.notFound.title=Page not found
+errors.notFound.description=Sorry - we have not been able to find the page you asked for.
+
+
+errors.unexpected.pageTitle=Unexpected error
+errors.unexpected.title=Unexpected error: {0}
+errors.unexpected.description=Sorry - an unexpected error has occurred, please try again later.
+errors.unexpected.details=Error details: {0}

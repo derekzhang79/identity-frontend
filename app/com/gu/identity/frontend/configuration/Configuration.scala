@@ -2,49 +2,78 @@ package com.gu.identity.frontend.configuration
 
 import play.api.{Configuration => PlayConfiguration}
 
-trait Configuration {
-  val identityCookieDomain: String
 
-  val identityApiKey: String
-  val identityApiHost: String
+case class Configuration(
+  identityCookieDomain: String,
 
-  val identityProfileBaseUrl: String
+  identityApiKey: String,
+  identityApiHost: String,
 
-  val identityFederationApiHost: String
+  identityProfileBaseUrl: String,
 
-  val omnitureAccount: String
+  identityFederationApiHost: String,
 
-  val recaptchaEnabled: Boolean
+  omnitureAccount: String,
 
-  val googleRecaptchaSiteKey: String
+  recaptchaEnabled: Boolean,
+  googleRecaptchaSiteKey: String,
+  googleRecaptchaSecretKey: String,
 
-  val googleRecaptchaSecretKey: String
+  underlying: PlayConfiguration)
 
-  val appConfiguration: PlayConfiguration
-}
 
-class ApplicationConfiguration(val appConfiguration: PlayConfiguration) extends Configuration {
+object Configuration {
+  def apply(appConfiguration: PlayConfiguration): Configuration = {
 
-  private def getString(path: String) =
-    appConfiguration.getString(path).getOrElse(sys.error(s"Missing configuration: $path"))
+    def getString(path: String) =
+      appConfiguration.getString(path).getOrElse(sys.error(s"Missing configuration: $path"))
 
-  private def getBoolean(path: String) =
-    appConfiguration.getBoolean(path).getOrElse(sys.error(s"Missing configuration: $path"))
+    def getBoolean(path: String) =
+      appConfiguration.getBoolean(path).getOrElse(sys.error(s"Missing configuration: $path"))
 
-  val identityCookieDomain = getString("identity.frontend.cookieDomain")
 
-  val identityApiKey = getString("identity.api.key")
-  val identityApiHost = getString("identity.api.host")
+    Configuration(
+      identityCookieDomain = getString("identity.frontend.cookieDomain"),
 
-  val identityFederationApiHost = getString("identity.federation.api.host")
+      identityApiKey = getString("identity.api.key"),
+      identityApiHost = getString("identity.api.host"),
 
-  val identityProfileBaseUrl = getString("identity.frontend.baseUrl")
+      identityFederationApiHost = getString("identity.federation.api.host"),
 
-  val omnitureAccount = getString("omniture.account")
+      identityProfileBaseUrl = getString("identity.frontend.baseUrl"),
 
-  val googleRecaptchaSiteKey = getString("google.recaptcha.site")
+      omnitureAccount = getString("omniture.account"),
 
-  val googleRecaptchaSecretKey = getString("google.recaptcha.secret")
+      googleRecaptchaSiteKey = getString("google.recaptcha.site"),
 
-  val recaptchaEnabled = getBoolean("google.recaptchaEnabled")
+      googleRecaptchaSecretKey = getString("google.recaptcha.secret"),
+
+      recaptchaEnabled = getBoolean("google.recaptchaEnabled"),
+
+      underlying = appConfiguration
+    )
+  }
+
+
+  lazy val testConfiguration = Configuration(
+    identityCookieDomain = "dev-theguardian.com",
+
+    identityApiKey = "--test-key--",
+    identityApiHost = "idapi.code.dev-theguardian.com",
+
+    identityFederationApiHost = "https://oauth.code.dev-theguardian.com",
+
+    identityProfileBaseUrl = "https://profile.code.dev-theguardian.com",
+
+    omnitureAccount = "--test-omniture-account--",
+
+    googleRecaptchaSiteKey = "--recaptcha-key--",
+
+    googleRecaptchaSecretKey = "--recaptcha-secret-key--",
+
+    recaptchaEnabled = true,
+
+    underlying = PlayConfiguration.empty
+  )
+
 }

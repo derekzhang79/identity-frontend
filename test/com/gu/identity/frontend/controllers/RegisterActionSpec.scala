@@ -27,18 +27,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
-    val config = new Configuration {
-      override val identityApiHost: String = "identityApiHost"
-      override val identityApiKey: String = "identityApiKey"
-      override val identityCookieDomain: String = "theguardian.com"
-      override val identityProfileBaseUrl: String = "profile.theguardian.com"
-      override val omnitureAccount: String = "omnitureAccount"
-      override val appConfiguration: PlayConfiguration = null
-      override val identityFederationApiHost: String = "https://oauth.theguardian.com"
-      override val googleRecaptchaSiteKey: String = "siteKey"
-      override val googleRecaptchaSecretKey: String = "secret"
-      override val recaptchaEnabled: Boolean = true
-    }
+    val config = Configuration.testConfiguration
 
     val controller = new RegisterAction(mockIdentityService, messages, config, fakeCsrfConfig)
   }

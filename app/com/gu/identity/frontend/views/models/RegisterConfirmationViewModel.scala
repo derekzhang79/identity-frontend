@@ -20,7 +20,7 @@ case class RegisterConfirmationViewModel private(
 
 object RegisterConfirmationViewModel {
   def apply(configuration: Configuration, returnUrl: Option[String])(implicit messages: Messages): RegisterConfirmationViewModel = {
-    val layout = LayoutViewModel(configuration, None)
+    val layout = LayoutViewModel(configuration)
     val urlParams = Seq(("returnUrl" -> returnUrl.getOrElse("http://www.theguardian.com")))
 
     RegisterConfirmationViewModel(

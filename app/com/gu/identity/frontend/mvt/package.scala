@@ -3,6 +3,8 @@ package com.gu.identity.frontend
 
 package object mvt {
 
+  type ActiveMultiVariantTests = Map[MultiVariantTest, MultiVariantTestVariant]
+
   object Implicits {
     import play.api.libs.json._
 

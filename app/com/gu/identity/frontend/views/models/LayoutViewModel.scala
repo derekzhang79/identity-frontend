@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views.models
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.Text.{FooterText, HeaderText, LayoutText}
 import com.gu.identity.frontend.mvt
-import com.gu.identity.frontend.mvt.{MultiVariantTests, MultiVariantTestVariant, MultiVariantTest}
+import com.gu.identity.frontend.mvt.{ActiveMultiVariantTests, MultiVariantTests, MultiVariantTest}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 
@@ -78,7 +78,7 @@ object LayoutViewModel {
   def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel =
     apply(configuration, Map.empty)
 
-  def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)])(implicit messages: Messages): LayoutViewModel = {
+  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests)(implicit messages: Messages): LayoutViewModel = {
 
     val config = JavascriptConfig(
       omnitureAccount = configuration.omnitureAccount,
@@ -88,7 +88,7 @@ object LayoutViewModel {
     val runtime = activeTests.headOption.map { _ =>
       JavascriptRuntimeParams(activeTests.map {
         case (key, value) => key.name -> value.id
-      }.toMap)
+      })
     }
 
     val inlinedJSConfig = InlinedJSONResource("id_config", config.toJSONString)

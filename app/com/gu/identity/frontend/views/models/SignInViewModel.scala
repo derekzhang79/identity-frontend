@@ -5,7 +5,7 @@ import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.Text._
-import com.gu.identity.frontend.mvt.{MultiVariantTestVariant, MultiVariantTest}
+import com.gu.identity.frontend.mvt.ActiveMultiVariantTests
 import play.api.i18n.Messages
 
 case class SignInViewModel private(
@@ -36,7 +36,7 @@ case class SignInViewModel private(
 
 
 object SignInViewModel {
-  def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)], csrfToken: Option[CSRFToken], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
+  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, csrfToken: Option[CSRFToken], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests)
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
@@ -75,7 +75,7 @@ object SignInViewModel {
       None
     }
   }
-  
+
   private def getResources(layout: LayoutViewModel, recaptchaViewModel: Option[GoogleRecaptchaViewModel]): Seq[PageResource with Product] ={
     recaptchaViewModel match {
       case Some(model) =>  layout.resources ++ model.resources

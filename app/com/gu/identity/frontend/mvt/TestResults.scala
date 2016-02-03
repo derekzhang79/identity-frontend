@@ -21,8 +21,8 @@ object TestResults {
   /**
    * Retrieve active server-side tests and the selected variant for an mvtId.
    */
-  def activeTests(mvtId: MultiVariantTestID): Set[(MultiVariantTest, MultiVariantTestVariant)] =
+  def activeTests(mvtId: MultiVariantTestID): ActiveMultiVariantTests =
     allServerSide.flatMap { test =>
       activeVariantForTest(test, mvtId).map(test -> _)
-    }
+    }.toMap
 }

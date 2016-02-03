@@ -7,7 +7,7 @@ import scala.concurrent.Future
 
 case class MultiVariantTestRequest[A](
     mvtCookie: Option[MultiVariantTestID],
-    activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
+    activeTests: ActiveMultiVariantTests,
     request: Request[A])
   extends WrappedRequest[A](request)
 

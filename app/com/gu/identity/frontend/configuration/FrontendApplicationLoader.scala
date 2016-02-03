@@ -33,6 +33,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val applicationController = new Application(frontendConfiguration, messagesApi, csrfConfig)
   lazy val healthcheckController = new HealthCheck()
   lazy val manifestController = new Manifest()
+  lazy val cspReporterController = new CSPViolationReporter()
   lazy val googleRecaptchaServiceHandler = new GoogleRecaptchaServiceHandler(wsClient, frontendConfiguration)
   lazy val googleRecaptchaCheck = new GoogleRecaptchaCheck(googleRecaptchaServiceHandler)
   lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaCheck)
@@ -50,5 +51,5 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
     Logger.configure(environment)
   }
 
-  override lazy val router = new Routes(httpErrorHandler, applicationController, signinController, registerController, healthcheckController, manifestController, assets)
+  override lazy val router = new Routes(httpErrorHandler, applicationController, signinController, registerController, healthcheckController, manifestController, assets, cspReporterController)
 }

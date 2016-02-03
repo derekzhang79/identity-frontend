@@ -20,3 +20,5 @@ GET        /management/healthcheck        com.gu.identity.frontend.controllers.H
 GET        /management/manifest           com.gu.identity.frontend.controllers.Manifest.manifest
 
 GET        /static/*file                  controllers.Assets.versioned(path="/public", file: Asset)
+
+POST       /csp/report                    com.gu.identity.frontend.controllers.CSPViolationReporter.cspReport

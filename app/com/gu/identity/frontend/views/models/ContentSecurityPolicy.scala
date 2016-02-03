@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.views.models
 
+import com.gu.identity.frontend.controllers._
 
 object ContentSecurityPolicy {
 
@@ -14,8 +15,15 @@ object ContentSecurityPolicy {
   val CSP_DATA_PROTOCOL = "data:"
   val CSP_UNSAFE_INLINE = "'unsafe-inline'"
 
+  val CSP_REPORT_URI = "report-uri"
+  val CSP_REPORT_URI_PATH = routes.CSPViolationReporter.cspReport.url
+
   val defaultCsp = Map(
     CSP_DEFAULT_SRC -> Seq(CSP_SELF_DOMAIN)
+  )
+
+  val violationReportingCsp = Map(
+    CSP_REPORT_URI -> Seq(CSP_REPORT_URI_PATH)
   )
 
 
@@ -31,7 +39,7 @@ object ContentSecurityPolicy {
 
     val transformed = grouped.mapValues(_.map(cspStatementForResource).distinct)
 
-    "Content-Security-Policy" -> toCSPHeader(defaultCsp ++ transformed)
+    "Content-Security-Policy" -> toCSPHeader(defaultCsp ++ transformed ++ violationReportingCsp)
   }
 
 

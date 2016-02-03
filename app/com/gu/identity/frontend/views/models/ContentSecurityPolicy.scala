@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.views.models
 
+import com.gu.identity.frontend.controllers._
 
 object ContentSecurityPolicy {
 
@@ -15,7 +16,7 @@ object ContentSecurityPolicy {
   val CSP_UNSAFE_INLINE = "'unsafe-inline'"
 
   val CSP_REPORT_URI = "report-uri"
-  val CSP_REPORT_URI_PATH = "/csp/report"
+  val CSP_REPORT_URI_PATH = routes.CSPViolationReporter.cspReport.url
 
   val defaultCsp = Map(
     CSP_DEFAULT_SRC -> Seq(CSP_SELF_DOMAIN)

@@ -7,7 +7,6 @@ import com.gu.identity.frontend.filters.{SecurityHeadersFilter, Filters}
 import com.gu.identity.frontend.services.{GoogleRecaptchaServiceHandler, IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import com.gu.identity.service.client.IdentityClient
 import jp.co.bizreach.play2handlebars.HandlebarsPlugin
-import play.api.http.HttpErrorHandler
 import play.api.i18n.I18nComponents
 import play.api.routing.Router
 import play.filters.gzip.GzipFilter

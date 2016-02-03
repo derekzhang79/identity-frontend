@@ -13,7 +13,7 @@ class CSPViolationReporter extends Logging{
     val userAgent = request.headers.get("User-Agent")
     val report = request.body
 
-    logger.error(s"Content Security Violation Error: ${report}.\nUser Agent: ${userAgent}")
+    logger.error(s"Content Security Violation Error: User Agent: ${userAgent}.  Report: ${report}.")
 
     Ok("Content Security Policy Violation Logged.")
   }

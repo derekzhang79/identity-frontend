@@ -49,7 +49,6 @@ object FacebookTestUserService {
         case 200 => response
         case _ => {
           logger.warn(s"Repeating GET call. Attempt number ... ${count-1}")
-          Thread.sleep(2000)
           repeater(url, count - 1)
         }
       }

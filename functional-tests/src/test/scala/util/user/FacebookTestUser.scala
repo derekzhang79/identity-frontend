@@ -47,7 +47,7 @@ object FacebookTestUserService {
       if (count == 0)
         throw new FaceBookTestUserException("Could not query Facebook Graph API.")
       else response.toOption.filter(_.status == OK).getOrElse {
-        logger.warn(s"Repeating GET call. Remaning attempts ... ${count-1}")
+        logger.warn(s"Repeating GET call. Remaining attempts ... ${count-1}")
         repeater(url, count - 1)
       }
     }

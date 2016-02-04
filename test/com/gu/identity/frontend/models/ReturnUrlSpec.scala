@@ -32,4 +32,12 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
     ReturnUrl(None, Some("http://profile-origin2.thegulocal.com")) should be(ReturnUrl("http://profile-origin2.thegulocal.com"))
   }
 
+  it should "Determine valid url path" in {
+    validUrlPath(ReturnUrl("http://theguardian.com/signin")) should be(false)
+    validUrlPath(ReturnUrl("http://theguardian.com/register")) should be(false)
+    validUrlPath(ReturnUrl("http://theguardian.com/register/confirm")) should be(false)
+    validUrlPath(ReturnUrl("http://theguardian.com")) should be(true)
+    validUrlPath(ReturnUrl("http://theguardian.com/politics")) should be(true)
+  }
+
 }

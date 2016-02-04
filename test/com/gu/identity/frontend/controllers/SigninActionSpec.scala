@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.controllers
 
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services._
@@ -23,7 +24,8 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
     val mockGoogleRecaptchaCheck = new MockRecaptchaCheck()
-    lazy val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig, mockGoogleRecaptchaCheck)
+    val config = Configuration.testConfiguration
+    lazy val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig, mockGoogleRecaptchaCheck, config)
   }
 
   trait WithFailedRecaptchaCheck extends WithControllerMockedDependencies{

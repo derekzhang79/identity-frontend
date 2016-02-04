@@ -1,17 +1,21 @@
 package com.gu.identity.frontend.models
 
 import java.net.URI
+import com.gu.identity.frontend.configuration.Configuration
+
 import scala.util.Try
 
 case class ReturnUrl(url: String)
 
 object ReturnUrl {
 
-  val default = ReturnUrl("http://www.theguardian.com")
   val domains = List(".theguardian.com", ".code.dev-theguardian.com", ".thegulocal.com")
   val invalidUrlPaths = List("/signin", "/register", "/register/confirm")
 
-  def apply(returnUrl: Option[String], referer: Option[String]): ReturnUrl = {
+  def apply(returnUrl: Option[String], referer: Option[String], configuration: Configuration): ReturnUrl = {
+
+    val default = ReturnUrl(configuration.identityDefaultReturnUrl)
+
     returnUrl.map(ReturnUrl(_))
       .orElse(referer.map(ReturnUrl(_)))
       .filter(validDomain(_))

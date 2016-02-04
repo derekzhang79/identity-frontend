@@ -37,7 +37,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
   def signIn = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
     val formParams = signInFormBody.bindFromRequest()(request).get
     val trackingData = TrackingData(request, formParams.returnUrl)
-    val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"))
+    val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"), config)
 
     def googleRecaptchaError = Future.successful(
       redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation)

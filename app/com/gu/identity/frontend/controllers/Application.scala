@@ -16,7 +16,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
   }
 
   def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
-    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"))
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration)
 
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
 
@@ -24,7 +24,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
   }
 
   def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
-    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"))
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration)
 
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
 

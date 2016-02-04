@@ -6,6 +6,7 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 import test.util.Config.FacebookAppCredentials
 import play.api.libs.ws.{WSResponse, WS}
+import scala.annotation.tailrec
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import play.api.test._
@@ -33,23 +34,33 @@ object FacebookTestUserService {
 
   def logger = LoggerFactory.getLogger(this.getClass)
 
-  private val graphApiUrl = "https://graph.facebook.com"
+  private val graphApiUrl = "https://graph.facebook.com/v2.2"
+
+  implicit val app: play.api.test.FakeApplication = new FakeApplication()
 
   private def GET(url: String): WSResponse = {
-    implicit val app: play.api.test.FakeApplication = new FakeApplication()
 
-    val response = Await.result(WS.url(url).get(), 10.second)
+    @tailrec
+    def repeater(url: String, count: Int): WSResponse = {
+      val response = Await.result(WS.url(url).get(), 5.second)
 
-    // try one more time if it fails
-    response.status match {
-      case 200 => response
-      case _ => Await.result(WS.url(url).get(), 10.second)
+      if (count == 0) response
+      else response.status match {
+        case 200 => response
+        case _ => {
+          logger.warn(s"Repeating GET call. Attempt number ... ${count-1}")
+          Thread.sleep(2000)
+          repeater(url, count - 1)
+        }
+      }
     }
+
+    repeater(url, 5)
   }
 
   private val accessToken = {
 
-    val authEndpoint = "https://graph.facebook.com/oauth/access_token"
+    val authEndpoint = s"${graphApiUrl}/oauth/access_token"
 
     val queryString = Map(
       "client_id" -> FacebookAppCredentials.id,
@@ -121,7 +132,7 @@ object FacebookTestUserService {
       throw new FaceBookTestUserException(
         s"Could not delete Facebook Test User with ID ${fbTestUser.id}. ${response.body}")
 
-    response.body.toBoolean
+    (response.json \ "success").as[Boolean]
   }
 }
 

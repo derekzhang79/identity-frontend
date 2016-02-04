@@ -12,7 +12,8 @@ export function domElement( elem ) {
     select: domElementFunctionProxy.bind( null, elem, 'select' ),
     on: domElementEventHandler.bind( null, elem ),
     value: domElementValueExtractor.bind( null, elem, 'value' ),
-    setValue: domElementValueSetter.bind( null, elem, 'value' )
+    setValue: domElementValueSetter.bind( null, elem, 'value' ),
+    innerHTML: domElementValueExtractor.bind( null, elem, 'innerHTML' )
   });
 }
 

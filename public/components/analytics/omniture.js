@@ -2,6 +2,8 @@
 
 /*global window*/
 
+import { configuration } from '../configuration/configuration';
+
 /* SiteCatalyst code version: AM 1.4.1
  Copyright 1996-2014 Adobe, Inc. All Rights Reserved
  More info available at http://www.omniture.com */
@@ -13,7 +15,7 @@ const s = s_gi(s_account);
 export default s;
 
 function getOmnitureAccount() {
-  const account = window._idConfig && window._idConfig.omnitureAccount;
+  const account = configuration && configuration.omnitureAccount;
   if (!account) {
     throw new Error('Omniture account configuration not found');
   }

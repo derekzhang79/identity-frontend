@@ -89,9 +89,9 @@ object LayoutViewModel {
       }.toMap)
     }
 
-    val inlinedJSConfig = InlinedJavascriptResource(config.toJavascript, isInHead = true)
+    val inlinedJSConfig = InlinedJSONResource("id_config", config.toJSONString)
     val inlinedJSRuntimeParams = runtime.map { r =>
-      InlinedJavascriptResource(r.toJavascript, isInHead = true)
+      InlinedJSONResource("id_runtime_params", r.toJSONString)
     }
 
     val resources: Seq[PageResource with Product] = BaseLayoutViewModel.resources ++ Seq(Some(inlinedJSConfig), inlinedJSRuntimeParams).flatten

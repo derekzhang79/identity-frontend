@@ -2,7 +2,7 @@
  * Multi-variant testing.
  */
 
-/*global window*/
+import { runtimeParameters } from '../configuration/configuration';
 
 import cookies from 'cookie-cutter';
 import { MultiVariantTest } from './mvt-model';
@@ -64,8 +64,8 @@ function getActiveTestsAndResults() {
 }
 
 function getServerSideActiveTestResults() {
-  if (window._idRuntimeParams && typeof (window._idRuntimeParams.activeTests) === 'object') {
-    return window._idRuntimeParams.activeTests;
+  if ( runtimeParameters && typeof ( runtimeParameters.activeTests) === 'object') {
+    return runtimeParameters.activeTests;
   }
   return {};
 }

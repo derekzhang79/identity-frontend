@@ -1,15 +1,16 @@
 package test.util.user
 
 import org.slf4j.LoggerFactory
+import play.api.http.Status.OK
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import test.util.Config.FacebookAppCredentials
 import play.api.libs.ws.{WSResponse, WS}
-import scala.annotation.tailrec
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import play.api.test._
+import scala.util.Try
 
 case class FacebookTestUser(
     name: String = "John Doe",
@@ -40,17 +41,14 @@ object FacebookTestUserService {
 
   private def GET(url: String): WSResponse = {
 
-    @tailrec
     def repeater(url: String, count: Int): WSResponse = {
-      val response = Await.result(WS.url(url).get(), 5.second)
+      val response = Try(Await.result(WS.url(url).get(), 10.second))
 
-      if (count == 0) response
-      else response.status match {
-        case 200 => response
-        case _ => {
-          logger.warn(s"Repeating GET call. Attempt number ... ${count-1}")
-          repeater(url, count - 1)
-        }
+      if (count == 0)
+        throw new FaceBookTestUserException("Could not query Facebook Graph API.")
+      else response.toOption.filter(_.status == OK).getOrElse {
+        logger.warn(s"Repeating GET call. Remaning attempts ... ${count-1}")
+        repeater(url, count - 1)
       }
     }
 

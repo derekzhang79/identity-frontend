@@ -1,0 +1,9 @@
+<div class="error-content">
+  <h1 class="error-content__heading">{{ text.title }}</h1>
+
+  <p class="error-content__desc">{{ text.description }}</p>
+
+  {{# text.details }}
+    <p class="error-content__details">{{ text.details }}</p>
+  {{/text.details}}
+</div>

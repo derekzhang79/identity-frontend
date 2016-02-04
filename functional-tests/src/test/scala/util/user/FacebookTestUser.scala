@@ -1,6 +1,7 @@
 package test.util.user
 
 import org.slf4j.LoggerFactory
+import play.api.http.Status.OK
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
@@ -9,6 +10,7 @@ import play.api.libs.ws.{WSResponse, WS}
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import play.api.test._
+import scala.util.Try
 
 case class FacebookTestUser(
     name: String = "John Doe",
@@ -33,23 +35,29 @@ object FacebookTestUserService {
 
   def logger = LoggerFactory.getLogger(this.getClass)
 
-  private val graphApiUrl = "https://graph.facebook.com"
+  private val graphApiUrl = "https://graph.facebook.com/v2.2"
+
+  implicit val app: play.api.test.FakeApplication = new FakeApplication()
 
   private def GET(url: String): WSResponse = {
-    implicit val app: play.api.test.FakeApplication = new FakeApplication()
 
-    val response = Await.result(WS.url(url).get(), 10.second)
+    def repeater(url: String, count: Int): WSResponse = {
+      val response = Try(Await.result(WS.url(url).get(), 10.second))
 
-    // try one more time if it fails
-    response.status match {
-      case 200 => response
-      case _ => Await.result(WS.url(url).get(), 10.second)
+      if (count == 0)
+        throw new FaceBookTestUserException("Could not query Facebook Graph API.")
+      else response.toOption.filter(_.status == OK).getOrElse {
+        logger.warn(s"Repeating GET call. Remaining attempts ... ${count-1}")
+        repeater(url, count - 1)
+      }
     }
+
+    repeater(url, 5)
   }
 
   private val accessToken = {
 
-    val authEndpoint = "https://graph.facebook.com/oauth/access_token"
+    val authEndpoint = s"${graphApiUrl}/oauth/access_token"
 
     val queryString = Map(
       "client_id" -> FacebookAppCredentials.id,
@@ -121,7 +129,7 @@ object FacebookTestUserService {
       throw new FaceBookTestUserException(
         s"Could not delete Facebook Test User with ID ${fbTestUser.id}. ${response.body}")
 
-    response.body.toBoolean
+    (response.json \ "success").as[Boolean]
   }
 }
 

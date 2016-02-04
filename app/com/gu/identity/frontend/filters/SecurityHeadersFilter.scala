@@ -11,7 +11,7 @@ import play.filters.headers.{SecurityHeadersConfig, SecurityHeadersFilter => Pla
  */
 class SecurityHeadersFilter(configuration: Configuration) extends EssentialFilter {
 
-  private val defaultConfig = SecurityHeadersConfig.fromConfiguration(configuration.appConfiguration)
+  private val defaultConfig = SecurityHeadersConfig.fromConfiguration(configuration.underlying)
 
   val augmentedConfig = defaultConfig.copy(contentSecurityPolicy = None)
 

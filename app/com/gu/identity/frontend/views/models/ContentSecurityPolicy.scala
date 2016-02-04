@@ -29,7 +29,7 @@ object ContentSecurityPolicy {
 
   def cspForViewModel(viewModel: ViewModel with ViewModelResources) = {
     val allResources = viewModel.resources ++ viewModel.indirectResources
-    val grouped = allResources.groupBy {
+    val grouped = allResources.filter(noPolicyRequirement).groupBy {
       case r: ScriptResource => CSP_SCRIPT_SRC
       case r: StylesResource => CSP_STYLE_SRC
       case r: ImageResource => CSP_IMG_SRC
@@ -42,11 +42,15 @@ object ContentSecurityPolicy {
     "Content-Security-Policy" -> toCSPHeader(defaultCsp ++ transformed ++ violationReportingCsp)
   }
 
+  private def noPolicyRequirement(resource: PageResource) = resource match {
+    case r: NoPolicyRequirement => false
+    case _ => true
+  }
 
   private def cspStatementForResource(resource: PageResource): String = resource match {
     case r: UnsafeResource => CSP_UNSAFE_INLINE
     case r: LocalResource => CSP_SELF_DOMAIN
-    case r: ScriptResource with InlinedSource => toCSPShaDefinition(r.sha256)
+    case r: ScriptResource with InlinedSource => toCSPShaDefinition(r)
     case r: InlinedResource => CSP_DATA_PROTOCOL
     case r: ExternalResource => r.domain
   }
@@ -58,7 +62,7 @@ object ContentSecurityPolicy {
     }.mkString("; ")
 
 
-  private def toCSPShaDefinition(in: String) =
-    s"'sha256-$in'"
+  private def toCSPShaDefinition(source: InlinedSource) =
+    s"'sha256-${source.sha256}'"
 
 }

@@ -73,6 +73,9 @@ case class JavascriptRuntimeParams(activeTests: Map[String, String]) {
 
 object LayoutViewModel {
 
+  def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel =
+    apply(configuration, Map.empty)
+
   def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)])(implicit messages: Messages): LayoutViewModel = {
 
     val config = JavascriptConfig(
@@ -86,9 +89,9 @@ object LayoutViewModel {
       }.toMap)
     }
 
-    val inlinedJSConfig = InlinedJavascriptResource(config.toJavascript, isInHead = true)
+    val inlinedJSConfig = InlinedJSONResource("id_config", config.toJSONString)
     val inlinedJSRuntimeParams = runtime.map { r =>
-      InlinedJavascriptResource(r.toJavascript, isInHead = true)
+      InlinedJSONResource("id_runtime_params", r.toJSONString)
     }
 
     val resources: Seq[PageResource with Product] = BaseLayoutViewModel.resources ++ Seq(Some(inlinedJSConfig), inlinedJSRuntimeParams).flatten

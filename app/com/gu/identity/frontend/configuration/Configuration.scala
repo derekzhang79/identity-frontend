@@ -11,6 +11,8 @@ case class Configuration(
 
   identityProfileBaseUrl: String,
 
+  identityDefaultReturnUrl: String,
+
   identityFederationApiHost: String,
 
   omnitureAccount: String,
@@ -42,6 +44,8 @@ object Configuration {
 
       identityProfileBaseUrl = getString("identity.frontend.baseUrl"),
 
+      identityDefaultReturnUrl = getString("identity.frontend.defaultReturnUrl"),
+
       omnitureAccount = getString("omniture.account"),
 
       googleRecaptchaSiteKey = getString("google.recaptcha.site"),
@@ -64,6 +68,8 @@ object Configuration {
     identityFederationApiHost = "https://oauth.code.dev-theguardian.com",
 
     identityProfileBaseUrl = "https://profile.code.dev-theguardian.com",
+
+    identityDefaultReturnUrl = "http://www.theguardian.com",
 
     omnitureAccount = "--test-omniture-account--",
 

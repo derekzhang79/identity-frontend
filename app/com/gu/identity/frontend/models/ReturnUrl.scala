@@ -3,9 +3,9 @@ package com.gu.identity.frontend.models
 import java.net.URI
 import com.gu.identity.frontend.configuration.Configuration
 
-import scala.util.Try
-
-case class ReturnUrl(url: String)
+case class ReturnUrl(uri: URI) {
+  lazy val url: String = uri.toString
+}
 
 object ReturnUrl {
 
@@ -14,10 +14,10 @@ object ReturnUrl {
 
   def apply(returnUrl: Option[String], referer: Option[String], configuration: Configuration): ReturnUrl = {
 
-    val default = ReturnUrl(configuration.identityDefaultReturnUrl)
+    val default = ReturnUrl(new URI(configuration.identityDefaultReturnUrl))
 
-    returnUrl.map(ReturnUrl(_))
-      .orElse(referer.map(ReturnUrl(_)))
+    returnUrl.map(url => ReturnUrl(new URI(url)))
+      .orElse(referer.map(url => ReturnUrl(new URI(url))))
       .filter(validDomain(_))
       .filter(validUrlPath(_))
       .getOrElse(default)
@@ -33,7 +33,7 @@ object ReturnUrl {
     !invalidUrlPaths.contains(urlPath)
   }
 
-  def host(returnUrl: ReturnUrl): String = Try(new URI(returnUrl.url)).map(_.getHost).getOrElse("")
+  def host(returnUrl: ReturnUrl): String = returnUrl.uri.getHost
 
-  def path(returnUrl: ReturnUrl): String = Try(new URI(returnUrl.url)).map(_.getPath).getOrElse("")
+  def path(returnUrl: ReturnUrl): String = returnUrl.uri.getPath
 }

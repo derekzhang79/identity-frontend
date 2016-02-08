@@ -22,12 +22,16 @@ object UrlBuilder {
     apply(call.url, params)
 
 
-  def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): String =
-    apply(call.url, returnUrl, skipConfirmation)
+  def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): String =
+    apply(call.url, returnUrl, skipConfirmation, clientId)
 
 
-  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): String = {
-    val params = Seq(skipConfirmation.map("skipConfirmation" -> _.toString)).flatten
+  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): String = {
+    val params = Seq(
+      Some("returnUrl" -> returnUrl.url),
+      skipConfirmation.map("skipConfirmation" -> _.toString),
+      clientId.map("clientId" -> _.id)
+    ).flatten
 
     if (isDefaultReturnUrl(returnUrl)) {
       apply(baseUrl, params)

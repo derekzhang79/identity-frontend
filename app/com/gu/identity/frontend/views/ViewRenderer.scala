@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views
 import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.HttpError
-import com.gu.identity.frontend.models.ReturnUrl
+import com.gu.identity.frontend.models.{ClientID, ReturnUrl}
 import com.gu.identity.frontend.mvt.{SignInV2TestVariantB, SignInV2Test, MultiVariantTestVariant, MultiVariantTest}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
@@ -24,7 +24,8 @@ object ViewRenderer {
       csrfToken: Option[CSRFToken],
       errorIds: Seq[String],
       returnUrl: ReturnUrl,
-      skipConfirmation: Option[Boolean])
+      skipConfirmation: Option[Boolean],
+      clientId: Option[ClientID])
       (implicit messages: Messages) = {
 
     val model = SignInViewModel(
@@ -33,7 +34,8 @@ object ViewRenderer {
       csrfToken = csrfToken,
       errors = errorIds.map(ErrorViewModel.apply),
       returnUrl = returnUrl,
-      skipConfirmation = skipConfirmation
+      skipConfirmation = skipConfirmation,
+      clientId = clientId
     )
 
     val defaultView = "signin-page"
@@ -51,7 +53,8 @@ object ViewRenderer {
       errorIds: Seq[String],
       csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
-      skipConfirmation: Option[Boolean])
+      skipConfirmation: Option[Boolean],
+      clientId: Option[ClientID])
       (implicit messages: Messages) = {
 
     val model = RegisterViewModel(
@@ -60,7 +63,8 @@ object ViewRenderer {
       errors = errorIds.map(ErrorViewModel.apply),
       csrfToken = csrfToken,
       returnUrl = returnUrl,
-      skipConfirmation = skipConfirmation)
+      skipConfirmation = skipConfirmation,
+      clientId = clientId)
 
     renderViewModel("register-page", model)
   }

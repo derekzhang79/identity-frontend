@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views.models
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
-import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
+import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.text.RegisterText
 import com.gu.identity.frontend.mvt._
 import play.api.i18n.Messages
@@ -40,15 +40,18 @@ object RegisterViewModel {
       errors: Seq[ErrorViewModel],
       csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
-      skipConfirmation: Option[Boolean])
+      skipConfirmation: Option[Boolean],
+      clientId: Option[ClientID])
       (implicit messages: Messages): RegisterViewModel = {
 
-    val layout = LayoutViewModel(configuration, activeTests)
+    val skin = clientId.map(_.id)
+
+    val layout = LayoutViewModel(configuration, activeTests, skin)
 
     RegisterViewModel(
       layout = layout,
 
-      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation),
+      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId),
 
       registerPageText = RegisterText(),
       terms = TermsViewModel(),
@@ -61,7 +64,7 @@ object RegisterViewModel {
       skipConfirmation = skipConfirmation.getOrElse(false),
 
       actions = RegisterActions(),
-      links = RegisterLinks(returnUrl, skipConfirmation),
+      links = RegisterLinks(returnUrl, skipConfirmation, clientId),
 
       resources = layout.resources,
       indirectResources = layout.indirectResources
@@ -86,8 +89,8 @@ case class RegisterLinks private(
     signIn: String)
 
 object RegisterLinks {
-  def apply(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): RegisterLinks =
+  def apply(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): RegisterLinks =
     RegisterLinks(
-      signIn = UrlBuilder(routes.Application.signIn().url, returnUrl, skipConfirmation)
+      signIn = UrlBuilder(routes.Application.signIn().url, returnUrl, skipConfirmation, clientId)
     )
 }

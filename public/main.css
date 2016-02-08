@@ -28,3 +28,8 @@
 /** Register Confirmation page **/
 
 @import "components/register-confirmation/_register-confirmation";
+
+
+/** Membership skin **/
+
+@import "components/membership/_membership.css";

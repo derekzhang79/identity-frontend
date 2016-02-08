@@ -1,19 +1,25 @@
 package com.gu.identity.frontend.models
 
 import java.net.URI
-import scala.util.Try
+import com.gu.identity.frontend.configuration.Configuration
 
-case class ReturnUrl(url: String)
+case class ReturnUrl(uri: URI) {
+  lazy val url: String = uri.toString
+}
 
 object ReturnUrl {
 
-  val default = ReturnUrl("http://www.theguardian.com")
   val domains = List(".theguardian.com", ".code.dev-theguardian.com", ".thegulocal.com")
+  val invalidUrlPaths = List("/signin", "/register", "/register/confirm")
 
-  def apply(returnUrl: Option[String], referer: Option[String]): ReturnUrl = {
-    returnUrl.map(ReturnUrl(_))
-      .orElse(referer.map(ReturnUrl(_)))
+  def apply(returnUrl: Option[String], referer: Option[String], configuration: Configuration): ReturnUrl = {
+
+    val default = ReturnUrl(new URI(configuration.identityDefaultReturnUrl))
+
+    returnUrl.map(url => ReturnUrl(new URI(url)))
+      .orElse(referer.map(url => ReturnUrl(new URI(url))))
       .filter(validDomain(_))
+      .filter(validUrlPath(_))
       .getOrElse(default)
   }
 
@@ -22,6 +28,12 @@ object ReturnUrl {
     domains.exists(s".$hostname".endsWith(_))
   }
 
-  def host(returnUrl: ReturnUrl): String = Try(new URI(returnUrl.url)).map(_.getHost).getOrElse("")
+  def validUrlPath(returnUrl: ReturnUrl): Boolean = {
+    val urlPath = path(returnUrl)
+    !invalidUrlPaths.contains(urlPath)
+  }
 
+  def host(returnUrl: ReturnUrl): String = returnUrl.uri.getHost
+
+  def path(returnUrl: ReturnUrl): String = returnUrl.uri.getPath
 }

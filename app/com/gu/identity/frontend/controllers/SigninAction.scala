@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.controllers
 
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ReturnUrl, TrackingData}
@@ -18,7 +19,7 @@ import play.api.i18n.Messages.Implicits._
 /**
  * Form actions controller
  */
-class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, csrfConfig: CSRFConfig, googleRecaptchaCheck: GoogleRecaptchaCheck) extends Controller with Logging with I18nSupport {
+class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, csrfConfig: CSRFConfig, googleRecaptchaCheck: GoogleRecaptchaCheck, config: Configuration) extends Controller with Logging with I18nSupport {
 
   case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String], skipConfirmation: Option[Boolean], googleRecaptchaResponse: Option[String])
 
@@ -36,7 +37,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
   def signIn = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
     val formParams = signInFormBody.bindFromRequest()(request).get
     val trackingData = TrackingData(request, formParams.returnUrl)
-    val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"))
+    val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"), config)
 
     def googleRecaptchaError = Future.successful(
       redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation)

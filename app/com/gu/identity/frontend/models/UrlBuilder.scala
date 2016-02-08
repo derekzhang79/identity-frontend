@@ -27,11 +27,16 @@ object UrlBuilder {
 
 
   def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean]): String = {
-    val params = Seq(
-      Some("returnUrl" -> returnUrl.url),
-      skipConfirmation.map("skipConfirmation" -> _.toString)
-    ).flatten
+    val params = Seq(skipConfirmation.map("skipConfirmation" -> _.toString)).flatten
 
-    apply(baseUrl, params)
+    if (isDefaultReturnUrl(returnUrl)) {
+      apply(baseUrl, params)
+    } else {
+      apply(baseUrl, params ++ Seq("returnUrl" -> returnUrl.url))
+    }
+  }
+
+  private def isDefaultReturnUrl(returnUrl: ReturnUrl): Boolean = {
+    returnUrl.url == "http://www.theguardian.com"
   }
 }

@@ -1,4 +1,4 @@
-package com.gu.identity.frontend.configuration
+package com.gu.identity.frontend.mvt
 
 /**
  * Define a Multi Variant Test for testing different logic on Users to
@@ -63,6 +63,12 @@ sealed trait MultiVariantTest {
    * Variants available to the test which will be exposed to user's in the test.
    */
   val variants: Seq[MultiVariantTestVariant]
+
+  /**
+   * Defines a default variant to use when a MVT ID cannot be determined.
+   * Should only be used in 100% tests.
+   */
+  val defaultVariant: Option[MultiVariantTestVariant] = None
 }
 
 
@@ -78,6 +84,7 @@ case object SignInV2Test extends MultiVariantTest {
   val audienceOffset = 0.0
   val isServerSide = true
   val variants = Seq(SignInV2TestVariantA, SignInV2TestVariantB)
+  override val defaultVariant = Some(SignInV2TestVariantA)
 }
 
 case object SignInV2TestVariantA extends MultiVariantTestVariant { val id = "A" }
@@ -90,6 +97,7 @@ case object RegisterV2Test extends MultiVariantTest {
   val audienceOffset = 0.0
   val isServerSide = true
   val variants = Seq(RegisterTestVariantA)
+  override val defaultVariant = Some(RegisterTestVariantA)
 }
 
 case object RegisterTestVariantA extends MultiVariantTestVariant { val id = "A" }
@@ -98,44 +106,16 @@ case object RegisterTestVariantA extends MultiVariantTestVariant { val id = "A" 
 /**
  * Define a MVT at runtime - should only be used for tests.
  */
-case class RuntimeMultiVariantTest(
-  name: String,
-  audience: Double,
-  audienceOffset: Double,
-  isServerSide: Boolean = true,
-  variants: Seq[MultiVariantTestVariant]) extends MultiVariantTest
+private[mvt] trait RuntimeMultiVariantTest extends MultiVariantTest
 
 /**
  * Define a MVT variant at runtime - should only be used for tests.
  */
-case class RuntimeMultiVariantTestVariant(id: String) extends MultiVariantTestVariant
+private[mvt] trait RuntimeMultiVariantTestVariant extends MultiVariantTestVariant
 
 
 
 object MultiVariantTests {
-
-  object Implicits {
-    import play.api.libs.json._
-
-    implicit val mvtVariantJsonWrites: Writes[MultiVariantTestVariant] = new Writes[MultiVariantTestVariant] {
-      override def writes(o: MultiVariantTestVariant): JsValue = Json.obj(
-        "id" -> o.id
-      )
-    }
-
-    implicit val mvtJsonWrites: Writes[MultiVariantTest] = new Writes[MultiVariantTest] {
-      override def writes(o: MultiVariantTest): JsValue = Json.obj(
-        "name" -> o.name,
-        "audience" -> o.audience,
-        "audienceOffset" -> o.audienceOffset,
-        "isServerSide" -> o.isServerSide,
-        "variants" -> o.variants
-      )
-    }
-  }
-
-  val MVT_COOKIE_NAME = "GU_mvt_id"
-  val MAX_ID = 899999
 
   def all: Set[MultiVariantTest] = Set(SignInV2Test, RegisterV2Test)
 
@@ -143,25 +123,4 @@ object MultiVariantTests {
 
   def allServerSide = allActive.filter(_.isServerSide)
 
-  def isInTest(test: MultiVariantTest, mvtId: Int, maxId: Int = MAX_ID): Boolean = {
-    val minBound = maxId * test.audienceOffset
-    val maxBound = minBound + maxId * test.audience
-
-    minBound < mvtId && mvtId <= maxBound
-  }
-
-  def activeVariantForTest(test: MultiVariantTest, mvtId: Int, maxId: Int = MAX_ID): Option[MultiVariantTestVariant] = {
-    if (isInTest(test, mvtId, maxId))
-      Some(test.variants(mvtId % test.variants.size))
-
-    else None
-  }
-
-  /**
-   * Retrieve active server-side tests and the selected variant for an mvtId.
-   */
-  def activeTests(mvtId: Int, maxId: Int = MAX_ID): Set[(MultiVariantTest, MultiVariantTestVariant)] =
-    allServerSide.flatMap { test =>
-      activeVariantForTest(test, mvtId, maxId).map(test -> _)
-    }
 }

@@ -4,6 +4,7 @@ import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.HttpError
 import com.gu.identity.frontend.models.ReturnUrl
+import com.gu.identity.frontend.mvt.{SignInV2TestVariantB, SignInV2Test, MultiVariantTestVariant, MultiVariantTest}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
 import play.api.i18n.Messages

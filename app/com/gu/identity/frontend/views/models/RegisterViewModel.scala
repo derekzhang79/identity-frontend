@@ -1,10 +1,11 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.text.RegisterText
+import com.gu.identity.frontend.mvt._
 import play.api.i18n.Messages
 
 
@@ -35,7 +36,7 @@ object RegisterViewModel {
 
   def apply(
       configuration: Configuration,
-      activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)],
+      activeTests: ActiveMultiVariantTests,
       errors: Seq[ErrorViewModel],
       csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,

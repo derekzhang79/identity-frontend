@@ -11,6 +11,8 @@ lazy val root = (project in file(".")).enablePlugins(
 
 lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 
+resolvers += "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases"
+
 libraryDependencies ++= Seq(
   "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
   "org.scalatest" %% "scalatest" % "2.2.5" % "test",
@@ -18,7 +20,8 @@ libraryDependencies ++= Seq(
   ws,
   filters,
   "jp.co.bizreach" %% "play2-handlebars" % "0.3.0",
-  "com.mohiva" %% "play-html-compressor" % "0.5.0"
+  "com.mohiva" %% "play-html-compressor" % "0.5.0",
+  "com.gu.identity" %% "identity-cookie" % "3.50"
 )
 
 // Set logs options and default local resource for running locally (run and test)

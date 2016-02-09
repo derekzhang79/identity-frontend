@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.configuration
 
+import com.gu.identity.cookie.{IdentityKeys, IdentityCookieDecoder}
 import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.errors.ErrorHandler
@@ -31,6 +32,8 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val identityServiceRequestHandler = new IdentityServiceRequestHandler(wsClient)
   lazy val identityClient: IdentityClient = new IdentityClient
   lazy val identityService: IdentityService = new IdentityServiceImpl(frontendConfiguration, identityServiceRequestHandler, identityClient)
+
+  lazy val identityCookieDecoder: IdentityCookieDecoder = new IdentityCookieDecoder(IdentityKeys(frontendConfiguration.identityCookiePublicKey))
 
   lazy val applicationController = new Application(frontendConfiguration, messagesApi, csrfConfig)
   lazy val healthcheckController = new HealthCheck()

@@ -1,9 +1,11 @@
 package com.gu.identity.frontend.controllers
 
-class ThirdPartyTsAndCs {
+import play.api.mvc._
+
+class ThirdPartyTsAndCs extends Controller{
 
   def confirm = Action {
-    Ok("ok")
+    Ok("")
   }
 
 }

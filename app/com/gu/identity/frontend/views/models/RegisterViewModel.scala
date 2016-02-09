@@ -39,7 +39,8 @@ object RegisterViewModel {
       errors: Seq[ErrorViewModel],
       csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
-      skipConfirmation: Option[Boolean])
+      skipConfirmation: Option[Boolean],
+      group: Option[String])
       (implicit messages: Messages): RegisterViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests)

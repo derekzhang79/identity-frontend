@@ -50,7 +50,8 @@ object ViewRenderer {
       errorIds: Seq[String],
       csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
-      skipConfirmation: Option[Boolean])
+      skipConfirmation: Option[Boolean],
+      group: Option[String])
       (implicit messages: Messages) = {
 
     val model = RegisterViewModel(
@@ -59,7 +60,8 @@ object ViewRenderer {
       errors = errorIds.map(ErrorViewModel.apply),
       csrfToken = csrfToken,
       returnUrl = returnUrl,
-      skipConfirmation = skipConfirmation)
+      skipConfirmation = skipConfirmation,
+      group = group)
 
     renderViewModel("register-page", model)
   }

@@ -28,7 +28,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
 
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
 
-    renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation)
+    renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, group)
   }
 
   def confirm(returnUrl: Option[String]) = Action {

@@ -68,11 +68,13 @@ object RegisterApiRequest {
         request.password,
         RegisterRequestBodyPublicFields(request.username),
         RegisterRequestBodyPrivateFields(
-          request.firstName,
-          request.lastName,
-          request.receiveGnmMarketing,
-          request.receive3rdPartyMarketing,
-          clientIp.ip
+          firstName = request.firstName,
+          secondName = request.lastName,
+          registrationIp = clientIp.ip
+        ),
+        RegisterRequestBodyStatusFields(
+          receiveGnmMarketing = request.receiveGnmMarketing,
+          receive3rdPartyMarketing = request.receive3rdPartyMarketing
         )
       )),
       extraHeaders = ApiRequest.apiKeyHeaders,
@@ -81,8 +83,22 @@ object RegisterApiRequest {
   }
 }
 
-case class RegisterRequestBody(primaryEmailAddress: String, password: String, publicFields: RegisterRequestBodyPublicFields, privateFields: RegisterRequestBodyPrivateFields) extends ApiRequestBody
+case class RegisterRequestBody(
+    primaryEmailAddress: String,
+    password: String,
+    publicFields: RegisterRequestBodyPublicFields,
+    privateFields: RegisterRequestBodyPrivateFields,
+    statusFields: RegisterRequestBodyStatusFields)
+  extends ApiRequestBody
 
-case class RegisterRequestBodyPublicFields(username: String)
+case class RegisterRequestBodyPublicFields(
+    username: String)
 
-case class RegisterRequestBodyPrivateFields(firstName: String, secondName: String, receiveGnmMarketing: Boolean, receive3rdPartyMarketing: Boolean, registrationIp: String)
+case class RegisterRequestBodyPrivateFields(
+    firstName: String,
+    secondName: String,
+    registrationIp: String)
+
+case class RegisterRequestBodyStatusFields(
+    receiveGnmMarketing: Boolean,
+    receive3rdPartyMarketing: Boolean)

@@ -28,7 +28,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val password = "some%thing"
       val username = "myUsername"
       val firstName = "First"
-      val lastName = "Last"
+      val secondName = "Last"
       val receiveGnmMarketing = false
       val receive3rdPartyMarketing = false
       val registrationIp = "123.456.789.012"
@@ -37,10 +37,10 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
         email,
         password,
         RegisterRequestBodyPublicFields(username),
-        RegisterRequestBodyPrivateFields(firstName, lastName, receiveGnmMarketing, receive3rdPartyMarketing, registrationIp)
+        RegisterRequestBodyPrivateFields(firstName, secondName, receiveGnmMarketing, receive3rdPartyMarketing, registrationIp)
       )
       val result = handler.handleRequestBody(requestBody)
-      val expectedResult = s"""{"primaryEmailAddress":"$email","password":"$password","publicFields":{"username":"$username"},"privateFields":{"firstName":"$firstName","lastName":"$lastName","receiveGnmMarketing":$receiveGnmMarketing,"receive3rdPartyMarketing":$receive3rdPartyMarketing,"registrationIp":"$registrationIp"}}"""
+      val expectedResult = s"""{"primaryEmailAddress":"$email","password":"$password","publicFields":{"username":"$username"},"privateFields":{"firstName":"$firstName","secondName":"$secondName","receiveGnmMarketing":$receiveGnmMarketing,"receive3rdPartyMarketing":$receive3rdPartyMarketing,"registrationIp":"$registrationIp"}}"""
 
       result should equal (expectedResult)
     }

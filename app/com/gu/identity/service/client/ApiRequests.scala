@@ -85,4 +85,4 @@ case class RegisterRequestBody(primaryEmailAddress: String, password: String, pu
 
 case class RegisterRequestBodyPublicFields(username: String)
 
-case class RegisterRequestBodyPrivateFields(firstName: String, lastName: String, receiveGnmMarketing: Boolean, receive3rdPartyMarketing: Boolean,  registrationIp: String)
+case class RegisterRequestBodyPrivateFields(firstName: String, secondName: String, receiveGnmMarketing: Boolean, receive3rdPartyMarketing: Boolean, registrationIp: String)

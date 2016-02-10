@@ -43,6 +43,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val googleRecaptchaCheck = new GoogleRecaptchaCheck(googleRecaptchaServiceHandler)
   lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaCheck)
   lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
+  lazy val thirdPartyTsAndCsController = new ThirdPartyTsAndCs()
   lazy val assets = new controllers.Assets(httpErrorHandler)
 
   override lazy val httpFilters = new Filters(new SecurityHeadersFilter(
@@ -58,5 +59,5 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
     Logger.configure(environment)
   }
 
-  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signinController, registerController, cspReporterController, healthcheckController, manifestController, assets)
+  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, thirdPartyTsAndCsController, signinController, registerController, cspReporterController, healthcheckController, manifestController, assets)
 }

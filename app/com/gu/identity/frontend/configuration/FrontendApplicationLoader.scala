@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.configuration
 
 import com.gu.identity.cookie.{IdentityKeys, IdentityCookieDecoder}
+import com.gu.identity.frontend.authentication.AuthenticationService
 import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.errors.ErrorHandler
@@ -34,6 +35,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val identityService: IdentityService = new IdentityServiceImpl(frontendConfiguration, identityServiceRequestHandler, identityClient)
 
   lazy val identityCookieDecoder: IdentityCookieDecoder = new IdentityCookieDecoder(IdentityKeys(frontendConfiguration.identityCookiePublicKey))
+  lazy val authenticationService: AuthenticationService = new AuthenticationService(identityCookieDecoder)
 
   lazy val applicationController = new Application(frontendConfiguration, messagesApi, csrfConfig)
   lazy val healthcheckController = new HealthCheck()
@@ -43,7 +45,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val googleRecaptchaCheck = new GoogleRecaptchaCheck(googleRecaptchaServiceHandler)
   lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaCheck)
   lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
-  lazy val thirdPartyTsAndCsController = new ThirdPartyTsAndCs()
+  lazy val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(authenticationService)
   lazy val assets = new controllers.Assets(httpErrorHandler)
 
   override lazy val httpFilters = new Filters(new SecurityHeadersFilter(

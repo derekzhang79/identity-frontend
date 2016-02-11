@@ -36,7 +36,7 @@ aws --profile identity s3 cp s3://identity-local-ssl/profile-origin-thegulocal-c
 aws --profile identity s3 cp s3://identity-local-ssl/profile-origin-thegulocal-com-exp2016-11-10.key ./nginxCerts 1>/dev/null
 ```
 
-**Note**: If you do not have Janus access to Identity, we can grant your team specific access, which means you would substitute `--profile identity` with e.g. `--profile membership`.
+**Note**: If you do not have Janus access to Identity, we can grant your team specific access, which means you would substitute `--profile identity` with e.g. `--profile membership`. Contact the Identity team if you require access to these files.
 
 * Find the configuration folder of nginx by running:
 
@@ -77,7 +77,7 @@ mkdir -p /etc/gu
 aws s3 cp --profile identity s3://gu-identity-frontend-private/DEV/identity-frontend.conf /etc/gu
 ```
 
-**Note**: If you do not have Janus access to Identity, we can grant your team specific access, which means you would substitute `--profile identity` with e.g. `--profile membership`.
+**Note**: If you do not have Janus access to Identity, we can grant your team specific access, which means you would substitute `--profile identity` with e.g. `--profile membership`. Contact the Identity team if you require access to these files.
 
 ## Running the application
 

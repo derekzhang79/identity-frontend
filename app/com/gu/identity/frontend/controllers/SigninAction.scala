@@ -40,9 +40,9 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       case _ => returnUrl
     }
 
-    def googleRecaptchaError = Future.successful(
-      redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation, formParams.clientID)
-    )
+//    def googleRecaptchaError = Future.successful(
+//      redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation, formParams.clientID)
+//    )
 
 //    googleRecaptchaCheck(formParams.googleRecaptchaResponse, googleRecaptchaError) {
       identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
@@ -56,10 +56,10 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
 //    }
   }
 
-  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientID: Option[ClientID]) = {
-    val query = errors.map("signin-" + _.id)
-    SeeOther(routes.Application.signIn(query, Some(returnUrl.url), skipConfirmation, clientID.map(_.id)).url)
-  }
+//  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientID: Option[ClientID]) = {
+//    val query = errors.map("signin-" + _.id)
+//    SeeOther(routes.Application.signIn(query, Some(returnUrl.url), skipConfirmation).url)
+//  }
 
 
   // Note: Limitation

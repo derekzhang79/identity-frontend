@@ -24,6 +24,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
 
   implicit val registerRequestBodyPublicFieldsFormat = Json.format[RegisterRequestBodyPublicFields]
   implicit val registerRequestBodyPrivateFieldsFormat = Json.format[RegisterRequestBodyPrivateFields]
+  implicit val registerRequestBodyStatusFieldsFormat = Json.format[RegisterRequestBodyStatusFields]
   implicit val registerRequestBodyFormat = Json.format[RegisterRequestBody]
 
   implicit val registerResponseUserGroupsFormat = Json.format[RegisterResponseUserGroups]
@@ -72,7 +73,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
           logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
           Left(Seq(GatewayError("Unexpected response from server")))
         }
-      
+
     case r: RegisterApiRequest =>
       response.json.asOpt[RegisterResponse]
         .map(Right.apply)

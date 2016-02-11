@@ -1,11 +1,12 @@
 package com.gu.identity.frontend.services
 
-import com.gu.identity.service.client.{RegisterRequestBodyPrivateFields, RegisterRequestBodyPublicFields, RegisterRequestBody, AuthenticateCookiesRequestBody}
+import com.gu.identity.service.client._
 import org.scalatest.mock.MockitoSugar
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{OptionValues, Matchers, WordSpec}
+import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 
-class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with MockitoSugar {
+class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with MockitoSugar with OptionValues {
 
   val mockWSClient = mock[WSClient]
 
@@ -28,7 +29,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val password = "some%thing"
       val username = "myUsername"
       val firstName = "First"
-      val lastName = "Last"
+      val secondName = "Last"
       val receiveGnmMarketing = false
       val receive3rdPartyMarketing = false
       val registrationIp = "123.456.789.012"
@@ -37,12 +38,20 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
         email,
         password,
         RegisterRequestBodyPublicFields(username),
-        RegisterRequestBodyPrivateFields(firstName, lastName, receiveGnmMarketing, receive3rdPartyMarketing, registrationIp)
+        RegisterRequestBodyPrivateFields(firstName, secondName, registrationIp),
+        RegisterRequestBodyStatusFields(receiveGnmMarketing, receive3rdPartyMarketing)
       )
-      val result = handler.handleRequestBody(requestBody)
-      val expectedResult = s"""{"primaryEmailAddress":"$email","password":"$password","publicFields":{"username":"$username"},"privateFields":{"firstName":"$firstName","lastName":"$lastName","receiveGnmMarketing":$receiveGnmMarketing,"receive3rdPartyMarketing":$receive3rdPartyMarketing,"registrationIp":"$registrationIp"}}"""
+      val result: String = handler.handleRequestBody(requestBody)
+      val jsonResult = Json.parse(result)
 
-      result should equal (expectedResult)
+      (jsonResult \ "primaryEmailAddress").validate[String].asOpt.value should equal(email)
+      (jsonResult \ "password").validate[String].asOpt.value should equal(password)
+      (jsonResult \ "publicFields" \ "username").validate[String].asOpt.value should equal(username)
+      (jsonResult \ "privateFields" \ "firstName").validate[String].asOpt.value should equal(firstName)
+      (jsonResult \ "privateFields" \ "secondName").validate[String].asOpt.value should equal(secondName)
+      (jsonResult \ "privateFields" \ "registrationIp").validate[String].asOpt.value should equal(registrationIp)
+      (jsonResult \ "statusFields" \ "receiveGnmMarketing").validate[Boolean].asOpt.value should equal(receiveGnmMarketing)
+      (jsonResult \ "statusFields" \ "receive3rdPartyMarketing").validate[Boolean].asOpt.value should equal(receive3rdPartyMarketing)
     }
   }
 }

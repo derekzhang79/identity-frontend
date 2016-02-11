@@ -10,7 +10,7 @@ Web frontend for Sign in and Registration at [theguardian.com](http://theguardia
 Configuration files:
 - Environment-specific configuration (`conf/<ENV>.conf`)
 - Application configuration (`conf/application.conf`)
-- System file with additional properties (`/etc/gu/identity-frontend.conf`)
+- System file with additional properties (`/etc/gu/identity-frontend.conf` or `~/.gu/identity-frontend.conf`)
 
 # Local development
 
@@ -35,6 +35,8 @@ mkdir nginxCerts
 aws --profile identity s3 cp s3://identity-local-ssl/profile-origin-thegulocal-com-exp2016-11-10-bundle.crt ./nginxCerts 1>/dev/null
 aws --profile identity s3 cp s3://identity-local-ssl/profile-origin-thegulocal-com-exp2016-11-10.key ./nginxCerts 1>/dev/null
 ```
+
+**Note**: If you do not have Janus access to Identity, we can grant your team specific access, which means you would substitute `--profile identity` with e.g. `--profile membership`.
 
 * Find the configuration folder of nginx by running:
 
@@ -71,8 +73,11 @@ You should now be able to start the application (`sbt run`), go to [https://prof
 Install the local configuration file from s3:
 
 ```
+mkdir -p /etc/gu
 aws s3 cp --profile identity s3://gu-identity-frontend-private/DEV/identity-frontend.conf /etc/gu
 ```
+
+**Note**: If you do not have Janus access to Identity, we can grant your team specific access, which means you would substitute `--profile identity` with e.g. `--profile membership`.
 
 ## Running the application
 

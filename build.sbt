@@ -18,7 +18,9 @@ libraryDependencies ++= Seq(
   ws,
   filters,
   "jp.co.bizreach" %% "play2-handlebars" % "0.3.0",
-  "com.mohiva" %% "play-html-compressor" % "0.5.0"
+  "com.mohiva" %% "play-html-compressor" % "0.5.0",
+  "com.typesafe.akka" %% "akka-actor" % "2.4.1",
+  "com.typesafe.akka" %% "akka-slf4j" % "2.4.0"
 )
 
 // Set logs options and default local resource for running locally (run and test)

@@ -28,9 +28,26 @@
         </encoder>
     </appender>
 
+    <appender name="METRICSLOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>${logs.home}/identity-frontend-metrics.log</file>
+
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>${logs.home}/identity-frontend-metrics.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+        <maxHistory>30</maxHistory>
+      </rollingPolicy>
+
+      <encoder>
+        <pattern>%date %msg%n</pattern>
+      </encoder>
+    </appender>
+
     <logger name="com.gu.identity.frontend.filters.LogRequestsFilter" level="INFO" additivity="false">
         <appender-ref ref="ACCESSLOGFILE"/>
     </logger>
+
+  <logger name="com.gu.identity.frontend.logging.SuccessfulActionLoggingActor" level="INFO" additivity="false">
+    <appender-ref ref="METRICSLOGFILE"/>
+  </logger>
 
     <root level="INFO">
         <appender-ref ref="LOGFILE"/>

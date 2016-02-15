@@ -1,6 +1,8 @@
 package com.gu.identity.frontend.configuration
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import play.api.{Configuration => PlayConfiguration}
+import com.amazonaws.auth._
 
 
 case class Configuration(
@@ -20,6 +22,8 @@ case class Configuration(
   recaptchaEnabled: Boolean,
   googleRecaptchaSiteKey: String,
   googleRecaptchaSecretKey: String,
+
+  awsCredentials: AWSCredentialsProvider,
 
   underlying: PlayConfiguration)
 
@@ -54,6 +58,8 @@ object Configuration {
 
       recaptchaEnabled = getBoolean("google.recaptchaEnabled"),
 
+      awsCredentials = getAwsCredentials,
+
       underlying = appConfiguration
     )
   }
@@ -79,7 +85,20 @@ object Configuration {
 
     recaptchaEnabled = true,
 
+    awsCredentials = getAwsCredentials,
+
     underlying = PlayConfiguration.empty
   )
+
+  private val getAwsCredentials: AWSCredentialsProvider = {
+    val provider = new AWSCredentialsProviderChain(
+      new EnvironmentVariableCredentialsProvider(),
+      new SystemPropertiesCredentialsProvider(),
+      new ProfileCredentialsProvider("identityfrontend"),
+      new InstanceProfileCredentialsProvider
+    )
+    provider.getCredentials
+    provider
+  }
 
 }

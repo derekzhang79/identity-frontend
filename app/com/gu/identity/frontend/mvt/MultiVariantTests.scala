@@ -83,12 +83,11 @@ case object SignInV2Test extends MultiVariantTest {
   val audience = 1.0
   val audienceOffset = 0.0
   val isServerSide = true
-  val variants = Seq(SignInV2TestVariantA, SignInV2TestVariantB)
+  val variants = Seq(SignInV2TestVariantA)
   override val defaultVariant = Some(SignInV2TestVariantA)
 }
 
 case object SignInV2TestVariantA extends MultiVariantTestVariant { val id = "A" }
-case object SignInV2TestVariantB extends MultiVariantTestVariant { val id = "B" }
 
 
 case object RegisterV2Test extends MultiVariantTest {

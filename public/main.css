@@ -16,10 +16,6 @@
 @import "components/signin-form/_signin-form.css";
 @import "components/oauth-cta/_oauth-cta.css";
 
-/** MVT: Sign in v2 variant B **/
-
-@import "components/signin-b/_signin-b.css";
-
 
 /** Register page **/
 

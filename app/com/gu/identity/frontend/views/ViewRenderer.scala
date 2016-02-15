@@ -4,7 +4,7 @@ import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.HttpError
 import com.gu.identity.frontend.models.{ClientID, ReturnUrl}
-import com.gu.identity.frontend.mvt.{SignInV2TestVariantB, SignInV2Test, MultiVariantTestVariant, MultiVariantTest}
+import com.gu.identity.frontend.mvt.{MultiVariantTestVariant, MultiVariantTest}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
 import play.api.i18n.Messages
@@ -38,11 +38,7 @@ object ViewRenderer {
       clientId = clientId
     )
 
-    val defaultView = "signin-page"
-    val view = activeTests.get(SignInV2Test) match {
-      case Some(SignInV2TestVariantB) => "signin-page-b"
-      case _ => defaultView
-    }
+    val view = "signin-page"
 
     renderViewModel(view, model)
   }

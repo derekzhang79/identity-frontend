@@ -13,6 +13,10 @@ body {
   min-height: 100%;
 }
 
+body > section:last-of-type {
+  flex-grow: 1;
+}
+
 %page-block {
   margin: 0 auto;
   box-sizing: border-box;
@@ -36,16 +40,20 @@ body {
 }
 
 %content-container {
-  max-width: 40rem;
+  background: white;
+  max-width: 54rem;
+  width: 54rem;
   margin: 0 auto;
+  padding: 0 34rem 0 26rem;
 }
 
 %page-heading {
   @extend %font-heading-1;
   @extend %content-container;
+  color: #333;
   font-weight: normal;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding-top: 0.6rem;
+  padding-bottom: 3.6rem;
 }
 
 @import "components/header/_header.css";
@@ -60,8 +68,7 @@ body {
   width: 100%;
 }
 
-a,
-.link {
+a {
   color: #005689;
   cursor: pointer;
   text-decoration: none;
@@ -69,15 +76,18 @@ a,
   &:hover {
     text-decoration: underline;
   }
+}
 
-  .content & {
-    border-bottom: 1px solid #dcdcdc;
-    transition: border-color 0.15s ease-out;
+/** Global style for links in the body text */
 
-    &:hover,
-    &:focus {
-      text-decoration: none;
-      border-color: #6e99b3;
-    }
+.link {
+  @extend a;
+  border-bottom: 1px solid #dcdcdc;
+  transition: border-color 0.15s ease-out;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    border-color: #6e99b3;
   }
 }

@@ -28,7 +28,12 @@ html {
 
 %font-heading-1 {
   @extend %font-serif;
-  @mixin font-size 24, 28;
+  @mixin font-size 36, 40;
+}
+
+%font-text-0 {
+  @extend %font-serif;
+  @mixin font-size 13, 18;
 }
 
 %font-text-1 {
@@ -43,7 +48,7 @@ html {
 
 %font-text-3 {
   @extend %font-serif;
-  @mixin font-size 18, 28;
+  @mixin font-size 20, 28;
 }
 
 %font-text-sans-0 {
@@ -53,10 +58,15 @@ html {
 
 %font-text-sans-1 {
   @extend %font-sans-serif;
-  @mixin font-size 14, 18;
+  @mixin font-size 13, 18;
 }
 
 %font-text-sans-2 {
+  @extend %font-sans-serif;
+  @mixin font-size 14, 20;
+}
+
+%font-text-sans-3 {
   @extend %font-sans-serif;
   @mixin font-size 16, 20;
 }

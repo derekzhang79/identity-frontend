@@ -11,11 +11,18 @@
 
   <h1 class="signin__heading">{{ signInPageText.title }}</h1>
 
-  {{> components/oauth-cta/_oauth-cta }}
+  <section class="signin__section">
+    {{> components/oauth-cta/_oauth-cta }}
 
-  {{> components/signin-form/_signin-form }}
+    {{> components/signin-form/_signin-form }}
+  </section>
+
+  <section class="signin__cta-section">
+    <p class="signin__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" class="signin__cta-link--signup" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
+  </section>
 
   {{> components/terms/_terms }}
+
 
 {{/partial}}
 

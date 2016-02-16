@@ -75,13 +75,13 @@
 
 %form__button--submit {
   @extend %font-text-sans-3;
-  background-color: var(--c-form-button--submit);
+  background: var(--c-form-button--submit) inline("arrow-white-right.svg") center right no-repeat;
   border: 0;
   border-radius: 15px;
   color: white;
   display: block;
   text-align: left;
-  padding: 0.8rem 2rem 0.8rem 2rem;
+  padding: 0.8rem 3rem 0.8rem 2rem;
 
   &:focus,
   &:hover {

@@ -1,5 +1,6 @@
 @import "components/_normalise.css";
 @import "components/_grid.css";
+@import "components/_breakpoints.css";
 @import "components/_typography.css";
 
 html {
@@ -23,28 +24,49 @@ body > section:last-of-type {
   padding: 0 1rem;
 
 
-  @media all and (min-width: 480px) {
+  @media (--viewport-mobile-wide) {
     padding: 0 2rem;
+    max-width: 58rem;
   }
 
-  @media all and (min-width: 980px) {
-    max-width: 980px;
+  @media (--viewport-tablet) {
+    max-width: 74rem;
+  }
+
+  @media (--viewport-desktop) {
     max-width: 98rem;
   }
 
-  @media all and (min-width: 1140px) {
-    max-width: 1140px;
+  @media (--viewport-wide) {
     max-width: 114rem;
   }
 
 }
 
+/**
+ * Off horizontally centred container of a content width of 540px
+ */
+
 %content-container {
+  @extend %page-block;
+
   background: white;
-  max-width: 54rem;
-  width: 54rem;
-  margin: 0 auto;
-  padding: 0 34rem 0 26rem;
+  width: 100%;
+
+  @media (--viewport-tablet) {
+    padding-right: 10rem;
+    padding-left: 10rem;
+  }
+
+  @media (--viewport-desktop) {
+    padding-right: 26rem;
+    padding-left: 18rem;
+  }
+
+  @media (--viewport-wide) {
+    padding-right: 34rem;
+    padding-left: 26rem;
+  }
 }
 
 %page-heading {

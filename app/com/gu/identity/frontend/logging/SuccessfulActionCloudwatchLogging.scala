@@ -3,9 +3,10 @@ package com.gu.identity.frontend.logging
 import com.amazonaws.ClientConfiguration
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth._
+import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.regions.{Regions, Region}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsyncClient
-import com.amazonaws.services.cloudwatch.model.PutMetricDataRequest
+import com.amazonaws.services.cloudwatch.model.{MetricDatum, PutMetricDataRequest}
 
 import scala.util.Try
 
@@ -31,6 +32,18 @@ object AWSConfig{
   }
 }
 
+trait LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, Void] with Logging {
+  def onError(exception: Exception) {
+    logger.error(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
+  }
+
+  def onSuccess(request: PutMetricDataRequest, result: Void) {
+    logger.debug("CloudWatch PutMetricDataRequest - success")
+  }
+}
+
+object LoggingAsyncHandler extends LoggingAsyncHandler
+
 object SuccessfulActionCloudwatchLogging {
 
   private lazy val cloudwatch = {
@@ -40,14 +53,24 @@ object SuccessfulActionCloudwatchLogging {
   }
 
   def putSignIn(): Unit = {
-    println("putting signin")
-//    val request = new PutMetricDataRequest()
-//    cloudwatch.putMetricDataAsync(request)
+    val request = new PutMetricDataRequest()
+      .withNamespace("SuccessfulSignIns")
+      .withMetricData(
+        new MetricDatum()
+          .withMetricName("SuccessfulSignIn")
+          .withUnit("Count")
+      )
+    cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
   }
 
   def putRegister(): Unit = {
-    println("putting register")
-//    val request = new PutMetricDataRequest()
-//    cloudwatch.putMetricDataAsync(request)
+    val request = new PutMetricDataRequest()
+      .withNamespace("SuccessfulRegistrations")
+      .withMetricData(
+        new MetricDatum()
+          .withMetricName("SuccessfulRegistration")
+          .withUnit("Count")
+      )
+    cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
   }
 }

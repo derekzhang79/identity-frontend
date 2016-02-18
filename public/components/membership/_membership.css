@@ -2,8 +2,11 @@
   background-image: inline("guardian-members-logo.svg");
   height: height("guardian-members-logo.svg");
   width: width("guardian-members-logo.svg");
+  margin: 1rem 0 1.4rem;
+
 }
 
 .skin-members .header {
-  background-color: #bb3a7f;
+  background-image: inline("bg-masthead-72px.png");
+  background-position: center top;
 }

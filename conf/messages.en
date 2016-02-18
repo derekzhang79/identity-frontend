@@ -38,6 +38,8 @@ register.createAccount=Create account
 terms.conditions=By proceeding, you agree to the Guardian''s
 terms.termsOfService=Terms of Service
 terms.privacyPolicy=Privacy Policy
+terms.teachersConditions=and Guardian Teacher Network''s
+terms.jobsConditions=and Guardian Jobs''
 
 # com.gu.identity.frontend.models.text.OAuthText
 oauth.signIn=Sign in with {0}

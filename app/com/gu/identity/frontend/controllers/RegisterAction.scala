@@ -3,7 +3,7 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
-import com.gu.identity.frontend.logging.{Register, SuccessfulActionLogger, Logging}
+import com.gu.identity.frontend.logging.{MetricsLoggingActor, Register, Logging}
 import com.gu.identity.frontend.models.{UrlBuilder, ClientRegistrationIp, TrackingData, ReturnUrl}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceError, IdentityService}
 import play.api.data.{Mapping, Form}
@@ -27,7 +27,7 @@ case class RegisterRequest(
     skipConfirmation: Option[Boolean],
     group: Option[String])
 
-class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi, val config: Configuration, csrfConfig: CSRFConfig) extends Controller with Logging with SuccessfulActionLogger with I18nSupport {
+class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi, val config: Configuration, csrfConfig: CSRFConfig) extends Controller with Logging with MetricsLoggingActor with I18nSupport {
 
   private val username: Mapping[String] = text.verifying(
     "error.username", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21

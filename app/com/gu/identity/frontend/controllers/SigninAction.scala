@@ -2,7 +2,7 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
-import com.gu.identity.frontend.logging.{SignIn, SuccessfulActionLogger, Logging}
+import com.gu.identity.frontend.logging.{MetricsLoggingActor, SignIn, Logging}
 import com.gu.identity.frontend.models.{ReturnUrl, TrackingData}
 import com.gu.identity.frontend.services._
 import play.api.data.Form
@@ -19,7 +19,7 @@ import play.api.i18n.Messages.Implicits._
 /**
  * Form actions controller
  */
-class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, csrfConfig: CSRFConfig, googleRecaptchaCheck: GoogleRecaptchaCheck, config: Configuration) extends Controller with Logging with SuccessfulActionLogger with I18nSupport {
+class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, csrfConfig: CSRFConfig, googleRecaptchaCheck: GoogleRecaptchaCheck, config: Configuration) extends Controller with Logging with MetricsLoggingActor with I18nSupport {
 
   case class SignInRequest(email: Option[String], password: Option[String], rememberMe: Boolean, returnUrl: Option[String], skipConfirmation: Option[Boolean], googleRecaptchaResponse: Option[String])
 

@@ -13,6 +13,10 @@
   .header {
     background-image: inline("bg-masthead-72px.png");
     background-position: center top;
+
+    @media (--viewport-max-tablet) {
+      background-position: -1010px top;
+    }
   }
 
   .register-form__submit-button,

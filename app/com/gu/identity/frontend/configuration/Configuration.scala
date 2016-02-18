@@ -94,7 +94,7 @@ object Configuration {
     val provider = new AWSCredentialsProviderChain(
       new EnvironmentVariableCredentialsProvider(),
       new SystemPropertiesCredentialsProvider(),
-      new ProfileCredentialsProvider("identityfrontend"),
+      new ProfileCredentialsProvider(),
       new InstanceProfileCredentialsProvider
     )
     provider.getCredentials

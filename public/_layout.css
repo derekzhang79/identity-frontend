@@ -70,12 +70,17 @@ body > section:last-of-type {
 }
 
 %page-heading {
-  @extend %font-heading-1;
+  @extend %font-heading-0;
   @extend %content-container;
   color: #333;
   font-weight: normal;
   padding-top: 0.6rem;
-  padding-bottom: 3.6rem;
+  padding-bottom: 2.4rem;
+
+  @media (--viewport-min-tablet) {
+    @extend %font-heading-1;
+    padding-bottom: 3.6rem;
+  }
 }
 
 @import "components/header/_header.css";

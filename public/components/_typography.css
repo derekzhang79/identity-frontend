@@ -26,6 +26,11 @@ html {
   font-family: GuardianTextSansWeb, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
+%font-heading-0 {
+  @extend %font-serif;
+  @mixin font-size 28, 32;
+}
+
 %font-heading-1 {
   @extend %font-serif;
   @mixin font-size 36, 40;

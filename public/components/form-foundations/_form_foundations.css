@@ -132,10 +132,11 @@
 %form__fancy-checkbox {
   @extend %font-text-sans-3;
   display: block;
+  content: " ";
   position: absolute;
   top: -0.2rem;
   left: 0;
-  background: white;
+  background: white center center no-repeat;
   border: 1px solid var(--c-form-field-border);
   border-radius: 3px;
   box-sizing: border-box;
@@ -149,6 +150,11 @@
 
   /* px line height required for IE */
   line-height: 20px;
+}
+
+%form__fancy-checkbox--checked {
+  @extend %form__fancy-checkbox;
+  background-image: inline("tick.svg");
 }
 
 @define-mixin formCheckbox $labelClass {
@@ -167,12 +173,10 @@
   }
 
   &:checked + $labelClass::before {
-    @extend %form__fancy-checkbox;
-    content: "\2713"; /* tick character */
+    @extend %form__fancy-checkbox--checked;
   }
 
   &:not(:checked) + $labelClass::before {
     @extend %form__fancy-checkbox;
-    content: "\00A0";
   }
 }

@@ -8,7 +8,7 @@
 :root {
   --c-form-prelude: #333;
   --c-form-fieldset-border: #eee;
-  --c-form-error: #dd4b39;
+  --c-form-error: #d61d00;
   --c-form-field-border: #ddd;
   --c-form-field-border--focus: #6e99b3;
   --c-form-button--submit: #005689;
@@ -39,8 +39,12 @@
 /** Form error **/
 
 %form__error {
-  @extend %font-text-3;
+  @extend %font-text-2;
   color: var(--c-form-error);
+  background: transparent inline("status-alert.svg") left top no-repeat;
+  margin: 0 0 1.8rem 0;
+  padding: 0 0 0 2.8rem;
+  line-height: 2.2rem;
 }
 
 
@@ -110,6 +114,15 @@
     box-shadow: 0 0 2px 2px color(var(--c-form-field-border) alpha(50%) lightness(- 10%));
     border-color: color(var(--c-form-field-border) lightness(- 10%));
     outline: none;
+  }
+
+  &:invalid {
+    border-color: var(--c-form-error);
+    box-shadow: none;
+
+    &:focus {
+      box-shadow: 0 0 2px 2px color(var(--c-form-error) alpha(50%) lightness(+ 20%));
+    }
   }
 }
 

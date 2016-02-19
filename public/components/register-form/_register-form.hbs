@@ -5,19 +5,20 @@
 
   <p class="register-form__prelude">{{ registerPageText.divideText }}</p>
 
-  <fieldset class="register-form__fieldset">
-    {{#each errors }}
+  {{#each errors }}
       <p id="{{ id }}" class="register-form__error">{{ message }}</p>
-    {{/ each }}
+  {{/ each }}
+
+  <fieldset class="register-form__fieldset">
 
     <div class="register-form__control--name">
       <label class="register-form__label--name" for="register_field_firstname">{{ registerPageText.name }}</label>
 
       <div class="register-form__control-column--firstname">
-        <input class="register-form__field--firstname" id="register_field_firstname" type="text" name="firstName" placeholder="{{ registerPageText.firstName }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <input class="register-form__field--firstname" id="register_field_firstname" type="text" name="firstName" placeholder="{{ registerPageText.firstName }}" required autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
       </div>
       <div class="register-form__control-column--lastname">
-        <input class="register-form__field--lastname" id="register_field_lastname" type="text" name="lastName" placeholder="{{ registerPageText.lastName }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <input class="register-form__field--lastname" id="register_field_lastname" type="text" name="lastName" placeholder="{{ registerPageText.lastName }}" required autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
       </div>
     </div>
 

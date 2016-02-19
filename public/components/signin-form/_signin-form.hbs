@@ -4,16 +4,17 @@
   <input type="hidden" name="skipConfirmation" value="{{skipConfirmation}}">
   <p class="signin-form__prelude">{{signInPageText.divideText}}</p>
 
-  <fieldset class="signin-form__fieldset">
+  {{#each errors }}
+    <p id="{{ id }}" class="signin-form__error">{{ message }}</p>
+  {{/each}}
 
-    {{#each errors}}
-      <p id="{{id}}" class="signin-form__error">{{message}}</p>
-    {{/each}}
+  <fieldset class="signin-form__fieldset">
 
     <div class="signin-form__control--email">
       <label class="signin-form__label--email" for="signin_field_email">{{signInPageText.email}}</label>
       <input class="signin-form__field--email" id="signin_field_email" type="email" name="email" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}"/>
     </div>
+
     <div class="signin-form__control--password">
       <label class="signin-form__label--password" for="signin_field_password">{{signInPageText.password}}</label>
       <input class="signin-form__field--password" id="signin_field_password" type="password" name="password" />

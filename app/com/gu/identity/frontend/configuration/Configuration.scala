@@ -87,7 +87,7 @@ object Configuration {
     underlying = PlayConfiguration.empty
   )
 
-  object AWSConfig{
+  object AWSConfig {
     val credentials: AWSCredentialsProvider = {
       val provider = new AWSCredentialsProviderChain(
         new EnvironmentVariableCredentialsProvider(),
@@ -99,14 +99,7 @@ object Configuration {
       provider
     }
 
-    val clientConfiguration: ClientConfiguration = {
-      val config = new ClientConfiguration()
-      for {
-        proxyHost <- Some(System.getProperty("http.proxyHost")).filterNot(_ == null)
-        proxyPort <- Try (Integer.parseInt(System.getProperty("http.proxyPort"))).toOption
-      } yield config.withProxyHost(proxyHost).withProxyPort(proxyPort)
-      config
-    }
+    val clientConfiguration: ClientConfiguration = new ClientConfiguration()
   }
 
   object Environment {

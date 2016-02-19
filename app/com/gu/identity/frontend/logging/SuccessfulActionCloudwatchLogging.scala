@@ -1,36 +1,10 @@
 package com.gu.identity.frontend.logging
 
-import com.amazonaws.ClientConfiguration
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth._
 import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.regions.{Regions, Region}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsyncClient
-import com.amazonaws.services.cloudwatch.model.{MetricDatum, PutMetricDataRequest}
-
-import scala.util.Try
-
-object AWSConfig{
-  val credentials: AWSCredentialsProvider = {
-    val provider = new AWSCredentialsProviderChain(
-      new EnvironmentVariableCredentialsProvider(),
-      new SystemPropertiesCredentialsProvider(),
-      new ProfileCredentialsProvider(),
-      new InstanceProfileCredentialsProvider
-    )
-    provider.getCredentials
-    provider
-  }
-
-  val clientConfiguration: ClientConfiguration = {
-    val config = new ClientConfiguration()
-    for {
-      proxyHost <- Some(System.getProperty("http.proxyHost")).filterNot(_ == null)
-      proxyPort <- Try (Integer.parseInt(System.getProperty("http.proxyPort"))).toOption
-    } yield config.withProxyHost(proxyHost).withProxyPort(proxyPort)
-    config
-  }
-}
+import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest}
+import com.gu.identity.frontend.configuration.Configuration._
 
 trait LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, Void] with Logging {
   def onError(exception: Exception) {
@@ -52,6 +26,8 @@ object SuccessfulActionCloudwatchLogging {
     client
   }
 
+  private lazy val stageDimension = new Dimension().withName("Stage").withValue(Environment.stage)
+
   def putSignIn(): Unit = {
     val request = new PutMetricDataRequest()
       .withNamespace("SuccessfulSignIns")
@@ -59,6 +35,8 @@ object SuccessfulActionCloudwatchLogging {
         new MetricDatum()
           .withMetricName("SuccessfulSignIn")
           .withUnit("Count")
+          .withValue(1d)
+          .withDimensions(stageDimension)
       )
     cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
   }
@@ -70,6 +48,8 @@ object SuccessfulActionCloudwatchLogging {
         new MetricDatum()
           .withMetricName("SuccessfulRegistration")
           .withUnit("Count")
+          .withValue(1d)
+          .withDimensions(stageDimension)
       )
     cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
   }

@@ -23,6 +23,7 @@ case class RegisterViewModel(
     csrfToken: Option[CSRFToken],
     returnUrl: String,
     skipConfirmation: Boolean,
+    clientId: Option[ClientID],
 
     actions: RegisterActions,
     links: RegisterLinks,
@@ -62,6 +63,7 @@ object RegisterViewModel {
       csrfToken = csrfToken,
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
+      clientId = clientId,
 
       actions = RegisterActions(),
       links = RegisterLinks(returnUrl, skipConfirmation, clientId),

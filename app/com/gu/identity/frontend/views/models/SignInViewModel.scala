@@ -23,6 +23,8 @@ case class SignInViewModel private(
     csrfToken: Option[CSRFToken],
     returnUrl: String = "",
     skipConfirmation: Boolean = false,
+    clientId: Option[ClientID],
+
     registerUrl: String = "",
     forgotPasswordUrl: String = "",
 
@@ -60,6 +62,8 @@ object SignInViewModel {
       csrfToken = csrfToken,
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
+      clientId = clientId,
+
       registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId),
       forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId),
 

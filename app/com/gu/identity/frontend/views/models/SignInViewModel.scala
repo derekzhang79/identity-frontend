@@ -35,7 +35,15 @@ case class SignInViewModel private(
 
 
 object SignInViewModel {
-  def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)], csrfToken: Option[CSRFToken], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
+  def apply(
+   configuration: Configuration,
+   activeTests: Iterable[(MultiVariantTest,
+   MultiVariantTestVariant)],
+   csrfToken: Option[CSRFToken],
+   errors: Seq[ErrorViewModel],
+   returnUrl: ReturnUrl,
+   skipConfirmation: Option[Boolean],
+   group: Option[String])(implicit messages: Messages): SignInViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests)
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
@@ -49,7 +57,7 @@ object SignInViewModel {
       oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation),
 
       signInPageText = SignInPageText.toMap,
-      terms = BasicTermsViewModel(),
+      terms = Terms.getTermsModel(group),
 
       hasErrors = errors.nonEmpty,
       errors = errors,

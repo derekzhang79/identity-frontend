@@ -1,1 +1,10 @@
-<p class="terms">{{ terms.conditionsText }} <a href="{{ terms.termsOfServiceUrl }}">{{ terms.termsOfServiceText }}</a> &amp; <a href="{{ terms.privacyPolicyUrl }}">{{ terms.privacyPolicyText }}</a>.</p>
+<p class="terms">
+  {{ terms.conditionsText }}
+  <a href="{{ terms.termsOfServiceUrl }}">{{ terms.termsOfServiceText }}</a> &amp;
+  <a href="{{ terms.privacyPolicyUrl }}">{{ terms.privacyPolicyText }}</a>
+  {{#if terms.extendedConditionsText}}
+    {{terms.extendedConditionsText}}
+    <a href="{{ terms.extendedTermsOfServiceUrl }}">{{ terms.termsOfServiceText }}</a> &amp;
+    <a href="{{ terms.extendedPrivacyPolicyUrl }}">{{ terms.privacyPolicyText }}</a>
+  {{/if}}
+.</p>

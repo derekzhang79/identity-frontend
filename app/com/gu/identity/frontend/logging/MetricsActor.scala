@@ -12,9 +12,7 @@ trait Message {}
 object SignIn extends Message
 object Register extends Message
 
-private class MetricsActor extends Actor{
-
-  private val logger = Logger(this.getClass)
+private class MetricsActor extends Actor with Logging{
 
   override def receive: Receive = {
     case SignIn => {
@@ -23,6 +21,6 @@ private class MetricsActor extends Actor{
     case Register => {
       SuccessfulActionCloudwatchLogging.putRegister()
     }
-    case _ =>  logger.info("Unexpected Message received by successful action logging actor.")
+    case _ =>  logger.info("Unexpected Message received by metrics actor.")
   }
 }

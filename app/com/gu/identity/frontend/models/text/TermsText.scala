@@ -8,11 +8,11 @@ case class TermsText private(
      privacyPolicyText: String)
 
 case class TeachersTermsText private(
-    basicTermsText: TermsText = TermsText(),
+    basicTermsText: TermsText,
     conditionsText: String)
 
 case class JobsTermsText private(
-    basicTermsText: TermsText = TermsText(),
+    basicTermsText: TermsText,
     conditionsText: String)
 
 object TermsText {
@@ -27,6 +27,7 @@ object TermsText {
 object TeachersTermsText {
   def apply()(implicit messages: Messages): TeachersTermsText =
     TeachersTermsText(
+      basicTermsText = TermsText(),
       conditionsText = messages("terms.teachersConditions")
     )
 }
@@ -34,6 +35,7 @@ object TeachersTermsText {
 object JobsTermsText {
   def apply()(implicit messages: Messages): JobsTermsText =
     JobsTermsText(
+      basicTermsText = TermsText(),
       conditionsText = messages("terms.jobsConditions")
     )
 }

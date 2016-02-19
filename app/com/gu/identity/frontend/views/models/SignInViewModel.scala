@@ -49,7 +49,7 @@ object SignInViewModel {
       oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation),
 
       signInPageText = SignInPageText.toMap,
-      terms = TermsViewModel(),
+      terms = BasicTermsViewModel(),
 
       hasErrors = errors.nonEmpty,
       errors = errors,
@@ -74,7 +74,7 @@ object SignInViewModel {
       None
     }
   }
-  
+
   private def getResources(layout: LayoutViewModel, recaptchaViewModel: Option[GoogleRecaptchaViewModel]): Seq[PageResource with Product] ={
     recaptchaViewModel match {
       case Some(model) =>  layout.resources ++ model.resources

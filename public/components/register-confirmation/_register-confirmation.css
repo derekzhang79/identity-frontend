@@ -1,13 +1,9 @@
 .register-confirm {
-  max-width: 40rem;
-  margin: 0 auto;
+  @extend %content-container;
 }
 
 .register-confirm__heading {
-  @extend %font-heading-1;
-  font-weight: normal;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  @extend %page-heading;
 }
 
 .register-confirm__instruction {
@@ -16,27 +12,29 @@
 }
 
 .register-confirm__complete-registration-button {
-  @extend %font-text-sans-2;
-  background-color: #005689;
-  border: 0;
-  border-radius: 15px;
-  color: white;
-  display: block;
-  text-align: left;
-  padding: 1rem 1rem 0.8rem 2rem;
+  @extend %form__button--submit;
+
+  display: inline-block;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .register-confirm__nav-bar {
   border-top: 1px solid #eee;
-  max-width: 40rem;
-  margin: 2rem auto 0;
-  padding: 1rem 0 0;
+  margin: 2.4rem auto;
+  padding: 1.2rem 0 0;
   text-align: center;
 }
 
 .register-confirm__nav-bar-item {
-  @extend %font-text-1;
+  @extend %font-text-sans-1;
   display: inline-block;
   margin: 0 1rem;
+}
+
+.register-confirm__nav-bar-item-link {
+  @extend .link;
 }
 

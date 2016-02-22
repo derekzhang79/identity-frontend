@@ -3,6 +3,7 @@ package com.gu.identity.frontend.configuration
 import com.amazonaws.ClientConfiguration
 import com.amazonaws.auth._
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.regions.Regions
 import play.api.{Configuration => PlayConfiguration}
 
 import scala.util.Try
@@ -100,6 +101,8 @@ object Configuration {
     }
 
     val clientConfiguration: ClientConfiguration = new ClientConfiguration()
+
+    val region: Regions = Regions.EU_WEST_1;
   }
 
   object Environment {

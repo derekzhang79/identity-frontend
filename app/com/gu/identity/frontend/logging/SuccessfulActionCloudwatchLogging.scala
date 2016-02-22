@@ -20,7 +20,7 @@ object SuccessfulActionCloudwatchLogging {
 
   private lazy val cloudwatch = {
     val client = new AmazonCloudWatchAsyncClient(AWSConfig.credentials, AWSConfig.clientConfiguration)
-    client.setEndpoint(Region.getRegion(Regions.EU_WEST_1).getServiceEndpoint(com.amazonaws.regions.ServiceAbbreviations.CloudWatch))
+    client.setEndpoint(Region.getRegion(AWSConfig.region).getServiceEndpoint(com.amazonaws.regions.ServiceAbbreviations.CloudWatch))
     client
   }
 

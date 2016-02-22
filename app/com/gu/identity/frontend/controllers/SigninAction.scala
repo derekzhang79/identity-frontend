@@ -47,7 +47,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
         case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, returnUrl, formParams.skipConfirmation)
         case Right(cookies) => {
-          successfulActionLogger ! SignIn
+          logSuccessfulSignin
           SeeOther(returnUrl.url)
             .withCookies(cookies: _*)
         }

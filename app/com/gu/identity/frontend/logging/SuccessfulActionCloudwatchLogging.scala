@@ -26,29 +26,25 @@ object SuccessfulActionCloudwatchLogging {
 
   private lazy val stageDimension = new Dimension().withName("Stage").withValue(Environment.stage)
 
-  def putSignIn(): Unit = {
-    val request = new PutMetricDataRequest()
-      .withNamespace("SuccessfulSignIns")
+  private def createRequest(namespace: String, metricName: String) = {
+    new PutMetricDataRequest()
+      .withNamespace(namespace)
       .withMetricData(
         new MetricDatum()
-          .withMetricName("SuccessfulSignIn")
+          .withMetricName(metricName)
           .withUnit("Count")
           .withValue(1d)
           .withDimensions(stageDimension)
       )
+  }
+
+  def putSignIn(): Unit = {
+    val request = createRequest("SuccessfulSignIns", "SuccessfulSignIn")
     cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
   }
 
   def putRegister(): Unit = {
-    val request = new PutMetricDataRequest()
-      .withNamespace("SuccessfulRegistrations")
-      .withMetricData(
-        new MetricDatum()
-          .withMetricName("SuccessfulRegistration")
-          .withUnit("Count")
-          .withValue(1d)
-          .withDimensions(stageDimension)
-      )
+    val request = createRequest("SuccessfulRegistrations", "SuccessfulRegistration")
     cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
   }
 }

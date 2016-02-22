@@ -21,6 +21,8 @@ object UrlBuilder {
   def apply(call: Call, params: Seq[(String, String)]): String =
     apply(call.url, params)
 
+  def apply(call: Call, returnUrl: ReturnUrl, clientId: Option[ClientID]): String =
+    apply(call, returnUrl, None, clientId)
 
   def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): String =
     apply(call.url, returnUrl, skipConfirmation, clientId)

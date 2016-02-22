@@ -1,5 +1,8 @@
 package com.gu.identity.frontend.models
 
+import play.api.data.{FieldMapping, FormError, Forms}
+import play.api.data.format.Formatter
+
 
 /**
  * Defines a Client ID for altering the skin of all pages.
@@ -25,8 +28,27 @@ case object GuardianMembersClientID extends ClientID {
 object ClientID {
   def all: Seq[ClientID] = Seq(GuardianMembersClientID)
 
+  def apply(clientId: String): Option[ClientID] =
+    all.find(_.id == clientId)
+
   def apply(clientId: Option[String]): Option[ClientID] =
-    clientId.flatMap { id =>
-      all.find(_.id == id)
+    clientId.flatMap(apply)
+
+  object FormMappings {
+    lazy val clientId: FieldMapping[ClientID] = Forms.of[ClientID](ClientIdFormatter)
+
+    private object ClientIdFormatter extends Formatter[ClientID] {
+      def bind(key: String, data: Map[String, String]): Either[Seq[FormError], ClientID] = {
+        val value = data.get(key)
+          .flatMap(ClientID.apply)
+
+        value.toRight {
+          Seq(FormError(key, "Unknown ClientID"))
+        }
+      }
+
+      def unbind(key: String, value: ClientID): Map[String, String] =
+        Map(key -> value.id)
     }
+  }
 }

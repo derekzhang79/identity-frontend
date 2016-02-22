@@ -2,12 +2,23 @@ package com.gu.identity.frontend.logging
 import akka.actor._
 import play.api.Logger
 
-trait Message {}
-
-object SignIn extends Message
-object Register extends Message
-
 trait MetricsLoggingActor {
+
+  def logSuccessfulRegister(): Unit = {
+    MetricsLoggingActor.logSuccessfulRegister()
+  }
+
+  def logSuccessfulSignin(): Unit = {
+    MetricsLoggingActor.logSuccessfulSignin()
+  }
+}
+
+private sealed trait Message {}
+
+private object SignIn extends Message
+private object Register extends Message
+
+private object MetricsLoggingActor {
   private val system = ActorSystem()
   val successfulActionLogger = system.actorOf(Props[MetricsActor])
 

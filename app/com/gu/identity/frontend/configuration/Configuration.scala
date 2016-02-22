@@ -3,10 +3,9 @@ package com.gu.identity.frontend.configuration
 import com.amazonaws.ClientConfiguration
 import com.amazonaws.auth._
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.regions.Regions
+import com.amazonaws.regions.Region
+import com.amazonaws.regions.Regions._
 import play.api.{Configuration => PlayConfiguration}
-
-import scala.util.Try
 
 
 case class Configuration(
@@ -102,7 +101,11 @@ object Configuration {
 
     val clientConfiguration: ClientConfiguration = new ClientConfiguration()
 
-    val region: Regions = Regions.EU_WEST_1;
+    val region: Region = {
+      val defaultRegion: Region = Region.getRegion(EU_WEST_1)
+      Option(getCurrentRegion()).getOrElse(defaultRegion)
+    }
+
   }
 
   object Environment {

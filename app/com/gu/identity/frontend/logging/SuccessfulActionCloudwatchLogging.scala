@@ -6,7 +6,7 @@ import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsyncClient
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest}
 import com.gu.identity.frontend.configuration.Configuration._
 
-trait LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, Void] with Logging {
+object LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, Void] with Logging {
   def onError(exception: Exception) {
     logger.error(s"CloudWatch PutMetricDataRequest error: ${exception.getMessage}}")
   }
@@ -15,8 +15,6 @@ trait LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, Void] with 
     logger.debug("CloudWatch PutMetricDataRequest - success")
   }
 }
-
-object LoggingAsyncHandler extends LoggingAsyncHandler
 
 object SuccessfulActionCloudwatchLogging {
 

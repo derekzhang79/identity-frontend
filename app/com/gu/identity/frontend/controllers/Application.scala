@@ -34,9 +34,11 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual)
   }
 
-  def confirm(returnUrl: Option[String]) = Action { req =>
-    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration)
-    renderRegisterConfirmation(configuration, returnUrlActual)
+  def confirm(returnUrl: Option[String], clientId: Option[String]) = Action {
+    val clientIdOpt = ClientID(clientId)
+    val returnUrlActual = ReturnUrl(returnUrl, referer = None, configuration)
+
+    renderRegisterConfirmation(configuration, returnUrlActual, clientIdOpt)
   }
 }
 

@@ -18,6 +18,13 @@ object UrlBuilder {
       }
     }
 
+  def apply(baseUrl: String, returnUrl: ReturnUrl, clientId: Option[ClientID]): String =
+    apply(baseUrl, returnUrl, skipConfirmation = None, clientId)
+
+  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): String =
+    apply(baseUrl, buildParams(returnUrl, skipConfirmation, clientId))
+
+
   def apply(call: Call, params: Seq[(String, String)]): String =
     apply(call.url, params)
 
@@ -28,19 +35,12 @@ object UrlBuilder {
     apply(call.url, returnUrl, skipConfirmation, clientId)
 
 
-  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): String = {
-    val params = Seq(
-      Some("returnUrl" -> returnUrl.url),
+  private def buildParams(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): Seq[(String, String)] =
+    Seq(
+      Some(returnUrl).filter(isDefaultReturnUrl).map("returnUrl" -> _.url),
       skipConfirmation.map("skipConfirmation" -> _.toString),
       clientId.map("clientId" -> _.id)
     ).flatten
-
-    if (isDefaultReturnUrl(returnUrl)) {
-      apply(baseUrl, params)
-    } else {
-      apply(baseUrl, params ++ Seq("returnUrl" -> returnUrl.url))
-    }
-  }
 
   private def isDefaultReturnUrl(returnUrl: ReturnUrl): Boolean = {
     returnUrl.url == "http://www.theguardian.com"

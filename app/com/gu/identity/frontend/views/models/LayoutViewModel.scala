@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.models.ClientID
 import com.gu.identity.frontend.models.Text.{FooterText, HeaderText, LayoutText}
 import com.gu.identity.frontend.mvt
 import com.gu.identity.frontend.mvt.{ActiveMultiVariantTests, MultiVariantTests, MultiVariantTest}
@@ -79,10 +80,17 @@ object LayoutViewModel {
   def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel =
     apply(configuration, Map.empty, None)
 
+  def apply(configuration: Configuration, clientId: Option[ClientID])(implicit messages: Messages): LayoutViewModel =
+    apply(configuration, Map.empty, clientId)
+
   def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests)(implicit messages: Messages): LayoutViewModel =
     apply(configuration, activeTests, None)
 
-  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, skin: Option[String])(implicit messages: Messages): LayoutViewModel = {
+  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, clientId: Option[ClientID])(implicit messages: Messages): LayoutViewModel = {
+
+    val skin = clientId
+      .filter(_.hasSkin)
+      .map(c => s"skin-${c.id}")
 
     val config = JavascriptConfig(
       omnitureAccount = configuration.omnitureAccount,
@@ -108,7 +116,7 @@ object LayoutViewModel {
       footerText = FooterText.toMap,
       resources = resources,
       indirectResources = BaseLayoutViewModel.indirectResources,
-      skin = skin.map(s => s"skin-$s"))
+      skin = skin)
   }
 }
 

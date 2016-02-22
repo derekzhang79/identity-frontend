@@ -17,12 +17,16 @@ sealed trait ClientID extends Product2[ClientID, String] {
 
   val id: String
 
+  def hasSkin: Boolean = false
+
   def _1 = self
   def _2 = id
 }
 
 case object GuardianMembersClientID extends ClientID {
   val id = "members"
+
+  override def hasSkin = true
 }
 
 object ClientID {

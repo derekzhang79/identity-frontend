@@ -18,6 +18,9 @@ object UrlBuilder {
       }
     }
 
+  def apply(baseUrl: String, returnUrl: ReturnUrl): String =
+    apply(baseUrl, returnUrl, skipConfirmation = None, clientId = None)
+
   def apply(baseUrl: String, returnUrl: ReturnUrl, clientId: Option[ClientID]): String =
     apply(baseUrl, returnUrl, skipConfirmation = None, clientId)
 
@@ -37,12 +40,8 @@ object UrlBuilder {
 
   private def buildParams(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): Seq[(String, String)] =
     Seq(
-      Some(returnUrl).filter(isDefaultReturnUrl).map("returnUrl" -> _.url),
+      Some(returnUrl).filterNot(_.isDefault).map("returnUrl" -> _.url),
       skipConfirmation.map("skipConfirmation" -> _.toString),
       clientId.map("clientId" -> _.id)
     ).flatten
-
-  private def isDefaultReturnUrl(returnUrl: ReturnUrl): Boolean = {
-    returnUrl.url == "http://www.theguardian.com"
-  }
 }

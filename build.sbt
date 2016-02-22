@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
   "com.mohiva" %% "play-html-compressor" % "0.5.0",
   "com.typesafe.akka" %% "akka-actor" % "2.4.1",
   "com.typesafe.akka" %% "akka-slf4j" % "2.4.0",
-  "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.9.12"
+  "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.54"
 )
 
 // Set logs options and default local resource for running locally (run and test)

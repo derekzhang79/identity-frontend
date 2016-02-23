@@ -1,5 +1,6 @@
 package com.gu.identity.service.client
 
+import com.gu.identity.service.client.models.User
 import org.joda.time.DateTime
 
 sealed trait ApiResponse
@@ -14,3 +15,5 @@ case class AuthenticationCookiesResponseCookie(key: String, value: String, sessi
 case class RegisterResponse(user: RegisterResponseUser) extends ApiResponse
 case class RegisterResponseUser(userGroups: List[RegisterResponseUserGroups])
 case class RegisterResponseUserGroups(packageCode: String, path: String)
+
+case class UserResponse(user: User) extends ApiResponse

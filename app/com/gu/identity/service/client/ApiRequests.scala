@@ -56,10 +56,8 @@ case class UserRequest(url: String, override val headers: HttpParameters) extend
 
 object UserRequest {
 
-  private def getPathComponents(userId: String) = Seq("user", userId)
-
-  def apply(userId: String, cookie: Cookie)(implicit configuration: IdentityClientConfiguration): UserRequest = {
-    val pathComponents = getPathComponents(userId)
+  def apply(cookie: Cookie)(implicit configuration: IdentityClientConfiguration): UserRequest = {
+    val pathComponents = Seq("user", "me")
     new UserRequest(
       ApiRequest.apiEndpoint(pathComponents: _*),
       ApiRequest.apiKeyHeaders ++ ApiRequest.apiSecureCookieUserHeader(cookie)

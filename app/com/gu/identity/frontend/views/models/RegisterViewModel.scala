@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views.models
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
-import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ReturnUrl}
+import com.gu.identity.frontend.models.{GuardianMembersClientID, ClientID, UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.text.RegisterText
 import com.gu.identity.frontend.mvt._
 import play.api.i18n.Messages
@@ -19,6 +19,8 @@ case class RegisterViewModel(
 
     hasErrors: Boolean,
     errors: Seq[ErrorViewModel],
+
+    showStandfirst: Boolean,
 
     csrfToken: Option[CSRFToken],
     returnUrl: String,
@@ -58,6 +60,8 @@ object RegisterViewModel {
       hasErrors = errors.nonEmpty,
       errors = errors,
 
+      showStandfirst = showStandfirst(activeTests, clientId),
+
       csrfToken = csrfToken,
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
@@ -70,6 +74,9 @@ object RegisterViewModel {
       indirectResources = layout.indirectResources
     )
   }
+
+  private def showStandfirst(activeTests: ActiveMultiVariantTests, clientId: Option[ClientID]) =
+    clientId.contains(GuardianMembersClientID) && activeTests.contains(RegisterMembershipStandfirstTest)
 
 }
 

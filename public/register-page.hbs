@@ -4,6 +4,12 @@
 
   <h1 class="register__heading">{{ registerPageText.title }}</h1>
 
+  {{# showStandfirst }}
+    <section class="register__standfirst">
+      <p class="register__standfirst-paragraph">{{ registerPageText.standfirst }}</p>
+    </section>
+  {{/ showStandfirst }}
+
   <section class="register__section">
     {{> components/oauth-cta/_oauth-cta }}
 

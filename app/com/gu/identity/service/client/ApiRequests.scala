@@ -2,6 +2,7 @@ package com.gu.identity.service.client
 
 import com.gu.identity.frontend.controllers.RegisterRequest
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
+import play.api.mvc.Cookie
 
 sealed trait ApiRequest {
   val method: HttpMethod = GET
@@ -15,8 +16,17 @@ object ApiRequest {
   def apiKeyHeaders(implicit configuration: IdentityClientConfiguration) =
     Iterable("X-GU-ID-Client-Access-Token" -> s"Bearer ${configuration.apiKey}")
 
-  def apiEndpoint(path: String)(implicit configuration: IdentityClientConfiguration) =
+  def apiSecureCookieUserHeader(cookie: Cookie) = {
+    Iterable("X-GU-ID-FOWARDED-SC-GU-U" -> cookie.value)
+  }
+
+  def apiEndpoint(path: String)(implicit configuration: IdentityClientConfiguration): String =
     s"https://${configuration.host}/$path"
+
+  def apiEndpoint(pathComponents: String*)(implicit configuration: IdentityClientConfiguration): String = {
+    val path = pathComponents.mkString("/")
+    apiEndpoint(path)
+  }
 
   private[client] def encodeBody(params: (String, String)*) = {
     def encode = java.net.URLEncoder.encode(_: String, "UTF8")
@@ -24,6 +34,39 @@ object ApiRequest {
     params.map(p => s"${p._1}=${encode(p._2)}").mkString("&")
   }
 }
+
+case class AssignGroupRequest(url: String, override val headers: HttpParameters) extends ApiRequest {
+  override val method: HttpMethod = POST
+}
+
+object AssignGroupRequest {
+
+  private def getPathComponents(group: String) = Seq("user", "me", "group", group)
+
+  def apply(group: String, cookie: Cookie)(implicit configuration: IdentityClientConfiguration): AssignGroupRequest = {
+    val pathComponents = getPathComponents(group)
+    new AssignGroupRequest(
+      ApiRequest.apiEndpoint(pathComponents: _*),
+      ApiRequest.apiKeyHeaders ++ ApiRequest.apiSecureCookieUserHeader(cookie)
+    )
+  }
+}
+
+case class UserRequest(url: String, override val headers: HttpParameters) extends ApiRequest
+
+object UserRequest {
+
+  private def getPathComponents(userId: String) = Seq("user", userId)
+
+  def apply(userId: String, cookie: Cookie)(implicit configuration: IdentityClientConfiguration): UserRequest = {
+    val pathComponents = getPathComponents(userId)
+    new UserRequest(
+      ApiRequest.apiEndpoint(pathComponents: _*),
+      ApiRequest.apiKeyHeaders ++ ApiRequest.apiSecureCookieUserHeader(cookie)
+    )
+  }
+}
+
 
 case class AuthenticateCookiesRequest(url: String, email: String, password: String, rememberMe: Boolean, trackingData: TrackingData, extraHeaders: HttpParameters = Nil) extends ApiRequest {
   override val method = POST

@@ -33,3 +33,30 @@
   }
 
 }
+
+
+@media (--viewport-min-tablet) {
+  .skin-members {
+    @mixin header__back-link--dark;
+  }
+}
+
+/*
+@media (--viewport-min-tablet) {
+  .skin-members .header__back-link {
+    color: var(--c-back-link-dark);
+
+    &::before {
+      background-image: inline("../header/arrow-back-dark.svg");
+      border: 1px solid color(var(--c-back-link-dark) alpha(30%));
+    }
+
+    &:hover,
+    &:focus {
+      &::before {
+        border-color: var(--c-back-link-dark);
+      }
+    }
+  }
+}
+*/

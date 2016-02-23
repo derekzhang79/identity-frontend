@@ -40,6 +40,8 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val userResponseUserFormat = Json.format[User]
   implicit val userResponseFormat = Json.format[UserResponse]
 
+  implicit val assignGroupResponseFormat = Json.format[AssignGroupResponse]
+
   def handleRequest(request: ApiRequest): Future[Either[IdentityClientErrors, ApiResponse]] =
     ws.url(request.url)
       .withHeaders(request.headers.toSeq: _*)
@@ -86,6 +88,11 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
 
     case r: UserRequest =>
       response.json.asOpt[UserResponse]
+        .map(Right.apply)
+        .getOrElse(handleUnexpectedResponse(response))
+
+    case r: AssignGroupRequest =>
+      response.json.asOpt[AssignGroupResponse]
         .map(Right.apply)
         .getOrElse(handleUnexpectedResponse(response))
 

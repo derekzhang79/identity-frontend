@@ -21,6 +21,7 @@ trait IdentityService {
   def registerThenSignIn(request:RegisterRequest, clientIp: ClientRegistrationIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
   def register(request: RegisterRequest, clientIp: ClientRegistrationIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]]
   def getUser(cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], User]]
+  def assignGroupCode(group: String, cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], AssignGroupResponse]]
 }
 
 
@@ -87,6 +88,19 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
         }
       }
       case Right(user) => Right(user)
+    }
+  }
+
+  override def assignGroupCode(group: String, cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], AssignGroupResponse]] = {
+    val apiRequest = AssignGroupRequest(group, cookie)
+    client.assignGroupCode(apiRequest).map {
+      case Left(errors) => Left {
+        errors.map {
+          case e: BadRequest => ServiceBadRequest(e.message, e.description)
+          case e: GatewayError => ServiceGatewayError(e.message, e.description)
+        }
+      }
+      case Right(response) => Right(response)
     }
   }
 }

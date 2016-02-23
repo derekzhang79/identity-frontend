@@ -9,7 +9,7 @@ case class User(
     privateFields: Option[PrivateFields] = None,
     publicFields: Option[PublicFields] = None,
     statusFields: Option[StatusFields] = None,
-    userGroups: UserGroups)
+    userGroups: List[UserGroup])
 
 case class CreationDate(accountCreatedDate: DateTime)
 
@@ -30,6 +30,4 @@ case class PublicFields(userName: Option[String] = None, displayName: Option[Str
 
 case class StatusFields(allowThirdPartyProfiling: Option[Boolean] = None, userEmailValidated: Option[Boolean] = None)
 
-case class UserGroups(groups: List[Group])
-
-case class Group(packageCode: String, path: String)
+case class UserGroup(packageCode: String, path: String)

@@ -1,8 +1,7 @@
 package com.gu.identity.service.client
 
 import com.gu.identity.frontend.models.TrackingData
-import org.joda.time.DateTime
-
+import com.gu.identity.service.client.models.User
 import scala.concurrent.{ExecutionContext, Future}
 
 class IdentityClient extends Logging {
@@ -27,6 +26,15 @@ class IdentityClient extends Logging {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
       case Right(RegisterResponse(user)) =>
+        Right(user)
+      case Right(other) => Left(Seq(GatewayError("Unknown response")))
+    }
+  }
+
+  def getUser(request: UserRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, User]] = {
+    configuration.requestHandler.handleRequest(request).map {
+      case Left(error) => Left(error)
+      case Right(UserResponse(user)) =>
         Right(user)
       case Right(other) => Left(Seq(GatewayError("Unknown response")))
     }

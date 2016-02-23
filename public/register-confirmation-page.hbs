@@ -2,10 +2,13 @@
 
 {{# partial "content" }}
 
-  <h1 class="register-confirm__heading">{{ registerConfirmationPageText.title }}</h1>
+  <h1 class="page-heading">{{ registerConfirmationPageText.title }}</h1>
+
+  <section class="page-standfirst">
+    <p class="page-standfirst__paragraph">{{ registerConfirmationPageText.instruction }}</p>
+  </section>
 
   <section class="register-confirm">
-    <p class="register-confirm__instruction">{{registerConfirmationPageText.instruction}}</p>
     <a class="register-confirm__complete-registration-button" href="{{returnUrl}}">
       {{registerConfirmationPageText.completeRegistration}}
     </a>

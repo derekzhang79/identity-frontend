@@ -2,15 +2,6 @@
   @extend %content-container;
 }
 
-.register-confirm__heading {
-  @extend %page-heading;
-}
-
-.register-confirm__instruction {
-  @extend %font-text-1;
-  margin: 1rem 0;
-}
-
 .register-confirm__complete-registration-button {
   @extend %form__button--submit;
 

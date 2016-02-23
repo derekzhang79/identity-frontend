@@ -1,15 +1,3 @@
-.register__heading {
-  @extend %page-heading;
-}
-
-.register__standfirst {
-  @extend %page-standfirst;
-}
-
-.register__standfirst-paragraph {
-  margin: 0 0 0.8rem;
-}
-
 .register__section {
   background: #e7e7e7;
 }

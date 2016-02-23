@@ -13,10 +13,6 @@
 }
 
 
-.signin__heading {
-  @extend %page-heading;
-}
-
 .signin__section {
   background: #e7e7e7;
 }

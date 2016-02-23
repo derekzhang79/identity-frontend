@@ -69,7 +69,7 @@ body > section:last-of-type {
   }
 }
 
-%page-heading {
+.page-heading {
   @extend %font-heading-0;
   @extend %content-container;
   color: #333;
@@ -87,7 +87,7 @@ body > section:last-of-type {
 /**
  * Page standfirst - section and paragraph under the page-heading
  */
-%page-standfirst {
+.page-standfirst {
   @extend %font-sub-heading-0;
   @extend %content-container;
   color: #767676;
@@ -95,18 +95,17 @@ body > section:last-of-type {
   @media (--viewport-min-tablet) {
     @extend %font-sub-heading-1;
   }
+
+  & .page-standfirst__paragraph {
+    margin: 0 0 0.8rem;
+  }
 }
 
 @import "components/header/_header.css";
 @import "components/footer/_footer.css";
 
-.content {
-  @extend %page-block;
-  background-color: #fff;
-  padding: 2rem;
-  flex-grow: 1;
-  flex-shrink: 0;
-  width: 100%;
+.page-content {
+  @extend %content-container;
 }
 
 a {

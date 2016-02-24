@@ -44,7 +44,7 @@ object AuthenticateCookiesApiRequest {
 
 
   def apply(body: AuthenticateCookiesApiRequestBody, rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): AuthenticateCookiesApiRequest = {
-    lazy val extraHeaders = ApiRequest.apiKeyHeaders
+    lazy val extraHeaders = ApiRequest.commonApiHeaders(trackingData)
     lazy val extraParams = Seq(
       "persistent" -> rememberMe.toString
     ) ++ trackingData.parameters

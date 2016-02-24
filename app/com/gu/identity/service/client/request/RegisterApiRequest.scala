@@ -29,7 +29,7 @@ object RegisterApiRequest {
           receive3rdPartyMarketing = request.receive3rdPartyMarketing
         )
       )),
-      extraHeaders = ApiRequest.apiKeyHeaders,
+      extraHeaders = ApiRequest.commonApiHeaders(trackingData),
       trackingData = trackingData
     )
   }

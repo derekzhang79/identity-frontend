@@ -1,5 +1,7 @@
 package com.gu.identity.service.client
 
+import com.gu.identity.frontend.models.TrackingData
+
 trait ApiRequest {
   val method: HttpMethod = GET
   val headers: HttpParameters = Nil
@@ -11,8 +13,14 @@ trait ApiRequest {
 trait ApiRequestBody
 
 object ApiRequest {
-  def apiKeyHeaders(implicit configuration: IdentityClientConfiguration) =
-    Iterable("X-GU-ID-Client-Access-Token" -> s"Bearer ${configuration.apiKey}")
+  def apiKeyHeader(implicit configuration: IdentityClientConfiguration) =
+    "X-GU-ID-Client-Access-Token" -> s"Bearer ${configuration.apiKey}"
+
+  def xForwardedForIpHeader(trackingData: TrackingData) =
+    trackingData.ipAddress.map("X-Forwarded-For" -> _)
+
+  def commonApiHeaders(trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Iterable[(String, String)] =
+    Iterable(Some(apiKeyHeader), xForwardedForIpHeader(trackingData)).flatten
 
   def apiEndpoint(path: String)(implicit configuration: IdentityClientConfiguration) =
     s"https://${configuration.host}/$path"

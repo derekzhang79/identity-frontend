@@ -95,6 +95,16 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       result.isLeft shouldBe true
       result.left.get shouldBe a[BadRequest]
     }
+
+    "include X-Forwarded-For header on requests" in {
+      val email = Some("test@guardian.co.uk")
+      val password = Some("god")
+
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
+
+      result shouldBe 'right
+      result.right.get.headers should contain("X-Forwarded-For" -> "127.0.0.1")
+    }
   }
 
 }

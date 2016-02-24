@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.models.UrlBuilder
+import com.gu.identity.frontend.models.{ReturnUrl, UrlBuilder}
 import com.gu.identity.frontend.models.text.RegisterConfirmationText
 import play.api.i18n.Messages
 
@@ -19,13 +19,13 @@ case class RegisterConfirmationViewModel private(
   with ViewModelResources
 
 object RegisterConfirmationViewModel {
-  def apply(configuration: Configuration, returnUrl: Option[String])(implicit messages: Messages): RegisterConfirmationViewModel = {
+  def apply(configuration: Configuration, returnUrl: ReturnUrl)(implicit messages: Messages): RegisterConfirmationViewModel = {
     val layout = LayoutViewModel(configuration)
-    val urlParams = Seq(("returnUrl" -> returnUrl.getOrElse("http://www.theguardian.com")))
+    val urlParams = Seq(("returnUrl" -> returnUrl.url))
 
     RegisterConfirmationViewModel(
       layout = layout,
-      returnUrl = returnUrl.getOrElse("http://www.theguardian.com"),
+      returnUrl = returnUrl.url,
       registerConfirmationPageText = RegisterConfirmationText(),
       resetPasswordUrl = UrlBuilder("https://profile.theguardian.com/reset",urlParams),
       signOutUrl = UrlBuilder("https://profile.theguardian.com/signout",urlParams),

@@ -2,6 +2,8 @@ package com.gu.identity.frontend.logging
 import akka.actor._
 import play.api.Logger
 
+import scala.concurrent.{ExecutionContext, Future}
+
 trait MetricsLoggingActor {
 
   def logSuccessfulRegister(): Unit = {
@@ -11,12 +13,17 @@ trait MetricsLoggingActor {
   def logSuccessfulSignin(): Unit = {
     MetricsLoggingActor.logSuccessfulSignin()
   }
+
+  def terminateActor()(implicit executionContext: ExecutionContext): Future[Unit] = {
+    MetricsLoggingActor.terminateActor().map(_ => ())
+  }
 }
 
 private sealed trait Message {}
 
 private object SignIn extends Message
 private object Register extends Message
+private object Terminate extends Message
 
 private object MetricsLoggingActor {
   private val system = ActorSystem()
@@ -28,6 +35,11 @@ private object MetricsLoggingActor {
 
   def logSuccessfulSignin(): Unit = {
     successfulActionLogger ! SignIn
+  }
+
+  def terminateActor(): Future[Terminated] = {
+    successfulActionLogger ! PoisonPill
+    system.terminate()
   }
 }
 

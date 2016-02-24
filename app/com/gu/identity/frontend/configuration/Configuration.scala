@@ -95,7 +95,6 @@ object Configuration {
         new ProfileCredentialsProvider(),
         new InstanceProfileCredentialsProvider
       )
-      provider.getCredentials
       provider
     }
 

@@ -1,5 +1,10 @@
 package com.gu.identity.frontend.configuration
 
+import com.amazonaws.ClientConfiguration
+import com.amazonaws.auth._
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.regions.Region
+import com.amazonaws.regions.Regions._
 import play.api.{Configuration => PlayConfiguration}
 
 
@@ -82,4 +87,27 @@ object Configuration {
     underlying = PlayConfiguration.empty
   )
 
+  object AWSConfig {
+    val credentials: AWSCredentialsProvider = {
+      val provider = new AWSCredentialsProviderChain(
+        new EnvironmentVariableCredentialsProvider(),
+        new SystemPropertiesCredentialsProvider(),
+        new ProfileCredentialsProvider(),
+        new InstanceProfileCredentialsProvider
+      )
+      provider
+    }
+
+    val clientConfiguration: ClientConfiguration = new ClientConfiguration()
+
+    val region: Region = {
+      val defaultRegion: Region = Region.getRegion(EU_WEST_1)
+      Option(getCurrentRegion()).getOrElse(defaultRegion)
+    }
+
+  }
+
+  object Environment {
+    lazy val stage = System.getProperty("stage", "DEV")
+  }
 }

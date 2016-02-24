@@ -99,6 +99,14 @@ body > section:last-of-type {
   & .page-standfirst__paragraph {
     margin: 0 0 0.8rem;
   }
+
+  .page-heading + & {
+    margin-top: -1.6rem;
+
+    @media (--viewport-min-tablet) {
+      margin-top: -2.8rem;
+    }
+  }
 }
 
 @import "components/header/_header.css";

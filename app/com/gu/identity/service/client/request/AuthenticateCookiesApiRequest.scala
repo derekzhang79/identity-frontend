@@ -4,9 +4,9 @@ import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.service.client._
 
 
-case class AuthenticateCookiesRequest private(
+case class AuthenticateCookiesApiRequest private(
     url: String,
-    override val body: Option[AuthenticateCookiesRequestBody],
+    override val body: Option[AuthenticateCookiesApiRequestBody],
     private val extraHeaders: HttpParameters = Nil,
     private val extraParameters: HttpParameters = Nil)
   extends ApiRequest {
@@ -16,9 +16,9 @@ case class AuthenticateCookiesRequest private(
   override val parameters = Seq("format" -> "cookies") ++ extraParameters
 }
 
-case class AuthenticateCookiesRequestBody(email: String, password: String) extends ApiRequestBody
+case class AuthenticateCookiesApiRequestBody(email: String, password: String) extends ApiRequestBody
 
-object AuthenticateCookiesRequest {
+object AuthenticateCookiesApiRequest {
   private val emailRegex = "^.+@.+$".r
 
   private def isValidEmail(email: String): Boolean =
@@ -32,10 +32,10 @@ object AuthenticateCookiesRequest {
     ApiRequest.apiEndpoint("auth")
 
 
-  def apply(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Either[BadRequest, AuthenticateCookiesRequest] =
+  def apply(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Either[BadRequest, AuthenticateCookiesApiRequest] =
     (email, password) match {
       case (Some(e), Some(p)) if isValidEmail(e) && isValidPassword(p) => Right {
-        apply(AuthenticateCookiesRequestBody(e, p), rememberMe, trackingData)
+        apply(AuthenticateCookiesApiRequestBody(e, p), rememberMe, trackingData)
       }
       case _ => Left {
         BadRequest("Invalid request")
@@ -43,13 +43,13 @@ object AuthenticateCookiesRequest {
     }
 
 
-  def apply(body: AuthenticateCookiesRequestBody, rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): AuthenticateCookiesRequest = {
+  def apply(body: AuthenticateCookiesApiRequestBody, rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): AuthenticateCookiesApiRequest = {
     lazy val extraHeaders = ApiRequest.apiKeyHeaders
     lazy val extraParams = Seq(
       "persistent" -> rememberMe.toString
     ) ++ trackingData.parameters
 
-    AuthenticateCookiesRequest(endpoint, Some(body), extraHeaders, extraParams)
+    AuthenticateCookiesApiRequest(endpoint, Some(body), extraHeaders, extraParams)
   }
 
 }

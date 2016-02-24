@@ -53,7 +53,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
 
   def handleRequestBody(body: ApiRequestBody): String = body match {
     case b: RegisterRequestBody => Json.stringify(Json.toJson(b))
-    case AuthenticateCookiesRequestBody(email, password) => encodeBody("email" -> email, "password" -> password)
+    case AuthenticateCookiesApiRequestBody(email, password) => encodeBody("email" -> email, "password" -> password)
   }
 
   private def encodeBody(params: (String, String)*) = {
@@ -67,7 +67,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
       handleErrorResponse(response)
     }
 
-    case r: AuthenticateCookiesRequest =>
+    case r: AuthenticateCookiesApiRequest =>
       response.json.asOpt[AuthenticationCookiesResponse]
         .map(Right.apply)
         .getOrElse {

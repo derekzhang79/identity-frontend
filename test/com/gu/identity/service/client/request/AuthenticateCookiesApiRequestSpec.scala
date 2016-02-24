@@ -6,7 +6,7 @@ import org.scalatest.mock.MockitoSugar
 import org.scalatest.{Matchers, WordSpec}
 
 
-class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with MockitoSugar {
+class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with MockitoSugar {
 
   val handler = mock[IdentityClientRequestHandler]
 
@@ -26,7 +26,7 @@ class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with Mockito
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
 
       result.isRight shouldBe true
       result.right.get.body.get.email should equal (email.get)
@@ -38,7 +38,7 @@ class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with Mockito
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesRequest(email, password, rememberMe = true, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = true, trackingData)
 
       result.isRight shouldBe true
       result.right.get.parameters should contain("persistent" -> "true")
@@ -48,7 +48,7 @@ class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with Mockito
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesRequest(email, password, rememberMe = true, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = true, trackingData)
 
       result.isRight shouldBe true
       val params = result.right.get.parameters
@@ -59,7 +59,7 @@ class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with Mockito
       val email = Some("me@")
       val password = Some("god")
 
-      val result = AuthenticateCookiesRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[BadRequest]
@@ -70,7 +70,7 @@ class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with Mockito
       val email = Some("@blah.com")
       val password = Some("god")
 
-      val result = AuthenticateCookiesRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[BadRequest]
@@ -80,7 +80,7 @@ class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with Mockito
       val email = Some("")
       val password = Some("god")
 
-      val result = AuthenticateCookiesRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[BadRequest]
@@ -90,7 +90,7 @@ class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with Mockito
       val email = Some("me@guardian.co.uk")
       val password = Some("")
 
-      val result = AuthenticateCookiesRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[BadRequest]

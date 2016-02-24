@@ -18,7 +18,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val email = "test@guardian.co.uk"
       val password = "some%thing"
 
-      val requestBody = AuthenticateCookiesRequestBody(email, password)
+      val requestBody = AuthenticateCookiesApiRequestBody(email, password)
       val result = handler.handleRequestBody(requestBody)
 
       result should equal ("email=test%40guardian.co.uk&password=some%25thing")

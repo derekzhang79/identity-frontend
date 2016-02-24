@@ -11,6 +11,8 @@ sealed trait ApiRequest {
   val body: Option[ApiRequestBody] = None
 }
 
+sealed trait ApiRequestBody
+
 object ApiRequest {
   def apiKeyHeaders(implicit configuration: IdentityClientConfiguration) =
     Iterable("X-GU-ID-Client-Access-Token" -> s"Bearer ${configuration.apiKey}")
@@ -25,11 +27,16 @@ object ApiRequest {
   }
 }
 
-case class AuthenticateCookiesRequest(url: String, email: String, password: String, rememberMe: Boolean, trackingData: TrackingData, extraHeaders: HttpParameters = Nil) extends ApiRequest {
+case class AuthenticateCookiesRequest private(
+    url: String,
+    override val body: Option[AuthenticateCookiesRequestBody],
+    private val extraHeaders: HttpParameters = Nil,
+    private val extraParameters: HttpParameters = Nil)
+extends ApiRequest {
+
   override val method = POST
   override val headers = Seq("Content-Type" -> "application/x-www-form-urlencoded") ++ extraHeaders
-  override val parameters = Seq("format" -> "cookies", "persistent" -> rememberMe.toString) ++ trackingData.parameters
-  override val body = Some(AuthenticateCookiesRequestBody(email, password))
+  override val parameters = Seq("format" -> "cookies") ++ extraParameters
 }
 
 case class AuthenticateCookiesRequestBody(email: String, password: String) extends ApiRequestBody
@@ -43,15 +50,32 @@ object AuthenticateCookiesRequest {
   private def isValidPassword(password: String): Boolean =
     password.nonEmpty
 
-  def from(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Either[BadRequest, AuthenticateCookiesRequest] =
+
+  def endpoint(implicit configuration: IdentityClientConfiguration) =
+    ApiRequest.apiEndpoint("auth")
+
+
+  def apply(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Either[BadRequest, AuthenticateCookiesRequest] =
     (email, password) match {
-      case (Some(e), Some(p)) if isValidEmail(e) && isValidPassword(p) => Right(AuthenticateCookiesRequest(ApiRequest.apiEndpoint("auth"), e, p, rememberMe, trackingData, ApiRequest.apiKeyHeaders))
-      case _ => Left(BadRequest("Invalid request"))
+      case (Some(e), Some(p)) if isValidEmail(e) && isValidPassword(p) => Right {
+        apply(AuthenticateCookiesRequestBody(e, p), rememberMe, trackingData)
+      }
+      case _ => Left {
+        BadRequest("Invalid request")
+      }
     }
 
-}
 
-sealed trait ApiRequestBody
+  def apply(body: AuthenticateCookiesRequestBody, rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): AuthenticateCookiesRequest = {
+    lazy val extraHeaders = ApiRequest.apiKeyHeaders
+    lazy val extraParams = Seq(
+      "persistent" -> rememberMe.toString
+    ) ++ trackingData.parameters
+
+    AuthenticateCookiesRequest(endpoint, Some(body), extraHeaders, extraParams)
+  }
+
+}
 
 case class RegisterApiRequest(url: String, extraHeaders: HttpParameters = Nil, trackingData: TrackingData, override val body: Option[ApiRequestBody]) extends ApiRequest {
   override val method = POST

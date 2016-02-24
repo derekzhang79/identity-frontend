@@ -1,8 +1,9 @@
-package com.gu.identity.service.client
+package com.gu.identity.service.client.request
 
 import com.gu.identity.frontend.models.TrackingData
-import org.scalatest.{Matchers, WordSpec}
+import com.gu.identity.service.client.{BadRequest, IdentityClientConfiguration, IdentityClientRequestHandler}
 import org.scalatest.mock.MockitoSugar
+import org.scalatest.{Matchers, WordSpec}
 
 
 class AuthenticateCookiesRequestSpec extends WordSpec with Matchers with MockitoSugar {

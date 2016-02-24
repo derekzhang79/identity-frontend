@@ -4,6 +4,7 @@ import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.RegisterRequest
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 import com.gu.identity.service.client._
+import com.gu.identity.service.client.request.RegisterApiRequest
 import org.joda.time.{DateTime, Seconds}
 import play.api.mvc.{Cookie => PlayCookie}
 

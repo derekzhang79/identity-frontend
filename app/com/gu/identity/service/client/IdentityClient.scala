@@ -1,6 +1,7 @@
 package com.gu.identity.service.client
 
 import com.gu.identity.frontend.models.TrackingData
+import com.gu.identity.service.client.request.{RegisterApiRequest, AuthenticateCookiesRequest}
 
 import scala.concurrent.{ExecutionContext, Future}
 

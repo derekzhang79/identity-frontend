@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.services
 
-import com.gu.identity.service.client._
+import com.gu.identity.service.client.request._
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{OptionValues, Matchers, WordSpec}
 import play.api.libs.json.Json

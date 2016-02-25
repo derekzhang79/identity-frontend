@@ -11,7 +11,7 @@ GET        /register                      com.gu.identity.frontend.controllers.A
 
 GET        /register/confirm              com.gu.identity.frontend.controllers.Application.confirm(returnUrl: Option[String] ?= None)
 
-GET        /agree                         com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.confirm
+GET        /agree/:group                  com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.confirm(group: String)
 
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 

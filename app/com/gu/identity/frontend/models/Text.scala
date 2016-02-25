@@ -43,18 +43,4 @@ object Text {
       )
     }
   }
-
-  object FooterText {
-    def toMap(implicit messages: Messages): Map[String, String] = {
-      Map(
-        "help" -> messages("footer.help"),
-        "terms" -> messages("footer.terms"),
-        "contact" -> messages("footer.contact"),
-        "privacy" -> messages("footer.privacy"),
-        "techFeedback" -> messages("footer.techfeedback"),
-        "cookies" -> messages("footer.cookies"),
-        "copyright" -> messages("footer.copyright")
-      )
-    }
-  }
 }

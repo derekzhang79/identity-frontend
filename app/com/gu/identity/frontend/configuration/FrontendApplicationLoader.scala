@@ -3,7 +3,7 @@ package com.gu.identity.frontend.configuration
 import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.errors.ErrorHandler
-import com.gu.identity.frontend.filters.{SecurityHeadersFilter, Filters}
+import com.gu.identity.frontend.filters.{HtmlCompressorFilter, SecurityHeadersFilter, Filters}
 import com.gu.identity.frontend.logging.MetricsLoggingActor
 import com.gu.identity.frontend.services.{GoogleRecaptchaServiceHandler, IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import com.gu.identity.service.client.IdentityClient
@@ -15,7 +15,6 @@ import router.Routes
 import play.api.libs.ws.ning.NingWSComponents
 import play.api.{Mode, Logger, BuiltInComponentsFromContext, ApplicationLoader}
 import play.api.ApplicationLoader.Context
-import com.mohiva.play.htmlcompressor.DefaultHTMLCompressorFilter
 import play.api.libs.concurrent.Execution.defaultContext
 
 class FrontendApplicationLoader extends ApplicationLoader {
@@ -47,7 +46,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   override lazy val httpFilters = new Filters(new SecurityHeadersFilter(
     frontendConfiguration),
     new GzipFilter(),
-    new DefaultHTMLCompressorFilter(configuration, environment)
+    HtmlCompressorFilter(configuration, environment)
   ).filters
 
   override lazy val httpErrorHandler = new ErrorHandler(frontendConfiguration, messagesApi, environment, sourceMapper, Some(router))

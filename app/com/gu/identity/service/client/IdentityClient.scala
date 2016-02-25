@@ -1,19 +1,19 @@
 package com.gu.identity.service.client
 
 import com.gu.identity.frontend.models.TrackingData
-import org.joda.time.DateTime
+import com.gu.identity.service.client.request._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class IdentityClient extends Logging {
 
   def authenticateCookies(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] =
-    AuthenticateCookiesRequest.from(email, password, rememberMe, trackingData) match {
+    AuthenticateCookiesApiRequest(email, password, rememberMe, trackingData) match {
       case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(Seq(err)))
     }
 
-  def authenticateCookies(request: AuthenticateCookiesRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] =
+  def authenticateCookies(request: AuthenticateCookiesApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityCookie]]] =
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
       case Right(AuthenticationCookiesResponse(cookies)) =>

@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.services
 
-import com.gu.identity.service.client._
+import com.gu.identity.service.client.request._
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{OptionValues, Matchers, WordSpec}
 import play.api.libs.json.Json
@@ -18,7 +18,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val email = "test@guardian.co.uk"
       val password = "some%thing"
 
-      val requestBody = AuthenticateCookiesRequestBody(email, password)
+      val requestBody = AuthenticateCookiesApiRequestBody(email, password)
       val result = handler.handleRequestBody(requestBody)
 
       result should equal ("email=test%40guardian.co.uk&password=some%25thing")

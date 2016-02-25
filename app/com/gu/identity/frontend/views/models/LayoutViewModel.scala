@@ -2,7 +2,8 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.ClientID
-import com.gu.identity.frontend.models.Text.{FooterText, HeaderText, LayoutText}
+import com.gu.identity.frontend.models.Text.{HeaderText, LayoutText}
+import com.gu.identity.frontend.models.text.FooterText
 import com.gu.identity.frontend.mvt
 import com.gu.identity.frontend.mvt.{ActiveMultiVariantTests, MultiVariantTests, MultiVariantTest}
 import play.api.i18n.Messages
@@ -32,7 +33,7 @@ case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
 case class LayoutViewModel(
     text: Map[String,String],
     headerText: Map[String, String],
-    footerText: Map[String, String],
+    footerText: FooterText,
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product],
     favicons: Seq[Favicon] = Favicons(),
@@ -113,7 +114,7 @@ object LayoutViewModel {
     LayoutViewModel(
       text = LayoutText.toMap,
       headerText = HeaderText.toMap,
-      footerText = FooterText.toMap,
+      footerText = FooterText(),
       resources = resources,
       indirectResources = BaseLayoutViewModel.indirectResources,
       skin = skin)

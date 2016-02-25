@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.models.text
 
+import org.joda.time.DateTime
 import play.api.i18n.Messages
 
 case class FooterText private(
@@ -12,6 +13,8 @@ case class FooterText private(
     copyright: String)
 
 object FooterText {
+  lazy val currentYear: String = new DateTime().year().getAsText
+
   def apply()(implicit messages: Messages): FooterText =
     FooterText(
       help = messages("footer.help"),
@@ -20,6 +23,6 @@ object FooterText {
       privacy = messages("footer.privacy"),
       techFeedback = messages("footer.techfeedback"),
       cookies = messages("footer.cookies"),
-      copyright = messages("footer.copyright")
+      copyright = messages("footer.copyright", currentYear)
     )
 }

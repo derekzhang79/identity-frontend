@@ -55,7 +55,7 @@ footer.contact=contact us
 footer.privacy=privacy policy
 footer.techfeedback=report technical issue
 footer.cookies=cookie policy
-footer.copyright=© 2015 Guardian News and Media Limited or its affiliated companies. All rights reserved.
+footer.copyright=© {0} Guardian News and Media Limited or its affiliated companies. All rights reserved.
 
 # com.gu.identity.frontend.models.text.RegisterConfirmationText
 registerConfirmation.pageTitle=Register

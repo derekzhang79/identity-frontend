@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.models.ClientID
 import com.gu.identity.frontend.models.Text.{FooterText, HeaderText, LayoutText}
 import com.gu.identity.frontend.mvt
 import com.gu.identity.frontend.mvt.{ActiveMultiVariantTests, MultiVariantTests, MultiVariantTest}
@@ -34,7 +35,8 @@ case class LayoutViewModel(
     footerText: Map[String, String],
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product],
-    favicons: Seq[Favicon] = Favicons())
+    favicons: Seq[Favicon] = Favicons(),
+    skin: Option[String])
   extends ViewModel
   with ViewModelResources
 
@@ -76,9 +78,19 @@ case class JavascriptRuntimeParams(activeTests: Map[String, String]) {
 object LayoutViewModel {
 
   def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel =
-    apply(configuration, Map.empty)
+    apply(configuration, Map.empty, None)
 
-  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests)(implicit messages: Messages): LayoutViewModel = {
+  def apply(configuration: Configuration, clientId: Option[ClientID])(implicit messages: Messages): LayoutViewModel =
+    apply(configuration, Map.empty, clientId)
+
+  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests)(implicit messages: Messages): LayoutViewModel =
+    apply(configuration, activeTests, None)
+
+  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, clientId: Option[ClientID])(implicit messages: Messages): LayoutViewModel = {
+
+    val skin = clientId
+      .filter(_.hasSkin)
+      .map(c => s"skin-${c.id}")
 
     val config = JavascriptConfig(
       omnitureAccount = configuration.omnitureAccount,
@@ -103,7 +115,8 @@ object LayoutViewModel {
       headerText = HeaderText.toMap,
       footerText = FooterText.toMap,
       resources = resources,
-      indirectResources = BaseLayoutViewModel.indirectResources)
+      indirectResources = BaseLayoutViewModel.indirectResources,
+      skin = skin)
   }
 }
 

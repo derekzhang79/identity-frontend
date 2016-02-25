@@ -3,8 +3,8 @@ package com.gu.identity.frontend.views
 import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.HttpError
-import com.gu.identity.frontend.models.ReturnUrl
-import com.gu.identity.frontend.mvt.{SignInV2TestVariantB, SignInV2Test, MultiVariantTestVariant, MultiVariantTest}
+import com.gu.identity.frontend.models.{ClientID, ReturnUrl}
+import com.gu.identity.frontend.mvt.{MultiVariantTestVariant, MultiVariantTest}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
 import play.api.i18n.Messages
@@ -24,7 +24,8 @@ object ViewRenderer {
       csrfToken: Option[CSRFToken],
       errorIds: Seq[String],
       returnUrl: ReturnUrl,
-      skipConfirmation: Option[Boolean])
+      skipConfirmation: Option[Boolean],
+      clientId: Option[ClientID])
       (implicit messages: Messages) = {
 
     val model = SignInViewModel(
@@ -33,14 +34,11 @@ object ViewRenderer {
       csrfToken = csrfToken,
       errors = errorIds.map(ErrorViewModel.apply),
       returnUrl = returnUrl,
-      skipConfirmation = skipConfirmation
+      skipConfirmation = skipConfirmation,
+      clientId = clientId
     )
 
-    val defaultView = "signin-page"
-    val view = activeTests.get(SignInV2Test) match {
-      case Some(SignInV2TestVariantB) => "signin-page-b"
-      case _ => defaultView
-    }
+    val view = "signin-page"
 
     renderViewModel(view, model)
   }
@@ -51,7 +49,8 @@ object ViewRenderer {
       errorIds: Seq[String],
       csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
-      skipConfirmation: Option[Boolean])
+      skipConfirmation: Option[Boolean],
+      clientId: Option[ClientID])
       (implicit messages: Messages) = {
 
     val model = RegisterViewModel(
@@ -60,15 +59,16 @@ object ViewRenderer {
       errors = errorIds.map(ErrorViewModel.apply),
       csrfToken = csrfToken,
       returnUrl = returnUrl,
-      skipConfirmation = skipConfirmation)
+      skipConfirmation = skipConfirmation,
+      clientId = clientId)
 
     renderViewModel("register-page", model)
   }
 
-  def renderRegisterConfirmation(configuration: Configuration, returnUrl: ReturnUrl)(implicit messages: Messages) = {
+  def renderRegisterConfirmation(configuration: Configuration, returnUrl: ReturnUrl, clientId: Option[ClientID])(implicit messages: Messages) = {
     renderViewModel(
       "register-confirmation-page",
-      RegisterConfirmationViewModel(configuration, returnUrl))
+      RegisterConfirmationViewModel(configuration, returnUrl, clientId))
   }
 
 

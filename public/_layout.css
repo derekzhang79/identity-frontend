@@ -1,5 +1,6 @@
 @import "components/_normalise.css";
 @import "components/_grid.css";
+@import "components/_breakpoints.css";
 @import "components/_typography.css";
 
 html {
@@ -13,55 +14,109 @@ body {
   min-height: 100%;
 }
 
+body > section:last-of-type {
+  flex-grow: 1;
+}
+
 %page-block {
   margin: 0 auto;
   box-sizing: border-box;
   padding: 0 1rem;
 
 
-  @media all and (min-width: 480px) {
+  @media (--viewport-mobile-wide) {
     padding: 0 2rem;
+    max-width: 58rem;
   }
 
-  @media all and (min-width: 980px) {
-    max-width: 980px;
+  @media (--viewport-tablet) {
+    max-width: 74rem;
+  }
+
+  @media (--viewport-desktop) {
     max-width: 98rem;
   }
 
-  @media all and (min-width: 1140px) {
-    max-width: 1140px;
+  @media (--viewport-wide) {
     max-width: 114rem;
   }
 
 }
 
+/**
+ * Off horizontally centred container of a content width of 540px
+ */
+
 %content-container {
-  max-width: 40rem;
-  margin: 0 auto;
+  @extend %page-block;
+
+  background: white;
+  width: 100%;
+
+  @media (--viewport-tablet) {
+    padding-right: 10rem;
+    padding-left: 10rem;
+  }
+
+  @media (--viewport-desktop) {
+    padding-right: 26rem;
+    padding-left: 18rem;
+  }
+
+  @media (--viewport-wide) {
+    padding-right: 34rem;
+    padding-left: 26rem;
+  }
 }
 
-%page-heading {
-  @extend %font-heading-1;
+.page-heading {
+  @extend %font-heading-0;
   @extend %content-container;
+  color: #333;
   font-weight: normal;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding-top: 0.6rem;
+  padding-bottom: 2.4rem;
+
+  @media (--viewport-min-tablet) {
+    @extend %font-heading-1;
+    padding-bottom: 3.6rem;
+  }
+}
+
+
+/**
+ * Page standfirst - section and paragraph under the page-heading
+ */
+.page-standfirst {
+  @extend %font-sub-heading-0;
+  @extend %content-container;
+  color: #767676;
+
+  @media (--viewport-min-tablet) {
+    @extend %font-sub-heading-1;
+  }
+
+  & .page-standfirst__paragraph {
+    margin: 0 0 0.8rem;
+  }
+
+  .page-heading + & {
+    margin-top: -2.4rem;
+
+    @media (--viewport-min-tablet) {
+      margin-top: -3.6rem;
+    }
+  }
 }
 
 @import "components/header/_header.css";
 @import "components/footer/_footer.css";
 
-.content {
-  @extend %page-block;
-  background-color: #fff;
-  padding: 2rem;
-  flex-grow: 1;
-  flex-shrink: 0;
-  width: 100%;
+.page-content {
+  @extend %content-container;
 }
 
-a,
-.link {
+a {
   color: #005689;
   cursor: pointer;
   text-decoration: none;
@@ -69,15 +124,18 @@ a,
   &:hover {
     text-decoration: underline;
   }
+}
 
-  .content & {
-    border-bottom: 1px solid #dcdcdc;
-    transition: border-color 0.15s ease-out;
+/** Global style for links in the body text */
 
-    &:hover,
-    &:focus {
-      text-decoration: none;
-      border-color: #6e99b3;
-    }
+.link {
+  @extend a;
+  border-bottom: 1px solid #dcdcdc;
+  transition: border-color 0.15s ease-out;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    border-color: #6e99b3;
   }
 }

@@ -2,11 +2,23 @@
 
 {{# partial "content" }}
 
-  <h1 class="register__heading">{{ registerPageText.title }}</h1>
+  <h1 class="page-heading">{{ registerPageText.title }}</h1>
 
-  {{> components/oauth-cta/_oauth-cta }}
+  {{# showStandfirst }}
+    <section class="page-standfirst">
+      <p class="page-standfirst__paragraph">{{ registerPageText.standfirst }}</p>
+    </section>
+  {{/ showStandfirst }}
 
-  {{> components/register-form/_register-form }}
+  <section class="register__section">
+    {{> components/oauth-cta/_oauth-cta }}
+
+    {{> components/register-form/_register-form }}
+  </section>
+
+  <section class="register__cta-section">
+    <p class="register__cta--sign-in">{{ registerPageText.signInCta }} <a class="register__cta-link--sign-in" href="{{ links.signIn }}">{{ registerPageText.signIn }}</a></p>
+  </section>
 
   {{> components/terms/_terms }}
 

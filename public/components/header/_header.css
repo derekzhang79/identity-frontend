@@ -1,5 +1,10 @@
 @import "../logo/_logo.css";
 
+:root {
+  --c-back-link-dark: #333;
+  --c-back-link-light: #fff;
+}
+
 .header {
   background: #005689;
 }
@@ -26,39 +31,58 @@
   text-indent: -1000rem;
 }
 
-.header__back-link {
-  @extend %font-text-2;
-  color: #fff;
-  line-height: 4.8rem;
+@custom-selector :--header__back-button .header__back-link::before;
+@custom-selector :--header__back-button--active .header__back-link:focus::before, .header__back-link:hover::before;
 
-  &::before {
-    content: "";
-    background-image: inline("arrow-back.svg");
-    background-repeat: no-repeat;
-    background-position: center center;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 100%;
-    display: inline-block;
-    height: 3.2rem;
-    width: 3.2rem;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-  }
+/**
+ * Pseudo-element for the back-button (arrow)
+ */
+:--header__back-button {
+  content: "";
+  background: inline("arrow-back-light.svg") center center no-repeat;
+  border: 1px solid color(var(--c-back-link-light) alpha(30%));
+  border-radius: 100%;
+  display: inline-block;
+  height: 3.2rem;
+  width: 3.2rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+:--header__back-button--active {
+  border-color: var(--c-back-link-light);
+}
+
+
+.header__back-link {
+  @extend %font-text-1;
+  color: var(--c-back-link-light);
+  line-height: 4.8rem;
 
   &:hover,
   &:focus {
     text-decoration: none;
-
-    &::before {
-      border-color: #fff;
-    }
 
     .header__back-link-text {
       opacity: 1;
       text-decoration: underline;
     }
   }
+}
 
+@define-mixin header__back-link--dark {
+  .header__back-link {
+    color: var(--c-back-link-dark);
+  }
+
+  :--header__back-button {
+    background-image: inline("arrow-back-dark.svg");
+    border: 1px solid color(var(--c-back-link-dark) alpha(30%));
+  }
+
+  :--header__back-button--active {
+    border-color: var(--c-back-link-dark);
+  }
 }
 
 .header__back-link-text {

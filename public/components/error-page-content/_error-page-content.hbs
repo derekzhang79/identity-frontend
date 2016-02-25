@@ -1,9 +1,11 @@
-<div class="error-content">
-  <h1 class="error-content__heading">{{ text.title }}</h1>
+<h1 class="page-heading">{{ text.title }}</h1>
 
-  <p class="error-content__desc">{{ text.description }}</p>
+<section class="page-standfirst">
+  <p class="page-standfirst__paragraph">{{ text.description }}</p>
+</section>
 
+<section class="page-content">
   {{# text.details }}
     <p class="error-content__details">{{ text.details }}</p>
   {{/text.details}}
-</div>
+</section>

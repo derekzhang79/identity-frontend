@@ -6,10 +6,10 @@
 /** Form colours **/
 
 :root {
-  --c-form-prelude: #989898;
+  --c-form-prelude: #333;
   --c-form-fieldset-border: #eee;
-  --c-form-error: #dd4b39;
-  --c-form-field-border: #989898;
+  --c-form-error: #d61d00;
+  --c-form-field-border: #ddd;
   --c-form-field-border--focus: #6e99b3;
   --c-form-button--submit: #005689;
 }
@@ -18,9 +18,11 @@
 /** Form prelude - the "or" text before a form **/
 
 %form__prelude {
-  @extend %font-text-1;
+  @extend %font-text-3;
   color: var(--c-form-prelude);
-  margin: 0 0 0.5rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 1.2rem 0;
   text-align: center;
 }
 
@@ -29,18 +31,20 @@
 
 %form__fieldset {
   border: none;
-  border-top: 1px solid var(--c-form-fieldset-border);
-  border-bottom: 1px solid var(--c-form-fieldset-border);
   margin: 0;
-  padding: 1rem 0;
+  padding: 0;
 }
 
 
 /** Form error **/
 
 %form__error {
-  @extend %font-text-3;
+  @extend %font-text-2;
   color: var(--c-form-error);
+  background: transparent inline("status-alert.svg") left top no-repeat;
+  margin: 0 0 1.8rem 0;
+  padding: 0 0 0 2.8rem;
+  line-height: 2.2rem;
 }
 
 
@@ -48,7 +52,7 @@
 
 %form__control {
   @extend %row;
-  margin: 1rem 0;
+  margin: 0;
 }
 
 
@@ -56,6 +60,7 @@
 
 %form__label {
   @extend %font-text-2;
+  color: #333;
   display: block;
   font-weight: normal;
   cursor: pointer;
@@ -74,17 +79,18 @@
 
 %form__button--submit {
   @extend %font-text-sans-2;
-  background-color: var(--c-form-button--submit);
+  background: var(--c-form-button--submit) inline("arrow-white-right.svg") center right no-repeat;
   border: 0;
   border-radius: 15px;
   color: white;
   display: block;
   text-align: left;
-  padding: 1rem 1rem 0.8rem 2rem;
-  width: 100%;
+  padding: 0.8rem 4rem 0.8rem 1.6rem;
 
-  &:focus {
-    box-shadow: 0 0 2px 2px color(var(--c-form-button--submit) a(0.5));
+  &:focus,
+  &:hover {
+    box-shadow: 0 0 2px 2px color(var(--c-form-button--submit) alpha(50%));
+    background-color: color(var(--c-form-button--submit) lightness(- 10%));
     outline: none;
   }
 }
@@ -93,21 +99,33 @@
 /** Form fields **/
 
 %form__text-field {
-  @extend %font-text-sans-2;
+  @extend %font-text-sans-3;
   box-sizing: border-box;
   display: block;
   background-color: #fff;
   border: 1px solid var(--c-form-field-border);
   color: #000;
-  padding: 5px 15px;
+  padding: 7px 15px;
   border-radius: 15px;
-  margin: 5px 0;
+  margin: 0.2rem 0;
   width: 100%;
 
   &:focus {
-    box-shadow: 0 0 2px 2px color(var(--c-form-field-border--focus) a(0.5));
-    border-color: var(--c-form-field-border--focus);
+    box-shadow: 0 0 2px 2px color(var(--c-form-field-border) alpha(50%) lightness(- 10%));
+    border-color: color(var(--c-form-field-border) lightness(- 10%));
     outline: none;
+  }
+
+  /* override default invalid field styles, only show on focus */
+
+  &:invalid {
+    border-color: var(--c-form-field-border);
+    box-shadow: none;
+
+    &:focus {
+      border-color: var(--c-form-error);
+      box-shadow: 0 0 2px 2px color(var(--c-form-error) alpha(50%) lightness(+ 20%));
+    }
   }
 }
 
@@ -115,11 +133,13 @@
 /** Form checkboxes **/
 
 %form__fancy-checkbox {
-  @extend %font-text-sans-2;
+  @extend %font-text-sans-3;
   display: block;
+  content: " ";
   position: absolute;
   top: -0.2rem;
   left: 0;
+  background: white center center no-repeat;
   border: 1px solid var(--c-form-field-border);
   border-radius: 3px;
   box-sizing: border-box;
@@ -135,6 +155,11 @@
   line-height: 20px;
 }
 
+%form__fancy-checkbox--checked {
+  @extend %form__fancy-checkbox;
+  background-image: inline("tick.svg");
+}
+
 @define-mixin formCheckbox $labelClass {
 
   /* Only display nicer checkbox when browser supports CSS3 - should fallback nicely */
@@ -146,17 +171,15 @@
   }
 
   &:focus + $labelClass::before {
-    border-color: var(--c-form-field-border--focus);
-    box-shadow: 0 0 2px 2px color(var(--c-form-field-border--focus) a(0.5));
+    border-color: color(var(--c-form-field-border) lightness(- 10%));
+    box-shadow: 0 0 2px 2px color(var(--c-form-field-border) alpha(50%) lightness(- 10%));
   }
 
   &:checked + $labelClass::before {
-    @extend %form__fancy-checkbox;
-    content: "\2713"; /* tick character */
+    @extend %form__fancy-checkbox--checked;
   }
 
   &:not(:checked) + $labelClass::before {
     @extend %form__fancy-checkbox;
-    content: "\00A0";
   }
 }

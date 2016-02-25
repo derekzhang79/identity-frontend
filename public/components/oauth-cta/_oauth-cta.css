@@ -3,23 +3,30 @@
  */
 
 .oauth {
-  @extend %row;
-  margin: 0 auto 2rem;
-  max-width: 40rem;
+  @extend %content-container;
+  background: #f1f1f1;
+  padding-top: 2rem;
+  padding-bottom: 0.6rem;
 }
 
 %oauth__cta {
-  @extend %font-text-sans-1;
-  color: black;
+  @extend %font-text-sans-2;
+  color: #333;
   display: block;
   text-decoration: none;
-  padding: 1rem 1rem 0.8rem 3.8rem;
-  margin: 0 0 1.5rem;
-  border: 1px solid #dcdcdc;
+  padding: 0.8rem 1rem 0.6rem 3.8rem;
+  margin: 0 0 1.2rem;
+  border: 1px solid #fff;
   border-radius: 1.5rem;
   background-color: white;
   background-repeat: no-repeat;
   background-position: 1rem center;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    border-color: #dcdcdc;
+  }
 }
 
 .oauth__cta--google {

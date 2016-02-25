@@ -27,7 +27,7 @@
 }
 
 .colophon__list {
-  @extend %font-text-sans-1;
+  @extend %font-text-sans-2;
   @mixin footer-columns 2;
 
   @media all and (min-width: 600px) {

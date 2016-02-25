@@ -33,11 +33,11 @@
 /* stylelint-enable */
 
 
-/* GuardianTextEgyptianWeb */
+/* GuardianEgyptianWeb */
+@mixin guFontFace GuardianEgyptianWeb, ascii, GuardianEgyptianWeb-Regular;
 
+/* GuardianTextEgyptianWeb */
 @mixin guFontFace GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Regular;
 
-
 /* GuardianTextSansWeb */
-
 @mixin guFontFace GuardianTextSansWeb, all, GuardianTextSansWeb-Regular;

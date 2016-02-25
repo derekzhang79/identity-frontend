@@ -18,6 +18,7 @@ signin.signup=Sign up
 # com.gu.identity.frontend.models.text.RegisterText
 register.pageTitle=Register
 register.title=Create your Guardian account
+register.standfirst=Guardian Members support our independence and our award-winning journalism. Please create an account below to join us. We really appreciate your support.
 register.divideText=or
 register.name=Name
 register.firstName=First name

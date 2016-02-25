@@ -101,10 +101,10 @@ body > section:last-of-type {
   }
 
   .page-heading + & {
-    margin-top: -1.6rem;
+    margin-top: -2.4rem;
 
     @media (--viewport-min-tablet) {
-      margin-top: -2.8rem;
+      margin-top: -3.6rem;
     }
   }
 }

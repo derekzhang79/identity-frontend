@@ -41,6 +41,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val googleRecaptchaCheck = new GoogleRecaptchaCheck(googleRecaptchaServiceHandler)
   lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaCheck, frontendConfiguration)
   lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
+  lazy val resetPasswordController = new ResetPasswordAction(identityService)
   lazy val assets = new controllers.Assets(httpErrorHandler)
   lazy val redirects = new Redirects
 
@@ -53,11 +54,11 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   override lazy val httpErrorHandler = new ErrorHandler(frontendConfiguration, messagesApi, environment, sourceMapper, Some(router))
 
   // Makes sure the logback.xml file is being found in DEV environments
-  if(environment.mode == Mode.Dev) {
+  if (environment.mode == Mode.Dev) {
     Logger.configure(environment)
   }
 
   applicationLifecycle.addStopHook(() => terminateActor()(defaultContext))
 
-  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signinController, registerController, cspReporterController, healthcheckController, manifestController, assets, redirects)
+  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signinController, registerController, resetPasswordController, cspReporterController, healthcheckController, manifestController, assets, redirects)
 }

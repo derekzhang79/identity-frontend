@@ -77,31 +77,6 @@ sealed trait MultiVariantTestVariant {
 }
 
 
-
-case object SignInV2Test extends MultiVariantTest {
-  val name = "SignInV2"
-  val audience = 1.0
-  val audienceOffset = 0.0
-  val isServerSide = true
-  val variants = Seq(SignInV2TestVariantA)
-  override val defaultVariant = Some(SignInV2TestVariantA)
-}
-
-case object SignInV2TestVariantA extends MultiVariantTestVariant { val id = "A" }
-
-
-case object RegisterV2Test extends MultiVariantTest {
-  val name = "RegisterV2"
-  val audience = 1.0
-  val audienceOffset = 0.0
-  val isServerSide = true
-  val variants = Seq(RegisterTestVariantA)
-  override val defaultVariant = Some(RegisterTestVariantA)
-}
-
-case object RegisterTestVariantA extends MultiVariantTestVariant { val id = "A" }
-
-
 case object RegisterMembershipStandfirstTest extends MultiVariantTest {
   val name = "RegisterMembershipStandfirst"
   val audience = 0.5
@@ -126,7 +101,7 @@ private[mvt] trait RuntimeMultiVariantTestVariant extends MultiVariantTestVarian
 
 object MultiVariantTests {
 
-  def all: Set[MultiVariantTest] = Set(SignInV2Test, RegisterV2Test, RegisterMembershipStandfirstTest)
+  def all: Set[MultiVariantTest] = Set(RegisterMembershipStandfirstTest)
 
   def allActive = all.filter(_.active)
 

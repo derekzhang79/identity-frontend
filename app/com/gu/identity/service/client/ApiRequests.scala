@@ -42,23 +42,6 @@ object ApiRequest {
   }
 }
 
-case class AssignGroupRequest(url: String, override val headers: HttpParameters) extends ApiRequest {
-  override val method: HttpMethod = POST
-}
-
-object AssignGroupRequest {
-
-  private def getPathComponents(group: String) = Seq("user", "me", "group", group)
-
-  def apply(group: String, cookie: Cookie)(implicit configuration: IdentityClientConfiguration): AssignGroupRequest = {
-    val pathComponents = getPathComponents(group)
-    new AssignGroupRequest(
-      ApiRequest.apiEndpoint(pathComponents: _*),
-      Seq(ApiRequest.apiKeyHeader) ++ ApiRequest.apiSecureCookieUserHeader(cookie)
-    )
-  }
-}
-
 case class UserRequest(url: String, override val headers: HttpParameters) extends ApiRequest
 
 object UserRequest {

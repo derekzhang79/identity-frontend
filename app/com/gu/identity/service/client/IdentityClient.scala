@@ -41,7 +41,7 @@ class IdentityClient extends Logging {
     }
   }
 
-  def assignGroupCode(request: AssignGroupRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, AssignGroupResponse]] = {
+  def assignGroupCode(request: AssignGroupApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, AssignGroupResponse]] = {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
       case Right(response: AssignGroupResponse) => Right(response)

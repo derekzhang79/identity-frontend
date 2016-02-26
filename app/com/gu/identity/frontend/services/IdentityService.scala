@@ -3,7 +3,7 @@ package com.gu.identity.frontend.services
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.RegisterRequest
 import com.gu.identity.frontend.controllers.ResetPasswordData
-import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
+import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 import com.gu.identity.service.client._
 import com.gu.identity.service.client.request.{SendResetPasswordEmailApiRequest, RegisterApiRequest}
 import org.joda.time.{DateTime, Seconds}
@@ -19,9 +19,9 @@ import scala.concurrent.{ExecutionContext, Future}
  */
 trait IdentityService {
   def authenticate(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
-  def registerThenSignIn(request:RegisterRequest, clientIp: ClientRegistrationIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
-  def register(request: RegisterRequest, clientIp: ClientRegistrationIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]]
-  def sendResetPasswordEmail(data: ResetPasswordData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], SendResetPasswordEmailResponse ]]
+  def registerThenSignIn(request:RegisterRequest, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]]
+  def register(request: RegisterRequest, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]]
+  def sendResetPasswordEmail(data: ResetPasswordData, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], SendResetPasswordEmailResponse ]]
 }
 
 
@@ -47,7 +47,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
     }
   }
 
-  override def register(request: RegisterRequest, clientIp: ClientRegistrationIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]] = {
+  override def register(request: RegisterRequest, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], RegisterResponseUser]] = {
     val apiRequest = RegisterApiRequest(request, clientIp, trackingData)
     client.register(apiRequest).map {
       case Left(errors) => Left {
@@ -61,7 +61,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
   }
 
   override def registerThenSignIn(request: RegisterRequest,
-                                  clientIp: ClientRegistrationIp,
+                                  clientIp: ClientIp,
                                   trackingData: TrackingData
                                  )(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], Seq[PlayCookie]]] = {
     register(request, clientIp, trackingData).flatMap{
@@ -78,8 +78,8 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
     }
   }
 
-  override def sendResetPasswordEmail(resetPasswordData: ResetPasswordData)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], SendResetPasswordEmailResponse ]] = {
-    val apiRequest = SendResetPasswordEmailApiRequest(resetPasswordData)
+  override def sendResetPasswordEmail(resetPasswordData: ResetPasswordData, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], SendResetPasswordEmailResponse ]] = {
+    val apiRequest = SendResetPasswordEmailApiRequest(resetPasswordData, clientIp)
     client.sendResetPasswordEmail(apiRequest).map {
       case Left(errors) => Left {
         errors.map {

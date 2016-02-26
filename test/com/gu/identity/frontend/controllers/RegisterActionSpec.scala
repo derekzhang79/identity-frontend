@@ -4,7 +4,7 @@ import java.net.{URLDecoder, URLEncoder}
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFConfig
-import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
+import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
 import com.gu.identity.frontend.utils.UrlDecoder
 import org.mockito.Matchers.{any => argAny, _}
@@ -60,7 +60,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
   }
 
   def fakeRegisterThenSignIn(mockIdentityService: IdentityService) =
-    mockIdentityService.registerThenSignIn(anyObject(), argAny[ClientRegistrationIp], argAny[TrackingData])(argAny[ExecutionContext])
+    mockIdentityService.registerThenSignIn(anyObject(), argAny[ClientIp], argAny[TrackingData])(argAny[ExecutionContext])
 
   "POST /register" should {
 

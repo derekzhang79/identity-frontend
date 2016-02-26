@@ -2,10 +2,10 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
 import com.gu.identity.frontend.logging.Logging
-import com.gu.identity.frontend.models.UrlBuilder
+import com.gu.identity.frontend.models.{ClientIp, UrlBuilder}
 import com.gu.identity.frontend.services.{ServiceError, ServiceGatewayError, IdentityService}
 
-import play.api.data.{Form}
+import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.{RequestHeader, Controller}
 
@@ -31,7 +31,8 @@ case class ResetPasswordAction(identityService: IdentityService,
         Future.successful(NoCache(SeeOther(routes.Application.reset(errors).url)))
       },
       successForm => {
-        identityService.sendResetPasswordEmail(successForm).map {
+        val ip = ClientIp(request)
+        identityService.sendResetPasswordEmail(successForm, ip).map {
           case Left(errors) => {
             redirectToResetPageWithErrors(errors)
           }

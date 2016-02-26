@@ -2,7 +2,7 @@
 
 {{# partial "content" }}
 
-  <h1 class="page-heading">{{ registerPageText.title }}</h1>
+  <h1 class="page-heading{{# showStandfirst }}--with-standfirst{{/ showStandfirst }}">{{ registerPageText.title }}</h1>
 
   {{# showStandfirst }}
     <section class="page-standfirst">

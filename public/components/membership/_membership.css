@@ -22,13 +22,15 @@
   .register-form__submit-button,
   .signin-form__submit-button,
   .register-confirm__complete-registration-button {
-
     background-color: var(--c-members-button);
 
     &:focus,
     &:hover {
-      box-shadow: 0 0 2px 2px color(var(--c-members-button) alpha(50%));
       background-color: color(var(--c-members-button) lightness(- 10%));
+    }
+
+    &:focus {
+      box-shadow: 0 0 2px 2px color(var(--c-members-button) alpha(50%));
     }
   }
 

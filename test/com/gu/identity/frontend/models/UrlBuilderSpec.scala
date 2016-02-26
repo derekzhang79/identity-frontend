@@ -40,4 +40,12 @@ class UrlBuilderSpec extends FlatSpec with Matchers{
     UrlBuilder("/register/confirm", returnUrl) should be("/register/confirm")
   }
 
+  it should "Include group code in return url when one is provided" in {
+    val baseUrl = "/register/confirm"
+    val returnUrl = ReturnUrl(Some("http://www.theguardian.com/uk"), Configuration.testConfiguration)
+    val group = Some("ABC")
+
+    val result = UrlBuilder(baseUrl, returnUrl, skipConfirmation = None, clientId = None, group = group)
+    result should be("/register/confirm?returnUrl=http%3A%2F%2Fwww.theguardian.com%2Fuk&group=ABC")
+  }
 }

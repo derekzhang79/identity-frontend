@@ -70,8 +70,8 @@ object SignInViewModel {
       skipConfirmation = skipConfirmation.getOrElse(false),
       clientId = clientId,
 
-      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId),
-      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId),
+      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group),
+      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group),
 
       recaptchaModel = recaptchaModel,
 

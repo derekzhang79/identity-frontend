@@ -17,6 +17,7 @@ case class RegisterText private(
     passwordHelp: String,
     signIn: String,
     signInCta: String,
+    standfirst: String,
     title: String,
     username: String,
     usernameHelp: String)
@@ -38,6 +39,7 @@ object RegisterText {
       passwordHelp = messages("register.passwordHelp"),
       signIn = messages("register.signIn"),
       signInCta = messages("register.signInCta"),
+      standfirst = messages("register.standfirst"),
       title = messages("register.title"),
       username = messages("register.username"),
       usernameHelp = messages("register.usernameHelp")

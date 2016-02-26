@@ -1,11 +1,11 @@
 package com.gu.identity.frontend.configuration
 
 import com.gu.identity.cookie.{IdentityKeys, IdentityCookieDecoder}
-import com.gu.identity.frontend.authentication.AuthenticationService
 import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.errors.ErrorHandler
-import com.gu.identity.frontend.filters.{SecurityHeadersFilter, Filters}
+import com.gu.identity.frontend.filters.{HtmlCompressorFilter, SecurityHeadersFilter, Filters}
+import com.gu.identity.frontend.logging.MetricsLoggingActor
 import com.gu.identity.frontend.services.{GoogleRecaptchaServiceHandler, IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import com.gu.identity.service.client.IdentityClient
 import jp.co.bizreach.play2handlebars.HandlebarsPlugin
@@ -16,7 +16,7 @@ import router.Routes
 import play.api.libs.ws.ning.NingWSComponents
 import play.api.{Mode, Logger, BuiltInComponentsFromContext, ApplicationLoader}
 import play.api.ApplicationLoader.Context
-import com.mohiva.play.htmlcompressor.DefaultHTMLCompressorFilter
+import play.api.libs.concurrent.Execution.defaultContext
 
 class FrontendApplicationLoader extends ApplicationLoader {
   def load(context: Context) = {
@@ -26,7 +26,7 @@ class FrontendApplicationLoader extends ApplicationLoader {
   }
 }
 
-class ApplicationComponents(context: Context) extends BuiltInComponentsFromContext(context) with NingWSComponents with I18nComponents {
+class ApplicationComponents(context: Context) extends BuiltInComponentsFromContext(context) with NingWSComponents with I18nComponents with MetricsLoggingActor {
   lazy val frontendConfiguration = Configuration(configuration)
   lazy val csrfConfig = CSRFConfig(configuration)
 
@@ -42,7 +42,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val cspReporterController = new CSPViolationReporter()
   lazy val googleRecaptchaServiceHandler = new GoogleRecaptchaServiceHandler(wsClient, frontendConfiguration)
   lazy val googleRecaptchaCheck = new GoogleRecaptchaCheck(googleRecaptchaServiceHandler)
-  lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaCheck)
+  lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaCheck, frontendConfiguration)
   lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
   lazy val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(identityService, identityCookieDecoder)
   lazy val assets = new controllers.Assets(httpErrorHandler)
@@ -50,7 +50,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   override lazy val httpFilters = new Filters(new SecurityHeadersFilter(
     frontendConfiguration),
     new GzipFilter(),
-    new DefaultHTMLCompressorFilter(configuration, environment)
+    HtmlCompressorFilter(configuration, environment)
   ).filters
 
   override lazy val httpErrorHandler = new ErrorHandler(frontendConfiguration, messagesApi, environment, sourceMapper, Some(router))
@@ -59,6 +59,8 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   if(environment.mode == Mode.Dev) {
     Logger.configure(environment)
   }
+
+  applicationLifecycle.addStopHook(() => terminateActor()(defaultContext))
 
   override lazy val router: Router = new Routes(httpErrorHandler, applicationController, thirdPartyTsAndCsController, signinController, registerController, cspReporterController, healthcheckController, manifestController, assets)
 }

@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
+import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.text.{OAuthText, OAuthRegistrationText, OAuthSignInText}
 import play.api.i18n.Messages
 
@@ -21,17 +21,18 @@ object OAuthProviderViewModel {
       configuration: Configuration,
       text: OAuthText,
       returnUrl: ReturnUrl,
-      skipConfirmation: Option[Boolean])
+      skipConfirmation: Option[Boolean],
+      clientId: Option[ClientID])
       (implicit messages: Messages): OAuthProviderViewModel = {
 
     val baseUrl = configuration.identityFederationApiHost + provider.authPath
 
     provider match {
       case GoogleOAuth =>
-        OAuthProviderViewModel(provider.id, text.google, UrlBuilder(baseUrl, returnUrl, skipConfirmation))
+        OAuthProviderViewModel(provider.id, text.google, UrlBuilder(baseUrl, returnUrl, skipConfirmation, clientId))
 
       case FacebookOAuth =>
-        OAuthProviderViewModel(provider.id, text.facebook, UrlBuilder(baseUrl, returnUrl, skipConfirmation))
+        OAuthProviderViewModel(provider.id, text.facebook, UrlBuilder(baseUrl, returnUrl, skipConfirmation, clientId))
     }
   }
 
@@ -63,11 +64,11 @@ case class OAuthSignInViewModel private(
 
 object OAuthSignInViewModel {
 
-  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): OAuthSignInViewModel = {
+  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID])(implicit messages: Messages): OAuthSignInViewModel = {
     val text = OAuthSignInText()
 
     OAuthSignInViewModel(
-      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation))
+      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation, clientId))
     )
   }
 
@@ -80,11 +81,11 @@ case class OAuthRegistrationViewModel(
 
 object OAuthRegistrationViewModel {
 
-  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean])(implicit messages: Messages): OAuthRegistrationViewModel = {
+  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID])(implicit messages: Messages): OAuthRegistrationViewModel = {
     val text = OAuthRegistrationText()
 
     OAuthRegistrationViewModel(
-      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation))
+      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation, clientId))
     )
   }
 

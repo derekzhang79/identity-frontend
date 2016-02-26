@@ -3,6 +3,7 @@ package com.gu.identity.frontend.services
 import com.gu.identity.frontend.logging.{Logging => ApplicationLogging}
 import com.gu.identity.service.client._
 import com.gu.identity.service.client.models._
+import com.gu.identity.service.client.request._
 import play.api.libs.json.Json
 import play.api.libs.json.Reads.jodaDateReads
 import play.api.libs.ws.{WSResponse, WSClient}
@@ -25,6 +26,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
 
   implicit val registerRequestBodyPublicFieldsFormat = Json.format[RegisterRequestBodyPublicFields]
   implicit val registerRequestBodyPrivateFieldsFormat = Json.format[RegisterRequestBodyPrivateFields]
+  implicit val registerRequestBodyStatusFieldsFormat = Json.format[RegisterRequestBodyStatusFields]
   implicit val registerRequestBodyFormat = Json.format[RegisterRequestBody]
 
   implicit val registerResponseUserGroupsFormat = Json.format[RegisterResponseUserGroups]
@@ -61,8 +63,8 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         }
 
   def handleRequestBody(body: ApiRequestBody): String = body match {
-    case b:RegisterRequestBody => Json.stringify(Json.toJson(b))
-    case AuthenticateCookiesRequestBody(email, password) => encodeBody("email" -> email, "password" -> password)
+    case b: RegisterRequestBody => Json.stringify(Json.toJson(b))
+    case AuthenticateCookiesApiRequestBody(email, password) => encodeBody("email" -> email, "password" -> password)
   }
 
   private def encodeBody(params: (String, String)*) = {
@@ -76,7 +78,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
       handleErrorResponse(response)
     }
 
-    case r: AuthenticateCookiesRequest =>
+    case r: AuthenticateCookiesApiRequest =>
       response.json.asOpt[AuthenticationCookiesResponse]
         .map(Right.apply)
         .getOrElse(handleUnexpectedResponse(response))

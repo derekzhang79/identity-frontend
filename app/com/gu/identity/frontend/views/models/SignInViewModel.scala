@@ -1,10 +1,11 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTest, Configuration}
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
-import com.gu.identity.frontend.models.{UrlBuilder, ReturnUrl}
+import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.Text._
+import com.gu.identity.frontend.mvt.ActiveMultiVariantTests
 import play.api.i18n.Messages
 
 case class SignInViewModel private(
@@ -22,6 +23,8 @@ case class SignInViewModel private(
     csrfToken: Option[CSRFToken],
     returnUrl: String = "",
     skipConfirmation: Boolean = false,
+    clientId: Option[ClientID],
+
     registerUrl: String = "",
     forgotPasswordUrl: String = "",
 
@@ -37,15 +40,15 @@ case class SignInViewModel private(
 object SignInViewModel {
   def apply(
    configuration: Configuration,
-   activeTests: Iterable[(MultiVariantTest,
-   MultiVariantTestVariant)],
+   activeTests: ActiveMultiVariantTests,
    csrfToken: Option[CSRFToken],
    errors: Seq[ErrorViewModel],
    returnUrl: ReturnUrl,
    skipConfirmation: Option[Boolean],
+   clientId: Option[ClientID],
    group: Option[String])(implicit messages: Messages): SignInViewModel = {
 
-    val layout = LayoutViewModel(configuration, activeTests)
+    val layout = LayoutViewModel(configuration, activeTests, clientId)
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
       getRecaptchaModel(configuration, isError = !errors.isEmpty, recaptchaEnabled = configuration.recaptchaEnabled)
 
@@ -54,7 +57,7 @@ object SignInViewModel {
     SignInViewModel(
       layout = layout,
 
-      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation),
+      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId),
 
       signInPageText = SignInPageText.toMap,
       terms = Terms.getTermsModel(group),
@@ -65,8 +68,10 @@ object SignInViewModel {
       csrfToken = csrfToken,
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
-      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation),
-      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation),
+      clientId = clientId,
+
+      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId),
+      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId),
 
       recaptchaModel = recaptchaModel,
 

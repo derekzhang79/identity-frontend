@@ -29,7 +29,7 @@ class ApiRequestSpec extends PlaySpec with MockitoSugar{
     }
 
     "return a iterable containing the X-GU-ID-Client-Access-Token and value for this token" in {
-      val headers = ApiRequest.apiKeyHeaders
+      val headers = Seq(ApiRequest.apiKeyHeader)
       headers.head equals ("X-GU-ID-Client-Access-Token","Bearer ##key##")
     }
 

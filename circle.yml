@@ -3,7 +3,7 @@ machine:
   java:
     version: oraclejdk8
   node:
-    version: 4.1.0
+    version: 4.2.2
   environment:
     SBT_OPTS: "-Xmx1384M -XX:MaxMetaspaceSize=384M -XX:+UseCompressedOops"
 

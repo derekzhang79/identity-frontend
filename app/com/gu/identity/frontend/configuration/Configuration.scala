@@ -1,5 +1,10 @@
 package com.gu.identity.frontend.configuration
 
+import com.amazonaws.ClientConfiguration
+import com.amazonaws.auth._
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.regions.Region
+import com.amazonaws.regions.Regions._
 import play.api.{Configuration => PlayConfiguration}
 
 
@@ -10,6 +15,8 @@ case class Configuration(
   identityApiHost: String,
 
   identityProfileBaseUrl: String,
+
+  identityDefaultReturnUrl: String,
 
   identityFederationApiHost: String,
 
@@ -44,6 +51,8 @@ object Configuration {
 
       identityProfileBaseUrl = getString("identity.frontend.baseUrl"),
 
+      identityDefaultReturnUrl = getString("identity.frontend.defaultReturnUrl"),
+
       omnitureAccount = getString("omniture.account"),
 
       googleRecaptchaSiteKey = getString("google.recaptcha.site"),
@@ -69,6 +78,8 @@ object Configuration {
 
     identityProfileBaseUrl = "https://profile.code.dev-theguardian.com",
 
+    identityDefaultReturnUrl = "http://www.theguardian.com",
+
     omnitureAccount = "--test-omniture-account--",
 
     googleRecaptchaSiteKey = "--recaptcha-key--",
@@ -82,4 +93,27 @@ object Configuration {
     underlying = PlayConfiguration.empty
   )
 
+  object AWSConfig {
+    val credentials: AWSCredentialsProvider = {
+      val provider = new AWSCredentialsProviderChain(
+        new EnvironmentVariableCredentialsProvider(),
+        new SystemPropertiesCredentialsProvider(),
+        new ProfileCredentialsProvider(),
+        new InstanceProfileCredentialsProvider
+      )
+      provider
+    }
+
+    val clientConfiguration: ClientConfiguration = new ClientConfiguration()
+
+    val region: Region = {
+      val defaultRegion: Region = Region.getRegion(EU_WEST_1)
+      Option(getCurrentRegion()).getOrElse(defaultRegion)
+    }
+
+  }
+
+  object Environment {
+    lazy val stage = System.getProperty("stage", "DEV")
+  }
 }

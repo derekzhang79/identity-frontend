@@ -1,7 +1,11 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.configuration.{MultiVariantTestVariant, MultiVariantTests, MultiVariantTest, Configuration}
-import com.gu.identity.frontend.models.Text.{FooterText, HeaderText, LayoutText}
+import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.models.ClientID
+import com.gu.identity.frontend.models.Text.{HeaderText, LayoutText}
+import com.gu.identity.frontend.models.text.FooterText
+import com.gu.identity.frontend.mvt
+import com.gu.identity.frontend.mvt.{ActiveMultiVariantTests, MultiVariantTests, MultiVariantTest}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 
@@ -29,10 +33,11 @@ case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
 case class LayoutViewModel(
     text: Map[String,String],
     headerText: Map[String, String],
-    footerText: Map[String, String],
+    footerText: FooterText,
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product],
-    favicons: Seq[Favicon] = Favicons())
+    favicons: Seq[Favicon] = Favicons(),
+    skin: Option[String])
   extends ViewModel
   with ViewModelResources
 
@@ -43,7 +48,7 @@ case class LayoutViewModel(
 case class JavascriptConfig(omnitureAccount: String, mvtTests: Seq[MultiVariantTest]) {
   self =>
 
-  import MultiVariantTests.Implicits._
+  import mvt.Implicits._
   implicit val jsonWrites = Json.writes[JavascriptConfig]
 
   def toJSON =
@@ -74,9 +79,19 @@ case class JavascriptRuntimeParams(activeTests: Map[String, String]) {
 object LayoutViewModel {
 
   def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel =
-    apply(configuration, Map.empty)
+    apply(configuration, Map.empty, None)
 
-  def apply(configuration: Configuration, activeTests: Iterable[(MultiVariantTest, MultiVariantTestVariant)])(implicit messages: Messages): LayoutViewModel = {
+  def apply(configuration: Configuration, clientId: Option[ClientID])(implicit messages: Messages): LayoutViewModel =
+    apply(configuration, Map.empty, clientId)
+
+  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests)(implicit messages: Messages): LayoutViewModel =
+    apply(configuration, activeTests, None)
+
+  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, clientId: Option[ClientID])(implicit messages: Messages): LayoutViewModel = {
+
+    val skin = clientId
+      .filter(_.hasSkin)
+      .map(c => s"skin-${c.id}")
 
     val config = JavascriptConfig(
       omnitureAccount = configuration.omnitureAccount,
@@ -86,7 +101,7 @@ object LayoutViewModel {
     val runtime = activeTests.headOption.map { _ =>
       JavascriptRuntimeParams(activeTests.map {
         case (key, value) => key.name -> value.id
-      }.toMap)
+      })
     }
 
     val inlinedJSConfig = InlinedJSONResource("id_config", config.toJSONString)
@@ -99,9 +114,10 @@ object LayoutViewModel {
     LayoutViewModel(
       text = LayoutText.toMap,
       headerText = HeaderText.toMap,
-      footerText = FooterText.toMap,
+      footerText = FooterText(),
       resources = resources,
-      indirectResources = BaseLayoutViewModel.indirectResources)
+      indirectResources = BaseLayoutViewModel.indirectResources,
+      skin = skin)
   }
 }
 

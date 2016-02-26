@@ -91,6 +91,10 @@ object FrontendBuildPlugin extends AutoPlugin {
       val filesRead = (sourceDir ** fileFilter).get
       val filesWritten = (targetDir ** fileFilter).get
 
+      // Note:  Use the sbt command `last` to see debug logs
+      log.debug(s"[${op.id}] Success. Read files: ${filesRead.mkString(", ")}")
+      log.debug(s"[${op.id}] Success. Wrote files: ${filesWritten.mkString(", ")}")
+
       OpSuccess(filesRead.toSet, filesWritten.toSet)
     }
 

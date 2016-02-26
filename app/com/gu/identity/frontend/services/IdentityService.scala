@@ -5,7 +5,7 @@ import com.gu.identity.frontend.controllers.RegisterRequest
 import com.gu.identity.frontend.models.{ClientRegistrationIp, TrackingData}
 import com.gu.identity.service.client.models.User
 import com.gu.identity.service.client._
-import com.gu.identity.service.client.request.{AssignGroupApiRequest, RegisterApiRequest}
+import com.gu.identity.service.client.request.{UserApiRequest, AssignGroupApiRequest, RegisterApiRequest}
 import org.joda.time.{DateTime, Seconds}
 import play.api.mvc.{Cookie => PlayCookie}
 
@@ -80,7 +80,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
   }
 
   override def getUser(cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceError], User]] = {
-    val apiRequest = UserRequest(cookie)
+    val apiRequest = UserApiRequest(cookie)
     client.getUser(apiRequest).map {
       case Left(errors) => Left {
         errors.map {

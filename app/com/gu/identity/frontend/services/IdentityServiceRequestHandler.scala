@@ -88,7 +88,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         .map(Right.apply)
         .getOrElse(handleUnexpectedResponse(response))
 
-    case r: UserRequest =>
+    case r: UserApiRequest =>
       response.json.asOpt[UserResponse]
         .map(Right.apply)
         .getOrElse(handleUnexpectedResponse(response))

@@ -32,7 +32,7 @@ class IdentityClient extends Logging {
     }
   }
 
-  def getUser(request: UserRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, User]] = {
+  def getUser(request: UserApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, User]] = {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
       case Right(UserResponse(user)) =>

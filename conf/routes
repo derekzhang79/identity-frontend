@@ -3,8 +3,6 @@
 # ~~~~
 
 # Home page
-GET        /                              com.gu.identity.frontend.controllers.Application.index
-
 GET        /signin                        com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None)
 
 GET        /register                      com.gu.identity.frontend.controllers.Application.register(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, group: Option[String] ?= None, clientId: Option[String] ?= None)
@@ -22,3 +20,9 @@ GET        /management/healthcheck        com.gu.identity.frontend.controllers.H
 GET        /management/manifest           com.gu.identity.frontend.controllers.Manifest.manifest
 
 GET        /static/*file                  controllers.Assets.versioned(path="/public", file: Asset)
+
+
+# Redirects
+GET        /                              com.gu.identity.frontend.controllers.Redirects.indexRedirect
+GET        /signin/                       com.gu.identity.frontend.controllers.Redirects.signInPageTrailingSlash
+GET        /register/                     com.gu.identity.frontend.controllers.Redirects.registerPageTrailingSlash

@@ -2,6 +2,7 @@ package com.gu.identity.frontend.controllers
 
 import akka.util.Timeout
 import com.gu.identity.cookie.IdentityCookieDecoder
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.services.{ServiceGatewayError, IdentityService}
 import com.gu.identity.service.client.models.{UserGroup, User}
 import org.mockito.Matchers.{any => argAny}
@@ -18,8 +19,9 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val mockIdentityCookieDecoder = mock[IdentityCookieDecoder]
+    val testConfig = Configuration.testConfiguration
 
-    val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(mockIdentityService, mockIdentityCookieDecoder)
+    val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(mockIdentityService, mockIdentityCookieDecoder, testConfig)
   }
 
 
@@ -61,7 +63,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
           }
         }
 
-      val future = thirdPartyTsAndCsController.checkForGroupMembership(groupCode, cookie)
+      val future = thirdPartyTsAndCsController.checkUserForGroupMembership(groupCode, cookie)
       val result = Await.result(future, timeout.duration)
 
       result mustEqual Right(true)
@@ -84,7 +86,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
           }
         }
 
-      val future = thirdPartyTsAndCsController.checkForGroupMembership(groupCode, cookie)
+      val future = thirdPartyTsAndCsController.checkUserForGroupMembership(groupCode, cookie)
       val result = Await.result(future, timeout.duration)
 
       result mustEqual Right(false)
@@ -107,7 +109,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
           }
         }
 
-      val future = thirdPartyTsAndCsController.checkForGroupMembership(groupCode, cookie)
+      val future = thirdPartyTsAndCsController.checkUserForGroupMembership(groupCode, cookie)
       val result = Await.result(future, timeout.duration)
 
       result mustEqual Left(Seq(ServiceGatewayError("Unexpected 500 error")))

@@ -35,7 +35,7 @@ case class ResetPasswordAction(identityService: IdentityService,
           case Left(errors) => {
             redirectToResetPageWithErrors(errors)
           }
-          case Right(okResponse) => NoCache(SeeOther(routes.Application.reset().url))
+          case Right(okResponse) => NoCache(SeeOther(routes.Application.resetPasswordEmailSent().url))
         }.recover {
           case NonFatal(ex) => {
             logger.error(s"Unexpected error when trying to send reset password email: ${ex.getMessage}" )

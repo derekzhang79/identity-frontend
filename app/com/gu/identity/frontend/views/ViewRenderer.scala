@@ -84,6 +84,13 @@ object ViewRenderer {
     renderViewModel("reset-password-page", model)
   }
 
+  def renderResetPasswordEmailSent(configuration: Configuration)(implicit messages: Messages) = {
+    val model = ResetPasswordEmailSentViewModel(
+      configuration = configuration
+    )
+    renderViewModel("reset-password-email-sent-page", model)
+  }
+
 
   def renderErrorPage(configuration: Configuration, error: HttpError, resultGenerator: Html => Result)(implicit messages: Messages) =
     renderViewModel("error-page", ErrorPageViewModel(configuration, error), resultGenerator)

@@ -79,6 +79,11 @@ resetPassword.userHelpTitle=Something else?
 resetPassword.userHelpEmail=Email Userhelp
 resetPassword.userHelpContent=who will be able to help you.
 
+# com.gu.identity.frontend.models.text.ResetPasswordEmailSentText
+resetPasswordEmailSent.pageTitle=Check your email
+resetPasswordEmailSent.title=Now check your email
+resetPasswordEmailSent.instructions1=Follow the link in the email to reset your password.
+resetPasswordEmailSent.instructions2=Reset password links are valid for 30 minutes.
 
 errors.badRequest.pageTitle=Bad request: {0}
 errors.badRequest.title=Bad request: {0}

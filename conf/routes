@@ -11,6 +11,8 @@ GET        /register/confirm              com.gu.identity.frontend.controllers.A
 
 GET        /reset                         com.gu.identity.frontend.controllers.Application.reset(error: Seq[String] ?= Seq.empty)
 
+GET        /reset/email-sent              com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent
+
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 
 POST       /actions/register              com.gu.identity.frontend.controllers.RegisterAction.register

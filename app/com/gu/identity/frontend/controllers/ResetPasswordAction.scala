@@ -49,7 +49,7 @@ case class ResetPasswordAction(identityService: IdentityService,
 
   private def redirectToResetPageWithErrors(errors: Seq[ServiceError]) = {
     val idErrors = errors.map {
-      error => "error" -> error.message
+      error => "error" -> ("reset-password-" + error.id)
     }
     NoCache(SeeOther(UrlBuilder(routes.Application.reset(), idErrors)))
   }

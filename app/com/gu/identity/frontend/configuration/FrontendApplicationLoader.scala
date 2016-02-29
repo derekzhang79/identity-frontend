@@ -44,7 +44,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val googleRecaptchaCheck = new GoogleRecaptchaCheck(googleRecaptchaServiceHandler)
   lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaCheck, frontendConfiguration)
   lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
-  lazy val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(identityService, identityCookieDecoder, frontendConfiguration)
+  lazy val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(identityService, identityCookieDecoder, frontendConfiguration, messagesApi)
   lazy val assets = new controllers.Assets(httpErrorHandler)
 
   override lazy val httpFilters = new Filters(new SecurityHeadersFilter(

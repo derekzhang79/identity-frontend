@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views
 import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.HttpError
-import com.gu.identity.frontend.models.{ClientID, ReturnUrl}
+import com.gu.identity.frontend.models.{GroupCode, ClientID, ReturnUrl}
 import com.gu.identity.frontend.mvt.{MultiVariantTestVariant, MultiVariantTest}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
@@ -79,6 +79,10 @@ object ViewRenderer {
   def renderErrorPage(configuration: Configuration, error: HttpError, resultGenerator: Html => Result)(implicit messages: Messages) =
     renderViewModel("error-page", ErrorPageViewModel(configuration, error), resultGenerator)
 
+  def renderTsAndCs(configuration: Configuration, returnUrl: ReturnUrl, clientId: Option[ClientID], group: GroupCode)(implicit messages: Messages) = {
+    val model = TsAndCsViewModel(configuration, returnUrl, clientId, group)
+    renderViewModel("third-party-ts-and-cs-page", model)
+  }
 
   def renderViewModel(
       view: String,

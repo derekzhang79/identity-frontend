@@ -56,7 +56,7 @@ case class ResetPasswordAction(identityService: IdentityService,
 
   private def handleCSRFError(request: RequestHeader, msg: String) = Future.successful {
     logger.error(s"CSRF error during Reset password: $msg")
-    val errors = Seq("reset-error-csrf")
+    val errors = Seq("reset-password-error-csrf")
 
     SeeOther(routes.Application.signIn(errors).url)
   }

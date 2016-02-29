@@ -47,7 +47,7 @@ object RegisterViewModel {
       clientId: Option[ClientID])
       (implicit messages: Messages): RegisterViewModel = {
 
-    val layout = LayoutViewModel(configuration, activeTests, clientId)
+    val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
 
     RegisterViewModel(
       layout = layout,

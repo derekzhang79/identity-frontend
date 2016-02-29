@@ -80,15 +80,9 @@ case class JavascriptRuntimeParams(activeTests: Map[String, String]) {
 object LayoutViewModel {
 
   def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel =
-    apply(configuration, Map.empty, None)
+    apply(configuration, Map.empty, clientId = None, returnUrl = None)
 
-  def apply(configuration: Configuration, clientId: Option[ClientID])(implicit messages: Messages): LayoutViewModel =
-    apply(configuration, Map.empty, clientId)
-
-  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests)(implicit messages: Messages): LayoutViewModel =
-    apply(configuration, activeTests, None)
-
-  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, clientId: Option[ClientID])(implicit messages: Messages): LayoutViewModel = {
+  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, clientId: Option[ClientID], returnUrl: Option[ReturnUrl])(implicit messages: Messages): LayoutViewModel = {
 
     val skin = clientId
       .filter(_.hasSkin)
@@ -116,7 +110,7 @@ object LayoutViewModel {
       text = LayoutText.toMap,
       headerText = HeaderText.toMap,
       footerText = FooterText(),
-      links = LayoutLinks(configuration, clientId, None),
+      links = LayoutLinks(configuration, clientId, returnUrl),
       resources = resources,
       indirectResources = BaseLayoutViewModel.indirectResources,
       skin = skin)
@@ -137,7 +131,7 @@ object LayoutLinks {
   def apply(configuration: Configuration, clientId: Option[ClientID], returnUrl: Option[ReturnUrl]): LayoutLinks = {
     val baseUrl = "http://www.theguardian.com"
     LayoutLinks(
-      headerBack = baseUrl,
+      headerBack = returnUrl.map(_.url).getOrElse(baseUrl),
       headerLogo = baseUrl,
       footerHelp = s"$baseUrl/help/identity-faq",
       footerTerms = s"$baseUrl/help/terms-of-service",

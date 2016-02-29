@@ -17,3 +17,14 @@ managedSourceDirectories in Assets += (buildOutputDirectory in build in Assets).
 
 // Include handlebars views in resources for lookup on classpath
 unmanagedResourceDirectories in Compile += (resourceDirectory in Assets).value
+
+
+// Clean out node_modules directory as part of a `clean` task
+cleanFiles ++= (WebKeys.nodeModuleDirectories in Assets).value
+
+
+clean := {
+  val log = streams.value.log
+  log.info("Cleaned target and node_modules - next compile may take a while")
+  clean.value
+}

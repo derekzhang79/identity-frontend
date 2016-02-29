@@ -1,8 +1,10 @@
-import com.typesafe.sbt.web.Import._
+import com.typesafe.sbt.jse.JsEngineImport.JsEngineKeys.npmNodeModules
+import com.typesafe.sbt.jse.SbtJsTask
 import com.typesafe.sbt.web.Import.WebKeys._
+import com.typesafe.sbt.web.Import._
 import com.typesafe.sbt.web.incremental._
+import sbt.Keys._
 import sbt._
-import Keys._
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.control.NoStackTrace
@@ -25,6 +27,8 @@ object FrontendBuildPlugin extends AutoPlugin {
     )
   }
 
+  override def requires = SbtJsTask
+
   // Default settings for the task
   override lazy val projectSettings = inConfig(Assets) {
     Seq(
@@ -36,8 +40,19 @@ object FrontendBuildPlugin extends AutoPlugin {
       sourceDirectory in build := resourceDirectory.value,
       buildOutputDirectory in build := webTarget.value / "build",
 
-      buildCommands in build := Seq.empty
+      buildCommands in build := Seq.empty,
+
+      npmNodeModules := npmNodeModules.dependsOn(logNodeModuleInstall).value
     )
+  }
+
+  lazy val logNodeModuleInstall = Def.task[Unit] {
+    val log = (streams in Assets).value.log
+
+    val nodeModulesDir = baseDirectory.value / "node_modules"
+    if (!nodeModulesDir.exists()) {
+      log.info("Installing node.js dependencies, may take a while")
+    }
   }
 
   lazy val buildAssetsTask = Def.task {

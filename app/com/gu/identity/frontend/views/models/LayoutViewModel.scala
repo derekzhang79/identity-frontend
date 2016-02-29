@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.models.ClientID
+import com.gu.identity.frontend.models.{ReturnUrl, ClientID}
 import com.gu.identity.frontend.models.Text.{HeaderText, LayoutText}
 import com.gu.identity.frontend.models.text.FooterText
 import com.gu.identity.frontend.mvt
@@ -30,10 +30,11 @@ case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
 }
 
 
-case class LayoutViewModel(
+case class LayoutViewModel private(
     text: Map[String,String],
     headerText: Map[String, String],
     footerText: FooterText,
+    links: LayoutLinks,
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product],
     favicons: Seq[Favicon] = Favicons(),
@@ -115,9 +116,36 @@ object LayoutViewModel {
       text = LayoutText.toMap,
       headerText = HeaderText.toMap,
       footerText = FooterText(),
+      links = LayoutLinks(configuration, clientId, None),
       resources = resources,
       indirectResources = BaseLayoutViewModel.indirectResources,
       skin = skin)
+  }
+}
+
+case class LayoutLinks private(
+    headerBack: String,
+    headerLogo: String,
+    footerHelp: String,
+    footerTerms: String,
+    footerContact: String,
+    footerPrivacy: String,
+    footerFeedback: String,
+    footerCookies: String)
+
+object LayoutLinks {
+  def apply(configuration: Configuration, clientId: Option[ClientID], returnUrl: Option[ReturnUrl]): LayoutLinks = {
+    val baseUrl = "http://www.theguardian.com"
+    LayoutLinks(
+      headerBack = baseUrl,
+      headerLogo = baseUrl,
+      footerHelp = s"$baseUrl/help/identity-faq",
+      footerTerms = s"$baseUrl/help/terms-of-service",
+      footerContact = s"$baseUrl/help/contact-us",
+      footerPrivacy = s"$baseUrl/info/privacy",
+      footerFeedback = s"$baseUrl/info/tech-feedback",
+      footerCookies = s"$baseUrl/info/cookies"
+    )
   }
 }
 

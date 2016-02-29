@@ -1,23 +1,25 @@
 <footer class="footer">
   <div class="footer__inner">
     <ul class="colophon__list">
-        <li class="colophon__item"><a data-link-name="help" href="http://www.theguardian.com/help/identity-faq">
-          {{layout.footerText.help}}</a></li>
-        <li class="colophon__item"><a data-link-name="terms" href="http://www.theguardian.com/help/terms-of-service">
-          {{layout.footerText.terms}}</a></li>
-        <li class="colophon__item"><a data-link-name="uk : footer : contact us" href="http://www.theguardian.com/help/contact-us">
-          {{layout.footerText.contact}}</a>
-        </li>
-        <li class="colophon__item"><a data-link-name="privacy" href="https://www.theguardian.com/info/privacy">
-          {{layout.footerText.privacy}}</a></li>
-        <li class="colophon__item">
-            <a data-link-name="tech feedback" class="js-tech-feedback-report" href="https://www.theguardian.com/info/tech-feedback">
-              {{layout.footerText.techFeedback}}
-            </a>
-        </li>
-        <li class="colophon__item"><a data-link-name="cookie" href="https://www.theguardian.com/info/cookies">{{layout.footerText.cookies}}</a></li>
+      <li class="colophon__item">
+        <a data-link-name="help" href="{{ layout.links.footerHelp }}">{{ layout.footerText.help }}</a>
+      </li>
+      <li class="colophon__item">
+        <a data-link-name="terms" href="{{ layout.links.footerTerms }}">{{ layout.footerText.terms }}</a>
+      </li>
+      <li class="colophon__item">
+        <a data-link-name="uk : footer : contact us" href="{{ layout.links.footerContact }}">{{ layout.footerText.contact }}</a>
+      </li>
+      <li class="colophon__item">
+        <a data-link-name="privacy" href="{{ layout.links.footerPrivacy }}">{{ layout.footerText.privacy }}</a>
+      </li>
+      <li class="colophon__item">
+        <a data-link-name="tech feedback" class="js-tech-feedback-report" href="{{ layout.links.footerFeedback }}">{{ layout.footerText.techFeedback }}</a>
+      </li>
+      <li class="colophon__item">
+        <a data-link-name="cookie" href="{{ layout.links.footerCookies }}">{{ layout.footerText.cookies }}</a>
+      </li>
     </ul>
-    <p class="footer__copyright">{{layout.footerText.copyright}}</p>
+    <p class="footer__copyright">{{ layout.footerText.copyright }}</p>
   </div>
-
 </footer>

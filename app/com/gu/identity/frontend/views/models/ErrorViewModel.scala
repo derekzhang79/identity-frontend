@@ -28,7 +28,7 @@ object ErrorViewModel {
     "register-error-csrf" -> "Forgery token invalid; please try again.",
     "reset-password-error-gateway" -> "There was a problem resetting your password; please try again",
     "reset-password-error-csrf" -> "Forgery token invalid; please try again",
-    "reset-password-error-bad-request" -> "Incorrect email; please try again.",
+    "reset-password-error-bad-request" -> "There was a problem resetting your password; please try again.",
     "reset-password-error-email" -> nonEmptyField("email")
   )
 

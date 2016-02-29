@@ -5,11 +5,11 @@ import com.gu.identity.frontend.models.text.ResetPasswordEmailSentText
 import play.api.i18n.Messages
 
 case class ResetPasswordEmailSentViewModel private(
-                                           layout: LayoutViewModel,
-                                           resetPasswordEmailSentText: ResetPasswordEmailSentText,
-                                           resources: Seq[PageResource with Product],
-                                           indirectResources: Seq[PageResource with Product]
-                                           )
+    layout: LayoutViewModel,
+    resetPasswordEmailSentText: ResetPasswordEmailSentText,
+    resources: Seq[PageResource with Product],
+    indirectResources: Seq[PageResource with Product]
+  )
   extends ViewModel
   with ViewModelResources
 

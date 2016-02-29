@@ -12,10 +12,6 @@ import play.api.mvc._
 
 class Application (configuration: Configuration, val messagesApi: MessagesApi, csrfConfig: CSRFConfig) extends Controller with Logging with I18nSupport {
 
-  def index = Action {
-    Redirect(routes.Application.signIn())
-  }
-
   def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration)
     val clientIdActual = ClientID(clientId)

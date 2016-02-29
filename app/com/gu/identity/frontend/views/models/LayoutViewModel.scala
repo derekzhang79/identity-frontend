@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.models.{ReturnUrl, ClientID}
+import com.gu.identity.frontend.models.{GuardianMembersClientID, ReturnUrl, ClientID}
 import com.gu.identity.frontend.models.Text.{HeaderText, LayoutText}
 import com.gu.identity.frontend.models.text.FooterText
 import com.gu.identity.frontend.mvt
@@ -129,10 +129,11 @@ case class LayoutLinks private(
 
 object LayoutLinks {
   def apply(configuration: Configuration, clientId: Option[ClientID], returnUrl: Option[ReturnUrl]): LayoutLinks = {
-    val baseUrl = "http://www.theguardian.com"
+    val baseUrl = configuration.dotcomBaseUrl
+
     LayoutLinks(
       headerBack = returnUrl.map(_.url).getOrElse(baseUrl),
-      headerLogo = baseUrl,
+      headerLogo = logoUrl(configuration, clientId),
       footerHelp = s"$baseUrl/help/identity-faq",
       footerTerms = s"$baseUrl/help/terms-of-service",
       footerContact = s"$baseUrl/help/contact-us",
@@ -141,6 +142,13 @@ object LayoutLinks {
       footerCookies = s"$baseUrl/info/cookies"
     )
   }
+
+  private def logoUrl(configuration: Configuration, clientId: Option[ClientID]) =
+    clientId match {
+      case Some(GuardianMembersClientID) => configuration.membershipBaseUrl
+      case _ => configuration.dotcomBaseUrl
+    }
+
 }
 
 case class Favicon(filename: String, rel: String, url: String, sizes: Option[String] = None)

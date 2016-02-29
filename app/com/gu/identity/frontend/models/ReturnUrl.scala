@@ -17,24 +17,30 @@ object ReturnUrl {
   val domains = List(".theguardian.com", ".code.dev-theguardian.com", ".thegulocal.com")
   val invalidUrlPaths = List("/signin", "/register", "/register/confirm")
 
-  def apply(returnUrl: Option[String], configuration: Configuration): ReturnUrl =
-    apply(returnUrl, referer = None, configuration)
+  def apply(returnUrlParam: Option[String], configuration: Configuration): ReturnUrl =
+    apply(returnUrlParam, refererHeader = None, configuration, clientId = None)
 
-  def apply(returnUrl: Option[String], referer: Option[String], configuration: Configuration): ReturnUrl =
-    returnUrl
+  def apply(returnUrlParam: Option[String], refererHeader: Option[String], configuration: Configuration, clientId: Option[ClientID]): ReturnUrl =
+    returnUrlParam
       .flatMap(uriOpt)
-      .orElse(referer.flatMap(uriOpt))
+      .orElse(refererHeader.flatMap(uriOpt))
       .filter(validDomain)
       .filter(validUrlPath)
       .map(uri => ReturnUrl(uri))
       .getOrElse {
-        default(configuration)
+        default(configuration, clientId)
       }
 
-  def default(configuration: Configuration) = {
-    val defaultUri = uri(configuration.identityDefaultReturnUrl).getOrElse {
+  def default(configuration: Configuration, clientId: Option[ClientID]) = {
+    val url = clientId match {
+      case Some(GuardianMembersClientID) => configuration.membershipBaseUrl
+      case _ => configuration.dotcomBaseUrl
+    }
+
+    val defaultUri = uri(url).getOrElse {
       sys.error("Invalid defaultReturnUrl specified in configuration")
     }
+
     ReturnUrl(defaultUri, isDefault = true)
   }
 

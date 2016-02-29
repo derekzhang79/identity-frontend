@@ -14,12 +14,12 @@ case class BaseTsAndCsText private(
 object BaseTsAndCsText {
   def apply(title: String, serviceName: String)(implicit messages: Messages): BaseTsAndCsText = {
     BaseTsAndCsText(
-      title = "Welcome to Guardian",
-      explanationText = "By connecting your account you get access to a range of features:",
-      continueButtonText = "Continue",
-      termsText = "By proceeding, you agree to Guardian",
-      termsOfServiceLinkText = "Terms of Service",
-      privacyPolicyLinkText = "Privacy Policy"
+      title = messages("thirdPartyTerms.title", title),
+      explanationText = messages("thirdPartyTerms.explanation"),
+      continueButtonText = messages("thirdPartyTerms.continueButton"),
+      termsText = messages("thirdPartyTerms.terms", serviceName),
+      termsOfServiceLinkText = messages("thirdPartyTerms.termsOfService"),
+      privacyPolicyLinkText = messages("thirdPartyTerms.privacyPolicy")
     )
   }
 }
@@ -35,29 +35,30 @@ case class ThirdPartyTsAndCsText (
 
 object TeachersTsAndCsText {
   def apply(returnUrl: ReturnUrl)(implicit messages: Messages): ThirdPartyTsAndCsText = {
-    val name = "Teacher's Network"
+    val title = messages("thirdPartyTerms.teachersTitle")
+    val serviceName = messages("thirdPartyTerms.teachersServiceName")
     ThirdPartyTsAndCsText(
-      title = name,
-      features = Seq("Download teaching resources"),
+      title = title,
+      features = Seq(messages("thirdPartyTerms.teachersFeatures")),
       continueLink = returnUrl.url,
-      serviceName = name,
+      serviceName = serviceName,
       termsOfServiceLink = "http://teachers.theguardian.com/Terms.htm",
       privacyPolicyLink = "http://teachers.theguardian.com/privacypolicy.htm",
-      baseText = BaseTsAndCsText(name, name)
+      baseText = BaseTsAndCsText(title, serviceName)
     )
   }
 }
 
 object JobsTsAndCsText {
   def apply(returnUrl: ReturnUrl)(implicit messages: Messages): ThirdPartyTsAndCsText = {
-    val title = "Jobs"
-    val serviceName = "Jobs'"
+    val title = messages("thirdPartyTerms.jobsTitle")
+    val serviceName = messages("thirdPartyTerms.jobsServiceName")
     ThirdPartyTsAndCsText(
       title = title,
       features = Seq(
-        "Receive relevant jobs into your inbox",
-        "Upload your CV and let potential employers find you",
-        "Shortlist jobs that interest you, so that you can come back to them later"),
+        messages("thirdPartyTerms.jobsFeature1"),
+        messages("thirdPartyTerms.jobsFeature2"),
+        messages("thirdPartyTerms.jobsFeature3")),
       continueLink = returnUrl.url,
       serviceName = serviceName,
       termsOfServiceLink = "https://jobs.theguardian.com/terms-and-conditions/",

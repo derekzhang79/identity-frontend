@@ -87,3 +87,19 @@ errors.unexpected.pageTitle=Unexpected error
 errors.unexpected.title=Unexpected error: {0}
 errors.unexpected.description=Sorry - an unexpected error has occurred, please try again later.
 errors.unexpected.details=Error details: {0}
+
+# com.gu.identity.frontend.models.text.ThirdPartyTsAndCsText
+thirdPartyTerms.title=Welcome to Guardian {0}
+thirdPartyTerms.explanation=By connecting your account you get access to a range of features:
+thirdPartyTerms.continueButton=Continue
+thirdPartyTerms.terms=By proceeding, you agree to Guardian {0}
+thirdPartyTerms.termsOfService=Terms of Service
+thirdPartyTerms.privacyPolicy=Privacy Policy
+thirdPartyTerms.teachersTitle=Teacher's Network
+thirdPartyTerms.teachersServiceName=Teacher Network's
+thirdPartyTerms.teachersFeatures=Download teaching resources
+thirdPartyTerms.jobsTitle=Jobs
+thirdPartyTerms.jobsServiceName=Jobs'
+thirdPartyTerms.jobsFeature1=Receive relevant jobs into your inbox
+thirdPartyTerms.jobsFeature2=Upload your CV and let potential employers find you
+thirdPartyTerms.jobsFeature3=Shortlist jobs that interest you, so that you can come back to them later

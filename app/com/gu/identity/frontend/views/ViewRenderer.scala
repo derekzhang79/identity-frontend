@@ -74,19 +74,22 @@ object ViewRenderer {
   def renderResetPassword(
     configuration: Configuration,
     errorIds: Seq[String],
-    csrfToken: Option[CSRFToken])
+    csrfToken: Option[CSRFToken],
+    clientId: Option[ClientID])
     (implicit messages: Messages) = {
     val model = ResetPasswordViewModel(
       configuration = configuration,
       errors = errorIds.map(ErrorViewModel.apply),
-      csrfToken = csrfToken
+      csrfToken = csrfToken,
+      clientId = clientId
     )
     renderViewModel("reset-password-page", model)
   }
 
-  def renderResetPasswordEmailSent(configuration: Configuration)(implicit messages: Messages) = {
+  def renderResetPasswordEmailSent(configuration: Configuration, clientId: Option[ClientID])(implicit messages: Messages) = {
     val model = ResetPasswordEmailSentViewModel(
-      configuration = configuration
+      configuration = configuration,
+      clientId = clientId
     )
     renderViewModel("reset-password-email-sent-page", model)
   }

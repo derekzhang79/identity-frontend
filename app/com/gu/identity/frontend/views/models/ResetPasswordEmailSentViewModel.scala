@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.models.ClientID
 import com.gu.identity.frontend.models.text.ResetPasswordEmailSentText
 import play.api.i18n.Messages
 
@@ -15,8 +16,8 @@ case class ResetPasswordEmailSentViewModel private(
 
 object ResetPasswordEmailSentViewModel {
 
-  def apply(configuration: Configuration)(implicit messages: Messages): ResetPasswordEmailSentViewModel = {
-    val layout = LayoutViewModel(configuration)
+  def apply(configuration: Configuration, clientId: Option[ClientID])(implicit messages: Messages): ResetPasswordEmailSentViewModel = {
+    val layout = LayoutViewModel(configuration, clientId = clientId)
 
     ResetPasswordEmailSentViewModel(
       layout = layout,

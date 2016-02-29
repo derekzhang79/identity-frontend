@@ -3,6 +3,7 @@ package com.gu.identity.frontend.views.models
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFToken
+import com.gu.identity.frontend.models.ClientID
 import com.gu.identity.frontend.models.text.ResetPasswordText
 import play.api.i18n.Messages
 
@@ -27,8 +28,10 @@ object ResetPasswordViewModel {
   def apply(
     configuration: Configuration,
     errors: Seq[ErrorViewModel],
-    csrfToken: Option[CSRFToken])(implicit messages: Messages): ResetPasswordViewModel = {
-    val layout = LayoutViewModel(configuration)
+    csrfToken: Option[CSRFToken],
+    clientId: Option[ClientID])
+    (implicit messages: Messages): ResetPasswordViewModel = {
+    val layout = LayoutViewModel(configuration, clientId = clientId)
 
     ResetPasswordViewModel(
       layout = layout,

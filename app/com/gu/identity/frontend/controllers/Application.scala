@@ -37,14 +37,16 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     renderRegisterConfirmation(configuration, returnUrlActual, clientIdOpt)
   }
 
-  def reset(error: Seq[String]) = CSRFAddToken(csrfConfig) { req =>
+  def reset(error: Seq[String], clientId: Option[String]) = CSRFAddToken(csrfConfig) { req =>
+    val clientIdOpt = ClientID(clientId)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
 
-    renderResetPassword(configuration, error, csrfToken)
+    renderResetPassword(configuration, error, csrfToken, clientIdOpt)
   }
 
-  def resetPasswordEmailSent = Action {
-    renderResetPasswordEmailSent(configuration)
+  def resetPasswordEmailSent(clientId: Option[String]) = Action {
+    val clientIdOpt = ClientID(clientId)
+    renderResetPasswordEmailSent(configuration, clientIdOpt)
   }
 }
 

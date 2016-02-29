@@ -9,9 +9,9 @@ GET        /register                      com.gu.identity.frontend.controllers.A
 
 GET        /register/confirm              com.gu.identity.frontend.controllers.Application.confirm(returnUrl: Option[String] ?= None, clientId: Option[String] ?= None)
 
-GET        /reset                         com.gu.identity.frontend.controllers.Application.reset(error: Seq[String] ?= Seq.empty)
+GET        /reset                         com.gu.identity.frontend.controllers.Application.reset(error: Seq[String] ?= Seq.empty, clientId: Option[String] ?= None)
 
-GET        /reset/email-sent              com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent
+GET        /reset/email-sent              com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent(clientId: Option[String] ?= None)
 
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 

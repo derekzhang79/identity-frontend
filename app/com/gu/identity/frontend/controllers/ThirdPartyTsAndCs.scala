@@ -6,6 +6,8 @@ import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.{GroupCode, ClientID, ReturnUrl}
 import com.gu.identity.frontend.services.{ServiceError, IdentityService}
 import com.gu.identity.service.client.models.User
+import play.api.data.Form
+import play.api.data.Forms._
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.mvc.Security.AuthenticatedBuilder
 import play.api.mvc._
@@ -13,6 +15,8 @@ import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.views.ViewRenderer.renderTsAndCs
 
 import scala.concurrent.{Future, ExecutionContext}
+
+case class AddUserToGroupRequest(groupCode: String, returnUrl: Option[String])
 
 class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder: IdentityCookieDecoder, config: Configuration, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
 
@@ -65,35 +69,38 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
   }
 
 
-  def addToGroup() = authenticationAction.async { implicit request => {
-//    val sc_gu_uCookie = getSC_GU_UCookie(request.cookies)
-//    sc_gu_uCookie match {
-//      case Some(cookie) => {
-//        val response = identityService.assignGroupCode(group, cookie)
-//        Future.successful(Ok("ddf"))
-//      }
-//        case _ => Future(NotFound)
-//      }
-    Future(Ok("Successful post"))
-    }
-
+  def addToGroup() = authenticationAction.async { implicit request =>
+    val sc_gu_uCookie = getSC_GU_UCookie(request.cookies)
+    addUserToGroupRequestFormBody.bindFromRequest.fold(
+      errorForm => Future.successful(Ok("Error form fail")),
+      successForm => {
+        val verifiedReturnUrl = ReturnUrl(successForm.returnUrl, config)
+        sc_gu_uCookie match {
+          case Some(cookie) => {
+            val response = identityService.assignGroupCode(successForm.groupCode, cookie)
+            response.map{
+              case Left(errors) => Ok("assign to group fails")
+              case Right(response) => SeeOther(verifiedReturnUrl.url)
+            }
+          }
+          case _ => Future.successful(Ok("No cookie"))
+        }
+      }
+    )
   }
 
-//  def assignToGroup(group: String, cookie: Cookie, returnUrl: ReturnUrl) = {
-//    checkUserForGroupMembership(group, cookie).map {
-//      case Right(true) => SeeOther(returnUrl.url)
-//      case Right(false) => SeeOther(routes.ThirdPartyTsAndCs.addToGroup(group)).withCookies(cookie)
-//      case _ => {
-//        logger.info("could not check users group membership status")
-//        BadRequest
-//      }
-//    }
-//  }
-
-  def isUserInGroup(user: User, group: String):Boolean = {
+  def isUserInGroup(user: User, group: String): Boolean = {
     val usersGroups = user.userGroups
     usersGroups.map(_.packageCode == group).contains(true)
   }
 
   def getSC_GU_UCookie(cookies: Cookies): Option[Cookie] = cookies.get(CookieName.SC_GU_U.toString)
+
+  private val addUserToGroupRequestFormBody = Form(
+    mapping(
+      "groupCode" -> text,
+      "returnUrl" -> optional(text)
+    )(AddUserToGroupRequest.apply)(AddUserToGroupRequest.unapply)
+  )
+
 }

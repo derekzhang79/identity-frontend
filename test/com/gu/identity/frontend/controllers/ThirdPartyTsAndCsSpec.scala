@@ -9,6 +9,7 @@ import org.mockito.Matchers.{any => argAny}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import org.mockito.Mockito._
+import play.api.i18n.MessagesApi
 import play.api.mvc.Cookie
 import scala.concurrent.duration._
 
@@ -19,9 +20,10 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val mockIdentityCookieDecoder = mock[IdentityCookieDecoder]
+    val mockMessages = mock[MessagesApi]
     val testConfig = Configuration.testConfiguration
 
-    val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(mockIdentityService, mockIdentityCookieDecoder, testConfig)
+    val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(mockIdentityService, mockIdentityCookieDecoder, testConfig, mockMessages)
   }
 
 

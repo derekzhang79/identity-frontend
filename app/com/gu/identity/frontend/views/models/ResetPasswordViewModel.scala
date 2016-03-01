@@ -31,7 +31,7 @@ object ResetPasswordViewModel {
     csrfToken: Option[CSRFToken],
     clientId: Option[ClientID])
     (implicit messages: Messages): ResetPasswordViewModel = {
-    val layout = LayoutViewModel(configuration, clientId = clientId)
+    val layout = LayoutViewModel(configuration, clientId = clientId, returnUrl = None)
 
     ResetPasswordViewModel(
       layout = layout,

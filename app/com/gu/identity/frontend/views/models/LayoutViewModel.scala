@@ -82,6 +82,9 @@ object LayoutViewModel {
   def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel =
     apply(configuration, Map.empty, clientId = None, returnUrl = None)
 
+  def apply(configuration: Configuration, clientId: Option[ClientID], returnUrl: Option[ReturnUrl])(implicit messages: Messages): LayoutViewModel =
+    apply(configuration, activeTests = Map.empty, clientId, returnUrl)
+
   def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, clientId: Option[ClientID], returnUrl: Option[ReturnUrl])(implicit messages: Messages): LayoutViewModel = {
 
     val skin = clientId

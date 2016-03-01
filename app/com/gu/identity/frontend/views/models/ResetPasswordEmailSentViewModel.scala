@@ -17,7 +17,7 @@ case class ResetPasswordEmailSentViewModel private(
 object ResetPasswordEmailSentViewModel {
 
   def apply(configuration: Configuration, clientId: Option[ClientID])(implicit messages: Messages): ResetPasswordEmailSentViewModel = {
-    val layout = LayoutViewModel(configuration, clientId = clientId)
+    val layout = LayoutViewModel(configuration, clientId, returnUrl = None)
 
     ResetPasswordEmailSentViewModel(
       layout = layout,

@@ -2,6 +2,17 @@
   @extend %content-container;
 }
 
+.third-party-terms__features-list {
+  margin-top: 0;
+  margin-bottom: 1.8rem;
+  padding-left: 2rem;
+}
+
+.third-party-terms__features-list-item {
+  @extend %font-text-1;
+  color: #333;
+}
+
 .third-party-ts-and-cs__confirm-agree {
   @extend %form__button--submit;
   margin: 1.2rem 0;

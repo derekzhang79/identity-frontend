@@ -35,7 +35,7 @@ case class ThirdPartyTsAndCsText (
 
 object TeachersTsAndCsText {
   def apply()(implicit messages: Messages): ThirdPartyTsAndCsText = {
-    val title = messages("thirdPartyTerms.teachersTitle")
+    val title = messages("thirdPartyTerms.teachersTitle").replace(' ', '\u00A0')
     val serviceName = messages("thirdPartyTerms.teachersServiceName")
     ThirdPartyTsAndCsText(
       pageTitle = messages("thirdPartyTerms.teachersPageTitle"),

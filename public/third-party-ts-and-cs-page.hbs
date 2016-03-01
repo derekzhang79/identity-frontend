@@ -9,27 +9,23 @@
   </section>
 
   <section class="third-party-ts-and-cs">
-    <ul>
+    <ul class="third-party-terms__features-list">
     {{#each tsAndCsPageText.features}}
-      <li>{{this}}</li>
+      <li class="third-party-terms__features-list-item">{{this}}</li>
     {{/each}}
     </ul>
-  </section>
 
-  <section class="third-party-ts-and-cs">
     <form method="POST" action="{{continueFormUrl}}" >
       <input type="hidden" name="groupCode" value="{{ groupCode }}">
-      <input type="hidden" name="returnUrl" value="{{returnUrl}}">
-      <button class="third-party-ts-and-cs__confirm-agree">{{tsAndCsPageText.baseText.continueButtonText}}</button>
+      <input type="hidden" name="returnUrl" value="{{ returnUrl }}">
+      <button type="submit" class="third-party-ts-and-cs__confirm-agree">{{tsAndCsPageText.baseText.continueButtonText}}</button>
     </form>
-  </section>
 
-  <section class="third-party-ts-and-cs">
-      <p class="third-party-terms__text">
-        {{ tsAndCsPageText.baseText.termsText }}
-        <a class="third-party-terms__link" href="{{ tsAndCsPageText.termsOfServiceLink }}">{{ tsAndCsPageText.baseText.termsOfServiceLinkText }}</a> &amp;
-        <a class="third-party-terms__link" href="{{ tsAndCsPageText.privacyPolicyLink }}">{{ tsAndCsPageText.baseText.privacyPolicyLinkText }}</a>
-      </p>
+    <p class="third-party-terms__text">
+      {{ tsAndCsPageText.baseText.termsText }}
+      <a class="third-party-terms__link" href="{{ tsAndCsPageText.termsOfServiceLink }}">{{ tsAndCsPageText.baseText.termsOfServiceLinkText }}</a> &amp;
+      <a class="third-party-terms__link" href="{{ tsAndCsPageText.privacyPolicyLink }}">{{ tsAndCsPageText.baseText.privacyPolicyLinkText }}</a>
+    </p>
   </section>
 
 {{/partial}}

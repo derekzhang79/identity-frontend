@@ -4,7 +4,7 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.{MetricsLoggingActor, Logging}
-import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ClientRegistrationIp, TrackingData, ReturnUrl}
+import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ClientIp, TrackingData, ReturnUrl}
 import com.gu.identity.frontend.models.ClientID.FormMappings.{clientId => clientIdMapping}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceError, IdentityService}
 import play.api.data.{Mapping, Form}
@@ -60,7 +60,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   )
 
   def register = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
-    val clientIp = ClientRegistrationIp(request)
+    val clientIp = ClientIp(request)
     registerForm.bindFromRequest.fold(
       errorForm => {
         val errors = errorForm.errors.map(error => s"register-error-${error.key}")

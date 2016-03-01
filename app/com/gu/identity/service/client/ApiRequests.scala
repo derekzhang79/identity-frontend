@@ -1,6 +1,6 @@
 package com.gu.identity.service.client
 
-import com.gu.identity.frontend.models.TrackingData
+import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 
 trait ApiRequest {
   val method: HttpMethod = GET
@@ -18,6 +18,9 @@ object ApiRequest {
 
   def xForwardedForIpHeader(trackingData: TrackingData) =
     trackingData.ipAddress.map("X-Forwarded-For" -> _)
+
+  def ipHeader(clientIp: ClientIp) =
+    "ip" -> clientIp.ip
 
   def commonApiHeaders(trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Iterable[(String, String)] =
     Iterable(Some(apiKeyHeader), xForwardedForIpHeader(trackingData)).flatten

@@ -29,3 +29,7 @@
 /** Membership skin **/
 
 @import "components/membership/_membership.css";
+
+/** Third Party Ts and Cs page **/
+
+@import "components/third-party-ts-and-cs/_third-party-ts-and-cs.css";

@@ -3,6 +3,7 @@ package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.text._
+import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.models._
 import play.api.i18n.Messages
 
@@ -11,16 +12,18 @@ case class TsAndCsViewModel private(
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product],
     clientId: Option[ClientID],
+    tsAndCsPageText: ThirdPartyTsAndCsText,
     returnUrl: String,
-    tsAndCsPageText: ThirdPartyTsAndCsText
+    groupCode: String,
+    continueFormUrl: String = routes.ThirdPartyTsAndCs.addToGroup.url
 ) extends ViewModel with ViewModelResources
 
 object TsAndCsViewModel {
   def apply(
     configuration: Configuration,
-    returnUrl: ReturnUrl,
     clientId: Option[ClientID],
-    group: GroupCode)(implicit messages: Messages): TsAndCsViewModel = {
+    group: GroupCode,
+    returnUrl: ReturnUrl)(implicit messages: Messages): TsAndCsViewModel = {
 
     val layout = LayoutViewModel(configuration, clientId)
     TsAndCsViewModel(
@@ -28,8 +31,9 @@ object TsAndCsViewModel {
       resources = layout.resources,
       indirectResources = layout.indirectResources,
       clientId = clientId,
-      returnUrl = returnUrl.url,
-      tsAndCsPageText = TsAndCsPageText.getPageText(group, returnUrl)
+      tsAndCsPageText = TsAndCsPageText.getPageText(group),
+      groupCode = group.getCodeValue,
+      returnUrl = returnUrl.url
     )
   }
 }

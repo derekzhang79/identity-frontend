@@ -25,22 +25,22 @@ object BaseTsAndCsText {
 }
 
 case class ThirdPartyTsAndCsText (
+    pageTitle: String,
     title: String,
     features: Seq[String],
-    continueLink: String,
     serviceName: String,
     termsOfServiceLink: String,
     privacyPolicyLink: String,
     baseText: BaseTsAndCsText)
 
 object TeachersTsAndCsText {
-  def apply(returnUrl: ReturnUrl)(implicit messages: Messages): ThirdPartyTsAndCsText = {
+  def apply()(implicit messages: Messages): ThirdPartyTsAndCsText = {
     val title = messages("thirdPartyTerms.teachersTitle")
     val serviceName = messages("thirdPartyTerms.teachersServiceName")
     ThirdPartyTsAndCsText(
+      pageTitle = messages("thirdPartyTerms.teachersPageTitle"),
       title = title,
       features = Seq(messages("thirdPartyTerms.teachersFeatures")),
-      continueLink = returnUrl.url,
       serviceName = serviceName,
       termsOfServiceLink = "http://teachers.theguardian.com/Terms.htm",
       privacyPolicyLink = "http://teachers.theguardian.com/privacypolicy.htm",
@@ -50,16 +50,16 @@ object TeachersTsAndCsText {
 }
 
 object JobsTsAndCsText {
-  def apply(returnUrl: ReturnUrl)(implicit messages: Messages): ThirdPartyTsAndCsText = {
+  def apply()(implicit messages: Messages): ThirdPartyTsAndCsText = {
     val title = messages("thirdPartyTerms.jobsTitle")
     val serviceName = messages("thirdPartyTerms.jobsServiceName")
     ThirdPartyTsAndCsText(
+      pageTitle = messages("thirdPartyTerms.jobsPageTitle"),
       title = title,
       features = Seq(
         messages("thirdPartyTerms.jobsFeature1"),
         messages("thirdPartyTerms.jobsFeature2"),
         messages("thirdPartyTerms.jobsFeature3")),
-      continueLink = returnUrl.url,
       serviceName = serviceName,
       termsOfServiceLink = "https://jobs.theguardian.com/terms-and-conditions/",
       privacyPolicyLink = "https://jobs.theguardian.com/privacy-policy/",
@@ -69,10 +69,10 @@ object JobsTsAndCsText {
 }
 
 object TsAndCsPageText {
-  def getPageText(group: GroupCode, returnUrl: ReturnUrl)(implicit messages: Messages): ThirdPartyTsAndCsText = {
+  def getPageText(group: GroupCode)(implicit messages: Messages): ThirdPartyTsAndCsText = {
     group match {
-      case GuardianTeachersNetwork => TeachersTsAndCsText(returnUrl)
-      case GuardianJobs => JobsTsAndCsText(returnUrl)
+      case GuardianTeachersNetwork => TeachersTsAndCsText()
+      case GuardianJobs => JobsTsAndCsText()
     }
   }
 }

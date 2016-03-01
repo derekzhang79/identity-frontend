@@ -1,6 +1,8 @@
 package com.gu.identity.frontend.models
 
-sealed trait GroupCode
+sealed trait GroupCode {
+  def getCodeValue: String
+}
 
 object GroupCode {
   def apply(group: String): Option[GroupCode] ={
@@ -12,5 +14,9 @@ object GroupCode {
   }
 }
 
-case object GuardianTeachersNetwork extends GroupCode
-case object GuardianJobs extends GroupCode
+case object GuardianTeachersNetwork extends GroupCode {
+  val getCodeValue: String = "GTNF"
+}
+case object GuardianJobs extends GroupCode {
+  val getCodeValue: String = "GRS"
+}

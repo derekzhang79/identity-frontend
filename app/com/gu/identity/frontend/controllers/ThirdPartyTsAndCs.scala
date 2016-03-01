@@ -33,7 +33,7 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
         case(Some(validGroup), Some(cookie)) => {
           checkUserForGroupMembership(group, cookie).map{
             case Right(true) => SeeOther(verifiedReturnUrl.url)
-            case Right(false) => renderAgree(clientIdActual, verifiedReturnUrl, validGroup)
+            case Right(false) => renderTsAndCs(config, clientIdActual, validGroup, verifiedReturnUrl)
             case Left(errors) => {
               logger.warn(s"Could not check user's group membership status {}", errors)
               BadRequest
@@ -65,17 +65,19 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
   }
 
 
-//  def addToGroup(group: String) = authenticationAction.async { implicit request => {
-//      val sc_gu_uCookie = getSC_GU_UCookie(request.cookies)
-//      sc_gu_uCookie match {
-//        case Some(cookie) => {
-//          val response = identityService.assignGroupCode(group, cookie)
-//          renderAgree(response)
-//        }
+  def addToGroup() = authenticationAction.async { implicit request => {
+//    val sc_gu_uCookie = getSC_GU_UCookie(request.cookies)
+//    sc_gu_uCookie match {
+//      case Some(cookie) => {
+//        val response = identityService.assignGroupCode(group, cookie)
+//        Future.successful(Ok("ddf"))
+//      }
 //        case _ => Future(NotFound)
 //      }
-//    }
-//  }
+    Future(Ok("Successful post"))
+    }
+
+  }
 
 //  def assignToGroup(group: String, cookie: Cookie, returnUrl: ReturnUrl) = {
 //    checkUserForGroupMembership(group, cookie).map {
@@ -87,10 +89,6 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
 //      }
 //    }
 //  }
-
-  def renderAgree(clientID: Option[ClientID], returnUrl: ReturnUrl, validGroup: GroupCode) = {
-    renderTsAndCs(config, returnUrl, clientID, validGroup)
-  }
 
   def isUserInGroup(user: User, group: String):Boolean = {
     val usersGroups = user.userGroups

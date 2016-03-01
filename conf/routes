@@ -13,7 +13,7 @@ GET        /register/confirm              com.gu.identity.frontend.controllers.A
 
 GET        /agree/:group                  com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.confirm(group: String, returnUrl: Option[String] ?= None, clientId: Option[String] ?= None)
 
-#POST       /actions/agree/:group          com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.addToGroup(group: String)
+POST       /actions/agree                 com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.addToGroup
 
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 

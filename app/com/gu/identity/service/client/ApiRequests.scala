@@ -20,7 +20,7 @@ object ApiRequest {
     trackingData.ipAddress.map("X-Forwarded-For" -> _)
 
   def ipHeader(clientIp: ClientIp) =
-    "ip" -> clientIp.ip
+    "X-Forwarded-For" -> clientIp.ip
 
   def commonApiHeaders(trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Iterable[(String, String)] =
     Iterable(Some(apiKeyHeader), xForwardedForIpHeader(trackingData)).flatten

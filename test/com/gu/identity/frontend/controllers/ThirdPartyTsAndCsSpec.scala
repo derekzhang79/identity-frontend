@@ -3,6 +3,8 @@ package com.gu.identity.frontend.controllers
 import akka.util.Timeout
 import com.gu.identity.cookie.IdentityCookieDecoder
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.errors.ErrorHandler
+import com.gu.identity.frontend.models.GroupCode
 import com.gu.identity.frontend.services.{ServiceGatewayError, IdentityService}
 import com.gu.identity.service.client.models.{UserGroup, User}
 import org.mockito.Matchers.{any => argAny}
@@ -22,8 +24,9 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
     val mockIdentityCookieDecoder = mock[IdentityCookieDecoder]
     val mockMessages = mock[MessagesApi]
     val testConfig = Configuration.testConfiguration
+    val mockErrorHandler = mock[ErrorHandler]
 
-    val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(mockIdentityService, mockIdentityCookieDecoder, testConfig, mockMessages)
+    val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(mockIdentityService, mockIdentityCookieDecoder, testConfig, mockMessages, mockErrorHandler)
   }
 
 
@@ -49,8 +52,9 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
     }
 
     "return a future of true when the user is in already in the group specified" in new WithControllerMockedDependencies {
-      val groupCode = "ABC"
-      val userGroup = UserGroup(groupCode, "Group/ABC")
+      val groupCode = "GRS"
+      val group = GroupCode(groupCode).get
+      val userGroup = UserGroup(groupCode, "Group/GRS")
       val userGroups = List(userGroup)
       val user = User(userGroups = userGroups)
 
@@ -65,15 +69,16 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
           }
         }
 
-      val future = thirdPartyTsAndCsController.checkUserForGroupMembership(groupCode, cookie)
+      val future = thirdPartyTsAndCsController.checkUserForGroupMembership(group, cookie)
       val result = Await.result(future, timeout.duration)
 
       result mustEqual Right(true)
     }
 
     "return a future of false when the user is not in the group specified" in new WithControllerMockedDependencies {
-      val groupCode = "ABC"
-      val userGroup = UserGroup("123", "Group/ABC")
+      val groupCode = "GTNF"
+      val group = GroupCode(groupCode).get
+      val userGroup = UserGroup("123", "Group/GTNF")
       val userGroups = List(userGroup)
       val user = User(userGroups = userGroups)
 
@@ -88,15 +93,16 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
           }
         }
 
-      val future = thirdPartyTsAndCsController.checkUserForGroupMembership(groupCode, cookie)
+      val future = thirdPartyTsAndCsController.checkUserForGroupMembership(group, cookie)
       val result = Await.result(future, timeout.duration)
 
       result mustEqual Right(false)
     }
 
     "return a future of sequence of service errors if it was not possible to check if the user is in the group" in new WithControllerMockedDependencies {
-      val groupCode = "ABC"
-      val userGroup = UserGroup(groupCode, "Group/ABC")
+      val groupCode = "GTNF"
+      val group = GroupCode(groupCode).get
+      val userGroup = UserGroup(groupCode, "Group/GTNF")
       val userGroups = List(userGroup)
       val user = User(userGroups = userGroups)
 
@@ -111,7 +117,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
           }
         }
 
-      val future = thirdPartyTsAndCsController.checkUserForGroupMembership(groupCode, cookie)
+      val future = thirdPartyTsAndCsController.checkUserForGroupMembership(group, cookie)
       val result = Await.result(future, timeout.duration)
 
       result mustEqual Left(Seq(ServiceGatewayError("Unexpected 500 error")))

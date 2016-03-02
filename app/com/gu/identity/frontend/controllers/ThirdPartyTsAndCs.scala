@@ -3,6 +3,7 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.cookie.IdentityCookieDecoder
 import com.gu.identity.frontend.authentication.{CookieName, AuthenticationService}
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.errors.BadRequestError
 import com.gu.identity.frontend.models.{GroupCode, ClientID, ReturnUrl}
 import com.gu.identity.frontend.services.{ServiceError, IdentityService}
 import com.gu.identity.service.client.models.User
@@ -10,6 +11,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.http.HttpErrorHandler
 import play.api.i18n.{MessagesApi, I18nSupport}
+import play.api.mvc.Results._
 import play.api.mvc.Security.AuthenticatedBuilder
 import play.api.mvc._
 import com.gu.identity.frontend.logging.Logging
@@ -33,22 +35,12 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
       val groupCode = GroupCode(group)
       val sc_gu_uCookie = getSC_GU_UCookie(request.cookies)
       val verifiedReturnUrl = ReturnUrl(returnUrl, request.headers.get("Referer"), config)
+      val skipConfirmationActual = skipConfirmation.getOrElse(false)
 
       (groupCode, sc_gu_uCookie) match {
         case(Some(validGroup), Some(cookie)) => {
-          checkUserForGroupMembership(group, cookie).map{
-            case Right(true) => SeeOther(verifiedReturnUrl.url)
-            case Right(false) => {
-              skipConfirmation match {
-                case Some(true) => SeeOther(verifiedReturnUrl.url)
-                case _ => renderTsAndCs(config, clientIdActual, validGroup, verifiedReturnUrl)
-              }
-            }
-            case Left(errors) => {
-              logger.warn(s"Could not check user's group membership status {}", errors)
-              BadRequest
-            }
-          }
+          val usersGroupMembershipStatus = checkUserForGroupMembership(validGroup, cookie)
+          renderPage(usersGroupMembershipStatus, skipConfirmationActual, clientIdActual, verifiedReturnUrl, validGroup)
         }
         case(None, _) => {
           logger.info(s"Received invalid group code $group")
@@ -62,14 +54,37 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
     }
   }
 
-  def checkUserForGroupMembership(group: String, cookie: Cookie): Future[Either[Seq[ServiceError], Boolean]] = {
+  def checkUserForGroupMembership(group: GroupCode, cookie: Cookie): Future[Either[Seq[ServiceError], Boolean]] = {
     identityService.getUser(cookie).map{
       case Right(user) => {
-        Right(isUserInGroup(user, group))
+        Right(isUserInGroup(user, group.getCodeValue))
       }
       case Left(errors) => {
         logger.info("Request did not have a SC_GU_U cookie could not get user.")
         Left(errors)
+      }
+    }
+  }
+
+  def renderPage(
+      groupMembershipStatus: Future[Either[Seq[ServiceError], Boolean]],
+      skipConfirmation: Boolean,
+      clientId: Option[ClientID],
+      returnUrl: ReturnUrl,
+      groupCode: GroupCode) = {
+
+    groupMembershipStatus.map {
+      case Right(true) => SeeOther(returnUrl.url)
+      case Right(false) => {
+        if (skipConfirmation){
+          SeeOther(returnUrl.url)
+        } else {
+          renderTsAndCs(config, clientId, groupCode, returnUrl)
+        }
+      }
+      case Left(errors) => {
+        logger.warn(s"Could not check user's group membership status {}", errors)
+        BadRequest
       }
     }
   }

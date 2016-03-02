@@ -8,6 +8,7 @@ import com.gu.identity.frontend.services.{ServiceError, IdentityService}
 import com.gu.identity.service.client.models.User
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.http.HttpErrorHandler
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.mvc.Security.AuthenticatedBuilder
 import play.api.mvc._
@@ -18,7 +19,7 @@ import scala.concurrent.{Future, ExecutionContext}
 
 case class AddUserToGroupRequest(groupCode: String, returnUrl: Option[String])
 
-class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder: IdentityCookieDecoder, config: Configuration, val messagesApi: MessagesApi) extends Controller with Logging with I18nSupport {
+class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder: IdentityCookieDecoder, config: Configuration, val messagesApi: MessagesApi, httpErrorHandler: HttpErrorHandler) extends Controller with Logging with I18nSupport {
 
   implicit lazy val executionContext: ExecutionContext = play.api.libs.concurrent.Execution.Implicits.defaultContext
 
@@ -51,11 +52,11 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
         }
         case(None, _) => {
           logger.info(s"Received invalid group code $group")
-          Future(BadRequest)
+          httpErrorHandler.onClientError(request, NOT_FOUND, "Invalid Group Code")
         }
         case(_, None) => {
           logger.info("Request did not have a SC_GU_U cookie")
-          Future(BadRequest)
+          httpErrorHandler.onClientError(request, NOT_FOUND, "Missing Cookie")
         }
       }
     }
@@ -77,12 +78,12 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
   def addToGroup(): Action[AnyContent] = authenticationAction.async { implicit request =>
     val sc_gu_uCookie = getSC_GU_UCookie(request.cookies)
     addUserToGroupRequestFormBody.bindFromRequest.fold(
-      errorForm => Future.successful(Ok("Error form fail")),
+      errorForm => httpErrorHandler.onClientError(request, NOT_FOUND, "Invalid form submission"),
       successForm => {
         val verifiedReturnUrl = ReturnUrl(successForm.returnUrl, config)
         GroupCode(successForm.groupCode) match {
           case Some(code) => addToGroup(code, sc_gu_uCookie, verifiedReturnUrl)
-          case _ => Future.successful(Ok("Invalid group"))
+          case _ => httpErrorHandler.onClientError(request, NOT_FOUND, "Invalid Group Code")
         }
       }
     )

@@ -21,7 +21,7 @@ case class RegisterConfirmationViewModel private(
 
 object RegisterConfirmationViewModel {
   def apply(configuration: Configuration, returnUrl: ReturnUrl, clientId: Option[ClientID])(implicit messages: Messages): RegisterConfirmationViewModel = {
-    val layout = LayoutViewModel(configuration, clientId)
+    val layout = LayoutViewModel(configuration, activeTests = Map.empty, clientId, returnUrl = Some(returnUrl))
 
     RegisterConfirmationViewModel(
       layout = layout,

@@ -13,26 +13,26 @@ import play.api.mvc._
 class Application (configuration: Configuration, val messagesApi: MessagesApi, csrfConfig: CSRFConfig) extends Controller with Logging with I18nSupport {
 
   def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
-    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration)
-    val clientIdActual = ClientID(clientId)
+    val clientIdOpt = ClientID(clientId)
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdOpt)
 
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
 
-    renderSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual)
+    renderSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdOpt)
   }
 
   def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], group: Option[String], clientId: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
-    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration)
-    val clientIdActual = ClientID(clientId)
+    val clientIdOpt = ClientID(clientId)
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdOpt)
 
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
 
-    renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual)
+    renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdOpt)
   }
 
   def confirm(returnUrl: Option[String], clientId: Option[String]) = Action {
     val clientIdOpt = ClientID(clientId)
-    val returnUrlActual = ReturnUrl(returnUrl, referer = None, configuration)
+    val returnUrlActual = ReturnUrl(returnUrl, refererHeader = None, configuration, clientIdOpt)
 
     renderRegisterConfirmation(configuration, returnUrlActual, clientIdOpt)
   }

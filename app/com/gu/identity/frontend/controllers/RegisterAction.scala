@@ -67,7 +67,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
         Future.successful(SeeOther(routes.Application.register(errors).url))},
       successForm => {
         val trackingData = TrackingData(request, successForm.returnUrl)
-        val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"), config)
+        val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"), config, successForm.clientID)
         identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
           case Left(errors) =>
             redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.group, successForm.clientID)

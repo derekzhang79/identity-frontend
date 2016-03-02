@@ -22,15 +22,15 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
 
   it should "construct return url" in {
 
-    ReturnUrl(Some("http://www.theguardian.com/uk"), None, config) should be(ReturnUrl(new URI("http://www.theguardian.com/uk")))
-    ReturnUrl(None, Some("http://www.theguardian.com/uk"), config) should be(ReturnUrl(new URI("http://www.theguardian.com/uk")))
+    ReturnUrl(Some("http://www.theguardian.com/uk"), None, config, None) should be(ReturnUrl(new URI("http://www.theguardian.com/uk")))
+    ReturnUrl(None, Some("http://www.theguardian.com/uk"), config, None) should be(ReturnUrl(new URI("http://www.theguardian.com/uk")))
 
-    ReturnUrl(Some("http://jobs.theguardian.com/apply"), None, config) should be(ReturnUrl(new URI("http://jobs.theguardian.com/apply")))
-    ReturnUrl(None, Some("http://jobs.theguardian.com/apply"), config) should be(ReturnUrl(new URI("http://jobs.theguardian.com/apply")))
+    ReturnUrl(Some("http://jobs.theguardian.com/apply"), None, config, None) should be(ReturnUrl(new URI("http://jobs.theguardian.com/apply")))
+    ReturnUrl(None, Some("http://jobs.theguardian.com/apply"), config, None) should be(ReturnUrl(new URI("http://jobs.theguardian.com/apply")))
 
-    ReturnUrl(None, Some("http://www.thegulocal.com/"), config) should be(ReturnUrl(new URI("http://www.thegulocal.com/")))
+    ReturnUrl(None, Some("http://www.thegulocal.com/"), config, None) should be(ReturnUrl(new URI("http://www.thegulocal.com/")))
 
-    ReturnUrl(None, Some("http://profile-origin2.thegulocal.com"), config) should be(ReturnUrl(new URI("http://profile-origin2.thegulocal.com")))
+    ReturnUrl(None, Some("http://profile-origin2.thegulocal.com"), config, None) should be(ReturnUrl(new URI("http://profile-origin2.thegulocal.com")))
   }
 
 
@@ -45,23 +45,30 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
 
   it should "Retrieve default Return URL" in {
     def assertDefaultFallbackFor(in: ReturnUrl) = {
-      in.url should be(config.identityDefaultReturnUrl)
+      in.url should be(config.dotcomBaseUrl)
       in shouldBe 'default
     }
 
-    assertDefaultFallbackFor(ReturnUrl(None, None, config))
-    assertDefaultFallbackFor(ReturnUrl(Some("http://baddomain.com"), None, config))
-    assertDefaultFallbackFor(ReturnUrl(None, Some("http://badreferrer.com"), config))
-    assertDefaultFallbackFor(ReturnUrl(Some("^!this-is\\a-bad-uri"), None, config))
-    assertDefaultFallbackFor(ReturnUrl(None, Some("^!this-is\\a-bad-referer!"), config))
+    assertDefaultFallbackFor(ReturnUrl(None, None, config, None))
+    assertDefaultFallbackFor(ReturnUrl(Some("http://baddomain.com"), None, config, None))
+    assertDefaultFallbackFor(ReturnUrl(None, Some("http://badreferrer.com"), config, None))
+    assertDefaultFallbackFor(ReturnUrl(Some("^!this-is\\a-bad-uri"), None, config, None))
+    assertDefaultFallbackFor(ReturnUrl(None, Some("^!this-is\\a-bad-referer!"), config, None))
   }
 
 
   it should "Use the default return url for CODE env" in {
-    val codeConfig = config.copy(identityDefaultReturnUrl = "http://m.code.dev-theguardian.com")
+    val codeConfig = config.copy(dotcomBaseUrl = "http://m.code.dev-theguardian.com")
 
-    ReturnUrl(None, None, codeConfig) should be(ReturnUrl(new URI("http://m.code.dev-theguardian.com"), isDefault = true))
+    ReturnUrl(None, None, codeConfig, None) should be(ReturnUrl(new URI("http://m.code.dev-theguardian.com"), isDefault = true))
 
-    ReturnUrl(None, None, config) should be(ReturnUrl(new URI("http://www.theguardian.com"), isDefault = true))
+    ReturnUrl(None, None, config, None) should be(ReturnUrl(new URI("http://www.theguardian.com"), isDefault = true))
+  }
+
+  it should "Use the membership return url for clientId=members as the default fallback" in {
+    val result = ReturnUrl(None, None, config, Some(GuardianMembersClientID))
+
+    result.url shouldEqual config.membershipBaseUrl
+    result shouldBe 'default
   }
 }

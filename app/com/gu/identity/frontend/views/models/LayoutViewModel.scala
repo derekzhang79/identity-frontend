@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.models.ClientID
+import com.gu.identity.frontend.models.{GuardianMembersClientID, ReturnUrl, ClientID}
 import com.gu.identity.frontend.models.Text.{HeaderText, LayoutText}
 import com.gu.identity.frontend.models.text.FooterText
 import com.gu.identity.frontend.mvt
@@ -30,10 +30,11 @@ case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
 }
 
 
-case class LayoutViewModel(
+case class LayoutViewModel private(
     text: Map[String,String],
     headerText: Map[String, String],
     footerText: FooterText,
+    links: LayoutLinks,
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product],
     favicons: Seq[Favicon] = Favicons(),
@@ -79,15 +80,12 @@ case class JavascriptRuntimeParams(activeTests: Map[String, String]) {
 object LayoutViewModel {
 
   def apply(configuration: Configuration)(implicit messages: Messages): LayoutViewModel =
-    apply(configuration, Map.empty, None)
+    apply(configuration, Map.empty, clientId = None, returnUrl = None)
 
-  def apply(configuration: Configuration, clientId: Option[ClientID])(implicit messages: Messages): LayoutViewModel =
-    apply(configuration, Map.empty, clientId)
+  def apply(configuration: Configuration, clientId: Option[ClientID], returnUrl: Option[ReturnUrl])(implicit messages: Messages): LayoutViewModel =
+    apply(configuration, activeTests = Map.empty, clientId, returnUrl)
 
-  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests)(implicit messages: Messages): LayoutViewModel =
-    apply(configuration, activeTests, None)
-
-  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, clientId: Option[ClientID])(implicit messages: Messages): LayoutViewModel = {
+  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, clientId: Option[ClientID], returnUrl: Option[ReturnUrl])(implicit messages: Messages): LayoutViewModel = {
 
     val skin = clientId
       .filter(_.hasSkin)
@@ -115,10 +113,45 @@ object LayoutViewModel {
       text = LayoutText.toMap,
       headerText = HeaderText.toMap,
       footerText = FooterText(),
+      links = LayoutLinks(configuration, clientId, returnUrl),
       resources = resources,
       indirectResources = BaseLayoutViewModel.indirectResources,
       skin = skin)
   }
+}
+
+case class LayoutLinks private(
+    headerBack: String,
+    headerLogo: String,
+    footerHelp: String,
+    footerTerms: String,
+    footerContact: String,
+    footerPrivacy: String,
+    footerFeedback: String,
+    footerCookies: String)
+
+object LayoutLinks {
+  def apply(configuration: Configuration, clientId: Option[ClientID], returnUrl: Option[ReturnUrl]): LayoutLinks = {
+    val baseUrl = configuration.dotcomBaseUrl
+
+    LayoutLinks(
+      headerBack = returnUrl.map(_.url).getOrElse(baseUrl),
+      headerLogo = logoUrl(configuration, clientId),
+      footerHelp = s"$baseUrl/help/identity-faq",
+      footerTerms = s"$baseUrl/help/terms-of-service",
+      footerContact = s"$baseUrl/help/contact-us",
+      footerPrivacy = s"$baseUrl/info/privacy",
+      footerFeedback = s"$baseUrl/info/tech-feedback",
+      footerCookies = s"$baseUrl/info/cookies"
+    )
+  }
+
+  private def logoUrl(configuration: Configuration, clientId: Option[ClientID]) =
+    clientId match {
+      case Some(GuardianMembersClientID) => configuration.membershipBaseUrl
+      case _ => configuration.dotcomBaseUrl
+    }
+
 }
 
 case class Favicon(filename: String, rel: String, url: String, sizes: Option[String] = None)

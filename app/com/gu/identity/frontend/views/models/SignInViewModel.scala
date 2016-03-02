@@ -40,7 +40,7 @@ case class SignInViewModel private(
 object SignInViewModel {
   def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, csrfToken: Option[CSRFToken], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID])(implicit messages: Messages): SignInViewModel = {
 
-    val layout = LayoutViewModel(configuration, activeTests, clientId)
+    val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
       getRecaptchaModel(configuration, isError = !errors.isEmpty, recaptchaEnabled = configuration.recaptchaEnabled)
 

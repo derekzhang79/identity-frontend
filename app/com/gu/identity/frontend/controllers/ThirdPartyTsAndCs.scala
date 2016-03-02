@@ -27,7 +27,7 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
     _ => SeeOther("/signin")
   )
 
-  def confirm(group: String, returnUrl: Option[String], clientId: Option[String]) = authenticationAction.async{ implicit request => {
+  def confirm(group: String, returnUrl: Option[String], clientId: Option[String], skipConfirmation: Option[Boolean]) = authenticationAction.async{ implicit request => {
       val clientIdActual = ClientID(clientId)
       val groupCode = GroupCode(group)
       val sc_gu_uCookie = getSC_GU_UCookie(request.cookies)
@@ -37,7 +37,12 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
         case(Some(validGroup), Some(cookie)) => {
           checkUserForGroupMembership(group, cookie).map{
             case Right(true) => SeeOther(verifiedReturnUrl.url)
-            case Right(false) => renderTsAndCs(config, clientIdActual, validGroup, verifiedReturnUrl)
+            case Right(false) => {
+              skipConfirmation match {
+                case Some(true) => SeeOther(verifiedReturnUrl.url)
+                case _ => renderTsAndCs(config, clientIdActual, validGroup, verifiedReturnUrl)
+              }
+            }
             case Left(errors) => {
               logger.warn(s"Could not check user's group membership status {}", errors)
               BadRequest
@@ -69,24 +74,31 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
   }
 
 
-  def addToGroup() = authenticationAction.async { implicit request =>
+  def addToGroup(): Action[AnyContent] = authenticationAction.async { implicit request =>
     val sc_gu_uCookie = getSC_GU_UCookie(request.cookies)
     addUserToGroupRequestFormBody.bindFromRequest.fold(
       errorForm => Future.successful(Ok("Error form fail")),
       successForm => {
         val verifiedReturnUrl = ReturnUrl(successForm.returnUrl, config)
-        sc_gu_uCookie match {
-          case Some(cookie) => {
-            val response = identityService.assignGroupCode(successForm.groupCode, cookie)
-            response.map{
-              case Left(errors) => Ok("assign to group fails")
-              case Right(response) => SeeOther(verifiedReturnUrl.url)
-            }
-          }
-          case _ => Future.successful(Ok("No cookie"))
+        GroupCode(successForm.groupCode) match {
+          case Some(code) => addToGroup(code, sc_gu_uCookie, verifiedReturnUrl)
+          case _ => Future.successful(Ok("Invalid group"))
         }
       }
     )
+  }
+
+  def addToGroup(group: GroupCode, sc_gu_uCookie: Option[Cookie], returnUrl: ReturnUrl): Future[Result] = {
+    sc_gu_uCookie match {
+      case Some(cookie) => {
+        val response = identityService.assignGroupCode(group.getCodeValue, cookie)
+        response.map{
+          case Left(errors) => Ok("assign to group fails")
+          case Right(response) => SeeOther(returnUrl.url)
+        }
+      }
+      case _ => Future.successful(Ok("No cookie"))
+    }
   }
 
   def isUserInGroup(user: User, group: String): Boolean = {

@@ -58,7 +58,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     )(RegisterRequest.apply)(RegisterRequest.unapply)
   )
 
-  def register = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
+  def register = CSRFCheck(csrfConfig).async { implicit request =>
     val clientIp = ClientIp(request)
     registerForm.bindFromRequest.fold(
       errorForm => {
@@ -129,15 +129,5 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   private def registerSuccessResult(returnUrl: ReturnUrl, cookies: Seq[PlayCookie]) = {
     logSuccessfulRegister
     SeeOther(returnUrl.url).withCookies(cookies: _*)
-  }
-
-  // Note: Limitation
-  //       Error Handler only accepts RequestHeader instead of Request, so we cannot
-  //       pass ReturnUrl and skipConfirmation as they're on the Request body.
-  private def handleCSRFError(request: RequestHeader, msg: String) = Future.successful {
-    logger.error(s"CSRF error during Registration: $msg")
-    val errors = Seq("register-error-csrf")
-
-    SeeOther(routes.Application.register(errors).url)
   }
 }

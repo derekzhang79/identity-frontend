@@ -15,7 +15,7 @@ case class TsAndCsViewModel private(
     tsAndCsPageText: ThirdPartyTsAndCsText,
     returnUrl: String,
     groupCode: String,
-    continueFormUrl: String = routes.ThirdPartyTsAndCs.addToGroup.url
+    continueFormUrl: String = routes.ThirdPartyTsAndCs.addToGroupAction.url
 ) extends ViewModel with ViewModelResources
 
 object TsAndCsViewModel {

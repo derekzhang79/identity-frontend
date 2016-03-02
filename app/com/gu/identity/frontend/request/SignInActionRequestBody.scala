@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.request
 
-import com.gu.identity.frontend.models.{ClientID,GroupCode}
+import com.gu.identity.frontend.models.{ClientID, GroupCode}
+import com.gu.identity.frontend.csrf.RequestBodyWithCSRFToken
 import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.mvc.BodyParsers.parse
@@ -14,7 +15,9 @@ case class SignInActionRequestBody(
     skipConfirmation: Option[Boolean],
     googleRecaptchaResponse: Option[String],
     clientID: Option[ClientID],
-    groupCode: Option[GroupCode])
+    groupCode: Option[GroupCode],
+    csrfToken: String)
+  extends RequestBodyWithCSRFToken
 
 object SignInActionRequestBody {
   val signInForm = Form(
@@ -26,7 +29,8 @@ object SignInActionRequestBody {
       "skipConfirmation" -> optional(boolean),
       "g-recaptcha-response" -> optional(text),
       "clientId" -> optional(ClientID.FormMappings.clientId),
-      "groupCode" -> optional(GroupCode.FormMappings.groupCode)
+      "groupCode" -> optional(GroupCode.FormMappings.groupCode),
+      "csrfToken" -> text
     )(SignInActionRequestBody.apply)(SignInActionRequestBody.unapply)
   )
 

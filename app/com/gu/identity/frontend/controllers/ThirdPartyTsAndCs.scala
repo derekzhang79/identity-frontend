@@ -1,7 +1,8 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.cookie.IdentityCookieDecoder
-import com.gu.identity.frontend.authentication.{CookieName, AuthenticationService}
+import com.gu.identity.frontend.authentication.UserAuthenticatedActionBuilder._
+import com.gu.identity.frontend.authentication.{UserAuthenticatedRequest, AuthenticationService}
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.{GroupCode, ClientID, ReturnUrl}
 import com.gu.identity.frontend.services.{ServiceError, IdentityService}
@@ -28,27 +29,23 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
     _ => SeeOther("/signin")
   )
 
-  def confirmAction(group: String, returnUrl: Option[String], clientId: Option[String], skipConfirmation: Option[Boolean]) = authenticationAction.async{ implicit request => {
+  def confirmAction[A](group: String, returnUrl: Option[String], clientId: Option[String], skipConfirmation: Option[Boolean]) = UserAuthenticatedAction(identityCookieDecoder).async { request => {
       val clientIdActual = ClientID(clientId)
       val groupCode = GroupCode(group)
-      val sc_gu_uCookie = getSC_GU_UCookie(request.cookies)
+      val sc_gu_uCookie = request.scGuUCookie
       val verifiedReturnUrl = ReturnUrl(returnUrl, request.headers.get("Referer"), config)
       val skipConfirmationActual = skipConfirmation.getOrElse(false)
 
-      (groupCode, sc_gu_uCookie) match {
-        case(Some(validGroup), Some(cookie)) => {
-          confirm(validGroup, verifiedReturnUrl, clientIdActual, skipConfirmationActual, cookie).flatMap {
+      groupCode match {
+        case Some(validGroup) => {
+          confirm(validGroup, verifiedReturnUrl, clientIdActual, skipConfirmationActual, sc_gu_uCookie).flatMap {
             case Right(result) => Future.successful(result)
             case Left(errors) => httpErrorHandler.onClientError(request, BAD_REQUEST, "Could not check user's group membership status")
           }
         }
-        case(None, _) => {
+        case None => {
           logger.info(s"Received invalid group code $group")
           httpErrorHandler.onClientError(request, NOT_FOUND, "Invalid Group Code")
-        }
-        case(_, None) => {
-          logger.info("Request did not have a SC_GU_U cookie")
-          httpErrorHandler.onClientError(request, NOT_FOUND, "Missing Cookie")
         }
       }
     }
@@ -71,7 +68,6 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
       }
     }
   }
-
 
   def addToGroupAction(): Action[AnyContent] = authenticationAction.async { implicit request =>
     val sc_gu_uCookie = getSC_GU_UCookie(request.cookies)
@@ -111,7 +107,7 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
         Right(isUserInGroup(user, group.getCodeValue))
       }
       case Left(errors) => {
-        logger.info("Request did not have a SC_GU_U cookie could not get user.")
+        logger.error("Request did not have a SC_GU_U cookie could not get user.")
         Left(errors)
       }
     }
@@ -122,8 +118,6 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
     val usersGroups = user.userGroups
     usersGroups.map(_.packageCode == group).contains(true)
   }
-
-  def getSC_GU_UCookie(cookies: Cookies): Option[Cookie] = cookies.get(CookieName.SC_GU_U.toString)
 
   private val addUserToGroupRequestFormBody = Form(
     mapping(

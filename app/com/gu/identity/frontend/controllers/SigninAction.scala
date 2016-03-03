@@ -5,6 +5,7 @@ import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.{MetricsLoggingActor, Logging}
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.errors.RedirectOnError
+import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
 import com.gu.identity.frontend.request.SignInActionRequestBody
 import com.gu.identity.frontend.services._
 import play.api.i18n.{MessagesApi, I18nSupport}
@@ -22,25 +23,27 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
 
   val redirectRoute: String = routes.Application.signIn().url
 
-  final val SignInServiceAction =
+  val SignInServiceAction =
     ServiceAction andThen
       RedirectOnError(redirectRoute) andThen
       CSRFCheck(csrfConfig)
 
+  val bodyParser = SignInActionRequestBody.bodyParser(config)
 
-  def signIn = SignInServiceAction(SignInActionRequestBody.parser) { request: Request[SignInActionRequestBody] =>
+  def signIn = SignInServiceAction(bodyParser) { request: Request[SignInActionRequestBody] =>
     val formParams = request.body
 
     val trackingData = TrackingData(request, formParams.returnUrl)
-    val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"), config, formParams.clientID)
+
     val successfulReturnUrl = formParams.groupCode match {
       case Some(validGroupCode) => {
-        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientID, validGroupCode, config)
+        UrlBuilder.buildThirdPartyReturnUrl(formParams.returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientID, validGroupCode, config)
       }
-      case _ => returnUrl
+      case _ => formParams.returnUrl
     }
 
-    identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
+
+    identityService.authenticate(formParams, trackingData).map {
       case Left(errors) => Left(errors)
       case Right(cookies) => Right {
         logSuccessfulSignin()

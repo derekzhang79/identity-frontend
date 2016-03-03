@@ -1,25 +1,25 @@
 package com.gu.identity.frontend.controllers
 
 import akka.util.Timeout
-import com.gu.identity.cookie.{IdentityKeys, IdentityCookieDecoder}
+import com.gu.identity.cookie.{IdentityCookieDecoder, IdentityKeys}
 import com.gu.identity.frontend.authentication.CookieName
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.errors.ErrorHandler
-import com.gu.identity.frontend.models.GroupCode
-import com.gu.identity.frontend.services.{ServiceGatewayError, IdentityService}
+import com.gu.identity.frontend.models.{GroupCode, ReturnUrl}
+import com.gu.identity.frontend.services.{IdentityService, ServiceGatewayError}
 import com.gu.identity.service.client.AssignGroupResponse
-import com.gu.identity.service.client.models.{UserGroup, User}
+import com.gu.identity.service.client.models.{User, UserGroup}
 import org.mockito.Matchers.{any => argAny}
+import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
-import org.mockito.Mockito._
 import play.api.i18n.MessagesApi
-import play.api.mvc.{RequestHeader, Cookie}
+import play.api.mvc.Results._
+import play.api.mvc.{Cookie, RequestHeader}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import scala.concurrent.duration._
-import play.api.mvc.Results._
 
+import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
@@ -136,6 +136,89 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
 
 
 
+  }
+
+  "confirm" should {
+    "Redirect to the return url when the user is already a group member" in new WithControllerMockedDependencies {
+      val groupCode = "GTNF"
+      val group = GroupCode(groupCode).get
+      val userGroup = UserGroup(groupCode, "Group/GTNF")
+      val userGroups = List(userGroup)
+      val user = User(userGroups = userGroups)
+      val url = Some("http://www.theguardian.com/sport")
+      val returnUrl = ReturnUrl(url, Configuration.testConfiguration)
+      val cookie = Cookie("Name", "Value")
+      val timeout = Timeout(5 seconds)
+
+      when(mockIdentityService.getUser(argAny[Cookie])(argAny[ExecutionContext]))
+        .thenReturn {
+          Future.successful{
+            Right(user)
+          }
+        }
+
+      val future = thirdPartyTsAndCsController.confirm(group, returnUrl, clientId = None, skipConfirmation = false, cookie)
+      val result = Await.result(future, timeout.duration)
+      val r = Future.successful(result.right.get)
+      redirectLocation(r) mustEqual url
+      status(r) mustEqual SEE_OTHER
+    }
+
+    "Redirect to the return url when the user successfully added to the group and skip confirmation is true" in new WithControllerMockedDependencies {
+      val groupCode = "GTNF"
+      val group = GroupCode(groupCode).get
+      val userGroup = UserGroup("ABC", "Group/ABC")
+      val userGroups = List(userGroup)
+      val user = User(userGroups = userGroups)
+      val url = Some("http://www.theguardian.com/sport")
+      val returnUrl = ReturnUrl(url, Configuration.testConfiguration)
+      val cookie = Cookie("Name", "Value")
+      val timeout = Timeout(5 seconds)
+
+      when(mockIdentityService.getUser(argAny[Cookie])(argAny[ExecutionContext]))
+        .thenReturn {
+          Future.successful{
+            Right(user)
+          }
+        }
+
+      when(mockIdentityService.assignGroupCode(groupCode, cookie))
+        .thenReturn{
+          Future.successful{
+            Right(AssignGroupResponse(groupCode))
+          }
+        }
+
+      val future = thirdPartyTsAndCsController.confirm(group, returnUrl, clientId = None, skipConfirmation = true, cookie)
+      val result = Await.result(future, timeout.duration)
+      val r = Future.successful(result.right.get)
+      redirectLocation(r) mustEqual url
+      status(r) mustEqual SEE_OTHER
+    }
+
+    "Return errors if it is not possible to check the users group membership" in new WithControllerMockedDependencies {
+      val groupCode = "GTNF"
+      val group = GroupCode(groupCode).get
+      val userGroup = UserGroup("ABC", "Group/ABC")
+      val userGroups = List(userGroup)
+      val user = User(userGroups = userGroups)
+      val url = Some("http://www.theguardian.com/sport")
+      val returnUrl = ReturnUrl(url, Configuration.testConfiguration)
+      val cookie = Cookie("Name", "Value")
+      val timeout = Timeout(5 seconds)
+
+      when(mockIdentityService.getUser(argAny[Cookie])(argAny[ExecutionContext]))
+        .thenReturn {
+          Future.successful{
+            Left(Seq(ServiceGatewayError("error")))
+          }
+        }
+
+      val future = thirdPartyTsAndCsController.confirm(group, returnUrl, clientId = None, skipConfirmation = false, cookie)
+      val result = Await.result(future, timeout.duration)
+      val r = result.left.get
+      r mustEqual Seq(ServiceGatewayError("error"))
+    }
   }
 
   "POST action/agree" should {

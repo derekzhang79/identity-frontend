@@ -45,19 +45,13 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
   }
 
   def confirm(groupCode: GroupCode, returnUrl: ReturnUrl, clientId: Option[ClientID], skipConfirmation: Boolean, userCookie: Cookie): Future[Either[Seq[ServiceError], Result]] = {
-    checkUserForGroupMembership(groupCode, userCookie).map {
-      case Right(true) => Right(SeeOther(returnUrl.url))
-      case Right(false) => Right {
-        if (skipConfirmation){
-          addToGroup(groupCode, userCookie, returnUrl)
-          SeeOther(returnUrl.url)
-        } else {
-          renderTsAndCs(config, clientId, groupCode, returnUrl)
-        }
-      }
+    checkUserForGroupMembership(groupCode, userCookie).flatMap {
+      case Right(true) => Future.successful(Right(SeeOther(returnUrl.url)))
+      case Right(false) if skipConfirmation => addToGroup(groupCode, userCookie, returnUrl)
+      case Right(false) => Future.successful(Right(renderTsAndCs(config, clientId, groupCode, returnUrl)))
       case Left(errors) => {
         logger.warn(s"Could not check user's group membership status {}", errors)
-        Left(errors)
+        Future.successful(Left(errors))
       }
     }
   }

@@ -38,11 +38,6 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
     val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(mockIdentityService, cookieDecoder, testConfig, mockMessages, mockErrorHandler)
   }
 
-  def createCookie(value: String, name: String) = {
-    Cookie(name = name, value = value)
-  }
-
-
   "Is user in group" should {
     "return true if user is in group specified" in new WithControllerMockedDependencies {
       val groupCode = "ABC"
@@ -144,11 +139,23 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
   }
 
   "POST action/agree" should {
+
+    val validCookie: Cookie = {
+      val validRequestCookieData = "WyIxMDAwMDgxMSIsMTQ2Mjg5MjgyNDYxMV0.MCwCFG_PdoPk2PpSO5KoXbRLWJ0BvuqhAhRFIt1mlDcO2SN1Y6X7ktSs_oRJJw"
+      Cookie(name = CookieName.SC_GU_U.toString, value = validRequestCookieData)
+    }
+
+    def successfulFakeRequest(groupCode: String, returnUrl: String, cookie: Cookie) = {
+      FakeRequest("POST", "/actions/GTNF")
+        .withFormUrlEncodedBody("groupCode" -> groupCode, "returnUrl" -> returnUrl)
+        .withCookies(cookie)
+    }
+
     "return a result of the return url when user has successfully been added to the group" in new WithControllerMockedDependencies {
       val groupCode = "GTNF"
       val returnUrl = "http://www.theguardian.com/sport"
-      val validRequestCookieData = "WyIxMDAwMDgxMSIsMTQ2Mjg5MjgyNDYxMV0.MCwCFG_PdoPk2PpSO5KoXbRLWJ0BvuqhAhRFIt1mlDcO2SN1Y6X7ktSs_oRJJw"
-      val cookie = createCookie(validRequestCookieData, CookieName.SC_GU_U.toString)
+      val cookie = validCookie
+      val fakeRequest = successfulFakeRequest(groupCode, returnUrl, cookie)
 
       when(mockIdentityService.assignGroupCode(groupCode, cookie))
         .thenReturn{
@@ -156,10 +163,6 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
             Right(AssignGroupResponse(groupCode))
           }
         }
-
-      val fakeRequest = FakeRequest("POST", "/actions/GTNF")
-        .withFormUrlEncodedBody("groupCode" -> groupCode, "returnUrl" -> returnUrl)
-        .withCookies(cookie)
 
       val result = call(thirdPartyTsAndCsController.addToGroupAction(), fakeRequest)
       redirectLocation(result) mustEqual Some(returnUrl)
@@ -169,8 +172,8 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
     "return bad request when it is not possible to add the user to group" in new WithControllerMockedDependencies {
       val groupCode = "GTNF"
       val returnUrl = "http://www.theguardian.com/sport"
-      val validRequestCookieData = "WyIxMDAwMDgxMSIsMTQ2Mjg5MjgyNDYxMV0.MCwCFG_PdoPk2PpSO5KoXbRLWJ0BvuqhAhRFIt1mlDcO2SN1Y6X7ktSs_oRJJw"
-      val cookie = createCookie(validRequestCookieData, CookieName.SC_GU_U.toString)
+      val cookie = validCookie
+      val fakeRequest = successfulFakeRequest(groupCode, returnUrl, cookie)
 
       when(mockIdentityService.assignGroupCode(groupCode, cookie))
         .thenReturn{
@@ -182,27 +185,6 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
       when(mockErrorHandler.onClientError(argAny[RequestHeader], argAny[Int], argAny[String]))
         .thenReturn(Future.successful(BadRequest("Fail")))
 
-      val fakeRequest = FakeRequest("POST", "/actions/GTNF")
-        .withFormUrlEncodedBody("groupCode" -> groupCode, "returnUrl" -> returnUrl)
-        .withCookies(cookie)
-
-      val result = call(thirdPartyTsAndCsController.addToGroupAction(), fakeRequest)
-      status(result) mustEqual BAD_REQUEST
-    }
-
-    "return bad request when the form submission to add to group action is invalid" in new WithControllerMockedDependencies {
-      val groupCode = "GTNF"
-      val returnUrl = "http://www.theguardian.com/sport"
-      val validRequestCookieData = "WyIxMDAwMDgxMSIsMTQ2Mjg5MjgyNDYxMV0.MCwCFG_PdoPk2PpSO5KoXbRLWJ0BvuqhAhRFIt1mlDcO2SN1Y6X7ktSs_oRJJw"
-      val cookie = createCookie(validRequestCookieData, CookieName.SC_GU_U.toString)
-
-      when(mockErrorHandler.onClientError(argAny[RequestHeader], argAny[Int], argAny[String]))
-        .thenReturn(Future.successful(BadRequest("Fail")))
-
-      val fakeRequest = FakeRequest("POST", "/actions/GTNF")
-        .withFormUrlEncodedBody("group" -> groupCode, "returnUrl" -> returnUrl)
-        .withCookies(cookie)
-
       val result = call(thirdPartyTsAndCsController.addToGroupAction(), fakeRequest)
       status(result) mustEqual BAD_REQUEST
     }
@@ -210,8 +192,8 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
     "return a not found error if group code is invalid" in new WithControllerMockedDependencies {
       val groupCode = "ABC"
       val returnUrl = "http://www.theguardian.com/sport"
-      val validRequestCookieData = "WyIxMDAwMDgxMSIsMTQ2Mjg5MjgyNDYxMV0.MCwCFG_PdoPk2PpSO5KoXbRLWJ0BvuqhAhRFIt1mlDcO2SN1Y6X7ktSs_oRJJw"
-      val cookie = createCookie(validRequestCookieData, CookieName.SC_GU_U.toString)
+      val cookie = validCookie
+      val fakeRequest = successfulFakeRequest(groupCode, returnUrl, cookie)
 
       when(mockIdentityService.assignGroupCode(groupCode, cookie))
         .thenReturn{
@@ -223,12 +205,23 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
       when(mockErrorHandler.onClientError(argAny[RequestHeader], argAny[Int], argAny[String]))
         .thenReturn(Future.successful(NotFound("Fail")))
 
-      val fakeRequest = FakeRequest("POST", "/actions/GTNF")
-        .withFormUrlEncodedBody("groupCode" -> groupCode, "returnUrl" -> returnUrl)
-        .withCookies(cookie)
-
       val result = call(thirdPartyTsAndCsController.addToGroupAction(), fakeRequest)
       status(result) mustEqual NOT_FOUND
+    }
+
+    "return bad request when the form submission to add to group action is invalid" in new WithControllerMockedDependencies {
+      val groupCode = "GTNF"
+      val returnUrl = "http://www.theguardian.com/sport"
+      val cookie = validCookie
+      val fakeRequest = FakeRequest("POST", "/actions/GTNF")
+        .withFormUrlEncodedBody("group" -> groupCode, "returnUrl" -> returnUrl)
+        .withCookies(cookie)
+
+      when(mockErrorHandler.onClientError(argAny[RequestHeader], argAny[Int], argAny[String]))
+        .thenReturn(Future.successful(BadRequest("Fail")))
+
+      val result = call(thirdPartyTsAndCsController.addToGroupAction(), fakeRequest)
+      status(result) mustEqual BAD_REQUEST
     }
   }
 }

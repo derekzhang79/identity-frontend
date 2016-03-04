@@ -34,8 +34,14 @@ class IdentityClient extends Logging {
 
   def sendResetPasswordEmail(request: SendResetPasswordEmailApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, SendResetPasswordEmailResponse ]] = {
     configuration.requestHandler.handleRequest(request).map {
-      case Left(error) => Left(error)
-      case Right(r: SendResetPasswordEmailResponse) => Right(r)
+      case Left(error) => {
+        logger.info("Failed to send reset password email request")
+        Left(error)
+      }
+      case Right(r: SendResetPasswordEmailResponse) => {
+        logger.info("Successfully sent reset password email request")
+        Right(r)
+      }
       case Right(other) => Left(Seq(GatewayError("Unknown response")))
     }
   }

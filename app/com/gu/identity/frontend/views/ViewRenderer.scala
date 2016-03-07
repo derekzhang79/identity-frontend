@@ -26,7 +26,7 @@ object ViewRenderer {
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
       clientId: Option[ClientID],
-      group: Option[String])
+      group: Option[GroupCode])
       (implicit messages: Messages) = {
 
     val model = SignInViewModel(
@@ -53,7 +53,7 @@ object ViewRenderer {
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
       clientId: Option[ClientID],
-      group: Option[String])
+      group: Option[GroupCode])
       (implicit messages: Messages) = {
 
     val model = RegisterViewModel(

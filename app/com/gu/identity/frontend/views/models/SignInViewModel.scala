@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views.models
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
-import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ReturnUrl}
+import com.gu.identity.frontend.models.{GroupCode, ClientID, UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.Text._
 import com.gu.identity.frontend.mvt.ActiveMultiVariantTests
 import play.api.i18n.Messages
@@ -46,7 +46,7 @@ object SignInViewModel {
    returnUrl: ReturnUrl,
    skipConfirmation: Option[Boolean],
    clientId: Option[ClientID],
-   group: Option[String])(implicit messages: Messages): SignInViewModel = {
+   group: Option[GroupCode])(implicit messages: Messages): SignInViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId)
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
@@ -57,10 +57,10 @@ object SignInViewModel {
     SignInViewModel(
       layout = layout,
 
-      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId),
+      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group),
 
       signInPageText = SignInPageText.toMap,
-      terms = Terms.getTermsModel(group),
+      terms = Terms.getTermsModel(group.map(_.getCodeValue)),
 
       hasErrors = errors.nonEmpty,
       errors = errors,
@@ -70,8 +70,8 @@ object SignInViewModel {
       skipConfirmation = skipConfirmation.getOrElse(false),
       clientId = clientId,
 
-      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group),
-      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group),
+      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.getCodeValue)),
+      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.getCodeValue)),
 
       recaptchaModel = recaptchaModel,
 

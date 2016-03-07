@@ -1,6 +1,8 @@
 package com.gu.identity.frontend.models
 
+import com.gu.identity.frontend.configuration.Configuration
 import play.api.mvc.Call
+import com.gu.identity.frontend.controllers._
 
 object UrlBuilder {
 
@@ -39,6 +41,16 @@ object UrlBuilder {
 
   def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
     apply(call.url, returnUrl, skipConfirmation, clientId, group)
+
+  def buildThirdPartyReturnUrl(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: GroupCode, configuration: Configuration): String = {
+    val relativeThirdPartyUrl = routes.ThirdPartyTsAndCs.confirmAction(group.getCodeValue, None, clientId.map(_.id), Some(true))
+    val absoluteThirdPartyUrl = configuration.identityProfileBaseUrl + relativeThirdPartyUrl
+
+
+    val constructedReturnUrl = apply(absoluteThirdPartyUrl, returnUrl, skipConfirmation, clientId, Some(group.getCodeValue))
+    val absoluteThirdPartyReturnUrl = ReturnUrl(Some(constructedReturnUrl), configuration)
+    apply(baseUrl, absoluteThirdPartyReturnUrl)
+  }
 
 
   private def buildParams(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): Seq[(String, String)] =

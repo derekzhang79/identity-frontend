@@ -12,6 +12,8 @@ object GroupCode {
       case _ => None
     }
   }
+
+  def apply(group: Option[String]): Option[GroupCode] = apply(group.getOrElse(""))
 }
 
 case object GuardianTeachersNetwork extends GroupCode {

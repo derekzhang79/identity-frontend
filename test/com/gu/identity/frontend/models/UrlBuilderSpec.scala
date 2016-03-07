@@ -1,5 +1,7 @@
 package com.gu.identity.frontend.models
 
+import java.net.{URLEncoder, URI}
+
 import com.gu.identity.frontend.configuration.Configuration
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -47,5 +49,20 @@ class UrlBuilderSpec extends FlatSpec with Matchers{
 
     val result = UrlBuilder(baseUrl, returnUrl, skipConfirmation = None, clientId = None, group = group)
     result should be("/register/confirm?returnUrl=http%3A%2F%2Fwww.theguardian.com%2Fuk&group=ABC")
+  }
+
+  it should "return a url including a reference to the third party additional ts and cs page" in {
+    val baseDomain = "oauth.thegulocal.com"
+    val baseUrl = s"http://$baseDomain"
+    val url = "http://www.jobs.theguardian.com"
+    val encodedUrl = URLEncoder.encode(url, "UTF-8")
+    val returnUrl = ReturnUrl(Some(url), Configuration.testConfiguration)
+    val groupCode = GroupCode("GRS").get
+
+    val result = UrlBuilder.buildThirdPartyReturnUrl(baseUrl, returnUrl, Some(true), None, groupCode, Configuration.testConfiguration)
+    val validUri = new URI(result)
+    validUri.getHost shouldBe baseDomain
+    validUri.getQuery.contains(encodedUrl) shouldBe true
+
   }
 }

@@ -75,6 +75,29 @@ object ViewRenderer {
       RegisterConfirmationViewModel(configuration, returnUrl, clientId))
   }
 
+  def renderResetPassword(
+    configuration: Configuration,
+    errorIds: Seq[String],
+    csrfToken: Option[CSRFToken],
+    clientId: Option[ClientID])
+    (implicit messages: Messages) = {
+    val model = ResetPasswordViewModel(
+      configuration = configuration,
+      errors = errorIds.map(ErrorViewModel.apply),
+      csrfToken = csrfToken,
+      clientId = clientId
+    )
+    renderViewModel("reset-password-page", model)
+  }
+
+  def renderResetPasswordEmailSent(configuration: Configuration, clientId: Option[ClientID])(implicit messages: Messages) = {
+    val model = ResetPasswordEmailSentViewModel(
+      configuration = configuration,
+      clientId = clientId
+    )
+    renderViewModel("reset-password-email-sent-page", model)
+  }
+
 
   def renderErrorPage(configuration: Configuration, error: HttpError, resultGenerator: Html => Result)(implicit messages: Messages) =
     renderViewModel("error-page", ErrorPageViewModel(configuration, error), resultGenerator)

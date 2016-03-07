@@ -48,7 +48,7 @@ object SignInViewModel {
    clientId: Option[ClientID],
    group: Option[GroupCode])(implicit messages: Messages): SignInViewModel = {
 
-    val layout = LayoutViewModel(configuration, activeTests, clientId)
+    val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
       getRecaptchaModel(configuration, isError = !errors.isEmpty, recaptchaEnabled = configuration.recaptchaEnabled)
 

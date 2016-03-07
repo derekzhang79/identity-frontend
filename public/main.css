@@ -25,10 +25,13 @@
 
 @import "components/register-confirmation/_register-confirmation";
 
-
 /** Membership skin **/
 
 @import "components/membership/_membership.css";
+
+/** Reset password page **/
+
+@import "components/reset-password/_reset-password";
 
 /** Third Party Ts and Cs page **/
 

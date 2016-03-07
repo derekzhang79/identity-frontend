@@ -26,7 +26,7 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
       val clientIdActual = ClientID(clientId)
       val groupCode = GroupCode(group)
       val sc_gu_uCookie = request.scGuUCookie
-      val verifiedReturnUrl = ReturnUrl(returnUrl, request.headers.get("Referer"), config)
+      val verifiedReturnUrl = ReturnUrl(returnUrl, request.headers.get("Referer"), config, clientIdActual)
       val skipConfirmationActual = skipConfirmation.getOrElse(false)
 
       groupCode match {

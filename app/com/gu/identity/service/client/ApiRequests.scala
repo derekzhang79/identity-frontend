@@ -1,7 +1,7 @@
 package com.gu.identity.service.client
 
 import play.api.mvc.Cookie
-import com.gu.identity.frontend.models.TrackingData
+import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 
 trait ApiRequest {
   val method: HttpMethod = GET
@@ -19,6 +19,9 @@ object ApiRequest {
 
   def xForwardedForIpHeader(trackingData: TrackingData) =
     trackingData.ipAddress.map("X-Forwarded-For" -> _)
+
+  def ipHeader(clientIp: ClientIp) =
+    "X-Forwarded-For" -> clientIp.ip
 
   def commonApiHeaders(trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Iterable[(String, String)] =
     Iterable(Some(apiKeyHeader), xForwardedForIpHeader(trackingData)).flatten
@@ -41,4 +44,3 @@ object ApiRequest {
     params.map(p => s"${p._1}=${encode(p._2)}").mkString("&")
   }
 }
-

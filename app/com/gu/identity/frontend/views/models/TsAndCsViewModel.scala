@@ -25,7 +25,7 @@ object TsAndCsViewModel {
     group: GroupCode,
     returnUrl: ReturnUrl)(implicit messages: Messages): TsAndCsViewModel = {
 
-    val layout = LayoutViewModel(configuration, clientId)
+    val layout = LayoutViewModel(configuration, clientId, Some(returnUrl))
     TsAndCsViewModel(
       layout = layout,
       resources = layout.resources,
@@ -37,4 +37,3 @@ object TsAndCsViewModel {
     )
   }
 }
-

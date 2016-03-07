@@ -4,7 +4,7 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.{MetricsLoggingActor, Logging}
-import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ClientRegistrationIp, TrackingData, ReturnUrl}
+import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ClientIp, TrackingData, ReturnUrl}
 import com.gu.identity.frontend.models.ClientID.FormMappings.{clientId => clientIdMapping}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceError, IdentityService}
 import play.api.data.{Mapping, Form}
@@ -60,14 +60,14 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   )
 
   def register = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
-    val clientIp = ClientRegistrationIp(request)
+    val clientIp = ClientIp(request)
     registerForm.bindFromRequest.fold(
       errorForm => {
         val errors = errorForm.errors.map(error => s"register-error-${error.key}")
         Future.successful(SeeOther(routes.Application.register(errors).url))},
       successForm => {
         val trackingData = TrackingData(request, successForm.returnUrl)
-        val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"), config)
+        val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"), config, successForm.clientID)
         identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
           case Left(errors) =>
             redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.group, successForm.clientID)

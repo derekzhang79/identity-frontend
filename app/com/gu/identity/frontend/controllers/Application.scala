@@ -5,21 +5,16 @@ import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFToken, CSRFAddToken}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{GroupCode, ClientID, ReturnUrl}
 import com.gu.identity.frontend.mvt.MultiVariantTestAction
-import com.gu.identity.frontend.views.ViewRenderer.{renderSignIn, renderRegisterConfirmation, renderRegister}
+import com.gu.identity.frontend.views.ViewRenderer.{renderSignIn, renderRegisterConfirmation, renderRegister, renderResetPassword, renderResetPasswordEmailSent}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.mvc._
 
 
 class Application (configuration: Configuration, val messagesApi: MessagesApi, csrfConfig: CSRFConfig) extends Controller with Logging with I18nSupport {
 
-  def index = Action {
-    Redirect(routes.Application.signIn())
-  }
-
   def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
-    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration)
     val clientIdActual = ClientID(clientId)
-
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
 
@@ -27,9 +22,8 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
   }
 
   def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean],  clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
-    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration)
     val clientIdActual = ClientID(clientId)
-
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
 
@@ -38,9 +32,21 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
 
   def confirm(returnUrl: Option[String], clientId: Option[String]) = Action {
     val clientIdOpt = ClientID(clientId)
-    val returnUrlActual = ReturnUrl(returnUrl, referer = None, configuration)
+    val returnUrlActual = ReturnUrl(returnUrl, refererHeader = None, configuration, clientIdOpt)
 
     renderRegisterConfirmation(configuration, returnUrlActual, clientIdOpt)
+  }
+
+  def reset(error: Seq[String], clientId: Option[String]) = CSRFAddToken(csrfConfig) { req =>
+    val clientIdOpt = ClientID(clientId)
+    val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
+
+    renderResetPassword(configuration, error, csrfToken, clientIdOpt)
+  }
+
+  def resetPasswordEmailSent(clientId: Option[String]) = Action {
+    val clientIdOpt = ClientID(clientId)
+    renderResetPasswordEmailSent(configuration, clientIdOpt)
   }
 }
 

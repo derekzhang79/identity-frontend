@@ -13,7 +13,7 @@ GET        /reset                         com.gu.identity.frontend.controllers.A
 
 GET        /reset/email-sent              com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent(clientId: Option[String] ?= None)
 
-GET        /agree/:group                  com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.confirmAction(group: String, returnUrl: Option[String] ?= None, clientId: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None)
+GET        /agree/:group                  com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.confirmAction(group: String, returnUrl: Option[String] ?= None, clientId: Option[String] ?= None, skipThirdPartyLandingPage: Option[Boolean] ?= None)
 
 POST       /actions/agree                 com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.addToGroupAction
 

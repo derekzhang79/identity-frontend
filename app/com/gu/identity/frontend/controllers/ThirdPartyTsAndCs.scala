@@ -22,16 +22,16 @@ class ThirdPartyTsAndCs(identityService: IdentityService, identityCookieDecoder:
 
   implicit lazy val executionContext: ExecutionContext = play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-  def confirmAction[A](group: String, returnUrl: Option[String], clientId: Option[String], skipConfirmation: Option[Boolean]) = UserAuthenticatedAction(identityCookieDecoder).async { request => {
+  def confirmAction[A](group: String, returnUrl: Option[String], clientId: Option[String], skipThirdPartyLandingPage: Option[Boolean]) = UserAuthenticatedAction(identityCookieDecoder).async { request => {
       val clientIdActual = ClientID(clientId)
       val groupCode = GroupCode(group)
       val sc_gu_uCookie = request.scGuUCookie
       val verifiedReturnUrl = ReturnUrl(returnUrl, request.headers.get("Referer"), config, clientIdActual)
-      val skipConfirmationActual = skipConfirmation.getOrElse(false)
+      val skipThirdPartyLandingPageActual = skipThirdPartyLandingPage.getOrElse(false)
 
       groupCode match {
         case Some(validGroup) => {
-          confirm(validGroup, verifiedReturnUrl, clientIdActual, skipConfirmationActual, sc_gu_uCookie).flatMap {
+          confirm(validGroup, verifiedReturnUrl, clientIdActual, skipThirdPartyLandingPageActual, sc_gu_uCookie).flatMap {
             case Right(result) => Future.successful(result)
             case Left(errors) => httpErrorHandler.onClientError(request, BAD_REQUEST, "Could not check user's group membership status")
           }

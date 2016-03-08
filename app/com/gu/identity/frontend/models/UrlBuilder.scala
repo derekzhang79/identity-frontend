@@ -21,17 +21,19 @@ object UrlBuilder {
     }
 
   def apply(baseUrl: String, returnUrl: ReturnUrl): String =
-    apply(baseUrl, returnUrl, skipConfirmation = None, clientId = None, group = None)
+    apply(baseUrl, returnUrl, skipConfirmation = None, clientId = None, group = None, skipThirdPartyLandingPage = None)
 
   def apply(baseUrl: String, returnUrl: ReturnUrl, clientId: Option[ClientID]): String =
-    apply(baseUrl, returnUrl, skipConfirmation = None, clientId, group = None)
+    apply(baseUrl, returnUrl, skipConfirmation = None, clientId, group = None, skipThirdPartyLandingPage = None)
 
   def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): String =
-    apply(baseUrl, buildParams(returnUrl, skipConfirmation, clientId, group = None))
+    apply(baseUrl, returnUrl, skipConfirmation, clientId, group = None, skipThirdPartyLandingPage = None)
 
   def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
-    apply(baseUrl, buildParams(returnUrl, skipConfirmation, clientId, group))
+    apply(baseUrl, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None)
 
+  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String], skipThirdPartyLandingPage: Option[Boolean]): String =
+    apply(baseUrl, buildParams(returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage))
 
   def apply(call: Call, params: Seq[(String, String)]): String =
     apply(call.url, params)
@@ -40,24 +42,35 @@ object UrlBuilder {
     apply(call, returnUrl, None, clientId, None)
 
   def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
-    apply(call.url, returnUrl, skipConfirmation, clientId, group)
+    apply(call.url, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None)
 
-  def buildThirdPartyReturnUrl(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: GroupCode, configuration: Configuration): String = {
-    val relativeThirdPartyUrl = routes.ThirdPartyTsAndCs.confirmAction(group.getCodeValue, None, clientId.map(_.id), Some(true))
-    val absoluteThirdPartyUrl = configuration.identityProfileBaseUrl + relativeThirdPartyUrl
+  def buildThirdPartyReturnUrl(
+      baseUrl: String,
+      returnUrl: ReturnUrl,
+      skipConfirmation: Option[Boolean],
+      skipThirdPartyLandingPage: Boolean,
+      clientId: Option[ClientID],
+      group: GroupCode,
+      configuration: Configuration): String = {
 
+    val baseThirdPartyReturnUrl = configuration.identityProfileBaseUrl + "/agree/" + group.getCodeValue
+    val thirdPartyReturnUrl = apply(baseThirdPartyReturnUrl, returnUrl, skipConfirmation = None, clientId, group = None, Some(skipThirdPartyLandingPage))
+    val verifiedThirdPartyReturnUrl = ReturnUrl(Some(thirdPartyReturnUrl), configuration)
 
-    val constructedReturnUrl = apply(absoluteThirdPartyUrl, returnUrl, skipConfirmation, clientId, Some(group.getCodeValue))
-    val absoluteThirdPartyReturnUrl = ReturnUrl(Some(constructedReturnUrl), configuration)
-    apply(baseUrl, absoluteThirdPartyReturnUrl)
+    apply(baseUrl, verifiedThirdPartyReturnUrl, skipConfirmation, clientId, Some(group.getCodeValue), skipThirdPartyLandingPage = None)
   }
 
-
-  private def buildParams(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): Seq[(String, String)] =
+  private def buildParams(
+                           returnUrl: ReturnUrl,
+                           skipConfirmation: Option[Boolean],
+                           clientId: Option[ClientID],
+                           group: Option[String],
+                           skipThirdPartyLandingPage: Option[Boolean]): Seq[(String, String)] =
     Seq(
       Some(returnUrl).filterNot(_.isDefault).map("returnUrl" -> _.url),
       skipConfirmation.map("skipConfirmation" -> _.toString),
       clientId.map("clientId" -> _.id),
-      group.map("group" -> _)
+      group.map("group" -> _),
+      skipThirdPartyLandingPage.map("skipThirdPartyLandingPage" -> _.toString)
     ).flatten
 }

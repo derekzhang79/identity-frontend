@@ -13,12 +13,10 @@ case class SendResetPasswordEmailApiRequest(data: ResetPasswordData, clientIp: C
     "Content-Type" -> "application/json")
   override val url = ApiRequest.apiEndpoint("pwd-reset/send-password-reset-email")
   override val body = Some(SendResetPasswordEmailRequestBody(
-    `email-address` = data.email,
-    `type` = "reset"
+    `email-address` = data.email
   ))
 }
 
 case class SendResetPasswordEmailRequestBody(
-  `email-address`: String,
-  `type`: String
+  `email-address`: String
 ) extends ApiRequestBody

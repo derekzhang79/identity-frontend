@@ -57,15 +57,13 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
 
     "Encode correct json when using a SendResetPasswordEmailRequest" in {
       val email = "test@guardian.co.uk"
-      val resetType = "reset"
 
-      val requestBody = SendResetPasswordEmailRequestBody(email, resetType)
+      val requestBody = SendResetPasswordEmailRequestBody(email)
 
       val result: String = handler.handleRequestBody(requestBody)
       val jsonResult = Json.parse(result)
 
       (jsonResult \ "email-address").validate[String].asOpt.value should equal(email)
-      (jsonResult \ "type").validate[String].asOpt.value should equal(resetType)
     }
   }
 }

@@ -38,6 +38,7 @@ object Driver {
       val capabilities = DesiredCapabilities.firefox()
       capabilities.setCapability("platform", Platform.WIN8)
       capabilities.setCapability("name", "identity-frontend")
+      capabilities.setCapability("timeZone", "London")
       new RemoteWebDriver(url, capabilities)
     }
   }

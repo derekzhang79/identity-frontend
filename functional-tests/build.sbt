@@ -12,5 +12,6 @@ libraryDependencies ++= Seq(
   "com.gu" %% "identity-test-users" % "0.5",
   "com.typesafe.play" %% "play-json" % "2.4.4",
   "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
-  ws
+  ws,
+  "com.sun.mail" % "javax.mail" % "1.5.5"
 )

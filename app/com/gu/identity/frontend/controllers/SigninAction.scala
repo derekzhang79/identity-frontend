@@ -50,6 +50,13 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     val formParams = signInFormBody.bindFromRequest()(request).get
     val trackingData = TrackingData(request, formParams.returnUrl)
     val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"), config, formParams.clientID)
+    val successfulReturnUrl = formParams.groupCode match {
+      case Some(validGroupCode) => {
+        val thirdPartyReturnUrl = Some(UrlBuilder.buildThirdPartyReturnUrl("", returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientID, validGroupCode, config))
+        ReturnUrl(thirdPartyReturnUrl, request.headers.get("Referer"), config, formParams.clientID)
+      }
+      case _ => returnUrl
+    }
 
     def googleRecaptchaError = Future.successful(
       redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation, formParams.clientID)
@@ -60,7 +67,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
         case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, returnUrl, formParams.skipConfirmation, formParams.clientID)
         case Right(cookies) => {
           logSuccessfulSignin
-          SeeOther(returnUrl.url)
+          SeeOther(successfulReturnUrl.url)
             .withCookies(cookies: _*)
         }
       }.recover {

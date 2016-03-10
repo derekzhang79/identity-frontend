@@ -7,6 +7,10 @@
     <input type="hidden" name="clientId" value="{{ clientId.id }}">
   {{/ clientId }}
 
+  {{# groupCode }}
+      <input type="hidden" name="groupCode" value="{{ groupCode.getCodeValue }}">
+  {{/ groupCode }}
+
   <p class="signin-form__prelude">{{signInPageText.divideText}}</p>
 
   {{#each errors }}

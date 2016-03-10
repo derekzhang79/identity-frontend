@@ -24,6 +24,7 @@ case class SignInViewModel private(
     returnUrl: String = "",
     skipConfirmation: Boolean = false,
     clientId: Option[ClientID],
+    groupCode: Option[GroupCode],
 
     registerUrl: String = "",
     forgotPasswordUrl: String = "",
@@ -69,6 +70,7 @@ object SignInViewModel {
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
       clientId = clientId,
+      groupCode = group,
 
       registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.getCodeValue)),
       forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.getCodeValue)),

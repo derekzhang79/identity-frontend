@@ -3,8 +3,9 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.{MetricsLoggingActor, Logging}
-import com.gu.identity.frontend.models.{ClientID, ReturnUrl, TrackingData}
+import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.models.ClientID.FormMappings.{clientId => clientIdMapping}
+import com.gu.identity.frontend.models.GroupCode.FormMappings.{groupCode => groupCodeMapping}
 import com.gu.identity.frontend.services._
 import play.api.data.Form
 import play.api.data.Forms.{boolean, default, mapping, optional, text}
@@ -29,7 +30,8 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     returnUrl: Option[String],
     skipConfirmation: Option[Boolean],
     googleRecaptchaResponse: Option[String],
-    clientID: Option[ClientID])
+    clientID: Option[ClientID],
+    groupCode: Option[GroupCode])
 
   private val signInFormBody = Form(
     mapping(
@@ -39,7 +41,8 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       "returnUrl" -> optional(text),
       "skipConfirmation" -> optional(boolean),
       "g-recaptcha-response" -> optional(text),
-      "clientId" -> optional(clientIdMapping)
+      "clientId" -> optional(clientIdMapping),
+      "groupCode" -> optional(groupCodeMapping)
     )(SignInRequest.apply)(SignInRequest.unapply)
   )
 

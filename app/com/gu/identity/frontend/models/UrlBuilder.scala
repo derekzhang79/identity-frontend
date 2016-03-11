@@ -1,14 +1,17 @@
 package com.gu.identity.frontend.models
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.errors.AppException
 import play.api.mvc.Call
-import com.gu.identity.frontend.controllers._
 
 object UrlBuilder {
 
+  type UrlParameter = (String, String)
+  type UrlParameters = Seq[UrlParameter]
+
   private def encode = java.net.URLEncoder.encode(_: String, "UTF8")
 
-  def apply(baseUrl: String, params: Seq[(String, String)]): String =
+  def apply(baseUrl: String, params: UrlParameters): String =
     params.headOption match {
       case None => baseUrl
       case _ => {
@@ -27,15 +30,21 @@ object UrlBuilder {
     apply(baseUrl, returnUrl, skipConfirmation = None, clientId, group = None, skipThirdPartyLandingPage = None)
 
   def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): String =
-    apply(baseUrl, returnUrl, skipConfirmation, clientId, group = None, skipThirdPartyLandingPage = None)
+    apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId))
 
   def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
     apply(baseUrl, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None)
 
   def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String], skipThirdPartyLandingPage: Option[Boolean]): String =
-    apply(baseUrl, buildParams(returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage))
+    apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, group, skipThirdPartyLandingPage))
 
-  def apply(call: Call, params: Seq[(String, String)]): String =
+  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], error: AppException): String =
+    apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, error = Some(error)))
+
+  def apply(baseUrl: String, error: AppException): String =
+    apply(baseUrl, buildParams(error = Some(error)))
+
+  def apply(call: Call, params: UrlParameters): String =
     apply(call.url, params)
 
   def apply(call: Call, returnUrl: ReturnUrl, clientId: Option[ClientID]): String =
@@ -72,16 +81,18 @@ object UrlBuilder {
   }
 
   private def buildParams(
-      returnUrl: ReturnUrl,
-      skipConfirmation: Option[Boolean],
-      clientId: Option[ClientID],
-      group: Option[String],
-      skipThirdPartyLandingPage: Option[Boolean]): Seq[(String, String)] =
+      returnUrl: Option[ReturnUrl] = None,
+      skipConfirmation: Option[Boolean] = None,
+      clientId: Option[ClientID] = None,
+      group: Option[String] = None,
+      skipThirdPartyLandingPage: Option[Boolean] = None,
+      error: Option[AppException] = None): UrlParameters =
     Seq(
-      Some(returnUrl).filterNot(_.isDefault).map("returnUrl" -> _.url),
+      returnUrl.flatMap(_.toStringOpt).map("returnUrl" -> _),
       skipConfirmation.map("skipConfirmation" -> _.toString),
       clientId.map("clientId" -> _.id),
       group.map("group" -> _),
-      skipThirdPartyLandingPage.map("skipThirdPartyLandingPage" -> _.toString)
+      skipThirdPartyLandingPage.map("skipThirdPartyLandingPage" -> _.toString),
+      error.map("error" -> _.id.key)
     ).flatten
 }

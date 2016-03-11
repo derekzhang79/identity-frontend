@@ -113,8 +113,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     val registrationConfirmUrl = UrlBuilder(config.identityProfileBaseUrl, routes.Application.confirm())
     (group, skipConfirmation.getOrElse(false)) match {
       case(Some(group), false) => {
-        val x = UrlBuilder(registrationConfirmUrl, returnUrl, clientId)
-        val skipConfirmationReturnUrl = ReturnUrl(Some(x), config)
+        val skipConfirmationReturnUrl = ReturnUrl(Some(UrlBuilder(registrationConfirmUrl, returnUrl, clientId)), config)
         val url = UrlBuilder.buildThirdPartyReturnUrl(skipConfirmationReturnUrl, skipConfirmation, skipThirdPartyLandingPage = true, clientId, group, config)
         registerSuccessResult(url, cookies)
       }

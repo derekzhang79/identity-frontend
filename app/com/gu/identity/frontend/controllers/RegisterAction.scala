@@ -28,8 +28,8 @@ case class RegisterRequest(
     receive3rdPartyMarketing: Boolean,
     returnUrl: Option[String],
     skipConfirmation: Option[Boolean],
-    group: Option[GroupCode],
-    clientID: Option[ClientID])
+    clientID: Option[ClientID],
+    groupCode: Option[GroupCode])
 
 class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi, val config: Configuration, csrfConfig: CSRFConfig) extends Controller with Logging with MetricsLoggingActor with I18nSupport {
 
@@ -52,8 +52,8 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
       "receive3rdPartyMarketing" -> boolean,
       "returnUrl" -> optional(text),
       "skipConfirmation" -> optional(boolean),
-      "group" -> optional(groupCodeMapping),
-      "clientId" -> optional(clientIdMapping)
+      "clientId" -> optional(clientIdMapping),
+      "groupCode" -> optional(groupCodeMapping)
     )(RegisterRequest.apply)(RegisterRequest.unapply)
   )
 
@@ -68,14 +68,14 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
         val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"), config, successForm.clientID)
         identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
           case Left(errors) =>
-            redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.group, successForm.clientID)
+            redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.groupCode, successForm.clientID)
           case Right(cookies) => {
-            registerSuccessRedirectUrl(cookies, returnUrl, successForm.skipConfirmation, successForm.group, successForm.clientID)
+            registerSuccessRedirectUrl(cookies, returnUrl, successForm.skipConfirmation, successForm.groupCode, successForm.clientID)
           }
         }.recover {
           case NonFatal(ex) => {
             logger.warn(s"Unexpected error while registering: ${ex.getMessage}", ex)
-            redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, successForm.skipConfirmation, successForm.group, successForm.clientID)
+            redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, successForm.skipConfirmation, successForm.groupCode, successForm.clientID)
           }
 
         }

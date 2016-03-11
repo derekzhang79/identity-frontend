@@ -42,7 +42,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
      receive3rdPartyMarketing: Boolean = true,
      returnUrl: Option[String] = Some("http://www.theguardian.com"),
      skipConfirmation: Option[Boolean] = None,
-     group: Option[String] = None) = {
+     groupCode: Option[String] = None) = {
     val bodyParams = Seq(
       "firstName" -> firstName,
       "lastName" -> lastName,
@@ -53,7 +53,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "receive3rdPartyMarketing" -> receive3rdPartyMarketing.toString,
       "returnUrl" -> returnUrl.getOrElse("http://none.com"),
       "skipConfirmation" -> skipConfirmation.getOrElse(false).toString,
-      "group" -> group.getOrElse(""))
+      "groupCode" -> groupCode.getOrElse(""))
 
     FakeRequest("POST", "/actions/register")
       .withFormUrlEncodedBody(bodyParams: _*)
@@ -171,7 +171,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation, group = group))
+      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation, groupCode = group))
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).get must startWith (s"${config.identityProfileBaseUrl}/agree/${group.get}")
@@ -189,7 +189,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation, group = group))
+      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation, groupCode = group))
       val resultCookies = cookies(result)
 
       resultCookies.size mustEqual 1
@@ -209,7 +209,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(returnUrl=Some(returnUrl), skipConfirmation = skipConfirmation, group = group))
+      val result = call(controller.register, fakeRegisterRequest(returnUrl=Some(returnUrl), skipConfirmation = skipConfirmation, groupCode = group))
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       queryParams.contains("returnUrl") mustEqual true
@@ -228,7 +228,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(returnUrl=returnUrl, skipConfirmation = skipConfirmation, group = group))
+      val result = call(controller.register, fakeRegisterRequest(returnUrl=returnUrl, skipConfirmation = skipConfirmation, groupCode = group))
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       queryParams.contains("skipConfirmation") mustEqual true
@@ -248,7 +248,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(returnUrl=returnUrl, skipConfirmation = skipConfirmation, group = group))
+      val result = call(controller.register, fakeRegisterRequest(returnUrl=returnUrl, skipConfirmation = skipConfirmation, groupCode = group))
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       queryParams.contains("skipThirdPartyLandingPage") mustEqual true
@@ -269,7 +269,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation, group = group))
+      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation, groupCode = group))
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).get must startWith (s"${config.identityProfileBaseUrl}/agree/${group.get}")
@@ -287,7 +287,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation, group = group))
+      val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation, groupCode = group))
       val resultCookies = cookies(result)
 
       resultCookies.size mustEqual 1
@@ -307,7 +307,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(returnUrl=returnUrl, skipConfirmation = skipConfirmation, group = group))
+      val result = call(controller.register, fakeRegisterRequest(returnUrl=returnUrl, skipConfirmation = skipConfirmation, groupCode = group))
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       queryParams.contains("returnUrl") mustEqual true
@@ -398,7 +398,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
           )
         }
 
-      val result = call(controller.register, fakeRegisterRequest(group = group))
+      val result = call(controller.register, fakeRegisterRequest(groupCode = group))
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
 
       queryParams.contains("group") mustEqual true
@@ -478,13 +478,13 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     "return register-error-group if the group code is not a valid code" in new WithControllerMockedDependencies {
       val group = "ABC"
 
-      val result = call(controller.register, fakeRegisterRequest(group = Some(group)))
+      val result = call(controller.register, fakeRegisterRequest(groupCode = Some(group)))
 
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("register-error-group")
+      queryParams.get("error") mustEqual Some("register-error-groupCode")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }

@@ -26,11 +26,10 @@ object OAuthProviderViewModel {
       groupCode: Option[GroupCode])
       (implicit messages: Messages): OAuthProviderViewModel = {
 
-    val skipThirdPartyLandingPage = true
     val baseUrl = configuration.identityFederationApiHost + provider.authPath
 
     val returnUrl = groupCode match{
-      case Some(code) => UrlBuilder.buildThirdPartyReturnUrl(baseUrl, finalReturnUrl, skipConfirmation, skipThirdPartyLandingPage, clientId, code, configuration)
+      case Some(code) => UrlBuilder.buildOauthReturnUrl(baseUrl, finalReturnUrl, skipConfirmation, clientId, code, configuration)
       case None => UrlBuilder(baseUrl, finalReturnUrl, skipConfirmation, clientId)
     }
 

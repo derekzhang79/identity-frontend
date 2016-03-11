@@ -4,7 +4,7 @@ import java.net.{URLDecoder, URLEncoder}
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFConfig
-import com.gu.identity.frontend.models.{ClientIp, TrackingData}
+import com.gu.identity.frontend.models.{UrlBuilder, ClientIp, TrackingData}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
 import com.gu.identity.frontend.utils.UrlDecoder
 import org.mockito.Matchers.{any => argAny, _}
@@ -118,7 +118,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation))
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get must startWith (routes.Application.confirm().url)
+      redirectLocation(result).get must startWith (UrlBuilder(config.identityProfileBaseUrl, routes.Application.confirm()))
     }
 
     "have a sign in cookie when registration is successful skipConfirmation is false and no group code" in new WithControllerMockedDependencies {

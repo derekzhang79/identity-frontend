@@ -110,29 +110,31 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   }
 
   private def registerSuccessRedirectUrl(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[GroupCode], clientId: Option[ClientID]) = {
+    val registrationConfirmUrl = UrlBuilder(config.identityProfileBaseUrl, routes.Application.confirm())
     (group, skipConfirmation.getOrElse(false)) match {
       case(Some(group), false) => {
-        val skipConfirmationReturnUrl = ReturnUrl(Some(UrlBuilder(routes.Application.confirm(), returnUrl, clientId)), config)
-        val url = UrlBuilder.buildThirdPartyReturnUrl("", skipConfirmationReturnUrl, skipConfirmation, skipThirdPartyLandingPage = true, clientId, group, config)
+        val x = UrlBuilder(registrationConfirmUrl, returnUrl, clientId)
+        val skipConfirmationReturnUrl = ReturnUrl(Some(x), config)
+        val url = UrlBuilder.buildThirdPartyReturnUrl(skipConfirmationReturnUrl, skipConfirmation, skipThirdPartyLandingPage = true, clientId, group, config)
         registerSuccessResult(url, cookies)
       }
       case(Some(group), true) => {
-        val url = UrlBuilder.buildThirdPartyReturnUrl("",returnUrl, skipConfirmation, skipThirdPartyLandingPage = true, clientId, group, config)
+        val url = UrlBuilder.buildThirdPartyReturnUrl(returnUrl, skipConfirmation, skipThirdPartyLandingPage = true, clientId, group, config)
         registerSuccessResult(url, cookies)
       }
       case (None, false) => {
-        val url = UrlBuilder(routes.Application.confirm(), returnUrl, clientId)
+        val url = ReturnUrl(Some(UrlBuilder(registrationConfirmUrl, returnUrl, clientId)), config)
         registerSuccessResult(url, cookies)
       }
       case (None, true) => {
-        registerSuccessResult(returnUrl.url, cookies)
+        registerSuccessResult(returnUrl, cookies)
       }
     }
   }
 
-  private def registerSuccessResult(url: String, cookies: Seq[PlayCookie]) = {
+  private def registerSuccessResult(returnUrl: ReturnUrl, cookies: Seq[PlayCookie]) = {
     logSuccessfulRegister
-    SeeOther(url).withCookies(cookies: _*)
+    SeeOther(returnUrl.url).withCookies(cookies: _*)
   }
 
   // Note: Limitation

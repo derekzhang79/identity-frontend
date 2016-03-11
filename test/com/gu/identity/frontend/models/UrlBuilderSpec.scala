@@ -56,7 +56,7 @@ class UrlBuilderSpec extends FlatSpec with Matchers{
     val baseUrl = s"http://$baseDomain"
     val returnUrl = ReturnUrl(Some(url), Configuration.testConfiguration)
     val groupCode = GroupCode("GRS").get
-    val result = UrlBuilder.buildThirdPartyReturnUrl(baseUrl, returnUrl, skipConfirmation = Some(true), skipThirdPartyLandingPage = true, clientId = None, groupCode, Configuration.testConfiguration)
+    val result = UrlBuilder.buildOauthReturnUrl(baseUrl, returnUrl, skipConfirmation = Some(true), clientId = None, groupCode, Configuration.testConfiguration)
     new URI(result)
   }
 
@@ -80,7 +80,7 @@ class UrlBuilderSpec extends FlatSpec with Matchers{
     query.split("\\?").length should be < 3
   }
 
-  it should "include skip third party language page, skip confirmation and group query params" in {
+  it should "include skip third party landing page, skip confirmation and group query params" in {
     val validUri = getThirdPartyUri()
     val query = validUri.getQuery
     query.contains("&skipThirdPartyLandingPage=true&") shouldBe true

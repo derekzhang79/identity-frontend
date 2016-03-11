@@ -44,20 +44,31 @@ object UrlBuilder {
   def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
     apply(call.url, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None)
 
+  def apply(baseUrl: String, call: Call): String = s"$baseUrl${call.url}"
+
   def buildThirdPartyReturnUrl(
-      baseUrl: String,
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
       skipThirdPartyLandingPage: Boolean,
       clientId: Option[ClientID],
       group: GroupCode,
-      configuration: Configuration): String = {
+      configuration: Configuration): ReturnUrl = {
 
     val baseThirdPartyReturnUrl = configuration.identityProfileBaseUrl + "/agree/" + group.getCodeValue
-    val thirdPartyReturnUrl = apply(baseThirdPartyReturnUrl, returnUrl, skipConfirmation = None, clientId, group = None, Some(skipThirdPartyLandingPage))
-    val verifiedThirdPartyReturnUrl = ReturnUrl(Some(thirdPartyReturnUrl), configuration)
+    val thirdPartyReturnUrl = apply(baseThirdPartyReturnUrl, returnUrl, skipConfirmation, clientId, group = None, Some(skipThirdPartyLandingPage))
+    ReturnUrl(Some(thirdPartyReturnUrl), configuration)
+  }
 
-    apply(baseUrl, verifiedThirdPartyReturnUrl, skipConfirmation, clientId, Some(group.getCodeValue), skipThirdPartyLandingPage = None)
+  def buildOauthReturnUrl(
+      baseUrl: String,
+      returnUrl: ReturnUrl,
+      skipConfirmation: Option[Boolean],
+      clientId: Option[ClientID],
+      group: GroupCode,
+      configuration: Configuration): String = {
+
+    val thirdPartyReturnUrl = buildThirdPartyReturnUrl(returnUrl, skipConfirmation, skipThirdPartyLandingPage = true, clientId, group, configuration)
+    apply(baseUrl, thirdPartyReturnUrl, skipConfirmation, clientId, Some(group.getCodeValue), skipThirdPartyLandingPage = None)
   }
 
   private def buildParams(

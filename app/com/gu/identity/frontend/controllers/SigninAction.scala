@@ -52,8 +52,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"), config, formParams.clientID)
     val successfulReturnUrl = formParams.groupCode match {
       case Some(validGroupCode) => {
-        val thirdPartyReturnUrl = Some(UrlBuilder.buildThirdPartyReturnUrl("", returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientID, validGroupCode, config))
-        ReturnUrl(thirdPartyReturnUrl, request.headers.get("Referer"), config, formParams.clientID)
+        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientID, validGroupCode, config)
       }
       case _ => returnUrl
     }

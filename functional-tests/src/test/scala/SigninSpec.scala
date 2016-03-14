@@ -1,11 +1,14 @@
 package test
 
-import test.util.{Browser, Driver, Config}
+import test.util._
 import test.util.user.{GoogleTestUser, FacebookTestUser, FacebookTestUserService, EmailTestUser}
+import test.util.Config.ResetPasswordEmail
 import test.pages.{FacebookAuthDialog, FacebookLogin, RegisterConfirm}
 import org.scalatest.selenium.WebBrowser
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FeatureSpec, GivenWhenThen}
 import org.slf4j.LoggerFactory
+import java.util.Calendar
+import test.util.Mail
 
 class SigninSpec extends FeatureSpec with WebBrowser with Browser
   with GivenWhenThen with BeforeAndAfter with BeforeAndAfterAll {
@@ -209,6 +212,50 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
 
       And("should be signed in.")
       assert(elementHasText(className("js-profile-info"), GoogleTestUser.name))
+    }
+
+    scenario("Existing users reset their password.") {
+      val resetRequestTime = Calendar.getInstance().getTime
+      Mail.deleteAllMail
+
+
+      Given("users have already registered with Guardian via Google,")
+
+      When("they visit 'Reset Password' page,")
+      val resetPassword = new pages.ResetPassword
+      go.to(resetPassword)
+      assert(resetPassword.hasLoaded())
+
+      And("enter their email address,")
+      resetPassword.setEmailAddress(ResetPasswordEmail.to)
+
+      And("click 'Reset Password' button,")
+      resetPassword.submit()
+
+      Then("they should land on 'Email Sent' page,")
+      assert(pageHasUrl("password/email-sent"))
+
+      And("should receive reset request email ")
+
+      def resetEmailReceived: Boolean = {
+
+        def repeater(count: Int): Boolean = {
+
+          if (count == 0)
+            false
+          else Mail.resetPasswordEmailReceived(resetRequestTime) match {
+            case true => true
+            case false =>
+              Thread.sleep(5000)
+              repeater(count - 1)
+          }
+        }
+
+        repeater(5)
+      }
+
+      assert(resetEmailReceived)
+      Mail.deleteAllMail
     }
   }
 }

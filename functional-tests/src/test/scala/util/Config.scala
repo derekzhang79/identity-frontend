@@ -34,6 +34,12 @@ object Config {
     val name = conf.getString("google.test.user.name")
   }
 
+  object ResetPasswordEmail {
+    val to = conf.getString("password.reset.email.to")
+    val from = conf.getString("password.reset.email.from")
+  }
+
+
   def debug() = conf.root().render()
 
   def printSummary(): Unit = {

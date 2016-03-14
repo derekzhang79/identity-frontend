@@ -53,5 +53,17 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       (jsonResult \ "statusFields" \ "receiveGnmMarketing").validate[Boolean].asOpt.value should equal(receiveGnmMarketing)
       (jsonResult \ "statusFields" \ "receive3rdPartyMarketing").validate[Boolean].asOpt.value should equal(receive3rdPartyMarketing)
     }
+
+
+    "Encode correct json when using a SendResetPasswordEmailRequest" in {
+      val email = "test@guardian.co.uk"
+
+      val requestBody = SendResetPasswordEmailRequestBody(email)
+
+      val result: String = handler.handleRequestBody(requestBody)
+      val jsonResult = Json.parse(result)
+
+      (jsonResult \ "email-address").validate[String].asOpt.value should equal(email)
+    }
   }
 }

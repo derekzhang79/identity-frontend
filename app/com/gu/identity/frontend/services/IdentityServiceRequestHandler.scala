@@ -29,6 +29,8 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val registerRequestBodyStatusFieldsFormat = Json.format[RegisterRequestBodyStatusFields]
   implicit val registerRequestBodyFormat = Json.format[RegisterRequestBody]
 
+  implicit val sendResetPasswordEmailRequestBody = Json.format[SendResetPasswordEmailRequestBody]
+
   implicit val registerResponseUserGroupsFormat = Json.format[RegisterResponseUserGroups]
   implicit val registerResponseUserFormat = Json.format[RegisterResponseUser]
   implicit val registerResponseFormat = Json.format[RegisterResponse]
@@ -65,6 +67,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   def handleRequestBody(body: ApiRequestBody): String = body match {
     case b: RegisterRequestBody => Json.stringify(Json.toJson(b))
     case AuthenticateCookiesApiRequestBody(email, password) => encodeBody("email" -> email, "password" -> password)
+    case b: SendResetPasswordEmailRequestBody => Json.stringify(Json.toJson(b))
   }
 
   private def encodeBody(params: (String, String)*) = {

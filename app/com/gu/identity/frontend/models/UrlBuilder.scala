@@ -72,11 +72,11 @@ object UrlBuilder {
   }
 
   private def buildParams(
-                           returnUrl: ReturnUrl,
-                           skipConfirmation: Option[Boolean],
-                           clientId: Option[ClientID],
-                           group: Option[String],
-                           skipThirdPartyLandingPage: Option[Boolean]): Seq[(String, String)] =
+      returnUrl: ReturnUrl,
+      skipConfirmation: Option[Boolean],
+      clientId: Option[ClientID],
+      group: Option[String],
+      skipThirdPartyLandingPage: Option[Boolean]): Seq[(String, String)] =
     Seq(
       Some(returnUrl).filterNot(_.isDefault).map("returnUrl" -> _.url),
       skipConfirmation.map("skipConfirmation" -> _.toString),

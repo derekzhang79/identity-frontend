@@ -6,76 +6,30 @@ import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.errors.AppException
 import com.gu.identity.frontend.logging.{MetricsLoggingActor, Logging}
 import com.gu.identity.frontend.models._
-import com.gu.identity.frontend.models.ClientID.FormMapping.{clientId => clientIdMapping}
-import com.gu.identity.frontend.models.GroupCode.FormMappings.{groupCode => groupCodeMapping}
+import com.gu.identity.frontend.request.RegisterActionRequestBody
 import com.gu.identity.frontend.services.IdentityService
-import play.api.data.{Mapping, Form}
-import play.api.data.Forms._
-import play.api.data.Forms.text
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Cookie => PlayCookie, RequestHeader, Controller}
+import play.api.mvc.{Cookie => PlayCookie, Controller}
 
-import scala.concurrent.Future
-import scala.util.control.NonFatal
-
-case class RegisterRequest(
-    firstName: String,
-    lastName: String,
-    email: String,
-    username: String,
-    password: String,
-    receiveGnmMarketing: Boolean,
-    receive3rdPartyMarketing: Boolean,
-    returnUrl: Option[String],
-    skipConfirmation: Option[Boolean],
-    clientID: Option[ClientID],
-    groupCode: Option[GroupCode])
 
 class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi, val config: Configuration, csrfConfig: CSRFConfig) extends Controller with Logging with MetricsLoggingActor with I18nSupport {
 
-  private val username: Mapping[String] = text.verifying(
-    "error.username", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
-  )
+  val bodyParser = RegisterActionRequestBody.bodyParser(config)
 
-  private val password: Mapping[String] = text.verifying(
-    "error.password", name => name.length > 5 && name.length < 21
-  )
-
-  val registerForm = Form(
-    mapping(
-      "firstName" -> nonEmptyText,
-      "lastName" -> nonEmptyText,
-      "email" -> email,
-      "username" -> username,
-      "password" -> password,
-      "receiveGnmMarketing" -> boolean,
-      "receive3rdPartyMarketing" -> boolean,
-      "returnUrl" -> optional(text),
-      "skipConfirmation" -> optional(boolean),
-      "clientId" -> optional(clientIdMapping),
-      "groupCode" -> optional(groupCodeMapping)
-    )(RegisterRequest.apply)(RegisterRequest.unapply)
-  )
-
-  def register = CSRFCheck(csrfConfig).async { implicit request =>
+  def register = CSRFCheck(csrfConfig).async(bodyParser) { request =>
     val clientIp = ClientIp(request)
-    registerForm.bindFromRequest.fold(
-      errorForm => {
-        val errors = errorForm.errors.map(error => s"register-error-${error.key}")
-        Future.successful(SeeOther(routes.Application.register(errors).url))},
-      successForm => {
-        val trackingData = TrackingData(request, successForm.returnUrl)
-        val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"), config, successForm.clientID)
-        identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
-          case Left(errors) =>
-            redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.groupCode, successForm.clientID)
-          case Right(cookies) => {
-            registerSuccessRedirectUrl(cookies, returnUrl, successForm.skipConfirmation, successForm.groupCode, successForm.clientID)
-          }
-        }
+    val body = request.body
+
+    val trackingData = TrackingData(request, body.returnUrl)
+    val returnUrl = ReturnUrl(body.returnUrl, request.headers.get("Referer"), config, body.clientID)
+    identityService.registerThenSignIn(body, clientIp, trackingData).map {
+      case Left(errors) =>
+        redirectToRegisterPageWithErrors(errors, returnUrl, body.skipConfirmation, body.groupCode, body.clientID)
+      case Right(cookies) => {
+        registerSuccessRedirectUrl(cookies, returnUrl, body.skipConfirmation, body.groupCode, body.clientID)
       }
-    )
+    }
   }
 
   private def redirectToRegisterPageWithErrors(errors: Seq[AppException], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[GroupCode], clientId: Option[ClientID]) = {

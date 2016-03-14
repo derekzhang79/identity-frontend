@@ -29,17 +29,14 @@ object UrlBuilder {
   def apply(baseUrl: String, returnUrl: ReturnUrl, clientId: Option[ClientID]): String =
     apply(baseUrl, returnUrl, skipConfirmation = None, clientId, group = None, skipThirdPartyLandingPage = None)
 
-  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): String =
-    apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId))
-
   def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
-    apply(baseUrl, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None)
+    apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, group))
 
   def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String], skipThirdPartyLandingPage: Option[Boolean]): String =
     apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, group, skipThirdPartyLandingPage))
 
-  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], error: AppException): String =
-    apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, error = Some(error)))
+  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[GroupCode], error: AppException): String =
+    apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, group.map(_.getCodeValue), error = Some(error)))
 
   def apply(baseUrl: String, error: AppException): String =
     apply(baseUrl, buildParams(error = Some(error)))
@@ -47,8 +44,6 @@ object UrlBuilder {
   def apply(call: Call, params: UrlParameters): String =
     apply(call.url, params)
 
-  def apply(call: Call, returnUrl: ReturnUrl, clientId: Option[ClientID]): String =
-    apply(call, returnUrl, None, clientId, None)
 
   def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
     apply(call.url, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None)

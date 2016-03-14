@@ -22,6 +22,7 @@ case class SignInActionRequestBody(
   with ReturnUrlRequestParameter
   with SkipConfirmationRequestParameter
   with ClientIdRequestParameter
+  with GroupRequestParameter
   with CSRFTokenRequestParameter
 
 

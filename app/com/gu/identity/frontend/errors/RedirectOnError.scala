@@ -53,8 +53,8 @@ case class RedirectOnError(route: String) extends ComposableActionBuilder[Reques
 
   def redirectResultFromAppException[A](request: Request[A], error: AppException): Result = {
     val url = request.body match {
-      case CoreSessionParameters(returnUrl, skipConfirmation, clientId) =>
-        UrlBuilder(route, returnUrl, skipConfirmation, clientId, error)
+      case CoreSessionParameters(returnUrl, skipConfirmation, clientId, groupCode) =>
+        UrlBuilder(route, returnUrl, skipConfirmation, clientId, groupCode, error)
 
       case _ =>
         UrlBuilder(route, error)

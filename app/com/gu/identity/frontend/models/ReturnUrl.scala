@@ -73,7 +73,7 @@ object ReturnUrl {
     import play.api.data.Forms.{optional, text}
 
     def returnUrl(refererHeader: Option[String], configuration: Configuration): Mapping[ReturnUrl] =
-      optional(text).transform(ReturnUrl.apply(_: Option[String], refererHeader, configuration), _.toStringOpt)
+      optional(text).transform(ReturnUrl.apply(_: Option[String], refererHeader, configuration, None), _.toStringOpt)
   }
 
 }

@@ -37,7 +37,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
 
     val successfulReturnUrl = formParams.groupCode match {
       case Some(validGroupCode) => {
-        UrlBuilder.buildThirdPartyReturnUrl(formParams.returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientID, validGroupCode, config)
+        UrlBuilder.buildThirdPartyReturnUrl(formParams.returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientId, validGroupCode, config)
       }
       case _ => formParams.returnUrl
     }

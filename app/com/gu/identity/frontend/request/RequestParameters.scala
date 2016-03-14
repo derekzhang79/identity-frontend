@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.request
 
-import com.gu.identity.frontend.models.{ClientID, ReturnUrl}
+import com.gu.identity.frontend.models.{GroupCode, ClientID, ReturnUrl}
 
 
 object RequestParameters {
@@ -19,6 +19,10 @@ object RequestParameters {
     val clientId: Option[ClientID]
   }
 
+  trait GroupRequestParameter extends RequestParameter {
+    val groupCode: Option[GroupCode]
+  }
+
   trait CSRFTokenRequestParameter extends RequestParameter {
     val csrfToken: String
   }
@@ -32,10 +36,11 @@ object RequestParameters {
   type CoreSessionParameters =
     ReturnUrlRequestParameter with
     SkipConfirmationRequestParameter with
-    ClientIdRequestParameter
+    ClientIdRequestParameter with
+    GroupRequestParameter
 
   object CoreSessionParameters {
-    def unapply(params: CoreSessionParameters): Option[(ReturnUrl, Option[Boolean], Option[ClientID])] =
-      Some(params.returnUrl, params.skipConfirmation, params.clientId)
+    def unapply(params: CoreSessionParameters): Option[(ReturnUrl, Option[Boolean], Option[ClientID], Option[GroupCode])] =
+      Some(params.returnUrl, params.skipConfirmation, params.clientId, params.groupCode)
   }
 }

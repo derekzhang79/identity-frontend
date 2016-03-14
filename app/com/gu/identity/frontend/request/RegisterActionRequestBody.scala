@@ -2,7 +2,8 @@ package com.gu.identity.frontend.request
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.errors._
-import com.gu.identity.frontend.models.{ClientID, GroupCode}
+import com.gu.identity.frontend.models.{ReturnUrl, ClientID, GroupCode}
+import com.gu.identity.frontend.request.RequestParameters._
 import play.api.data.Forms._
 import play.api.data.{FormError, Mapping, Form}
 import play.api.http.HeaderNames
@@ -17,10 +18,16 @@ case class RegisterActionRequestBody(
     password: String,
     receiveGnmMarketing: Boolean,
     receive3rdPartyMarketing: Boolean,
-    returnUrl: Option[String],
+    returnUrl: ReturnUrl,
     skipConfirmation: Option[Boolean],
-    clientID: Option[ClientID],
-    groupCode: Option[GroupCode])
+    groupCode: Option[GroupCode],
+    clientId: Option[ClientID],
+    csrfToken: String)
+  extends ReturnUrlRequestParameter
+  with SkipConfirmationRequestParameter
+  with ClientIdRequestParameter
+  with GroupRequestParameter
+  with CSRFTokenRequestParameter
 
 object RegisterActionRequestBody {
 
@@ -47,7 +54,7 @@ object RegisterActionRequestBody {
     case FormError("csrfToken", _, _) => ForgeryTokenAppException("Missing csrfToken on request")
     case FormError("username", msg, _) => RegisterActionInvalidUsernameAppException(msg.headOption.getOrElse("unknown"))
     case FormError("password", msg, _) => RegisterActionInvalidPasswordAppException(msg.headOption.getOrElse("unknown"))
-    case FormError("group", msg, _) => RegisterActionInvalidGroupAppException(msg.headOption.getOrElse("unknown"))
+    case FormError("groupCode", msg, _) => RegisterActionInvalidGroupAppException(msg.headOption.getOrElse("unknown"))
     case e => RegisterActionBadRequestAppException(s"Unexpected error: ${e.message}")
   }
 
@@ -55,6 +62,7 @@ object RegisterActionRequestBody {
   object FormMapping {
     import ClientID.FormMapping.clientId
     import GroupCode.FormMappings.groupCode
+    import ReturnUrl.FormMapping.returnUrl
 
     private val username: Mapping[String] = text.verifying(
       "error.username", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
@@ -73,10 +81,11 @@ object RegisterActionRequestBody {
         "password" -> password,
         "receiveGnmMarketing" -> boolean,
         "receive3rdPartyMarketing" -> boolean,
-        "returnUrl" -> optional(text),
+        "returnUrl" -> returnUrl(refererHeader, configuration),
         "skipConfirmation" -> optional(boolean),
+        "groupCode" -> optional(groupCode),
         "clientId" -> optional(clientId),
-        "groupCode" -> optional(groupCode)
+        "csrfToken" -> text
       )(RegisterActionRequestBody.apply)(RegisterActionRequestBody.unapply)
   }
 }

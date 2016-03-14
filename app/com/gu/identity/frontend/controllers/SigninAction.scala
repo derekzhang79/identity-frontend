@@ -2,7 +2,7 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
-import com.gu.identity.frontend.logging.{MetricsLoggingActor, Logging}
+import com.gu.identity.frontend.logging.{LogOnErrorAction, MetricsLoggingActor, Logging}
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.errors.RedirectOnError
 import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
@@ -25,8 +25,9 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
 
   val SignInServiceAction =
     ServiceAction andThen
-      RedirectOnError(redirectRoute) andThen
-      CSRFCheck(csrfConfig)
+    RedirectOnError(redirectRoute) andThen
+    LogOnErrorAction(logger) andThen
+    CSRFCheck(csrfConfig)
 
   val bodyParser = SignInActionRequestBody.bodyParser(config)
 

@@ -1,13 +1,9 @@
 package com.gu.identity.frontend.authentication
 
 import com.gu.identity.cookie.IdentityCookieDecoder
-//import com.gu.identity.frontend.authentication.UserAuthenticatedAction._
 import com.gu.identity.frontend.logging.Logging
 import controllers.routes
 import play.api.mvc._
-import play.api.mvc.Results.Redirect
-import play.api.libs.concurrent.Execution.Implicits._
-import play.api.Play.current
 import play.api.mvc.Results.SeeOther
 
 

@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.models
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.errors.AppException
+import com.gu.identity.frontend.errors.{SeqAppExceptions, AppException}
 import play.api.mvc.Call
 
 object UrlBuilder {
@@ -94,5 +94,12 @@ object UrlBuilder {
       group.map("group" -> _),
       skipThirdPartyLandingPage.map("skipThirdPartyLandingPage" -> _.toString),
       error.map("error" -> _.id.key)
-    ).flatten
+    ).flatten ++ error.map(errorToUrlParameters).getOrElse(Seq.empty)
+
+
+  private def errorToUrlParameters(error: AppException): UrlParameters =
+    error match {
+      case SeqAppExceptions(errors) => errors.flatMap(errorToUrlParameters)
+      case e => Seq("error" -> e.id.key)
+    }
 }

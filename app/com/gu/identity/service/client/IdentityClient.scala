@@ -21,7 +21,7 @@ class IdentityClient extends Logging {
         Right(cookies.values.map { c =>
           IdentityApiCookie(name = c.key, value = c.value, isSession = c.sessionCookie.getOrElse(false), expires = cookies.expiresAt)
         })
-      case Right(other) => Left(Seq(GatewayError("Unknown response")))
+      case Right(other) => Left(Seq(ClientGatewayError("Unknown response")))
     }
 
   def register(request: RegisterApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, RegisterResponseUser]] = {
@@ -29,7 +29,7 @@ class IdentityClient extends Logging {
       case Left(error) => Left(error)
       case Right(RegisterResponse(user)) =>
         Right(user)
-      case Right(other) => Left(Seq(GatewayError("Unknown response")))
+      case Right(other) => Left(Seq(ClientGatewayError("Unknown response")))
     }
   }
 
@@ -60,7 +60,7 @@ class IdentityClient extends Logging {
         logger.info("Successfully sent reset password email request")
         Right(r)
       }
-      case Right(other) => Left(Seq(GatewayError("Unknown response")))
+      case Right(other) => Left(Seq(ClientGatewayError("Unknown response")))
     }
   }
 

@@ -60,7 +60,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         .map(handleResponse(request))
         .recoverWith {
           case NonFatal(err) => Future.failed {
-            GatewayError(
+            ClientGatewayError(
               "Request Error",
               Some(s"Error executing ${request.method} request to: ${request.url} - ${err.getMessage}"),
               cause = Some(err)
@@ -116,10 +116,10 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
       }
       else {
         logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
-        Left(Seq(GatewayError("Unexpected response from server")))
+        Left(Seq(ClientGatewayError("Unexpected response from server")))
       }
 
-    case _ => Left(Seq(GatewayError("Unsupported request")))
+    case _ => Left(Seq(ClientGatewayError("Unsupported request")))
   }
 
   def isErrorResponse(response: WSResponse) =
@@ -131,24 +131,24 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   def handleErrorResponse(response: WSResponse): IdentityClientErrors =
     response.json.asOpt[ApiErrorResponse]
       .map(_.errors.map {
-        case e if isBadRequestError(response) => BadRequest(e.message, e.description, e.context)
-        case e => GatewayError(e.message, e.description, e.context)
+        case e if isBadRequestError(response) => ClientBadRequestError(e.message, e.description, e.context)
+        case e => ClientGatewayError(e.message, e.description, e.context)
       })
       .getOrElse {
         logger.warn(s"Unexpected error response: ${response.status} ${response.statusText} ${response.body}")
 
         Seq(
           if (isBadRequestError(response)) {
-            BadRequest(s"Bad request: ${response.status} ${response.statusText}")
+            ClientBadRequestError(s"Bad request: ${response.status} ${response.statusText}")
 
           } else {
-            GatewayError(s"Unknown error: ${response.status} ${response.statusText}")
+            ClientGatewayError(s"Unknown error: ${response.status} ${response.statusText}")
           }
         )
       }
 
   def handleUnexpectedResponse(response: WSResponse): Either[IdentityClientErrors, ApiResponse] = {
     logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
-    Left(Seq(GatewayError("Unexpected response from server")))
+    Left(Seq(ClientGatewayError("Unexpected response from server")))
   }
 }

@@ -104,8 +104,8 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
       case Left(errors) => Left {
         // TODO explicit errors for sendResetPasswordEmail
         errors.map {
-          case e: BadRequest => UnexpectedAppException(e.message)
-          case e: GatewayError => UnexpectedAppException(e.message)
+          case e: ClientBadRequestError => UnexpectedAppException(e.message)
+          case e: ClientGatewayError => UnexpectedAppException(e.message)
           case _ => UnexpectedAppException("Unknown error")
         }
       }

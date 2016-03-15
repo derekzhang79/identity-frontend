@@ -44,3 +44,12 @@ object OAuthRegistrationText {
       google = messages("oauth.register", google)
     )
 }
+
+case class OAuthPermissionsText private(a: String, b: String)
+
+object OAuthPermissionsText {
+  def apply()(implicit messages: Messages): OAuthPermissionsText = OAuthPermissionsText(
+    a = messages("oauth.permission.a"),
+    b = messages("oauth.permission.b")
+  )
+}

@@ -1,7 +1,10 @@
 package com.gu.identity.frontend.authentication
 
+import java.net.URI
+
 import com.gu.identity.cookie.{IdentityKeys, IdentityCookieDecoder}
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.models.GroupCode
 import com.gu.identity.frontend.test.SimpleFakeApplication
 import com.gu.identity.model.User
 import org.scalatest.mock.MockitoSugar
@@ -29,12 +32,12 @@ class UserAuthenticatedActionSpec extends PlaySpec with MockitoSugar {
           request => Ok
         }
 
-        val request = FakeRequest()
+        val request = FakeRequest("GET", "/agree/GRS")
 
         val result = call(action, request)
 
         status(result) mustEqual 303
-        redirectLocation(result) mustEqual Some("/signin")
+        redirectLocation(result) mustEqual Some("/signin?group=GRS")
       }
     }
 
@@ -54,7 +57,7 @@ class UserAuthenticatedActionSpec extends PlaySpec with MockitoSugar {
         }
 
         val scGuUCookie = Cookie("SC_GU_U", "abc")
-        val request = FakeRequest().withCookies(scGuUCookie)
+        val request = FakeRequest("GET", "/agree/GRS").withCookies(scGuUCookie)
 
         val result = call(action, request)
 
@@ -76,7 +79,7 @@ class UserAuthenticatedActionSpec extends PlaySpec with MockitoSugar {
         }
 
         val scGuUCookie = Cookie("SC_GU_U", "abc")
-        val request = FakeRequest().withCookies(scGuUCookie)
+        val request = FakeRequest("GET", "/agree/GRS").withCookies(scGuUCookie)
 
         val result = call(action, request)
 
@@ -85,4 +88,23 @@ class UserAuthenticatedActionSpec extends PlaySpec with MockitoSugar {
     }
   }
 
+  "extractGroupCodeFromURI" should {
+    "return a group code object when the uri contains a valid group code" in {
+      val uri = new URI("/agree/GRS")
+      val result = UserAuthenticatedActionBuilder.extractGroupCodeFromURI(uri)
+      result mustEqual GroupCode("GRS")
+    }
+
+    "return None when the uri does not contain a valid group code" in {
+      val uri = new URI("/agree/ABC")
+      val result = UserAuthenticatedActionBuilder.extractGroupCodeFromURI(uri)
+      result mustEqual None
+    }
+
+    "return None when the uri is empty" in {
+      val uri = new URI("/")
+      val result = UserAuthenticatedActionBuilder.extractGroupCodeFromURI(uri)
+      result mustEqual None
+    }
+  }
 }

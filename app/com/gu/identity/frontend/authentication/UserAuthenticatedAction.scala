@@ -43,8 +43,17 @@ object UserAuthenticatedActionBuilder extends Logging{
 
   def getGroupCode(url: String): Option[GroupCode] = {
     Try(new URI(url)) match {
-      case Success(uri) => GroupCode(uri.getPath.split("/").last)
+      case Success(uri) => extractGroupCodeFromURI(uri)
       case _ => None
+    }
+  }
+
+  def extractGroupCodeFromURI(uri: URI): Option[GroupCode] = {
+    val pathComponents = uri.getPath.split("/")
+    if(pathComponents.size == 3 && pathComponents.contains("agree")){
+      GroupCode(pathComponents.last)
+    } else {
+      None
     }
   }
 }

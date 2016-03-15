@@ -52,7 +52,7 @@ object RegisterViewModel {
     RegisterViewModel(
       layout = layout,
 
-      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId),
+      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, activeTests),
 
       registerPageText = RegisterText(),
       terms = TermsViewModel(),

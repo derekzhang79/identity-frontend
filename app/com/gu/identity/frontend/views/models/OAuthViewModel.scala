@@ -1,13 +1,15 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ReturnUrl}
-import com.gu.identity.frontend.models.text.{OAuthText, OAuthRegistrationText, OAuthSignInText}
+import com.gu.identity.frontend.models.{GuardianMembersClientID, ClientID, UrlBuilder, ReturnUrl}
+import com.gu.identity.frontend.models.text.{OAuthText, OAuthRegistrationText, OAuthSignInText, OAuthPermissionsText}
+import com.gu.identity.frontend.mvt._
 import play.api.i18n.Messages
 
 
 sealed trait OAuthViewModel extends ViewModel {
   val all: Seq[OAuthProviderViewModel]
+  val permission: Option[String]
 }
 
 case class OAuthProviderViewModel(
@@ -59,34 +61,45 @@ case object GoogleOAuth extends SupportedOAuthProvider {
 
 
 case class OAuthSignInViewModel private(
-    all: Seq[OAuthProviderViewModel])
+    all: Seq[OAuthProviderViewModel], permission: Option[String])
   extends OAuthViewModel
 
 object OAuthSignInViewModel {
 
-  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID])(implicit messages: Messages): OAuthSignInViewModel = {
+  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], activeTests: ActiveMultiVariantTests)(implicit messages: Messages): OAuthSignInViewModel = {
     val text = OAuthSignInText()
+    val permission = PermissionCopy(activeTests, OAuthPermissionsText())
 
     OAuthSignInViewModel(
-      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation, clientId))
+      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation, clientId)), permission
     )
   }
-
 }
 
-
 case class OAuthRegistrationViewModel(
-    all: Seq[OAuthProviderViewModel])
+    all: Seq[OAuthProviderViewModel], permission: Option[String])
   extends OAuthViewModel
 
 object OAuthRegistrationViewModel {
 
-  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID])(implicit messages: Messages): OAuthRegistrationViewModel = {
+  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], activeTests: ActiveMultiVariantTests)(implicit messages: Messages): OAuthRegistrationViewModel = {
     val text = OAuthRegistrationText()
+    val permission = PermissionCopy(activeTests, OAuthPermissionsText())
 
     OAuthRegistrationViewModel(
-      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation, clientId))
+      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation, clientId)), permission
     )
   }
-
 }
+
+object PermissionCopy {
+
+  def apply(activeTests: ActiveMultiVariantTests, text: OAuthPermissionsText): Option[String] = {
+    activeTests.get(SocialSigninPermissionCopyTest) match {
+      case Some(SocialSigninPermissionCopyVariantA) => Some(text.a)
+      case Some(SocialSigninPermissionCopyVariantB) => Some(text.b)
+      case _ => None
+      }
+    }
+  }
+

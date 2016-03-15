@@ -49,7 +49,7 @@ object SignInViewModel {
     SignInViewModel(
       layout = layout,
 
-      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId),
+      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, activeTests),
 
       signInPageText = SignInPageText.toMap,
       terms = TermsViewModel(),

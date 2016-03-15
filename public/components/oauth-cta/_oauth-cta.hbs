@@ -4,4 +4,7 @@
       <a class="oauth__cta--{{ id }}" id="oauth_cta_{{ id }}" href="{{ url }}">{{ text }}</a>
     </div>
   {{/each }}
+  {{#if oauth.permission }}
+    <p class="oauth__cta--permission">{{ oauth.permission }}</p>
+  {{/if}}
 </div>

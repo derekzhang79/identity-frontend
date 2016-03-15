@@ -39,3 +39,10 @@
   @extend %oauth__cta;
   background-image: inline("icon-facebook.svg");
 }
+
+.oauth__cta--permission {
+  @extend %font-text-sans-1;
+  text-align: center;
+  color: #333;
+  margin: 1.2rem 0 0 0;
+}

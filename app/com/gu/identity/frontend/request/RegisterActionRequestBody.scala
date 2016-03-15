@@ -23,11 +23,16 @@ case class RegisterActionRequestBody(
     groupCode: Option[GroupCode],
     clientId: Option[ClientID],
     csrfToken: String)
-  extends ReturnUrlRequestParameter
+  extends SignInRequestParameters
+  with ReturnUrlRequestParameter
   with SkipConfirmationRequestParameter
   with ClientIdRequestParameter
   with GroupRequestParameter
-  with CSRFTokenRequestParameter
+  with CSRFTokenRequestParameter {
+
+  // activate "rememberMe" on registrations
+  val rememberMe = true
+}
 
 object RegisterActionRequestBody {
 

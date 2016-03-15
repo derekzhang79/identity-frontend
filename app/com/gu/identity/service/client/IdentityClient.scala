@@ -8,8 +8,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class IdentityClient extends Logging {
 
-  def authenticateCookies(email: Option[String], password: Option[String], rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
-    AuthenticateCookiesApiRequest(email, password, rememberMe, trackingData) match {
+  def authenticateCookies(email: String, password: String, rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
+    AuthenticateCookiesApiRequest(Some(email), Some(password), rememberMe, trackingData) match {
       case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(Seq(err)))
     }

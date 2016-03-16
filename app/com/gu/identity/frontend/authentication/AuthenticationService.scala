@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.authentication
 
 import com.gu.identity.frontend.authentication.CookieName.Name
+import com.gu.identity.frontend.controllers.NoCache
 import com.gu.identity.model.User
 import play.api.mvc.{Result, Cookie, DiscardingCookie, RequestHeader}
 import play.api.mvc.Results._
@@ -32,10 +33,10 @@ object AuthenticationService {
       GuardianCookie(CookieName.GU_ID_CSRF, secure = true)
     ).map(cookie => DiscardingCookie(cookie.name, "/", Some(cookieDomain), secure = cookie.secure))
 
-    Found(verifiedReturnUrl)
-      .withHeaders("Cache-Control" -> "no-cache", "Pragma" -> "no-cache")
-      .discardingCookies(cookiesToDiscard:_*)
-      .withCookies(newCookies: _*)
+    NoCache(
+      Found(verifiedReturnUrl)
+        .discardingCookies(cookiesToDiscard:_*)
+        .withCookies(newCookies: _*))
   }
 }
 

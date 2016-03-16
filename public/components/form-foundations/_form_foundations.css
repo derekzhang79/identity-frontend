@@ -30,6 +30,8 @@
 /** Form fieldset **/
 
 %form__fieldset {
+  @extend %row;
+
   border: none;
   margin: 0;
   padding: 0;

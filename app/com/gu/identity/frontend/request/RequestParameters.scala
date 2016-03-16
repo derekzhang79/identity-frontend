@@ -8,7 +8,7 @@ object RequestParameters {
   sealed trait RequestParameter
 
   trait ReturnUrlRequestParameter extends RequestParameter {
-    val returnUrl: ReturnUrl
+    val returnUrl: Option[ReturnUrl]
   }
 
   trait SkipConfirmationRequestParameter extends RequestParameter {
@@ -40,7 +40,7 @@ object RequestParameters {
     GroupRequestParameter
 
   object CoreSessionParameters {
-    def unapply(params: CoreSessionParameters): Option[(ReturnUrl, Option[Boolean], Option[ClientID], Option[GroupCode])] =
+    def unapply(params: CoreSessionParameters): Option[(Option[ReturnUrl], Option[Boolean], Option[ClientID], Option[GroupCode])] =
       Some(params.returnUrl, params.skipConfirmation, params.clientId, params.groupCode)
   }
 }

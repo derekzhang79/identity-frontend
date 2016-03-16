@@ -29,7 +29,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     val clientIp = ClientIp(request)
     val body = request.body
 
-    val trackingData = TrackingData(request, body.returnUrl)
+    val trackingData = TrackingData(request, body.returnUrl.flatMap(_.toStringOpt))
     identityService.registerThenSignIn(body, clientIp, trackingData).map {
       case Left(errors) =>
         Left(errors)
@@ -40,7 +40,8 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   }
 
 
-  private def registerSuccessRedirectUrl(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[GroupCode], clientId: Option[ClientID]) = {
+  private def registerSuccessRedirectUrl(cookies: Seq[PlayCookie], returnUrlOpt: Option[ReturnUrl], skipConfirmation: Option[Boolean], group: Option[GroupCode], clientId: Option[ClientID]) = {
+    val returnUrl = returnUrlOpt.getOrElse(ReturnUrl.defaultForClient(config, clientId))
     val registrationConfirmUrl = UrlBuilder(config.identityProfileBaseUrl, routes.Application.confirm())
     (group, skipConfirmation.getOrElse(false)) match {
       case(Some(group), false) => {

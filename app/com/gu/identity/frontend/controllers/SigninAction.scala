@@ -34,13 +34,14 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
   def signIn = SignInServiceAction(bodyParser) { request: Request[SignInActionRequestBody] =>
     val formParams = request.body
 
-    val trackingData = TrackingData(request, formParams.returnUrl)
+    val trackingData = TrackingData(request, formParams.returnUrl.flatMap(_.toStringOpt))
+    lazy val returnUrl = formParams.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, formParams.clientId))
 
     val successfulReturnUrl = formParams.groupCode match {
       case Some(validGroupCode) => {
-        UrlBuilder.buildThirdPartyReturnUrl(formParams.returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientId, validGroupCode, config)
+        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientId, validGroupCode, config)
       }
-      case _ => formParams.returnUrl
+      case _ => returnUrl
     }
 
 

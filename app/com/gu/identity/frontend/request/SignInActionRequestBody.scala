@@ -9,11 +9,11 @@ import play.api.mvc.{BodyParsers, BodyParser, Result}
 import play.api.http.HeaderNames
 
 
-case class SignInActionRequestBody(
+case class SignInActionRequestBody private(
     email: String,
     password: String,
     rememberMe: Boolean,
-    returnUrl: ReturnUrl,
+    returnUrl: Option[ReturnUrl],
     skipConfirmation: Option[Boolean],
     clientId: Option[ClientID],
     groupCode: Option[GroupCode],
@@ -67,7 +67,7 @@ object SignInActionRequestBody {
         "email" -> text,
         "password" -> text,
         "rememberMe" -> default(boolean, false),
-        "returnUrl" -> returnUrl(refererHeader, configuration),
+        "returnUrl" -> returnUrl(refererHeader),
         "skipConfirmation" -> optional(boolean),
         "clientId" -> optional(clientId),
         "groupCode" -> optional(groupCode),

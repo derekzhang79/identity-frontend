@@ -2,11 +2,10 @@ package com.gu.identity.frontend.services
 
 import com.gu.identity.frontend.authentication.CookieService
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.controllers.ResetPasswordData
 import com.gu.identity.frontend.errors._
 import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 import com.gu.identity.service.client.models.User
-import com.gu.identity.frontend.request.RegisterActionRequestBody
+import com.gu.identity.frontend.request.{ResetPasswordActionRequestBody, RegisterActionRequestBody}
 import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
 import com.gu.identity.service.client._
 import com.gu.identity.service.client.request._
@@ -28,7 +27,7 @@ trait IdentityService {
   def deauthenticate(cookie: PlayCookie, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def registerThenSignIn(request: RegisterActionRequestBody, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def register(request: RegisterActionRequestBody, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, RegisterResponseUser]]
-  def sendResetPasswordEmail(data: ResetPasswordData, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse ]]
+  def sendResetPasswordEmail(data: ResetPasswordActionRequestBody, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse ]]
   def getUser(cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, User]]
   def assignGroupCode(group: String, cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, AssignGroupResponse]]
 }
@@ -91,7 +90,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
     }
   }
 
-  override def sendResetPasswordEmail(resetPasswordData: ResetPasswordData, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse ]] = {
+  override def sendResetPasswordEmail(resetPasswordData: ResetPasswordActionRequestBody, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse ]] = {
     val apiRequest = SendResetPasswordEmailApiRequest(resetPasswordData, clientIp)
     client.sendResetPasswordEmail(apiRequest).map {
       case Left(errors) =>

@@ -4,6 +4,7 @@ import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.errors.ResetPasswordServiceGatewayAppException
 import com.gu.identity.frontend.models.ClientIp
+import com.gu.identity.frontend.request.ResetPasswordActionRequestBody
 import com.gu.identity.frontend.services.IdentityService
 import com.gu.identity.service.client.{ClientGatewayError, SendResetPasswordEmailResponse}
 import org.scalatest.mock.MockitoSugar
@@ -24,23 +25,25 @@ class ResetPasswordActionSpec extends PlaySpec with MockitoSugar {
     lazy val controller = new ResetPasswordAction(mockIdentityService, fakeCsrfConfig)
   }
 
+  def fakeRequest(email: String) =
+    FakeRequest("POST", "/actions/reset")
+      .withFormUrlEncodedBody("email" -> email, "csrfToken" -> "~stubbedtoken~")
+
   def fakeGatewayError(message: String = "Unexpected 500 error") =
     Seq(ResetPasswordServiceGatewayAppException(ClientGatewayError(message)))
 
   "POST /actions/reset" should {
     "redirect to the email validation sent confirmation page when email was properly sent" in new WithControllerMockedDependencies {
       val email = "example@gu.com"
-      val fakeRequest = FakeRequest("POST", "/actions/reset")
-        .withFormUrlEncodedBody("email" -> email)
 
-      when(mockIdentityService.sendResetPasswordEmail(argAny[ResetPasswordData], argAny[ClientIp])(argAny[ExecutionContext]))
+      when(mockIdentityService.sendResetPasswordEmail(argAny[ResetPasswordActionRequestBody], argAny[ClientIp])(argAny[ExecutionContext]))
         .thenReturn {
           Future.successful{
             Right(SendResetPasswordEmailResponse())
           }
         }
 
-      val result = call(controller.reset, fakeRequest)
+      val result = call(controller.reset, fakeRequest(email))
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual Some("/reset/email-sent")
@@ -51,10 +54,7 @@ class ResetPasswordActionSpec extends PlaySpec with MockitoSugar {
   "POST /actions/reset" should {
     "return an error if the email is empty" in new WithControllerMockedDependencies {
       val email = ""
-      val fakeRequest = FakeRequest("POST", "/actions/reset")
-        .withFormUrlEncodedBody("email" -> email)
-
-      val result = call(controller.reset, fakeRequest)
+      val result = call(controller.reset, fakeRequest(email))
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual Some("/reset?error=reset-password-error-email")
@@ -65,18 +65,15 @@ class ResetPasswordActionSpec extends PlaySpec with MockitoSugar {
   "POST /actions/reset" should {
     "redirect to reset password form if an unexpected error happens when calling the service" in new WithControllerMockedDependencies {
       val email = "example@gu.com"
-      val fakeRequest = FakeRequest("POST", "/actions/reset")
-        .withFormUrlEncodedBody("email" -> email)
 
-
-      when(mockIdentityService.sendResetPasswordEmail(argAny[ResetPasswordData], argAny[ClientIp])(argAny[ExecutionContext]))
+      when(mockIdentityService.sendResetPasswordEmail(argAny[ResetPasswordActionRequestBody], argAny[ClientIp])(argAny[ExecutionContext]))
         .thenReturn {
           Future.failed {
             new RuntimeException("Unexpected 500 error")
           }
         }
 
-      val result = call(controller.reset, fakeRequest)
+      val result = call(controller.reset, fakeRequest(email))
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual Some("/reset?error=error-unexpected")
@@ -87,18 +84,15 @@ class ResetPasswordActionSpec extends PlaySpec with MockitoSugar {
   "POST /actions/reset" should {
     "return an error if the service failed to send the email" in new WithControllerMockedDependencies {
       val email = "example@gu.com"
-      val fakeRequest = FakeRequest("POST", "/actions/reset")
-        .withFormUrlEncodedBody("email" -> email)
 
-
-      when(mockIdentityService.sendResetPasswordEmail(argAny[ResetPasswordData], argAny[ClientIp])(argAny[ExecutionContext]))
+      when(mockIdentityService.sendResetPasswordEmail(argAny[ResetPasswordActionRequestBody], argAny[ClientIp])(argAny[ExecutionContext]))
         .thenReturn {
           Future.successful {
             Left(fakeGatewayError())
           }
         }
 
-      val result = call(controller.reset, fakeRequest)
+      val result = call(controller.reset, fakeRequest(email))
 
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual Some("/reset?error=reset-password-error-gateway")

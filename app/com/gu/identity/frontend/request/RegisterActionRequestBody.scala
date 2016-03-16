@@ -7,7 +7,7 @@ import com.gu.identity.frontend.request.RequestParameters._
 import play.api.data.Forms._
 import play.api.data.{FormError, Mapping, Form}
 import play.api.http.HeaderNames
-import play.api.mvc.{Result, BodyParsers, BodyParser}
+import play.api.mvc.{RequestHeader, Result, BodyParsers, BodyParser}
 
 
 case class RegisterActionRequestBody private(
@@ -36,26 +36,17 @@ case class RegisterActionRequestBody private(
 
 object RegisterActionRequestBody {
 
-  def bodyParser(configuration: Configuration) =
-    BodyParser("RegisterActionRequestBody") { requestHeader =>
-      val refererHeader = requestHeader.headers.get(HeaderNames.REFERER)
-      val form = Form {
-        FormMapping.registerForm(configuration, refererHeader)
-      }
+  lazy val bodyParser =
+    FormRequestBodyParser("RegisterActionRequestBody")(registerForm)(handleFormErrors)
 
-      BodyParsers.parse.form(form, onErrors = onParserErrors).apply(requestHeader)
-    }
+  def registerForm(requestHeader: RequestHeader): Form[RegisterActionRequestBody] =
+    registerForm(requestHeader.headers.get(HeaderNames.REFERER))
 
-  // Unfortunately need to throw errors here as play's parser syntax doesn't
-  // allow returning a typed error, only a result
-  private def onParserErrors(form: Form[RegisterActionRequestBody]): Result = throw {
-    if (form.errors.size == 1) formErrorToAppException(form.errors.head)
-    else SeqAppExceptions {
-      form.errors.map(formErrorToAppException)
-    }
-  }
+  def registerForm(refererHeader: Option[String]): Form[RegisterActionRequestBody] =
+    Form(FormMapping.registerFormMapping(refererHeader))
 
-  private def formErrorToAppException(formError: FormError): AppException = formError match {
+
+  private def handleFormErrors(formError: FormError): AppException = formError match {
     case FormError("csrfToken", _, _) => ForgeryTokenAppException("Missing csrfToken on request")
     case FormError("firstName", msg, _) => RegisterActionInvalidFirstNameAppException(msg.headOption.getOrElse("unknown"))
     case FormError("lastName", msg, _) => RegisterActionInvalidLastNameAppException(msg.headOption.getOrElse("unknown"))
@@ -80,7 +71,7 @@ object RegisterActionRequestBody {
       "error.password", name => name.length > 5 && name.length < 21
     )
 
-    def registerForm(configuration: Configuration, refererHeader: Option[String]): Mapping[RegisterActionRequestBody] =
+    def registerFormMapping(refererHeader: Option[String]): Mapping[RegisterActionRequestBody] =
       mapping(
         "firstName" -> nonEmptyText,
         "lastName" -> nonEmptyText,

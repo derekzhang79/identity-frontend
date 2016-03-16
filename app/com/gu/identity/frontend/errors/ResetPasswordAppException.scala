@@ -29,6 +29,14 @@ case class ResetPasswordServiceBadRequestAppException(
   val id = ResetPasswordBadRequestErrorID
 }
 
+case class ResetPasswordActionBadRequestAppException(message: String)
+  extends AbstractAppException(message)
+  with BadRequestAppException
+  with ResetPasswordAppException {
+
+  val id = ResetPasswordBadRequestErrorID
+}
+
 case class ResetPasswordInvalidEmailAppException(message: String)
   extends AbstractAppException(message)
   with BadRequestAppException

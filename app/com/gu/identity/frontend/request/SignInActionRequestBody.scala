@@ -1,11 +1,10 @@
 package com.gu.identity.frontend.request
 
-import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.errors._
 import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
 import com.gu.identity.frontend.request.RequestParameters._
 import play.api.data.{Mapping, FormError, Form}
-import play.api.mvc.{BodyParsers, BodyParser, Result}
+import play.api.mvc.RequestHeader
 import play.api.http.HeaderNames
 
 
@@ -28,27 +27,20 @@ case class SignInActionRequestBody private(
 
 object SignInActionRequestBody {
 
-  def bodyParser(configuration: Configuration) =
-    BodyParser("SignInActionRequestBody") { requestHeader =>
-      val refererHeader = requestHeader.headers.get(HeaderNames.REFERER)
-      val form = Form {
-        FormMapping.signInForm(configuration, refererHeader)
-      }
+  lazy val bodyParser =
+    FormRequestBodyParser("SignInActionRequestBody")(signInForm)(handleFormErrors)
 
-      BodyParsers.parse.form(form, onErrors = onParserErrors).apply(requestHeader)
+
+  def signInForm(requestHeader: RequestHeader): Form[SignInActionRequestBody] =
+    signInForm(requestHeader.headers.get(HeaderNames.REFERER))
+
+  def signInForm(refererHeader: Option[String]): Form[SignInActionRequestBody] =
+    Form {
+      FormMapping.signInFormMapping(refererHeader)
     }
 
 
-  // Unfortunately need to throw errors here as play's parser syntax doesn't
-  // allow returning a typed error, only a result
-  private def onParserErrors(form: Form[SignInActionRequestBody]): Result = throw {
-    if (form.errors.size == 1) formErrorToAppException(form.errors.head)
-    else SeqAppExceptions {
-      form.errors.map(formErrorToAppException)
-    }
-  }
-
-  private def formErrorToAppException(formError: FormError): AppException = formError match {
+  private def handleFormErrors(formError: FormError): AppException = formError match {
     case FormError("email", _, _) => SignInInvalidCredentialsAppException
     case FormError("password", _, _) => SignInInvalidCredentialsAppException
     case FormError("csrfToken", _, _) => ForgeryTokenAppException("Missing csrfToken on request")
@@ -62,7 +54,7 @@ object SignInActionRequestBody {
     import GroupCode.FormMappings.groupCode
     import ReturnUrl.FormMapping.returnUrl
 
-    def signInForm(configuration: Configuration, refererHeader: Option[String]): Mapping[SignInActionRequestBody] =
+    def signInFormMapping(refererHeader: Option[String]): Mapping[SignInActionRequestBody] =
       mapping(
         "email" -> text,
         "password" -> text,

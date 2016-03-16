@@ -10,10 +10,7 @@ import com.gu.identity.frontend.request.SignInActionRequestBody
 import com.gu.identity.frontend.services._
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc.{Request, RequestHeader, Controller}
-
-import scala.concurrent.Future
-import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Request, Controller}
 
 
 /**
@@ -29,23 +26,23 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     LogOnErrorAction(logger) andThen
     CSRFCheck(csrfConfig)
 
-  val bodyParser = SignInActionRequestBody.bodyParser(config)
+  val bodyParser = SignInActionRequestBody.bodyParser
 
   def signIn = SignInServiceAction(bodyParser) { request: Request[SignInActionRequestBody] =>
-    val formParams = request.body
+    val body = request.body
 
-    val trackingData = TrackingData(request, formParams.returnUrl.flatMap(_.toStringOpt))
-    lazy val returnUrl = formParams.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, formParams.clientId))
+    val trackingData = TrackingData(request, body.returnUrl.flatMap(_.toStringOpt))
+    lazy val returnUrl = body.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, body.clientId))
 
-    val successfulReturnUrl = formParams.groupCode match {
+    val successfulReturnUrl = body.groupCode match {
       case Some(validGroupCode) => {
-        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientId, validGroupCode, config)
+        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, body.skipConfirmation, skipThirdPartyLandingPage = true, body.clientId, validGroupCode, config)
       }
       case _ => returnUrl
     }
 
 
-    identityService.authenticate(formParams, trackingData).map {
+    identityService.authenticate(body, trackingData).map {
       case Left(errors) => Left(errors)
       case Right(cookies) => Right {
         logSuccessfulSignin()

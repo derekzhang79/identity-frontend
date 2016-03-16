@@ -23,7 +23,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     LogOnErrorAction(logger) andThen
     CSRFCheck(csrfConfig)
 
-  val bodyParser = RegisterActionRequestBody.bodyParser(config)
+  val bodyParser = RegisterActionRequestBody.bodyParser
 
   def register = RegisterServiceAction(bodyParser) { request =>
     val clientIp = ClientIp(request)

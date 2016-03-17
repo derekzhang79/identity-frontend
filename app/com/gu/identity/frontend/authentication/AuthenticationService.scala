@@ -37,13 +37,11 @@ object AuthenticationService {
       DiscardingCookie(name = cookie.name, path = "/", domain = Some(cookieDomain), secure = cookie.secure)
     }
 
-    NoCache(
-      SeeOther(verifiedReturnUrl)
-        .withHeaders("Cache-Control" -> "no-cache", "Pragma" -> "no-cache")
-        .withCookies(newCookies: _*)
-        .discardingCookies(cookiesToDiscard:_*)
+    NoCache(SeeOther(verifiedReturnUrl)
+      .withHeaders("Cache-Control" -> "no-cache", "Pragma" -> "no-cache")
+      .withCookies(newCookies: _*)
+      .discardingCookies(cookiesToDiscard:_*)
     )
-
   }
 }
 

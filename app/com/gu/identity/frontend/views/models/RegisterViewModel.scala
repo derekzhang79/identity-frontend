@@ -53,7 +53,7 @@ object RegisterViewModel {
     RegisterViewModel(
       layout = layout,
 
-      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group),
+      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
       registerPageText = RegisterText(),
       terms = Terms.getTermsModel(group.map(_.getCodeValue)),

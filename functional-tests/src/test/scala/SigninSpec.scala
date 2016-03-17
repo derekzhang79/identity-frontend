@@ -233,7 +233,7 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
       resetPassword.submit()
 
       Then("they should land on 'Email Sent' page,")
-      assert(pageHasUrl("password/email-sent"))
+      assert(pageHasUrl("reset/email-sent"))
 
       And("should receive reset request email ")
 

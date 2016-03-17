@@ -11,6 +11,6 @@ class ResetPassword extends LoadablePage with Browser {
 
   def submit() = clickOn(resetPasswordButton)
 
-  private lazy val resetPasswordButton = cssSelector("[data-test-id=\"reset-password-btn\"]")
-  private lazy val emailAddress = id("email-address")
+  private lazy val resetPasswordButton = id("reset-password_submit")
+  private lazy val emailAddress = id("reset-password_field_email")
 }

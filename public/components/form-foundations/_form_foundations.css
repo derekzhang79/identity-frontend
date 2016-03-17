@@ -30,6 +30,8 @@
 /** Form fieldset **/
 
 %form__fieldset {
+  @extend %row;
+
   border: none;
   margin: 0;
   padding: 0;
@@ -80,7 +82,7 @@
   @extend %font-text-sans-2;
   background: var(--c-form-button--submit) inline("arrow-white-right.svg") center right no-repeat;
   border: 0;
-  border-radius: 15px;
+  border-radius: 18px;
   color: white;
   display: block;
   text-align: left;
@@ -108,7 +110,7 @@
   border: 1px solid var(--c-form-field-border);
   color: #000;
   padding: 7px 15px;
-  border-radius: 15px;
+  border-radius: 18px;
   margin: 0.2rem 0;
   width: 100%;
 

@@ -9,6 +9,7 @@ import com.gu.identity.frontend.models.{GroupCode, ReturnUrl}
 import com.gu.identity.frontend.services.{IdentityService, ServiceGatewayError}
 import com.gu.identity.service.client.AssignGroupResponse
 import com.gu.identity.service.client.models.{User, UserGroup}
+import com.gu.identity.model.{User => CookieUser}
 import org.mockito.Matchers.{any => argAny}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -26,16 +27,17 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
 
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
-    val testKeys = new IdentityKeys(Configuration.testConfiguration.identityCookiePublicKey)
 
-    val cookieDecoder = new IdentityCookieDecoder(testKeys)
     val mockMessages = mock[MessagesApi]
     val testConfig = Configuration.testConfiguration
     val mockErrorHandler = mock[ErrorHandler]
 
     implicit lazy val executionContext: ExecutionContext = play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-    val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(mockIdentityService, cookieDecoder, testConfig, mockMessages, mockErrorHandler)
+    def validCookieDecoding(cookieValue: String) = Some(CookieUser(id = "10000811"))
+
+    val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(mockIdentityService, testConfig, mockMessages, mockErrorHandler, validCookieDecoding)
+
   }
 
   "Is user in group" should {

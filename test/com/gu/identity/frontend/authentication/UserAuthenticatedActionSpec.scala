@@ -2,33 +2,30 @@ package com.gu.identity.frontend.authentication
 
 import java.net.URI
 
-import com.gu.identity.cookie.{IdentityKeys, IdentityCookieDecoder}
-import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.authentication.UserAuthenticatedActionBuilder.UserAuthenticatedAction
 import com.gu.identity.frontend.models.GroupCode
 import com.gu.identity.frontend.test.SimpleFakeApplication
-import com.gu.identity.model.User
+import com.gu.identity.model.{User => CookieUser}
 import org.scalatest.mock.MockitoSugar
-import play.api.mvc.Cookie
-import play.api.test.FakeRequest
 import org.scalatestplus.play.PlaySpec
+import play.api.mvc.Cookie
 import play.api.mvc.Results.Ok
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import UserAuthenticatedActionBuilder.UserAuthenticatedAction
 
 class UserAuthenticatedActionSpec extends PlaySpec with MockitoSugar {
 
   implicit val app = SimpleFakeApplication()
-  val testKeys = new IdentityKeys(Configuration.testConfiguration.identityCookiePublicKey)
 
+  def validCookieDecoding(cookieValue: String) = Some(CookieUser(id = "10000811"))
+
+  def invalidCookieDecoding(cookieValue: String) = None
 
   "AuthenticatedUserAction" should {
     "stop a request if the cookie is absent or invalid" in {
-      val cookieDecoder = new IdentityCookieDecoder(testKeys) {
-        override def getUserDataForScGuU(cookieValue: String): Option[User] = None
-      }
 
       running(app) {
-        val action = UserAuthenticatedAction(cookieDecoder) {
+        val action = UserAuthenticatedAction(invalidCookieDecoding) {
           request => Ok
         }
 
@@ -42,12 +39,8 @@ class UserAuthenticatedActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "add a SC_GU_U cookie to the request if the a SC_GU_U cookie is valid" in {
-      val cookieDecoder = new IdentityCookieDecoder(testKeys) {
-        override def getUserDataForScGuU(cookieValue: String): Option[User] = Some(User(id = "1234"))
-      }
-
       running(app) {
-        val action = UserAuthenticatedAction(cookieDecoder) {
+        val action = UserAuthenticatedAction(validCookieDecoding) {
           request => {
             val scGuUCookie = request.scGuUCookie
             val cookieName = scGuUCookie.name
@@ -67,12 +60,8 @@ class UserAuthenticatedActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "redirect to signin if the cookie is present but invalid" in {
-      val cookieDecoder = new IdentityCookieDecoder(testKeys) {
-        override def getUserDataForScGuU(cookieValue: String): Option[User] = None
-      }
-
       running(app) {
-        val action = UserAuthenticatedAction(cookieDecoder) {
+        val action = UserAuthenticatedAction(invalidCookieDecoding) {
           request => {
             Ok
           }

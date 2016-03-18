@@ -3,6 +3,7 @@ package com.gu.identity.frontend.authentication
 import com.gu.identity.cookie.{IdentityKeys, IdentityCookieDecoder}
 import com.gu.identity.frontend.authentication.CookieName._
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.model.User
 import org.scalatestplus.play.PlaySpec
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
@@ -16,25 +17,20 @@ class AuthenticationServiceSpec extends PlaySpec {
 
   val testKeys = new IdentityKeys(Configuration.testConfiguration.identityCookiePublicKey)
 
-  val cookieDecoder = new IdentityCookieDecoder(testKeys)
-
-
-
   def requestWithCookies(cookies: Seq[Cookie]) = {
     FakeRequest().withCookies(cookies: _*)
   }
 
-  def createCookie(value: String, name: String) = {
-    Cookie(name = name, value = value)
-  }
+  def validCookieDecoding(cookieValue: String) = Some(User(id = "10000811"))
+
+  def invalidCookieDecoding(cookieValue: String) = None
 
   "AuthenticatedUserFor" should {
 
     "decode valid cookie" in {
-      val validRequestCookieData = "WyIxMDAwMDgxMSIsMTQ2Mjg5MjgyNDYxMV0.MCwCFG_PdoPk2PpSO5KoXbRLWJ0BvuqhAhRFIt1mlDcO2SN1Y6X7ktSs_oRJJw"
-      val cookie = createCookie(validRequestCookieData, CookieName.SC_GU_U)
+      val cookie = Cookie(CookieName.SC_GU_U, "SC_GU_U_data")
       val validCookieRequest = requestWithCookies(Seq(cookie))
-      val response = AuthenticationService.authenticatedUserFor(validCookieRequest, cookieDecoder.getUserDataForScGuU)
+      val response = AuthenticationService.authenticatedUserFor(validCookieRequest, validCookieDecoding)
       val expectedUser = AuthenticatedUser("10000811")
 
       response mustEqual Some(expectedUser)
@@ -42,7 +38,7 @@ class AuthenticationServiceSpec extends PlaySpec {
 
     "fail to decode invalid cookie" in {
       val invalidCookieRequest  = requestWithCookies(Seq(Cookie("abc", CookieName.SC_GU_U)))
-      val response = AuthenticationService.authenticatedUserFor(invalidCookieRequest, cookieDecoder.getUserDataForScGuU)
+      val response = AuthenticationService.authenticatedUserFor(invalidCookieRequest, invalidCookieDecoding)
 
       response mustEqual None
     }
@@ -63,8 +59,8 @@ class AuthenticationServiceSpec extends PlaySpec {
 
     "return a response with a GU_TEST cookie" in {
       val cookielessRequest = requestWithCookies(Seq.empty)
-      val testCookie = Seq(createCookie("test_value", "GU_TEST"))
-      val result = AuthenticationService.deauthenticate(cookielessRequest, "www.theguardian.com", "www.theguardian.com", testCookie)
+      val testCookie = Cookie("GU_TEST", "test_value")
+      val result = AuthenticationService.deauthenticate(cookielessRequest, "www.theguardian.com", "www.theguardian.com", Seq(testCookie))
       val resultCookies = cookies(Future.successful(result))
       resultCookies.get(CookieName.gu_user_features_expiry).value.value.isEmpty mustBe true
       resultCookies.get(CookieName.gu_paying_member).value.value.isEmpty mustBe true

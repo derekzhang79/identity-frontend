@@ -1,3 +1,5 @@
+import './components/sentry/sentry';
+
 import { isSupported as isBrowserSupported } from './components/browser/browser';
 
 import { logPageView } from './components/analytics/analytics';

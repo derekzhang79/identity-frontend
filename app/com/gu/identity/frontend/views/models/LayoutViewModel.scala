@@ -23,6 +23,7 @@ case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
     IndirectlyLoadedImageResources,
     IndirectlyLoadedInlinedImageResources,
     IndirectlyLoadedExternalScriptResources("https://j.ophan.co.uk"),
+    IndirectlyLoadedExternalResources("https://app.getsentry.com/api/"),
     IndirectlyLoadedExternalImageResources("https://hits-secure.theguardian.com"),
     IndirectlyLoadedExternalImageResources("https://sb.scorecardresearch.com"),
     IndirectlyLoadedExternalImageResources("https://ophan.theguardian.com")
@@ -46,7 +47,7 @@ case class LayoutViewModel private(
 /**
  * Config that will be exposed as Javascript inlined into the html response.
  */
-case class JavascriptConfig(omnitureAccount: String, mvtTests: Seq[MultiVariantTest]) {
+case class JavascriptConfig(omnitureAccount: String, sentryDsn: String, mvtTests: Seq[MultiVariantTest]) {
   self =>
 
   import mvt.Implicits._
@@ -93,6 +94,7 @@ object LayoutViewModel {
 
     val config = JavascriptConfig(
       omnitureAccount = configuration.omnitureAccount,
+      sentryDsn = configuration.sentryDsn,
       mvtTests = MultiVariantTests.all.toSeq
     )
 

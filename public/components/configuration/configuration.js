@@ -3,13 +3,14 @@
 import { getElementById } from '../browser/browser';
 
 class Configuration {
-  constructor( omnitureAccount, mvtTests ) {
+  constructor( omnitureAccount, sentryDsn, mvtTests ) {
     this.omnitureAccount = omnitureAccount;
+    this.sentryDsn = sentryDsn;
     this.mvtTests = mvtTests;
   }
 
-  static fromObject( { omnitureAccount, mvtTests } ) {
-    return new Configuration( omnitureAccount, mvtTests );
+  static fromObject( { omnitureAccount, sentryDsn, mvtTests } ) {
+    return new Configuration( omnitureAccount, sentryDsn, mvtTests );
   }
 
   static fromDocument() {

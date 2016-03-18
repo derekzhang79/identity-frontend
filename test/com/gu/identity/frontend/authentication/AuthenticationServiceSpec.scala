@@ -44,11 +44,11 @@ class AuthenticationServiceSpec extends PlaySpec {
     }
   }
 
-  "Deauthenticate" should {
+  "terminateSession" should {
 
     "return a response where all cookies have no value" in {
       val cookielessRequest = requestWithCookies(Seq.empty)
-      val result = AuthenticationService.deauthenticate(cookielessRequest, "www.theguardian.com", "www.theguardian.com")
+      val result = AuthenticationService.terminateSession(cookielessRequest, "www.theguardian.com", "www.theguardian.com")
       val resultCookies = cookies(Future.successful(result))
       resultCookies.get(CookieName.gu_user_features_expiry).value.value.isEmpty mustBe true
       resultCookies.get(CookieName.gu_paying_member).value.value.isEmpty mustBe true
@@ -57,17 +57,17 @@ class AuthenticationServiceSpec extends PlaySpec {
       resultCookies.get(CookieName.GU_ID_CSRF).value.value.isEmpty mustBe true
     }
 
-    "return a response with a GU_TEST cookie" in {
+    "return a response with a GU_SO cookie" in {
       val cookielessRequest = requestWithCookies(Seq.empty)
-      val testCookie = Cookie("GU_TEST", "test_value")
-      val result = AuthenticationService.deauthenticate(cookielessRequest, "www.theguardian.com", "www.theguardian.com", Seq(testCookie))
+      val testCookie = Seq(Cookie(name = "GU_SO", value = "test_value"))
+      val result = AuthenticationService.terminateSession(cookielessRequest, "www.theguardian.com", "www.theguardian.com", testCookie)
       val resultCookies = cookies(Future.successful(result))
       resultCookies.get(CookieName.gu_user_features_expiry).value.value.isEmpty mustBe true
       resultCookies.get(CookieName.gu_paying_member).value.value.isEmpty mustBe true
       resultCookies.get(CookieName.GU_U).value.value.isEmpty mustBe true
       resultCookies.get(CookieName.SC_GU_U).value.value.isEmpty mustBe true
       resultCookies.get(CookieName.GU_ID_CSRF).value.value.isEmpty mustBe true
-      resultCookies.get("GU_TEST").value.value mustEqual "test_value"
+      resultCookies.get("GU_SO").value.value mustEqual "test_value"
     }
   }
 }

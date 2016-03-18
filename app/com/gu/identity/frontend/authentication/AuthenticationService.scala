@@ -6,9 +6,18 @@ import com.gu.identity.model.User
 import play.api.mvc.{Result, Cookie, DiscardingCookie, RequestHeader}
 import play.api.mvc.Results._
 
-
+case class AuthenticatedUser(userId: String)
 
 object AuthenticationService {
+
+  val knownCookies: Seq[GuardianCookie] = Seq(
+    DotComCookie(CookieName.gu_user_features_expiry, secure = false),
+    DotComCookie(CookieName.gu_paying_member, secure = false),
+    IdentityCookie(CookieName.GU_U, secure = false),
+    IdentityCookie(CookieName.GU_ID_CSRF, secure = true),
+    IdentityCookie(CookieName.GU_PROFILE_CSRF, secure = true),
+    IdentityCookie(CookieName.SC_GU_U, secure = true)
+  )
 
   implicit def cookieNameToString(cookieName: Name): String = cookieName.toString
 
@@ -18,26 +27,22 @@ object AuthenticationService {
     userId <- Option(minimalSecureUser.getId)
   } yield AuthenticatedUser(userId)
 
-
-  def deauthenticate(
+  def terminateSession(
       request: RequestHeader,
       verifiedReturnUrl: String,
       cookieDomain: String,
       newCookies: Seq[Cookie] = Seq.empty): Result = {
 
-    val cookiesToDiscard: Seq[DiscardingCookie] = Seq(
-      GuardianCookie(CookieName.gu_user_features_expiry, secure = false),
-      GuardianCookie(CookieName.gu_paying_member, secure = false),
-      GuardianCookie(CookieName.GU_U, secure = false),
-      GuardianCookie(CookieName.SC_GU_U, secure = true),
-      GuardianCookie(CookieName.GU_ID_CSRF, secure = true)
-    ).map(cookie => DiscardingCookie(cookie.name, "/", Some(cookieDomain), secure = cookie.secure))
+    val cookiesToDiscard: Seq[DiscardingCookie] = knownCookies.map { cookie =>
+      DiscardingCookie(name = cookie.name, path = "/", domain = Some(cookieDomain), secure = cookie.secure)
+    }
 
-    NoCache(
-      Found(verifiedReturnUrl)
-        .discardingCookies(cookiesToDiscard:_*)
-        .withCookies(newCookies: _*))
+    NoCache(SeeOther(verifiedReturnUrl)
+      .withHeaders("Cache-Control" -> "no-cache", "Pragma" -> "no-cache")
+      .withCookies(newCookies: _*)
+      .discardingCookies(cookiesToDiscard:_*)
+    )
   }
 }
 
-case class AuthenticatedUser(userId: String)
+

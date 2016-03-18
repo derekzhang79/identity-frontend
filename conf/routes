@@ -3,15 +3,21 @@
 # ~~~~
 
 # Home page
-GET        /signin                        com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None)
+GET        /signin                        com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
 
-GET        /register                      com.gu.identity.frontend.controllers.Application.register(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, group: Option[String] ?= None, clientId: Option[String] ?= None)
+GET        /register                      com.gu.identity.frontend.controllers.Application.register(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
 
 GET        /register/confirm              com.gu.identity.frontend.controllers.Application.confirm(returnUrl: Option[String] ?= None, clientId: Option[String] ?= None)
 
 GET        /reset                         com.gu.identity.frontend.controllers.Application.reset(error: Seq[String] ?= Seq.empty, clientId: Option[String] ?= None)
 
 GET        /reset/email-sent              com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent(clientId: Option[String] ?= None)
+
+GET        /signout                       com.gu.identity.frontend.controllers.SignOutAction.signOut(returnUrl: Option[String] ?= None)
+
+GET        /agree/:group                  com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.confirmAction(group: String, returnUrl: Option[String] ?= None, clientId: Option[String] ?= None, skipThirdPartyLandingPage: Option[Boolean] ?= None)
+
+POST       /actions/agree                 com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.addToGroupAction
 
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 
@@ -31,4 +37,5 @@ GET        /static/*file                  controllers.Assets.versioned(path="/pu
 # Redirects
 GET        /                              com.gu.identity.frontend.controllers.Redirects.indexRedirect
 GET        /signin/                       com.gu.identity.frontend.controllers.Redirects.signInPageTrailingSlash
+GET        /signout/                      com.gu.identity.frontend.controllers.Redirects.signOutPageTrailingSlash
 GET        /register/                     com.gu.identity.frontend.controllers.Redirects.registerPageTrailingSlash

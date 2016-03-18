@@ -1,5 +1,6 @@
 package com.gu.identity.service.client
 
+import play.api.mvc.Cookie
 import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 
 trait ApiRequest {
@@ -25,8 +26,17 @@ object ApiRequest {
   def commonApiHeaders(trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Iterable[(String, String)] =
     Iterable(Some(apiKeyHeader), xForwardedForIpHeader(trackingData)).flatten
 
-  def apiEndpoint(path: String)(implicit configuration: IdentityClientConfiguration) =
+  def apiSecureCookieUserHeader(cookie: Cookie) = {
+    Iterable("X-GU-ID-FOWARDED-SC-GU-U" -> cookie.value)
+  }
+
+  def apiEndpoint(path: String)(implicit configuration: IdentityClientConfiguration): String =
     s"https://${configuration.host}/$path"
+
+  def apiEndpoint(pathComponents: String*)(implicit configuration: IdentityClientConfiguration): String = {
+    val path = pathComponents.mkString("/")
+    apiEndpoint(path)
+  }
 
   private[client] def encodeBody(params: (String, String)*) = {
     def encode = java.net.URLEncoder.encode(_: String, "UTF8")

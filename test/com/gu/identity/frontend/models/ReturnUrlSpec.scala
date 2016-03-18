@@ -37,7 +37,7 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
   it should "Determine valid url path" in {
     validUrlPath(new URI("http://theguardian.com/signin")) should be(false)
     validUrlPath(new URI("http://theguardian.com/register")) should be(false)
-    validUrlPath(new URI("http://theguardian.com/register/confirm")) should be(false)
+    validUrlPath(new URI("http://theguardian.com/register/confirm")) should be(true)
     validUrlPath(new URI("http://theguardian.com")) should be(true)
     validUrlPath(new URI("http://theguardian.com/politics")) should be(true)
   }

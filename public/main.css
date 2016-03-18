@@ -32,3 +32,7 @@
 /** Reset password page **/
 
 @import "components/reset-password/_reset-password";
+
+/** Third Party Ts and Cs page **/
+
+@import "components/third-party-ts-and-cs/_third-party-ts-and-cs.css";

@@ -27,6 +27,8 @@ case class Configuration(
   googleRecaptchaSiteKey: String,
   googleRecaptchaSecretKey: String,
 
+  identityCookiePublicKey: String,
+
   underlying: PlayConfiguration)
 
 
@@ -62,6 +64,8 @@ object Configuration {
 
       recaptchaEnabled = getBoolean("google.recaptchaEnabled"),
 
+      identityCookiePublicKey = getString("identityCookie.publicKey"),
+
       underlying = appConfiguration
     )
   }
@@ -87,6 +91,8 @@ object Configuration {
     googleRecaptchaSecretKey = "--recaptcha-secret-key--",
 
     recaptchaEnabled = true,
+
+    identityCookiePublicKey = "",
 
     underlying = PlayConfiguration.empty
   )

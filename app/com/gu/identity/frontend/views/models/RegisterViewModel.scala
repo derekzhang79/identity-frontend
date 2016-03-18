@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views.models
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
-import com.gu.identity.frontend.models.{GuardianMembersClientID, ClientID, UrlBuilder, ReturnUrl}
+import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.models.text.RegisterText
 import com.gu.identity.frontend.mvt._
 import play.api.i18n.Messages
@@ -44,7 +44,8 @@ object RegisterViewModel {
       csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
-      clientId: Option[ClientID])
+      clientId: Option[ClientID],
+      group: Option[GroupCode])
       (implicit messages: Messages): RegisterViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
@@ -52,10 +53,10 @@ object RegisterViewModel {
     RegisterViewModel(
       layout = layout,
 
-      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, activeTests),
+      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
       registerPageText = RegisterText(),
-      terms = TermsViewModel(),
+      terms = Terms.getTermsModel(group.map(_.getCodeValue)),
 
       hasErrors = errors.nonEmpty,
       errors = errors,

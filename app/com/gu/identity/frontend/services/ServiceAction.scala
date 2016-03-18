@@ -6,6 +6,26 @@ import play.api.mvc._
 
 import scala.concurrent.Future
 
+
+/**
+ * Wraps Play's ActionBuilder allowing creation of a `ServiceAction`.
+ *
+ * A `ServiceAction` accepts a block providing a `Future[ServiceResult]` rather than Play's
+ * `Result`. A `ServiceResult` is an `Either[ServiceExceptions, play.api.mvc.Result]`,
+ * and this wrapper will automatically handle the `ServiceExceptions`, providing a Failed
+ * Future for the action, which can then be handled further up an Action Composition chain.
+ *
+ * For example:
+ * {{{
+ * def myServiceAction = ServiceAction { request =>
+ *   Future.successful(Right(Ok("Service Action response")))
+ * }
+ *
+ * def myFailingServiceAction = ServiceAction { request =>
+ *   Future.successful(Left(Seq(BadRequestException("1st error"), BadRequestException("another error)))
+ * }
+ * }}}
+ */
 trait ServiceActionBuilder[+R[_]] extends ActionFunction[Request, R] {
   self =>
 
@@ -51,6 +71,10 @@ trait ServiceActionBuilder[+R[_]] extends ActionFunction[Request, R] {
 
 }
 
+
+/**
+ * @see ServiceActionBuilder
+ */
 object ServiceAction extends ServiceActionBuilder[Request] {
   override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
     block(request)

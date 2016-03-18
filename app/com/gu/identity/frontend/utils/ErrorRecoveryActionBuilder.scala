@@ -5,6 +5,13 @@ import play.api.mvc._
 import scala.concurrent.Future
 
 
+/**
+ * Allows a `ActionBuilder` which can recover from errors raised from when the
+ * action block is invoked (`invokeBlock`), when the action is composed on
+ * apply in `composeAction`, and when the request body is composed in `composeParser`.
+ *
+ * Clients should implement `recoverErrors` to recover from errors.
+ */
 trait ErrorRecoveryActionBuilder extends ComposableActionBuilder[Request] {
 
   def recoverErrors[A](request: Request[A]): PartialFunction[Throwable, Future[Result]]

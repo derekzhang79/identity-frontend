@@ -49,12 +49,9 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
   override def deauthenticate(cookie: PlayCookie, trackingData: TrackingData)(implicit ec: ExecutionContext) = {
     val apiRequest = DeauthenticateApiRequest(cookie, trackingData)
     client.deauthenticate(apiRequest).map {
-      case Left(errors) => Left {
-        errors.map {
-          case e: BadRequest => UnexpectedAppException(e.message)
-          case e: GatewayError => UnexpectedAppException(e.message)
-        }
-      }
+      case Left(errors) =>
+        Left(errors.map(DeauthenticateAppException.apply))
+
       case Right(cookies) => Right(CookieService.signOutCookies(cookies)(config))
     }
   }
@@ -103,12 +100,9 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
   override def getUser(cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, User]] = {
     val apiRequest = UserApiRequest(cookie)
     client.getUser(apiRequest).map {
-      case Left(errors) => Left {
-        errors.map {
-          case e: BadRequest => UnexpectedAppException(e.message)
-          case e: GatewayError => UnexpectedAppException(e.message)
-        }
-      }
+      case Left(errors) =>
+        Left(errors.map(GetUserAppException.apply))
+
       case Right(user) => Right(user)
     }
   }
@@ -116,12 +110,9 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
   override def assignGroupCode(group: String, cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, AssignGroupResponse]] = {
     val apiRequest = AssignGroupApiRequest(group, cookie)
     client.assignGroupCode(apiRequest).map {
-      case Left(errors) => Left {
-        errors.map {
-          case e: BadRequest => UnexpectedAppException(e.message)
-          case e: GatewayError => UnexpectedAppException(e.message)
-        }
-      }
+      case Left(errors) =>
+        Left(errors.map(AssignGroupAppException.apply))
+
       case Right(response) => Right(response)
     }
   }

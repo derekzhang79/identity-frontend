@@ -38,7 +38,7 @@ class IdentityClient extends Logging {
       case Left(error) => Left(error)
       case Right(UserResponse(user)) =>
         Right(user)
-      case Right(other) => Left(Seq(GatewayError("Unknown response")))
+      case Right(other) => Left(Seq(ClientGatewayError("Unknown response")))
     }
   }
 
@@ -46,7 +46,7 @@ class IdentityClient extends Logging {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
       case Right(response: AssignGroupResponse) => Right(response)
-      case Right(other) => Left(Seq(GatewayError("Unknown response")))
+      case Right(other) => Left(Seq(ClientGatewayError("Unknown response")))
     }
   }
 
@@ -73,7 +73,7 @@ class IdentityClient extends Logging {
           IdentityApiCookie(name = c.key, value = c.value, isSession = false, expires = expiresAt)
         }
       })
-      case Right(other) => Left(Seq(GatewayError("Unknown response")))
+      case Right(other) => Left(Seq(ClientGatewayError("Unknown response")))
     }
   }
 

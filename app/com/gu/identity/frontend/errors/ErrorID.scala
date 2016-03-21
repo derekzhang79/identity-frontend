@@ -65,7 +65,7 @@ object ErrorIDs {
   }
 
   case object RegisterActionInvalidGroupErrorID extends ErrorID {
-    val key = "register-error-group"
+    val key = "register-error-groupCode"
   }
 
   case object RegisterActionBadRequestErrorID extends ErrorID {
@@ -83,6 +83,33 @@ object ErrorIDs {
 
   case object ResetPasswordInvalidEmailErrorID extends ErrorID {
     val key = "reset-password-error-email"
+  }
+
+
+  case object DeauthenticateGatewayErrorID extends ErrorID {
+    val key = "deauthenticate-error-gateway"
+  }
+
+  case object DeauthenticateBadRequestErrorID extends ErrorID {
+    val key = "deauthenticate-error-bad-request"
+  }
+
+
+  case object GetUserGatewayErrorID extends ErrorID {
+    val key = "getuser-error-gateway"
+  }
+
+  case object GetUserBadRequestErrorID extends ErrorID {
+    val key = "getuser-error-bad-request"
+  }
+
+
+  case object AssignGroupGatewayErrorID extends ErrorID {
+    val key = "assigngroup-error-gateway"
+  }
+
+  case object AssignGroupBadRequestErrorID extends ErrorID {
+    val key = "assigngroup-error-bad-request"
   }
 
 

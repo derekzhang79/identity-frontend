@@ -87,8 +87,7 @@ object UrlBuilder {
       skipConfirmation.map("skipConfirmation" -> _.toString),
       clientId.map("clientId" -> _.id),
       group.map("group" -> _),
-      skipThirdPartyLandingPage.map("skipThirdPartyLandingPage" -> _.toString),
-      error.map("error" -> _.id.key)
+      skipThirdPartyLandingPage.map("skipThirdPartyLandingPage" -> _.toString)
     ).flatten ++ error.map(errorToUrlParameters).getOrElse(Seq.empty)
 
 

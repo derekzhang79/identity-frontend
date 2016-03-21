@@ -4,10 +4,10 @@ import akka.util.Timeout
 import com.gu.identity.cookie.{IdentityCookieDecoder, IdentityKeys}
 import com.gu.identity.frontend.authentication.CookieName
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.errors.ErrorHandler
+import com.gu.identity.frontend.errors.{GetUserAppException, AssignGroupAppException, ErrorHandler}
 import com.gu.identity.frontend.models.{GroupCode, ReturnUrl}
-import com.gu.identity.frontend.services.{IdentityService, ServiceGatewayError}
-import com.gu.identity.service.client.AssignGroupResponse
+import com.gu.identity.frontend.services.IdentityService
+import com.gu.identity.service.client.{ClientGatewayError, AssignGroupResponse}
 import com.gu.identity.service.client.models.{User, UserGroup}
 import com.gu.identity.model.{User => CookieUser}
 import org.mockito.Matchers.{any => argAny}
@@ -120,17 +120,19 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
 
       val cookie = Cookie("Name", "Value")
 
+      val stubbedError = GetUserAppException(ClientGatewayError("unexpected error"))
+
       when(mockIdentityService.getUser(argAny[Cookie])(argAny[ExecutionContext]))
         .thenReturn {
           Future.successful{
-            Left(Seq(ServiceGatewayError("Unexpected 500 error")))
+            Left(Seq(stubbedError))
           }
         }
 
       val future = thirdPartyTsAndCsController.checkUserForGroupMembership(group, cookie)
       val result = Await.result(future, timeout.duration)
 
-      result mustEqual Left(Seq(ServiceGatewayError("Unexpected 500 error")))
+      result mustEqual Left(Seq(stubbedError))
     }
   }
 
@@ -209,17 +211,19 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
       val cookie = Cookie("Name", "Value")
       val timeout = Timeout(5 seconds)
 
+      val stubbedError = GetUserAppException(ClientGatewayError("error"))
+
       when(mockIdentityService.getUser(argAny[Cookie])(argAny[ExecutionContext]))
         .thenReturn {
           Future.successful{
-            Left(Seq(ServiceGatewayError("error")))
+            Left(Seq(stubbedError))
           }
         }
 
       val future = thirdPartyTsAndCsController.confirm(group, returnUrl, clientId = None, skipConfirmation = false, cookie)
       val result = Await.result(future, timeout.duration)
       val r = result.left.get
-      r mustEqual Seq(ServiceGatewayError("error"))
+      r mustEqual Seq(stubbedError)
     }
   }
 
@@ -263,7 +267,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
       when(mockIdentityService.assignGroupCode(groupCode, cookie))
         .thenReturn{
           Future.successful{
-            Left(Seq(ServiceGatewayError("error")))
+            Left(Seq(AssignGroupAppException(ClientGatewayError("error"))))
           }
         }
 
@@ -283,7 +287,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
       when(mockIdentityService.assignGroupCode(groupCode, cookie))
         .thenReturn{
           Future.successful{
-            Left(Seq(ServiceGatewayError("error")))
+            Left(Seq(AssignGroupAppException(ClientGatewayError("error"))))
           }
         }
 

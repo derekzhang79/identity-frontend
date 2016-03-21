@@ -3,8 +3,13 @@ package com.gu.identity.frontend.models
 import play.api.data.format.Formatter
 import play.api.data.{FormError, Forms, FieldMapping}
 
-sealed trait GroupCode {
-  def getCodeValue: String
+sealed trait GroupCode extends Product2[GroupCode, String] {
+  self =>
+
+  val id: String
+
+  def _1 = self
+  def _2 = id
 }
 
 object GroupCode {
@@ -32,14 +37,14 @@ object GroupCode {
       }
 
       def unbind(key: String, value: GroupCode): Map[String, String] =
-        Map(key -> value.getCodeValue)
+        Map(key -> value.id)
     }
   }
 }
 
 case object GuardianTeachersNetwork extends GroupCode {
-  val getCodeValue: String = "GTNF"
+  val id: String = "GTNF"
 }
 case object GuardianJobs extends GroupCode {
-  val getCodeValue: String = "GRS"
+  val id: String = "GRS"
 }

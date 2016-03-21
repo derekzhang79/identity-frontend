@@ -32,11 +32,11 @@ object UserAuthenticatedActionBuilder extends Logging{
             case Some(cookie) => Right(new UserAuthenticatedRequest[A](cookie, request))
             case _ => {
               logger.error("Cookie not found on successfully authenticated request.")
-              Left(SeeOther(routes.Application.signIn(Seq.empty, returnUrl, skipConfirmation, clientId.map(_.id), groupCode.map(_.getCodeValue)).url))
+              Left(SeeOther(routes.Application.signIn(Seq.empty, returnUrl, skipConfirmation, clientId.map(_.id), groupCode.map(_.id)).url))
             }
           }
         }
-        case _ => Left(SeeOther(routes.Application.signIn(Seq.empty, returnUrl, skipConfirmation, clientId.map(_.id), groupCode.map(_.getCodeValue)).url))
+        case _ => Left(SeeOther(routes.Application.signIn(Seq.empty, returnUrl, skipConfirmation, clientId.map(_.id), groupCode.map(_.id)).url))
       }
     }
   }

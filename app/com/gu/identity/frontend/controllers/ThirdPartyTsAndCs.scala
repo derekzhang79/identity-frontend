@@ -79,7 +79,7 @@ class ThirdPartyTsAndCs(identityService: IdentityService, config: Configuration,
   }
 
   def addToGroup(group: GroupCode, sc_gu_uCookie: Cookie, returnUrl: ReturnUrl): Future[Either[Seq[ServiceError], Result]] = {
-    val response = identityService.assignGroupCode(group.getCodeValue, sc_gu_uCookie)
+    val response = identityService.assignGroupCode(group.id, sc_gu_uCookie)
     response.map{
       case Left(errors) => Left(errors)
       case Right(_) => Right(SeeOther(returnUrl.url))
@@ -89,7 +89,7 @@ class ThirdPartyTsAndCs(identityService: IdentityService, config: Configuration,
   def checkUserForGroupMembership(group: GroupCode, cookie: Cookie): Future[Either[Seq[ServiceError], Boolean]] = {
     identityService.getUser(cookie).map{
       case Right(user) => {
-        Right(isUserInGroup(user, group.getCodeValue))
+        Right(isUserInGroup(user, group.id))
       }
       case Left(errors) => {
         logger.error("Request did not have a SC_GU_U cookie could not get user.")

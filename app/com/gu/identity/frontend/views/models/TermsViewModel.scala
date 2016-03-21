@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.views.models
 
+import com.gu.identity.frontend.models.{GroupCode, GuardianJobs, GuardianTeachersNetwork}
 import com.gu.identity.frontend.models.text.{JobsTermsText, TeachersTermsText, TermsText}
 import play.api.i18n.Messages
 
@@ -80,10 +81,10 @@ object JobsTermsViewModel {
 }
 
 object Terms {
-  def getTermsModel(groupCode: Option[String])(implicit messages: Messages): TermsViewModel = {
-    groupCode match {
-      case Some("GTNF") => {TeachersTermsViewModel()}
-      case Some("GRS") => JobsTermsViewModel()
+  def getTermsModel(group: Option[GroupCode])(implicit messages: Messages): TermsViewModel = {
+    group match {
+      case Some(GuardianTeachersNetwork) => {TeachersTermsViewModel()}
+      case Some(GuardianJobs) => JobsTermsViewModel()
       case _ => BasicTermsViewModel()
     }
   }

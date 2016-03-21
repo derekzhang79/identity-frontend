@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.errors
 
-import com.gu.identity.service.client.IdentityClientError
+import com.gu.identity.service.client.{ClientRateLimitError, IdentityClientError}
 import ErrorIDs._
 
 import scala.util.control.NoStackTrace
@@ -45,6 +45,14 @@ private[errors] abstract class ServiceGatewayAppException(
     clientError: IdentityClientError)
   extends AbstractAppException(clientError)
   with NoStackTrace
+
+
+case object ServiceRateLimitedAppException
+  extends AbstractAppException(ClientRateLimitError)
+  with NoStackTrace {
+
+  val id = RateLimitedErrorID
+}
 
 
 // 500

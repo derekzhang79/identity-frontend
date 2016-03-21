@@ -117,6 +117,10 @@ object ErrorIDs {
     val key = "error-forgery-token"
   }
 
+  case object RateLimitedErrorID extends ErrorID {
+    val key = "rate-limited"
+  }
+
   case object UnexpectedErrorID extends ErrorID {
     val key = "error-unexpected"
   }

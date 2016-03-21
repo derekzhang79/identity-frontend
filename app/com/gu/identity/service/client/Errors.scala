@@ -75,6 +75,12 @@ case object ClientRegistrationEmailConflictError
   with NoStackTrace
 
 
+case object ClientRateLimitError
+  extends AbstractIdentityClientError("Rate limit exceeded")
+  with ClientBadRequestError
+  with NoStackTrace
+
+
 case class OtherClientBadRequestError(
     override val message: String,
     override val description: Option[String] = None,
@@ -93,6 +99,7 @@ object ClientBadRequestError {
       case ClientRegistrationUsernameConflictError.message => ClientRegistrationUsernameConflictError
       case ClientRegistrationUsernameConflictError.messageForReservedUser => ClientRegistrationUsernameConflictError
       case ClientRegistrationEmailConflictError.message => ClientRegistrationEmailConflictError
+      case ClientRateLimitError.message => ClientRateLimitError
       case _ => OtherClientBadRequestError(message, description, context)
     }
 }

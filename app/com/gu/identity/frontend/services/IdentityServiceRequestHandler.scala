@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.services
 
+import com.gu.identity.frontend.errors.ServiceRateLimitedAppException
 import com.gu.identity.frontend.logging.{Logging => ApplicationLogging}
 import com.gu.identity.service.client._
 import com.gu.identity.service.client.models._
@@ -58,6 +59,10 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
       .withBody(request.body.map(handleRequestBody).getOrElse(""))
       .execute(request.method.toString)
         .map(handleResponse(request))
+        .flatMap {
+          case Left(Seq(ClientRateLimitError)) => Future.failed(ServiceRateLimitedAppException)
+          case other => Future.successful(other)
+        }
         .recoverWith {
           case NonFatal(err) => Future.failed {
             ClientGatewayError(

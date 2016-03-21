@@ -35,6 +35,8 @@ object ErrorViewModel {
     ResetPasswordBadRequestErrorID -> "There was a problem resetting your password; please try again.",
     ResetPasswordInvalidEmailErrorID -> nonEmptyField("email"),
 
+    RateLimitedErrorID -> "This request has been rate limited, please try again shortly",
+
     ForgeryTokenErrorID -> "Forgery token invalid; please try again.",
     UnexpectedErrorID -> "There was an unexpected problem; please try again."
   )

@@ -24,7 +24,7 @@ case class SignInViewModel private(
     returnUrl: String = "",
     skipConfirmation: Boolean = false,
     clientId: Option[ClientID],
-    groupCode: Option[String],
+    group: Option[GroupCode],
 
     registerUrl: String = "",
     forgotPasswordUrl: String = "",
@@ -61,7 +61,7 @@ object SignInViewModel {
       oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
       signInPageText = SignInPageText.toMap,
-      terms = Terms.getTermsModel(group.map(_.getCodeValue)),
+      terms = Terms.getTermsModel(group.map(_.id)),
 
       hasErrors = errors.nonEmpty,
       errors = errors,
@@ -70,10 +70,10 @@ object SignInViewModel {
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
       clientId = clientId,
-      groupCode = group.map(_.getCodeValue),
+      group = group,
 
-      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.getCodeValue)),
-      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.getCodeValue)),
+      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
+      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.id)),
 
       recaptchaModel = recaptchaModel,
 

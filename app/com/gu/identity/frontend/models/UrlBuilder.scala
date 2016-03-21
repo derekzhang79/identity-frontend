@@ -54,7 +54,7 @@ object UrlBuilder {
       group: GroupCode,
       configuration: Configuration): ReturnUrl = {
 
-    val baseThirdPartyReturnUrl = configuration.identityProfileBaseUrl + "/agree/" + group.getCodeValue
+    val baseThirdPartyReturnUrl = configuration.identityProfileBaseUrl + "/agree/" + group.id
     val thirdPartyReturnUrl = apply(baseThirdPartyReturnUrl, returnUrl, skipConfirmation, clientId, group = None, Some(skipThirdPartyLandingPage))
     ReturnUrl(Some(thirdPartyReturnUrl), configuration)
   }
@@ -68,7 +68,7 @@ object UrlBuilder {
       configuration: Configuration): String = {
 
     val thirdPartyReturnUrl = buildThirdPartyReturnUrl(returnUrl, skipConfirmation, skipThirdPartyLandingPage = true, clientId, group, configuration)
-    apply(baseUrl, thirdPartyReturnUrl, skipConfirmation, clientId, Some(group.getCodeValue), skipThirdPartyLandingPage = None)
+    apply(baseUrl, thirdPartyReturnUrl, skipConfirmation, clientId, Some(group.id), skipThirdPartyLandingPage = None)
   }
 
   private def buildParams(

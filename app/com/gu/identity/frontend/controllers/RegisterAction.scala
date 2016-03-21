@@ -92,7 +92,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     val params = Seq(
       Some("returnUrl" -> returnUrl.url),
       skipConfirmation.map("skipConfirmation" -> _.toString),
-      group.map("group" -> _.getCodeValue),
+      group.map("group" -> _.id),
       clientId.map("clientId" -> _.id)
     ).flatten
 

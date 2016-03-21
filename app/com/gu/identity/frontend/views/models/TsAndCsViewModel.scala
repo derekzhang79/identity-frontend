@@ -32,7 +32,7 @@ object TsAndCsViewModel {
       indirectResources = layout.indirectResources,
       clientId = clientId,
       tsAndCsPageText = TsAndCsPageText.getPageText(group),
-      groupCode = group.getCodeValue,
+      groupCode = group.id,
       returnUrl = returnUrl.url
     )
   }

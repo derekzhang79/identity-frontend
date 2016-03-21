@@ -8,6 +8,13 @@ import s from './omniture';
 
 import { getMvtFullId, getActiveTestsAndResultsForOmniture } from './mvt';
 
+/**
+ * Stubbed userId of a signed in user to undefined, as most requests should
+ * be from signed out users. Implement when tracking of signed in users is
+ * required.
+ */
+const userId = undefined;
+
 function Omniture() {
     this.s = s;
 }
@@ -51,11 +58,10 @@ Omniture.prototype.populatePageProperties = function () {
         pad(now.getMonth() + 1, 2) + '/' +
         pad(now.getDate(), 2);
 
-    // TODO user id
-    //if (id.getUserFromCookie()) {
-    //    this.s.prop2 = 'GUID:' + id.getUserFromCookie().id;
-    //    this.s.eVar2 = 'GUID:' + id.getUserFromCookie().id;
-    //}
+    if (userId) {
+        this.s.prop2 = 'GUID:' + userId;
+        this.s.eVar2 = 'GUID:' + userId;
+    }
 
     this.s.channel   = 'identity';
 
@@ -70,8 +76,8 @@ Omniture.prototype.populatePageProperties = function () {
 
     this.s.prop19    = platform;
 
-    //this.s.prop31    = id.getUserFromCookie() ? 'registered user' : 'guest user';
-    //this.s.eVar31    = id.getUserFromCookie() ? 'registered user' : 'guest user';
+    this.s.prop31    = userId ? 'registered user' : 'guest user';
+    this.s.eVar31    = userId ? 'registered user' : 'guest user';
 
     this.s.eVar51  = mvtTag;
 

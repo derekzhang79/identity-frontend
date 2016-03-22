@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.configuration
 
+import com.gu.identity.cookie.{IdentityKeys, IdentityCookieDecoder}
 import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.errors.ErrorHandler
@@ -33,6 +34,8 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val identityClient: IdentityClient = new IdentityClient
   lazy val identityService: IdentityService = new IdentityServiceImpl(frontendConfiguration, identityServiceRequestHandler, identityClient)
 
+  lazy val identityCookieDecoder: IdentityCookieDecoder = new IdentityCookieDecoder(IdentityKeys(frontendConfiguration.identityCookiePublicKey))
+
   lazy val applicationController = new Application(frontendConfiguration, messagesApi, csrfConfig)
   lazy val healthcheckController = new HealthCheck()
   lazy val manifestController = new Manifest()
@@ -40,7 +43,9 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val googleRecaptchaServiceHandler = new GoogleRecaptchaServiceHandler(wsClient, frontendConfiguration)
   lazy val googleRecaptchaCheck = new GoogleRecaptchaCheck(googleRecaptchaServiceHandler)
   lazy val signinController = new SigninAction(identityService, messagesApi, csrfConfig, googleRecaptchaCheck, frontendConfiguration)
+  lazy val signOutController = new SignOutAction(identityService, messagesApi, frontendConfiguration)
   lazy val registerController = new RegisterAction(identityService, messagesApi, frontendConfiguration, csrfConfig)
+  lazy val thirdPartyTsAndCsController = new ThirdPartyTsAndCs(identityService, frontendConfiguration, messagesApi, httpErrorHandler, identityCookieDecoder.getUserDataForScGuU)
   lazy val resetPasswordController = new ResetPasswordAction(identityService, csrfConfig)
   lazy val assets = new controllers.Assets(httpErrorHandler)
   lazy val redirects = new Redirects
@@ -60,5 +65,5 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
 
   applicationLifecycle.addStopHook(() => terminateActor()(defaultContext))
 
-  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signinController, registerController, resetPasswordController, cspReporterController, healthcheckController, manifestController, assets, redirects)
+  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signOutController, thirdPartyTsAndCsController, signinController, registerController, resetPasswordController, cspReporterController, healthcheckController, manifestController, assets, redirects)
 }

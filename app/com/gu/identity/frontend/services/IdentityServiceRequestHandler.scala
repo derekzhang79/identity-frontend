@@ -2,6 +2,7 @@ package com.gu.identity.frontend.services
 
 import com.gu.identity.frontend.logging.{Logging => ApplicationLogging}
 import com.gu.identity.service.client._
+import com.gu.identity.service.client.models._
 import com.gu.identity.service.client.request._
 import play.api.libs.json.Json
 import play.api.libs.json.Reads.jodaDateReads
@@ -19,9 +20,13 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val apiErrorResponseErrorReads = Json.format[ApiErrorResponseError]
   implicit val apiErrorResponseReads = Json.format[ApiErrorResponse]
 
-  implicit val responseCookieReads = Json.format[AuthenticationCookiesResponseCookie]
-  implicit val responseCookiesListReads = Json.format[AuthenticationCookiesResponseCookieList]
-  implicit val responseReads = Json.format[AuthenticationCookiesResponse]
+  implicit val authenticationCookieReads = Json.format[AuthenticationCookiesResponseCookie]
+  implicit val authenticationCookiesListReads = Json.format[AuthenticationCookiesResponseCookieList]
+  implicit val authenticationReads = Json.format[AuthenticationCookiesResponse]
+
+  implicit val deauthenticationCookieReads = Json.format[DeauthenticationCookiesResponseCookie]
+  implicit val deauthenticationCookiesListReads = Json.format[DeauthenticationCookiesResponseCookieList]
+  implicit val deauthenticationReads = Json.format[DeauthenticationCookiesResponse]
 
   implicit val registerRequestBodyPublicFieldsFormat = Json.format[RegisterRequestBodyPublicFields]
   implicit val registerRequestBodyPrivateFieldsFormat = Json.format[RegisterRequestBodyPrivateFields]
@@ -34,6 +39,16 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val registerResponseUserFormat = Json.format[RegisterResponseUser]
   implicit val registerResponseFormat = Json.format[RegisterResponse]
 
+  implicit val userResponseGroupFormat = Json.format[UserGroup]
+  implicit val userResponseStatusFieldsFormat = Json.format[StatusFields]
+  implicit val userResponsePublicFieldsFormat = Json.format[PublicFields]
+  implicit val userResponseLastActiveLocationFormat = Json.format[LastActiveLocation]
+  implicit val userResponsePrivateFieldsFormat = Json.format[PrivateFields]
+  implicit val userResponseCreationDateFormat = Json.format[CreationDate]
+  implicit val userResponseUserFormat = Json.format[User]
+  implicit val userResponseFormat = Json.format[UserResponse]
+
+  implicit val assignGroupResponseFormat = Json.format[AssignGroupResponse]
 
   def handleRequest(request: ApiRequest): Future[Either[IdentityClientErrors, ApiResponse]] =
     ws.url(request.url)
@@ -73,18 +88,27 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
     case r: AuthenticateCookiesApiRequest =>
       response.json.asOpt[AuthenticationCookiesResponse]
         .map(Right.apply)
-        .getOrElse {
-          logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
-          Left(Seq(GatewayError("Unexpected response from server")))
-        }
+        .getOrElse(handleUnexpectedResponse(response))
 
     case r: RegisterApiRequest =>
       response.json.asOpt[RegisterResponse]
         .map(Right.apply)
-        .getOrElse {
-          logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
-          Left(Seq(GatewayError("Unexpected response from server")))
-        }
+        .getOrElse(handleUnexpectedResponse(response))
+
+    case r: UserApiRequest =>
+      response.json.asOpt[UserResponse]
+        .map(Right.apply)
+        .getOrElse(handleUnexpectedResponse(response))
+
+    case r: AssignGroupApiRequest =>
+      response.json.asOpt[AssignGroupResponse]
+        .map(Right.apply)
+        .getOrElse(handleUnexpectedResponse(response))
+
+    case r: DeauthenticateApiRequest =>
+      response.json.asOpt[DeauthenticationCookiesResponse]
+        .map(Right.apply)
+        .getOrElse(handleUnexpectedResponse(response))
 
     case r: SendResetPasswordEmailApiRequest =>
       if (response.status == 200) {
@@ -123,4 +147,8 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         )
       }
 
+  def handleUnexpectedResponse(response: WSResponse): Either[IdentityClientErrors, ApiResponse] = {
+    logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
+    Left(Seq(GatewayError("Unexpected response from server")))
+  }
 }

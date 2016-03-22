@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views
 import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.HttpError
-import com.gu.identity.frontend.models.{ClientID, ReturnUrl}
+import com.gu.identity.frontend.models.{GroupCode, ClientID, ReturnUrl}
 import com.gu.identity.frontend.mvt.{MultiVariantTestVariant, MultiVariantTest}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
@@ -25,7 +25,8 @@ object ViewRenderer {
       errorIds: Seq[String],
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
-      clientId: Option[ClientID])
+      clientId: Option[ClientID],
+      group: Option[GroupCode])
       (implicit messages: Messages) = {
 
     val model = SignInViewModel(
@@ -35,7 +36,8 @@ object ViewRenderer {
       errors = errorIds.map(ErrorViewModel.apply),
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation,
-      clientId = clientId
+      clientId = clientId,
+      group = group
     )
 
     val view = "signin-page"
@@ -50,7 +52,8 @@ object ViewRenderer {
       csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
-      clientId: Option[ClientID])
+      clientId: Option[ClientID],
+      group: Option[GroupCode])
       (implicit messages: Messages) = {
 
     val model = RegisterViewModel(
@@ -60,7 +63,8 @@ object ViewRenderer {
       csrfToken = csrfToken,
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation,
-      clientId = clientId)
+      clientId = clientId,
+      group = group)
 
     renderViewModel("register-page", model)
   }
@@ -98,6 +102,10 @@ object ViewRenderer {
   def renderErrorPage(configuration: Configuration, error: HttpError, resultGenerator: Html => Result)(implicit messages: Messages) =
     renderViewModel("error-page", ErrorPageViewModel(configuration, error), resultGenerator)
 
+  def renderTsAndCs(configuration: Configuration, clientId: Option[ClientID], group: GroupCode, returnUrl: ReturnUrl)(implicit messages: Messages) = {
+    val model = TsAndCsViewModel(configuration, clientId, group, returnUrl)
+    renderViewModel("third-party-ts-and-cs-page", model)
+  }
 
   def renderViewModel(
       view: String,

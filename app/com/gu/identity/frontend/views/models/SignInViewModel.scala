@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views.models
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
-import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ReturnUrl}
+import com.gu.identity.frontend.models.{GroupCode, ClientID, UrlBuilder, ReturnUrl}
 import com.gu.identity.frontend.models.Text._
 import com.gu.identity.frontend.mvt.ActiveMultiVariantTests
 import play.api.i18n.Messages
@@ -24,6 +24,7 @@ case class SignInViewModel private(
     returnUrl: String = "",
     skipConfirmation: Boolean = false,
     clientId: Option[ClientID],
+    groupCode: Option[String],
 
     registerUrl: String = "",
     forgotPasswordUrl: String = "",
@@ -38,7 +39,15 @@ case class SignInViewModel private(
 
 
 object SignInViewModel {
-  def apply(configuration: Configuration, activeTests: ActiveMultiVariantTests, csrfToken: Option[CSRFToken], errors: Seq[ErrorViewModel], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID])(implicit messages: Messages): SignInViewModel = {
+  def apply(
+   configuration: Configuration,
+   activeTests: ActiveMultiVariantTests,
+   csrfToken: Option[CSRFToken],
+   errors: Seq[ErrorViewModel],
+   returnUrl: ReturnUrl,
+   skipConfirmation: Option[Boolean],
+   clientId: Option[ClientID],
+   group: Option[GroupCode])(implicit messages: Messages): SignInViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
@@ -49,10 +58,10 @@ object SignInViewModel {
     SignInViewModel(
       layout = layout,
 
-      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, activeTests),
+      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
       signInPageText = SignInPageText.toMap,
-      terms = TermsViewModel(),
+      terms = Terms.getTermsModel(group.map(_.getCodeValue)),
 
       hasErrors = errors.nonEmpty,
       errors = errors,
@@ -61,9 +70,10 @@ object SignInViewModel {
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
       clientId = clientId,
+      groupCode = group.map(_.getCodeValue),
 
-      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId),
-      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId),
+      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.getCodeValue)),
+      forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.getCodeValue)),
 
       recaptchaModel = recaptchaModel,
 

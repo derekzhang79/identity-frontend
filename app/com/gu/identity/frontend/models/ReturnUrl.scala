@@ -15,7 +15,7 @@ case class ReturnUrl private[models](
 object ReturnUrl {
 
   val domains = List(".theguardian.com", ".code.dev-theguardian.com", ".thegulocal.com")
-  val invalidUrlPaths = List("/signin", "/register", "/register/confirm")
+  val invalidUrlPaths = List("/signin", "/register")
 
   def apply(returnUrlParam: Option[String], configuration: Configuration): ReturnUrl =
     apply(returnUrlParam, refererHeader = None, configuration, clientId = None)

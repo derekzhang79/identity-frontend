@@ -4,11 +4,13 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
 import com.gu.identity.frontend.logging.{MetricsLoggingActor, Logging}
-import com.gu.identity.frontend.models.{ClientID, UrlBuilder, ClientIp, TrackingData, ReturnUrl}
 import com.gu.identity.frontend.models.ClientID.FormMappings.{clientId => clientIdMapping}
+import com.gu.identity.frontend.models._
+import com.gu.identity.frontend.models.GroupCode.FormMappings.{groupCode => groupCodeMapping}
 import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceError, IdentityService}
 import play.api.data.{Mapping, Form}
 import play.api.data.Forms._
+import play.api.data.Forms.text
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Cookie => PlayCookie, RequestHeader, Controller}
@@ -26,8 +28,8 @@ case class RegisterRequest(
     receive3rdPartyMarketing: Boolean,
     returnUrl: Option[String],
     skipConfirmation: Option[Boolean],
-    group: Option[String],
-    clientID: Option[ClientID])
+    clientID: Option[ClientID],
+    groupCode: Option[GroupCode])
 
 class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi, val config: Configuration, csrfConfig: CSRFConfig) extends Controller with Logging with MetricsLoggingActor with I18nSupport {
 
@@ -37,10 +39,6 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
 
   private val password: Mapping[String] = text.verifying(
     "error.password", name => name.length > 5 && name.length < 21
-  )
-
-  private val group: Mapping[String] = text.verifying(
-    "error.group", name => name == "GRS" || name == "GTNF"
   )
 
   val registerForm = Form(
@@ -54,8 +52,8 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
       "receive3rdPartyMarketing" -> boolean,
       "returnUrl" -> optional(text),
       "skipConfirmation" -> optional(boolean),
-      "group" -> optional(group),
-      "clientId" -> optional(clientIdMapping)
+      "clientId" -> optional(clientIdMapping),
+      "groupCode" -> optional(groupCodeMapping)
     )(RegisterRequest.apply)(RegisterRequest.unapply)
   )
 
@@ -70,14 +68,14 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
         val returnUrl = ReturnUrl(successForm.returnUrl, request.headers.get("Referer"), config, successForm.clientID)
         identityService.registerThenSignIn(successForm, clientIp, trackingData).map {
           case Left(errors) =>
-            redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.group, successForm.clientID)
+            redirectToRegisterPageWithErrors(errors, returnUrl, successForm.skipConfirmation, successForm.groupCode, successForm.clientID)
           case Right(cookies) => {
-            registerSuccessRedirectUrl(cookies, returnUrl, successForm.skipConfirmation, successForm.group, successForm.clientID)
+            registerSuccessRedirectUrl(cookies, returnUrl, successForm.skipConfirmation, successForm.groupCode, successForm.clientID)
           }
         }.recover {
           case NonFatal(ex) => {
             logger.warn(s"Unexpected error while registering: ${ex.getMessage}", ex)
-            redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, successForm.skipConfirmation, successForm.group, successForm.clientID)
+            redirectToRegisterPageWithErrors(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, successForm.skipConfirmation, successForm.groupCode, successForm.clientID)
           }
 
         }
@@ -85,7 +83,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     )
   }
 
-  private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String], clientId: Option[ClientID]) = {
+  private def redirectToRegisterPageWithErrors(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[GroupCode], clientId: Option[ClientID]) = {
 
     val idErrors = errors.map {
       error => "error" -> (checkUserDataIsUnique(error))
@@ -94,7 +92,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     val params = Seq(
       Some("returnUrl" -> returnUrl.url),
       skipConfirmation.map("skipConfirmation" -> _.toString),
-      group.map("group" -> _),
+      group.map("group" -> _.getCodeValue),
       clientId.map("clientId" -> _.id)
     ).flatten
 
@@ -111,43 +109,32 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     }
   }
 
-  private def registerSuccessRedirectUrl(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[String], clientId: Option[ClientID]) = {
+  private def registerSuccessRedirectUrl(cookies: Seq[PlayCookie], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], group: Option[GroupCode], clientId: Option[ClientID]) = {
+    val registrationConfirmUrl = UrlBuilder(config.identityProfileBaseUrl, routes.Application.confirm())
     (group, skipConfirmation.getOrElse(false)) match {
       case(Some(group), false) => {
-        val skipConfirmationUrl = UrlBuilder(routes.Application.confirm(), Seq("returnUrl" -> returnUrl.url))
-        val url = build3rdPartyUrl(group, skipConfirmationUrl, skipConfirmation = false, clientId)
+        val skipConfirmationReturnUrl = ReturnUrl(Some(UrlBuilder(registrationConfirmUrl, returnUrl, clientId)), config)
+        val url = UrlBuilder.buildThirdPartyReturnUrl(skipConfirmationReturnUrl, skipConfirmation, skipThirdPartyLandingPage = true, clientId, group, config)
         registerSuccessResult(url, cookies)
       }
       case(Some(group), true) => {
-        val url = build3rdPartyUrl(group, returnUrl.url, skipConfirmation = true, clientId)
+        val url = UrlBuilder.buildThirdPartyReturnUrl(returnUrl, skipConfirmation, skipThirdPartyLandingPage = true, clientId, group, config)
         registerSuccessResult(url, cookies)
       }
       case (None, false) => {
-        val url = UrlBuilder(routes.Application.confirm(), returnUrl, clientId)
+        val url = ReturnUrl(Some(UrlBuilder(registrationConfirmUrl, returnUrl, clientId)), config)
         registerSuccessResult(url, cookies)
       }
       case (None, true) => {
-        registerSuccessResult(returnUrl.url, cookies)
+        registerSuccessResult(returnUrl, cookies)
       }
     }
   }
 
-  private def registerSuccessResult(url: String, cookies: Seq[PlayCookie]) = {
+  private def registerSuccessResult(returnUrl: ReturnUrl, cookies: Seq[PlayCookie]) = {
     logSuccessfulRegister
-    SeeOther(url).withCookies(cookies: _*)
+    SeeOther(returnUrl.url).withCookies(cookies: _*)
   }
-
-  private def build3rdPartyUrl(group: String, returnUrl: String, skipConfirmation: Boolean, clientId: Option[ClientID]) = {
-    val baseUrl = s"${config.identityProfileBaseUrl}/agree/$group"
-    val params = Seq(
-      "returnUrl" -> returnUrl,
-      "skipConfirmation" -> skipConfirmation.toString,
-      "skipThirdPartyLandingPage" -> "true",
-      "clientId" -> clientId.map(_.id).getOrElse("")
-    )
-    UrlBuilder(baseUrl, params)
-  }
-
 
   // Note: Limitation
   //       Error Handler only accepts RequestHeader instead of Request, so we cannot

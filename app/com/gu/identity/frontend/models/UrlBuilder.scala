@@ -36,7 +36,7 @@ object UrlBuilder {
     apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, group, skipThirdPartyLandingPage))
 
   def apply(baseUrl: String, returnUrl: Option[ReturnUrl], skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[GroupCode], error: AppException): String =
-    apply(baseUrl, buildParams(returnUrl, skipConfirmation, clientId, group.map(_.getCodeValue), error = Some(error)))
+    apply(baseUrl, buildParams(returnUrl, skipConfirmation, clientId, group.map(_.id), error = Some(error)))
 
   def apply(baseUrl: String, error: AppException): String =
     apply(baseUrl, buildParams(error = Some(error)))

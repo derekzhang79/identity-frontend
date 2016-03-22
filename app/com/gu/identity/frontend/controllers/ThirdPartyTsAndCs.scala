@@ -78,7 +78,7 @@ class ThirdPartyTsAndCs(identityService: IdentityService, config: Configuration,
     )
   }
 
-  def addToGroup(group: GroupCode, sc_gu_uCookie: Cookie, returnUrl: ReturnUrl): Future[Either[Seq[ServiceError], Result]] = {
+  def addToGroup(group: GroupCode, sc_gu_uCookie: Cookie, returnUrl: ReturnUrl): Future[Either[ServiceExceptions, Result]] = {
     val response = identityService.assignGroupCode(group.id, sc_gu_uCookie)
     response.map{
       case Left(errors) => Left(errors)

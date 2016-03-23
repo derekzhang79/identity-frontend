@@ -470,7 +470,7 @@
         "Statistic": "Average",
         "ComparisonOperator": "LessThanThreshold",
         "Threshold": "0.9",
-        "Period": "600",
+        "Period": "1200",
         "EvaluationPeriods": "1",
         "AlarmActions": [
           { "Ref": "TopicSendEmail" },

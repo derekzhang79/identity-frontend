@@ -5,6 +5,7 @@ import com.gu.identity.frontend.controllers._
 object ContentSecurityPolicy {
 
   val CSP_DEFAULT_SRC = "default-src"
+  val CSP_CONNECT_SRC = "connect-src"
   val CSP_SCRIPT_SRC = "script-src"
   val CSP_STYLE_SRC = "style-src"
   val CSP_FONT_SRC = "font-src"
@@ -30,6 +31,7 @@ object ContentSecurityPolicy {
   def cspForViewModel(viewModel: ViewModel with ViewModelResources) = {
     val allResources = viewModel.resources ++ viewModel.indirectResources
     val grouped = allResources.filter(noPolicyRequirement).groupBy {
+      case r: ConnectResource => CSP_CONNECT_SRC
       case r: ScriptResource => CSP_SCRIPT_SRC
       case r: StylesResource => CSP_STYLE_SRC
       case r: ImageResource => CSP_IMG_SRC

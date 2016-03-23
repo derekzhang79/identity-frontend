@@ -29,6 +29,9 @@ case class Configuration(
 
   identityCookiePublicKey: String,
 
+  // endpoint for reporting errors to Sentry
+  sentryDsn: String,
+
   underlying: PlayConfiguration)
 
 
@@ -66,6 +69,8 @@ object Configuration {
 
       identityCookiePublicKey = getString("identityCookie.publicKey"),
 
+      sentryDsn = getString("sentry.dsn"),
+
       underlying = appConfiguration
     )
   }
@@ -93,6 +98,8 @@ object Configuration {
     recaptchaEnabled = true,
 
     identityCookiePublicKey = "",
+
+    sentryDsn = "--stubbed-sentry-dsn--",
 
     underlying = PlayConfiguration.empty
   )

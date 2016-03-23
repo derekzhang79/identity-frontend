@@ -39,6 +39,7 @@ sealed trait LinkedResource {
   val url: String
 }
 
+sealed trait ConnectResource extends PageResource
 sealed trait ScriptResource extends PageResource
 sealed trait StylesResource extends PageResource
 sealed trait ImageResource extends PageResource
@@ -117,5 +118,7 @@ case class IndirectlyLoadedExternalImageResources(domain: String) extends ImageR
 case object IndirectlyLoadedScriptResources extends ScriptResource with LocalResource
 case object IndirectlyLoadedInlinedScriptResources extends ScriptResource with InlinedResource
 case class IndirectlyLoadedExternalScriptResources(domain: String) extends ScriptResource with ExternalResource
+
+case class IndirectlyLoadedExternalResources(domain: String) extends ConnectResource with ExternalResource
 
 case class IndirectlyLoadedExternalFrameResource(domain: String) extends FrameResource with ExternalResource

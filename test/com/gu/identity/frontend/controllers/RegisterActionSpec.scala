@@ -1,22 +1,20 @@
 package com.gu.identity.frontend.controllers
 
-import java.net.{URLDecoder, URLEncoder}
-
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFConfig
+import com.gu.identity.frontend.errors.{RegisterServiceGatewayAppException, RegisterServiceBadRequestException}
 import com.gu.identity.frontend.models.{UrlBuilder, ClientIp, TrackingData}
-import com.gu.identity.frontend.services.{ServiceGatewayError, ServiceBadRequest, IdentityService}
+import com.gu.identity.frontend.services.IdentityService
 import com.gu.identity.frontend.utils.UrlDecoder
+import com.gu.identity.service.client.{ClientBadRequestError, ClientGatewayError}
 import org.mockito.Matchers.{any => argAny, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.i18n.MessagesApi
-import play.api.{Configuration => PlayConfiguration}
 import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.utils.UriEncoding
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -53,7 +51,8 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "receive3rdPartyMarketing" -> receive3rdPartyMarketing.toString,
       "returnUrl" -> returnUrl.getOrElse("http://none.com"),
       "skipConfirmation" -> skipConfirmation.getOrElse(false).toString,
-      "groupCode" -> groupCode.getOrElse(""))
+      "groupCode" -> groupCode.getOrElse(""),
+      "csrfToken" -> "~stubbedToken~")
 
     FakeRequest("POST", "/actions/register")
       .withFormUrlEncodedBody(bodyParams: _*)
@@ -61,6 +60,12 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
 
   def fakeRegisterThenSignIn(mockIdentityService: IdentityService) =
     mockIdentityService.registerThenSignIn(anyObject(), argAny[ClientIp], argAny[TrackingData])(argAny[ExecutionContext])
+
+  def fakeBadRequestError(message: String) =
+    Seq(RegisterServiceBadRequestException(ClientBadRequestError(message)))
+
+  def fakeGatewayError(message: String = "Unexpected 500 error") =
+    Seq(RegisterServiceGatewayAppException(ClientGatewayError(message)))
 
   "POST /register" should {
 
@@ -319,7 +324,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       when(fakeRegisterThenSignIn(mockIdentityService))
         .thenReturn{
           Future.successful {
-            Left(Seq(ServiceBadRequest("User could not be registered, invalid fields in form.")))
+            Left(fakeBadRequestError("User could not be registered, invalid fields in form."))
           }
         }
 
@@ -337,7 +342,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       when(fakeRegisterThenSignIn(mockIdentityService))
         .thenReturn{
           Future.successful {
-            Left(Seq(ServiceGatewayError("Unexpected 500 error")))
+            Left(fakeGatewayError())
           }
         }
 
@@ -366,7 +371,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("register-error-gateway")
+      queryParams.get("error") mustEqual Some("error-unexpected")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
@@ -377,7 +382,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       when(fakeRegisterThenSignIn(mockIdentityService))
         .thenReturn{
           Future.successful(
-            Left(Seq(ServiceGatewayError("Unexpected 500 error")))
+            Left(fakeGatewayError())
           )
         }
 
@@ -394,7 +399,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       when(fakeRegisterThenSignIn(mockIdentityService))
         .thenReturn{
           Future.successful(
-            Left(Seq(ServiceGatewayError("Unexpected 500 error")))
+            Left(fakeGatewayError())
           )
         }
 

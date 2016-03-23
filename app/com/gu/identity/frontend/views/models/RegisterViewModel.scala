@@ -26,6 +26,7 @@ case class RegisterViewModel(
     returnUrl: String,
     skipConfirmation: Boolean,
     clientId: Option[ClientID],
+    group: Option[GroupCode],
 
     actions: RegisterActions,
     links: RegisterLinks,
@@ -56,7 +57,7 @@ object RegisterViewModel {
       oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
       registerPageText = RegisterText(),
-      terms = Terms.getTermsModel(group.map(_.getCodeValue)),
+      terms = Terms.getTermsModel(group),
 
       hasErrors = errors.nonEmpty,
       errors = errors,
@@ -67,6 +68,7 @@ object RegisterViewModel {
       returnUrl = returnUrl.url,
       skipConfirmation = skipConfirmation.getOrElse(false),
       clientId = clientId,
+      group = group,
 
       actions = RegisterActions(),
       links = RegisterLinks(returnUrl, skipConfirmation, clientId),
@@ -99,6 +101,6 @@ case class RegisterLinks private(
 object RegisterLinks {
   def apply(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): RegisterLinks =
     RegisterLinks(
-      signIn = UrlBuilder(routes.Application.signIn().url, returnUrl, skipConfirmation, clientId)
+      signIn = UrlBuilder(routes.Application.signIn().url, returnUrl, skipConfirmation, clientId, group = None)
     )
 }

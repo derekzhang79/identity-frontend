@@ -3,6 +3,7 @@ package com.gu.identity.frontend.models
 import java.net.{URLEncoder, URI}
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.errors.{SeqAppExceptions, SignInActionBadRequestAppException, UnexpectedAppException}
 import org.scalatest.{FlatSpec, Matchers}
 
 class UrlBuilderSpec extends FlatSpec with Matchers{
@@ -86,5 +87,20 @@ class UrlBuilderSpec extends FlatSpec with Matchers{
     query.contains("&skipThirdPartyLandingPage=true&") shouldBe true
     query.contains("&skipConfirmation=true&") shouldBe true
     query.contains("&group=GRS") shouldBe true
+  }
+
+  it should "create a valid url when given a single error" in {
+    val error = UnexpectedAppException("Oh no!")
+
+    UrlBuilder("/signin", error) should be(s"/signin?error=${error.id.key}")
+  }
+
+  it should "create a valid url when given a multiple errors" in {
+    val error1 = UnexpectedAppException("Oh no!")
+    val error2 = SignInActionBadRequestAppException("Failed request")
+
+    val error = SeqAppExceptions(Seq(error1, error2))
+
+    UrlBuilder("/signin", error) should be(s"/signin?error=${error1.id.key}&error=${error2.id.key}")
   }
 }

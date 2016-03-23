@@ -2,7 +2,7 @@ package com.gu.identity.service.client.request
 
 import com.gu.identity.frontend.authentication.CookieName
 import com.gu.identity.frontend.models.TrackingData
-import com.gu.identity.service.client.{POST, BadRequest, IdentityClientConfiguration, IdentityClientRequestHandler}
+import com.gu.identity.service.client.{POST, IdentityClientConfiguration, IdentityClientRequestHandler}
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{Matchers, WordSpec}
 import play.api.mvc.Cookie

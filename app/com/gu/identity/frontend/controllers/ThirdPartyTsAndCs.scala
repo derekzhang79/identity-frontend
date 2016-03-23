@@ -4,7 +4,7 @@ import com.gu.identity.frontend.authentication.UserAuthenticatedActionBuilder._
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
-import com.gu.identity.frontend.services.{IdentityService, ServiceError}
+import com.gu.identity.frontend.services._
 import com.gu.identity.frontend.views.ViewRenderer.renderTsAndCs
 import com.gu.identity.model.{User => SecureCookieUser}
 import com.gu.identity.service.client.models.User
@@ -44,7 +44,7 @@ class ThirdPartyTsAndCs(identityService: IdentityService, config: Configuration,
     }
   }
 
-  def confirm(groupCode: GroupCode, returnUrl: ReturnUrl, clientId: Option[ClientID], skipConfirmation: Boolean, userCookie: Cookie): Future[Either[Seq[ServiceError], Result]] = {
+  def confirm(groupCode: GroupCode, returnUrl: ReturnUrl, clientId: Option[ClientID], skipConfirmation: Boolean, userCookie: Cookie): Future[Either[ServiceExceptions, Result]] = {
     checkUserForGroupMembership(groupCode, userCookie).flatMap {
       case Right(true) => Future.successful(Right(SeeOther(returnUrl.url)))
       case Right(false) if skipConfirmation => addToGroup(groupCode, userCookie, returnUrl)
@@ -78,18 +78,18 @@ class ThirdPartyTsAndCs(identityService: IdentityService, config: Configuration,
     )
   }
 
-  def addToGroup(group: GroupCode, sc_gu_uCookie: Cookie, returnUrl: ReturnUrl): Future[Either[Seq[ServiceError], Result]] = {
-    val response = identityService.assignGroupCode(group.getCodeValue, sc_gu_uCookie)
+  def addToGroup(group: GroupCode, sc_gu_uCookie: Cookie, returnUrl: ReturnUrl): Future[Either[ServiceExceptions, Result]] = {
+    val response = identityService.assignGroupCode(group.id, sc_gu_uCookie)
     response.map{
       case Left(errors) => Left(errors)
       case Right(_) => Right(SeeOther(returnUrl.url))
     }
   }
 
-  def checkUserForGroupMembership(group: GroupCode, cookie: Cookie): Future[Either[Seq[ServiceError], Boolean]] = {
+  def checkUserForGroupMembership(group: GroupCode, cookie: Cookie): Future[Either[ServiceExceptions, Boolean]] = {
     identityService.getUser(cookie).map{
       case Right(user) => {
-        Right(isUserInGroup(user, group.getCodeValue))
+        Right(isUserInGroup(user, group.id))
       }
       case Left(errors) => {
         logger.error("Request did not have a SC_GU_U cookie could not get user.")

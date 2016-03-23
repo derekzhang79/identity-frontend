@@ -459,6 +459,42 @@
           }
         ]
       }
+    },
+
+    "alarmSignInInactivity": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "Low number of users signing in.",
+        "Namespace": "SuccessfulSignIns",
+        "MetricName": "SuccessfulSignIn",
+        "Statistic": "Average",
+        "ComparisonOperator": "LessThanThreshold",
+        "Threshold": "0.9",
+        "Period": "1200",
+        "EvaluationPeriods": "1",
+        "AlarmActions": [
+          { "Ref": "TopicSendEmail" },
+          { "Ref": "TopicPagerDutyAlerts" }
+        ]
+      }
+    },
+
+    "alarmRegisterInactivity": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "Low number of users registering.",
+        "Namespace": "SuccessfulRegistrations",
+        "MetricName": "SuccessfulRegistration",
+        "Statistic": "Average",
+        "ComparisonOperator": "LessThanThreshold",
+        "Threshold": "0.9",
+        "Period": "3600",
+        "EvaluationPeriods": "1",
+        "AlarmActions": [
+          { "Ref": "TopicSendEmail" },
+          { "Ref": "TopicPagerDutyAlerts" }
+        ]
+      }
     }
   },
 

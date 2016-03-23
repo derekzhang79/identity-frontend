@@ -1,10 +1,10 @@
 package com.gu.identity.service.client.request
 
-import com.gu.identity.frontend.controllers.ResetPasswordData
 import com.gu.identity.frontend.models.ClientIp
+import com.gu.identity.frontend.request.ResetPasswordActionRequestBody
 import com.gu.identity.service.client._
 
-case class SendResetPasswordEmailApiRequest(data: ResetPasswordData, clientIp: ClientIp)
+case class SendResetPasswordEmailApiRequest(data: ResetPasswordActionRequestBody, clientIp: ClientIp)
                                            (implicit configuration: IdentityClientConfiguration) extends ApiRequest {
   override val method = POST
   override val headers = Iterable(

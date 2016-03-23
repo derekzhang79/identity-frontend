@@ -2,96 +2,54 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
-import com.gu.identity.frontend.logging.{MetricsLoggingActor, Logging}
+import com.gu.identity.frontend.logging.{LogOnErrorAction, MetricsLoggingActor, Logging}
 import com.gu.identity.frontend.models._
-import com.gu.identity.frontend.models.ClientID.FormMappings.{clientId => clientIdMapping}
-import com.gu.identity.frontend.models.GroupCode.FormMappings.{groupCode => groupCodeMapping}
+import com.gu.identity.frontend.errors.RedirectOnError
+import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
+import com.gu.identity.frontend.request.SignInActionRequestBody
 import com.gu.identity.frontend.services._
-import play.api.data.Form
-import play.api.data.Forms.{boolean, default, mapping, optional, text}
 import play.api.i18n.{MessagesApi, I18nSupport}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc.{RequestHeader, Controller}
-
-import scala.concurrent.Future
-import scala.util.control.NonFatal
-import play.api.i18n.Messages.Implicits._
+import play.api.mvc.{Request, Controller}
 
 
 /**
  * Form actions controller
  */
-class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, csrfConfig: CSRFConfig, googleRecaptchaCheck: GoogleRecaptchaCheck, config: Configuration) extends Controller with Logging with MetricsLoggingActor with I18nSupport {
+class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, csrfConfig: CSRFConfig, config: Configuration) extends Controller with Logging with MetricsLoggingActor with I18nSupport {
 
-  case class SignInRequest(
-    email: Option[String],
-    password: Option[String],
-    rememberMe: Boolean,
-    returnUrl: Option[String],
-    skipConfirmation: Option[Boolean],
-    googleRecaptchaResponse: Option[String],
-    clientID: Option[ClientID],
-    groupCode: Option[GroupCode])
+  val redirectRoute: String = routes.Application.signIn().url
 
-  private val signInFormBody = Form(
-    mapping(
-      "email" -> optional(text),
-      "password" -> optional(text),
-      "rememberMe" -> default(boolean, false),
-      "returnUrl" -> optional(text),
-      "skipConfirmation" -> optional(boolean),
-      "g-recaptcha-response" -> optional(text),
-      "clientId" -> optional(clientIdMapping),
-      "groupCode" -> optional(groupCodeMapping)
-    )(SignInRequest.apply)(SignInRequest.unapply)
-  )
+  val SignInServiceAction =
+    ServiceAction andThen
+    RedirectOnError(redirectRoute) andThen
+    LogOnErrorAction(logger) andThen
+    CSRFCheck(csrfConfig)
 
-  def signIn = CSRFCheck(csrfConfig, handleCSRFError).async { implicit request =>
-    val formParams = signInFormBody.bindFromRequest()(request).get
-    val trackingData = TrackingData(request, formParams.returnUrl)
-    val returnUrl = ReturnUrl(formParams.returnUrl, request.headers.get("Referer"), config, formParams.clientID)
-    val successfulReturnUrl = formParams.groupCode match {
+  val bodyParser = SignInActionRequestBody.bodyParser
+
+  def signIn = SignInServiceAction(bodyParser) { request: Request[SignInActionRequestBody] =>
+    val body = request.body
+
+    val trackingData = TrackingData(request, body.returnUrl.flatMap(_.toStringOpt))
+    lazy val returnUrl = body.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, body.clientId))
+
+    val successfulReturnUrl = body.groupCode match {
       case Some(validGroupCode) => {
-        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, formParams.skipConfirmation, skipThirdPartyLandingPage = true, formParams.clientID, validGroupCode, config)
+        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, body.skipConfirmation, skipThirdPartyLandingPage = true, body.clientId, validGroupCode, config)
       }
       case _ => returnUrl
     }
 
-    def googleRecaptchaError = Future.successful(
-      redirectToSigninPageWithErrorsAndEmail(Seq(ServiceBadRequest("error-captcha")), returnUrl, formParams.skipConfirmation, formParams.clientID)
-    )
 
-    googleRecaptchaCheck(formParams.googleRecaptchaResponse, googleRecaptchaError) {
-      identityService.authenticate(formParams.email, formParams.password, formParams.rememberMe, trackingData).map {
-        case Left(errors) => redirectToSigninPageWithErrorsAndEmail(errors, returnUrl, formParams.skipConfirmation, formParams.clientID)
-        case Right(cookies) => {
-          logSuccessfulSignin
-          SeeOther(successfulReturnUrl.url)
-            .withCookies(cookies: _*)
-        }
-      }.recover {
-        case NonFatal(ex) => {
-          logger.warn(s"Unexpected error signing in: ${ex.getMessage}", ex)
-          redirectToSigninPageWithErrorsAndEmail(Seq(ServiceGatewayError(ex.getMessage)), returnUrl, formParams.skipConfirmation, formParams.clientID)
-        }
+    identityService.authenticate(body, trackingData).map {
+      case Left(errors) => Left(errors)
+      case Right(cookies) => Right {
+        logSuccessfulSignin()
+        SeeOther(successfulReturnUrl.url)
+          .withCookies(cookies: _*)
       }
     }
-  }
-
-  private def redirectToSigninPageWithErrorsAndEmail(errors: Seq[ServiceError], returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientID: Option[ClientID]) = {
-    val query = errors.map("signin-" + _.id)
-    SeeOther(routes.Application.signIn(query, Some(returnUrl.url), skipConfirmation, clientID.map(_.id)).url)
-  }
-
-
-  // Note: Limitation
-  //       Error Handler only accepts RequestHeader instead of Request, so we cannot
-  //       pass ReturnUrl and skipConfirmation as they're on the Request body.
-  private def handleCSRFError(request: RequestHeader, msg: String) = Future.successful {
-    logger.error(s"CSRF error during Sign-in: $msg")
-    val errors = Seq("signin-error-csrf")
-
-    SeeOther(routes.Application.signIn(errors).url)
   }
 
 }

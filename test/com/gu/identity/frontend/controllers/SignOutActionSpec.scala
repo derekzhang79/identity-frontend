@@ -2,8 +2,10 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.authentication.CookieName
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.errors.DeauthenticateAppException
 import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.services._
+import com.gu.identity.service.client.ClientBadRequestError
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.{any => argAny}
 import org.mockito.Mockito._
@@ -70,7 +72,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
       when(mockIdentityService.deauthenticate(argAny[Cookie], argAny[TrackingData])(argAny[ExecutionContext]))
         .thenReturn {
           Future.successful {
-            Left(Seq(ServiceBadRequest("Something went wrong")))
+            Left(Seq(DeauthenticateAppException(ClientBadRequestError("Something went wrong"))))
           }
         }
 

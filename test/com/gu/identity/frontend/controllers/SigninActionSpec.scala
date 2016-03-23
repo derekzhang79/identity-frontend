@@ -2,10 +2,14 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFConfig
+import com.gu.identity.frontend.errors.{SignInServiceGatewayAppException, SignInServiceBadRequestException}
 import com.gu.identity.frontend.models.TrackingData
+import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
 import com.gu.identity.frontend.services._
+import com.gu.identity.service.client.{ClientGatewayError, ClientBadRequestError}
+import org.mockito.ArgumentMatcher
 import org.mockito.Mockito._
-import org.mockito.Matchers.{any => argAny, eq => argEq}
+import org.mockito.Matchers.{any => argAny, argThat}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.i18n.MessagesApi
@@ -16,65 +20,89 @@ import org.scalatest.Matchers._
 
 import scala.concurrent.{ExecutionContext, Future}
 
+
 class SigninActionSpec extends PlaySpec with MockitoSugar {
   val fakeCsrfConfig = CSRFConfig.disabled
-  val mockGoogleRecaptchaServiceHandler = mock[GoogleRecaptchaServiceHandler]
+
+  val signInPageUrl = routes.Application.signIn().url
+
 
   trait WithControllerMockedDependencies {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
-    val mockGoogleRecaptchaCheck = new MockRecaptchaCheck()
     val config = Configuration.testConfiguration
-    lazy val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig, mockGoogleRecaptchaCheck, config)
+    lazy val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig, config)
+
+    def mockAuthenticate(
+        email: String,
+        password: String,
+        rememberMe: Boolean = false) = {
+
+      val mockRequest = MockSignInRequest(email, password, rememberMe)
+
+      mockIdentityService.authenticate(
+        argThat(signInRequestParamsMatcher(mockRequest)),
+        argAny[TrackingData]
+      )(argAny[ExecutionContext])
+    }
   }
 
-  trait WithFailedRecaptchaCheck extends WithControllerMockedDependencies{
-    override val mockGoogleRecaptchaCheck = new MockRecaptchaCheck(false)
-  }
+  private case class MockSignInRequest(email: String, password: String, rememberMe: Boolean)
+    extends SignInRequestParameters
+
+  def signInRequestParamsMatcher(expect: SignInRequestParameters) =
+    new ArgumentMatcher[SignInRequestParameters] {
+      def matches(arg: scala.Any): Boolean = arg match {
+        case r: SignInRequestParameters
+          if r.email == expect.email && r.password == expect.password && r.rememberMe == expect.rememberMe => true
+        case _ => false
+      }
+    }
+
+
 
   def fakeSigninRequest(
-      email: Option[String],
-      password: Option[String],
-      rememberMe: Option[String],
-      returnUrl: Option[String],
-      googleRecaptchaResponse: Option[String] = None) = {
-    val bodyParams = Seq("email" -> email, "password" -> password, "keepMeSignedIn" -> rememberMe, "returnUrl" -> returnUrl, "g-recaptcha-response" -> googleRecaptchaResponse)
-      .filter(_._2.isDefined)
-      .map(p => p._1 -> p._2.get)
+      email: Option[String] = None,
+      password: Option[String] = None,
+      rememberMe: Option[String] = None,
+      returnUrl: Option[String] = None) = {
+
+    val bodyParams = Seq(
+      email.map("email" -> _),
+      password.map("password" -> _),
+      rememberMe.map("rememberMe" -> _),
+      returnUrl.map("returnUrl" -> _),
+      Some("csrfToken" -> "~~fake token~~")
+    ).flatten
 
     FakeRequest("POST", "/actions/signin")
       .withFormUrlEncodedBody(bodyParams: _*)
   }
 
-  class MockRecaptchaCheck(stubbedResult: Boolean = true) extends GoogleRecaptchaCheck(mockGoogleRecaptchaServiceHandler) {
+  def fakeBadRequestError(message: String) =
+    Seq(SignInServiceBadRequestException(ClientBadRequestError(message)))
 
-    override def apply (
-        googleRecaptchaResponse: Option[String],
-        errorHandler: => Future[Result])
-        (result: => Future[Result])
-        (implicit ec: ExecutionContext): Future[Result] =
-      if (stubbedResult) result else errorHandler
-  }
+  def fakeGatewayError(message: String = "Unexpected 500 error") =
+    Seq(SignInServiceGatewayAppException(ClientGatewayError(message)))
 
 
   "POST /signin" should {
 
     "redirect to returnUrl when passed authentication" in new WithControllerMockedDependencies {
-      val email = Some("me@me.com")
-      val password = Some("password")
-      val rememberMe = None
+      val email = "me@me.com"
+      val password = "password"
       val returnUrl = Some("http://www.theguardian.com/yeah")
 
       val testCookie = Cookie("SC_GU_U", "##hash##")
 
-      when(mockIdentityService.authenticate(argEq(email), argEq(password), argEq(rememberMe.isDefined), argAny[TrackingData])(argAny[ExecutionContext]))
+      when(mockAuthenticate(email, password))
         .thenReturn {
           Future.successful {
             Right(Seq(testCookie))
           }
         }
 
-      val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
+      val result = call(controller.signIn, fakeSigninRequest(Some(email), Some(password), returnUrl = returnUrl))
       val resultCookies = cookies(result)
 
       status(result) mustEqual SEE_OTHER
@@ -85,105 +113,62 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "redirect to sign in page when failed authentication" in new WithControllerMockedDependencies {
-      val email = Some("me@me.com")
-      val password = Some("password")
-      val rememberMe = None
+      val email = "me@me.com"
+      val password = "password"
       val returnUrl = Some("http://www.theguardian.com/yeah")
 
-      when(mockIdentityService.authenticate(argEq(email), argEq(password), argEq(rememberMe.isDefined), argAny[TrackingData])(argAny[ExecutionContext]))
+      when(mockAuthenticate(email, password))
         .thenReturn {
           Future.successful {
-            Left(Seq(ServiceBadRequest("Invalid email or password")))
+            Left(fakeBadRequestError("Invalid email or password"))
           }
         }
 
-      val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
+      val result = call(controller.signIn, fakeSigninRequest(Some(email), Some(password), returnUrl = returnUrl))
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get should startWith (routes.Application.signIn().url)
-
-      // TODO check error parameters
+      redirectLocation(result).get should startWith (signInPageUrl)
+      redirectLocation(result).get should include ("error=signin-error-bad-request")
     }
 
     "redirect to sign in page when service error" in new WithControllerMockedDependencies {
-      val email = Some("me@me.com")
-      val password = Some("password")
-      val rememberMe = None
+      val email = "me@me.com"
+      val password = "password"
       val returnUrl = Some("http://www.theguardian.com/yeah")
 
-      when(mockIdentityService.authenticate(argEq(email), argEq(password), argEq(rememberMe.isDefined), argAny[TrackingData])(argAny[ExecutionContext]))
+      when(mockAuthenticate(email, password))
         .thenReturn {
           Future.successful {
-            Left(Seq(ServiceGatewayError("Unexpected 500 error")))
+            Left(fakeGatewayError())
           }
         }
 
-      val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
+      val result = call(controller.signIn, fakeSigninRequest(Some(email), Some(password), None, returnUrl))
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get should startWith (routes.Application.signIn().url)
-
-      // TODO check error parameters
+      redirectLocation(result).value should startWith (signInPageUrl)
+      redirectLocation(result).value should include ("error=signin-error-gateway")
     }
 
 
     "redirect to sign in page when error from future" in new WithControllerMockedDependencies {
-      val email = Some("me@me.com")
-      val password = Some("password")
-      val rememberMe = None
+      val email = "me@me.com"
+      val password = "password"
       val returnUrl = Some("http://www.theguardian.com/yeah")
 
-      when(mockIdentityService.authenticate(argEq(email), argEq(password), argEq(rememberMe.isDefined), argAny[TrackingData])(argAny[ExecutionContext]))
+      when(mockAuthenticate(email, password))
         .thenReturn {
           Future.failed {
             new RuntimeException("Unexpected 500 error")
           }
         }
 
-      val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl))
+      val result = call(controller.signIn, fakeSigninRequest(Some(email), Some(password), None, returnUrl))
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get should startWith (routes.Application.signIn().url)
+      redirectLocation(result).value should startWith (signInPageUrl)
+      redirectLocation(result).value should include ("error=error-unexpected")
 
-      // TODO check error parameters
-    }
-
-    "redirect to return url when google captcha code is valid" in new WithControllerMockedDependencies {
-      val email = Some("me@me.com")
-      val password = Some("password")
-      val rememberMe = None
-      val returnUrl = Some("http://www.theguardian.com/yeah")
-      val googleRecaptchaResponse = Some("12345")
-
-      val testCookie = Cookie("SC_GU_U", "##hash##")
-
-      when(mockIdentityService.authenticate(argEq(email), argEq(password), argEq(rememberMe.isDefined), argAny[TrackingData])(argAny[ExecutionContext]))
-        .thenReturn {
-          Future.successful {
-            Right(Seq(testCookie))
-          }
-        }
-
-      val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl, googleRecaptchaResponse))
-      val resultCookies = cookies(result)
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result) mustEqual returnUrl
-
-      resultCookies.size mustEqual 1
-      resultCookies.head mustEqual testCookie
-    }
-
-    "redirect to sign in page when google captcha code is invalid" in new WithFailedRecaptchaCheck {
-      val email = Some("me@me.com")
-      val password = Some("password")
-      val rememberMe = None
-      val returnUrl = Some("http://www.theguardian.com/yeah")
-      val googleRecaptchaResponse = Some("12345")
-
-      val result = call(controller.signIn, fakeSigninRequest(email, password, None, returnUrl, googleRecaptchaResponse))
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get should startWith (routes.Application.signIn().url)
     }
 
   }

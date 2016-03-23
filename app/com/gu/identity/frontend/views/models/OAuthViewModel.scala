@@ -32,7 +32,7 @@ object OAuthProviderViewModel {
 
     val returnUrl = groupCode match{
       case Some(code) => UrlBuilder.buildOauthReturnUrl(baseUrl, finalReturnUrl, skipConfirmation, clientId, code, configuration)
-      case None => UrlBuilder(baseUrl, finalReturnUrl, skipConfirmation, clientId)
+      case None => UrlBuilder(baseUrl, finalReturnUrl, skipConfirmation, clientId, group = None)
     }
 
 

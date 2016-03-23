@@ -23,7 +23,7 @@ class SignOutAction(identityService: IdentityService, val messagesApi: MessagesA
     request.cookies.get(CookieName.SC_GU_U).map { cookie =>
       identityService.deauthenticate(cookie, trackingData).map {
         case Left(errors) => {
-          logger.info(s"Error returned from API signout: ${errors.map(_.description).mkString(", ")}")
+          logger.info(s"Error returned from API signout: ${errors.map(_.getMessage).mkString(", ")}")
           performSignout(request, validReturnUrl, Seq.empty)
         }
         case Right(signOutCookies) => performSignout(request, validReturnUrl, signOutCookies)

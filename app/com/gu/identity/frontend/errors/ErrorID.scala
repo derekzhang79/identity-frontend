@@ -73,6 +73,15 @@ object ErrorIDs {
   }
 
 
+  /**
+   * Note: externally generated error from Federation API
+   */
+  case object SocialRegistrationFacebookEmailErrorID extends ErrorID {
+    val key = "fbEmail"
+  }
+
+
+
   case object ResetPasswordGatewayErrorID extends ErrorID {
     val key = "reset-password-error-gateway"
   }
@@ -115,6 +124,10 @@ object ErrorIDs {
 
   case object ForgeryTokenErrorID extends ErrorID {
     val key = "error-forgery-token"
+  }
+
+  case object RateLimitedErrorID extends ErrorID {
+    val key = "rate-limited"
   }
 
   case object UnexpectedErrorID extends ErrorID {

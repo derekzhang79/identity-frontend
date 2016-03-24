@@ -31,9 +31,13 @@ object ErrorViewModel {
     RegisterActionInvalidUsernameErrorID -> "Invalid username; your username must be between 6 and 20 characters long and contain only letters and numbers.",
     RegisterActionInvalidPasswordErrorID -> "Invalid password; your password must be between 6 and 20 characters long.",
 
+    SocialRegistrationFacebookEmailErrorID -> "We need your email address when you sign in with Facebook so that we can keep in touch (you can choose which emails you receive in your account settings). Try again and allow access to your email address or provide it manually below.",
+
     ResetPasswordGatewayErrorID -> "There was a problem resetting your password; please try again",
     ResetPasswordBadRequestErrorID -> "There was a problem resetting your password; please try again.",
     ResetPasswordInvalidEmailErrorID -> nonEmptyField("email"),
+
+    RateLimitedErrorID -> "This request has been rate limited, please try again shortly",
 
     ForgeryTokenErrorID -> "Forgery token invalid; please try again.",
     UnexpectedErrorID -> "There was an unexpected problem; please try again."

@@ -11,6 +11,9 @@ import { configuration } from '../configuration/configuration';
 function init() {
   const dsn = configuration.sentryDsn;
   const ravenOptions = {
+    whitelistUrls: [
+      /ophan\.co\.uk/
+    ],
     release: configuration.appVersion
   };
 

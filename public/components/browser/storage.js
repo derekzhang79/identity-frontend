@@ -1,24 +1,29 @@
-/*global window*/
+/*global window, console*/
 
 /**
  * Basic abstraction around browser key/value storage, eg: sessionStorage and localStorage.
  *
  * @param {string} type
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
  */
 function storage( type ) {
   const storageActual = window[ type ];
 
-  function checkSupported() {
-    if ( !storageActual ) {
-      throw new Error( `Could not find supported storage for: ${type}` );
-    }
-
-    return true;
+  function isAvailable() {
+    return isStorageAvailable( type );
   }
 
   return Object.freeze({
     set: function setValue( key, value ) {
-      checkSupported() && storageActual.setItem( key, value );
+      if ( isAvailable() ) {
+        try {
+          storageActual.setItem( key, value );
+
+        } catch ( err ) {
+          // Catch all possible errors
+          logWarning( `Could not set value in ${type} for key "${key}": ${err}` );
+        }
+      }
     },
 
     setJSON: function setJSONValue( key, value ) {
@@ -26,7 +31,7 @@ function storage( type ) {
     },
 
     get: function getValue( key ) {
-      return checkSupported() && storageActual.getItem( key ) || undefined;
+      return isAvailable() && storageActual.getItem( key ) || undefined;
     },
 
     getJSON: function getJSONValue( key ) {
@@ -38,12 +43,31 @@ function storage( type ) {
         }
 
       } catch ( err ) {
-        if ( console && console.warn ) {
-          console.warn( `Error parsing JSON from storage for key "${key}": ${err}` );
-        }
+        logWarning( `Error parsing JSON from storage for key "${key}": ${err}` );
       }
     }
   });
+}
+
+
+function isStorageAvailable( storageType ) {
+  try {
+    var storage = window[ storageType ],
+    x = '__storage_test__';
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+
+  } catch( errors ) {
+    return false;
+  }
+}
+
+
+function logWarning( message ) {
+  if ( console && console.warn ) {
+    console.warn( message );
+  }
 }
 
 export const sessionStorage = storage( 'sessionStorage' );

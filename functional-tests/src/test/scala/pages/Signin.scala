@@ -4,8 +4,9 @@ import test.util.user.EmailTestUser
 import test.util.{Browser, Config}
 import org.scalatest.selenium.Page
 
-class Signin(val testUser: EmailTestUser = new EmailTestUser) extends Page with Browser {
-  val url = s"${Config.baseUrl}/signin?mvt_signinv2=a"
+class Signin(val testUser: EmailTestUser = new EmailTestUser,
+             baseUrl: String = Config.baseUrl) extends Page with Browser {
+  val url = s"${baseUrl}/signin"
 
   def signUp() = clickOn(signUpLink)
 

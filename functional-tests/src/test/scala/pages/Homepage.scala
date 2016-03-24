@@ -1,9 +1,9 @@
 package test.pages
 
-import test.util.{LoadablePage, Browser}
+import test.util.{Config, LoadablePage, Browser}
 
 class Homepage extends LoadablePage with Browser {
-  val url = "www.theguardian.com"
+  val url = Config.homepageUrl
 
   def hasLoaded(): Boolean = pageHasElement(signInName)
 

@@ -17,7 +17,6 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
 
   before { /* each test */
     Driver.reset()
-    Driver.addCookie("GU_PROFILE_BETA", "1") // required due to A/B testing
   }
 
   override def beforeAll() = Config.printSummary()
@@ -99,8 +98,20 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
         val homepage = new pages.Homepage
         assert(homepage.hasLoaded())
 
-        And("should be signed in.")
-        assert(elementHasText(className("js-profile-info"), emailTestUser.name))
+        if (Config.stage != "DEV") {
+          And("should be signed in.")
+          assert(elementHasText(className("js-profile-info"), emailTestUser.name))
+        } else { // local DEV frontend targets CODE backend
+          And("they should be able to sign in (in CODE)")
+          val signinCode =
+            new pages.Signin(emailTestUser, "https://profile.code.dev-theguardian.com")
+          go.to(signinCode)
+          assert(signinCode.pageHasLoaded())
+          signinCode.fillInCredentials()
+          signinCode.signIn()
+          assert(homepage.hasLoaded())
+          assert(elementHasText(className("js-profile-info"), emailTestUser.name))
+        }
       }
     }
 
@@ -110,7 +121,7 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
         Given("users have not registered with Facebook before,")
 
         When("they visit 'Sign in' page")
-        val signin = new pages.Signin(new EmailTestUser)
+        val signin = new pages.Signin
         go.to(signin)
         assert(signin.pageHasLoaded())
 
@@ -149,7 +160,7 @@ class SigninSpec extends FeatureSpec with WebBrowser with Browser
         Given("users have not registered with Facebook before,")
 
         When("they visit 'Sign in' page,")
-        val signin = new pages.Signin(new EmailTestUser)
+        val signin = new pages.Signin
         go.to(signin)
         assert(signin.pageHasLoaded())
 

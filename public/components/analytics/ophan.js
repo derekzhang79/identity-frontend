@@ -16,8 +16,19 @@ const curlOptions = {
 };
 
 
-function getOphan() {
-  return curl(curlOptions, ['ophan/ng']);
+function getOphan( retryCount = 1 ) {
+  return curl( curlOptions, [ 'ophan/ng' ] )
+    .then(
+      ophan => ophan,
+      error => {
+        console.log('here: ' + retryCount + error);
+        if ( retryCount <= 2 ) {
+          return getOphan( retryCount + 1 );
+        } else {
+          throw error;
+        }
+      }
+    )
 }
 
 export function init() {

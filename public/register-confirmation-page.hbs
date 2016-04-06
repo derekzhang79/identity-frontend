@@ -2,31 +2,35 @@
 
 {{# partial "content" }}
 
-
-  <section class = "register-confirm">
     <h1 class="page-heading-confirm">{{ registerConfirmationPageText.title }}</h1>
-    <p class="page-standfirst-confirm">{{ registerConfirmationPageText.titleStandfirst }}</p>
-  </section>
-
-    <section class = "register-confirm__section">
-        <h1 class="page-heading-confirm">{{ registerConfirmationPageText.oneMoreStepTitle }}</h1>
-        <p class = "page-content-confirm">{{ registerConfirmationPageText.oneMoreStepP1 }}</p>
-        <p class = "page-content-confirm">{{ registerConfirmationPageText.oneMoreStepP2 }}</p>
+    <section class="page-standfirst">
+      <p class="page-standfirst__paragraph">{{ registerConfirmationPageText.titleStandfirst }}</p>
     </section>
 
-     <section class = "register-confirm__section">
-        <h1 class="page-heading-confirm">{{ registerConfirmationPageText.weValueYourOpinionTitle }}</h1>
+  <section class = "register-confirm__section">
+     <h2 class="page-heading-confirm">{{ registerConfirmationPageText.oneMoreStepTitle }}</h2>
+     <section class="page-content">
+        <p class = "page-content-confirm">{{ registerConfirmationPageText.oneMoreStepP1 }}</p>
+        <p class = "page-content-confirm">{{ registerConfirmationPageText.oneMoreStepP2 }}</p>
+      </section>
+  </section>
+
+  <section class = "register-confirm__section">
+      <h2 class="page-heading-confirm">{{ registerConfirmationPageText.weValueYourOpinionTitle }}</h2>
+      <section class="page-content">
         <p class = "page-content-confirm"> {{ registerConfirmationPageText.weValueYourOpinionP1 }} </p>
         <p class = "page-content-confirm">{{ registerConfirmationPageText.weValueYourOpinionP2}}</p>
         <p class = "page-content-confirm">{{ registerConfirmationPageText.weValueYourOpinionP3}}</p>
-    </section>
+      </section>
+  </section>
 
-
-  <section class="register-confirm">
-    <a class="register-confirm__complete-registration-button" href="{{returnUrl}}">
-      {{registerConfirmationPageText.completeRegistration}}
-    </a>
+    <section class="page-content">
+      <a class="register-confirm__complete-registration-button" href="{{returnUrl}}">
+        {{registerConfirmationPageText.completeRegistration}}
+      </a>
     </section>
 
 {{/partial}}
 {{> layout}}
+
+

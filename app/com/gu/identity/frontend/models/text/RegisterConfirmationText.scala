@@ -4,7 +4,6 @@ import play.api.i18n.Messages
 
 case class RegisterConfirmationText private(
     pageTitle: String,
-    userName: String,
     title: String,
     titleStandfirst: String,
     oneMoreStepTitle: String,
@@ -20,7 +19,6 @@ object RegisterConfirmationText {
   def apply()(implicit messages: Messages): RegisterConfirmationText =
     RegisterConfirmationText(
       pageTitle = messages("registerConfirmation.pageTitle"),
-      userName = messages("registerConfirmation.userName"),
       title = messages("registerConfirmation.title"),
       titleStandfirst = messages("registerConfirmation.titleStandfirst"),
       oneMoreStepTitle = messages("registerConfirmation.oneMoreStepTitle"),

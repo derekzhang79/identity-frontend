@@ -89,7 +89,7 @@ Requires:
 
 To run the application in development mode use:
 
-    sbt devrun
+    ./start-frontend.sh
 
 This command will automatically pull down all dependencies for the Scala app,
 and client-side dependencies with Node.js. Sources will automatically be watched,

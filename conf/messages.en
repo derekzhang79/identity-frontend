@@ -63,13 +63,16 @@ footer.copyright=© {0} Guardian News and Media Limited or its affiliated compan
 
 # com.gu.identity.frontend.models.text.RegisterConfirmationText
 registerConfirmation.pageTitle=Register
-registerConfirmation.title=Now check your email
-registerConfirmation.instruction=Follow the link in the email to validate your email address.
+registerConfirmation.title=Welcome
+registerConfirmation.titleStandfirst=Thank you for registering with the Guardian.
+registerConfirmation.oneMoreStepTitle=One more step
+registerConfirmation.oneMoreStepP1=To access all your account features and join the Guardian community, we need you to validate your email address.
+registerConfirmation.oneMoreStepP2=Please check your email and click on the link we’ve sent you to confirm. Easy.
+registerConfirmation.weValueYourOpinionTitle=We value your opinion and your experience
+registerConfirmation.weValueYourOpinionP1=The Guardian is much more than just a newspaper on the internet. We provide a platform for our audience to debate the news and share your experiences with each other and with us.
+registerConfirmation.weValueYourOpinionP2=The best comments and contributions are seen by our journalists and used in our work. Your feedback and stories help shape our journalism. All of your contributions are attributed to you.
+registerConfirmation.weValueYourOpinionP3=When you’re commenting on the Guardian, please keep it respectful and abide by the community guidelines - and if you spot a comment you think doesn’t follow those, please use the ‘Report’ link next to it to let us know.
 registerConfirmation.completeRegistration=Complete registration
-registerConfirmation.faq=FAQ
-registerConfirmation.emailUserhelp=Email userhelp
-registerConfirmation.resetPassword=Reset password
-registerConfirmation.signOut=Sign out
 
 # com.gu.identity.frontend.models.text.ResetPasswordText
 resetPassword.pageTitle=Reset password

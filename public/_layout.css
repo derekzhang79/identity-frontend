@@ -83,6 +83,16 @@ body > section:last-of-type {
   }
 }
 
+/**
+ * Smaller heading
+ */
+.page-heading--small {
+  @extend %font-sub-heading-2;
+  @extend %content-container;
+  padding-bottom: 0.4rem;
+  padding-top: 1.4rem;
+}
+
 .page-heading--with-standfirst {
   @extend .page-heading;
 
@@ -107,7 +117,6 @@ body > section:last-of-type {
     margin: 0;
   }
 }
-
 
 @import "components/header/_header.css";
 @import "components/footer/_footer.css";

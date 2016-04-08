@@ -11,7 +11,7 @@ case class TrackingData(returnUrl:Option[String],
                         referrer: Option[String],
                         userAgent: Option[String]) {
   def parameters: HttpParameters = List(
-    returnUrl.map("trackingReturnUrl" -> _),
+    returnUrl.map("returnUrl" -> _),
     registrationType.map("trackingRegistrationType" -> _),
     omnitureSVi.map("trackingOmnitureSVI" -> _),
     ipAddress.map("trackingIpAddress" -> _),

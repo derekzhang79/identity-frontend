@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.views.models
 
+import com.gu.identity.frontend.errors.ErrorIDs._
 import com.gu.identity.frontend.errors.{ErrorID, ErrorIDs}
-import play.api.i18n.Messages
 
 case class ErrorViewModel(id: String, message: String) extends ViewModel
 
@@ -53,4 +53,62 @@ object ErrorViewModel {
   val default: String = "There was an unexpected problem; please try again."
 
   private def getErrorMessage(id: String) = errorMessagesByKey.getOrElse(id, default)
+}
+
+case class RegisterErrorViewModel(usernameErrors : Seq[ErrorViewModel], emailErrors: Seq[ErrorViewModel], passwordErrors: Seq[ErrorViewModel], otherErrors : Seq[ErrorViewModel])
+
+object RegisterErrorViewModel {
+
+  val errorIdToFields: Map[ErrorID, String] = Map(
+      RegisterActionInvalidUsernameErrorID -> "usernameError",
+      RegisterUsernameConflictErrorID -> "usernameError",
+      RegisterActionInvalidEmailErrorID -> "emailError",
+      RegisterEmailConflictErrorID -> "emailError",
+      RegisterActionInvalidPasswordErrorID -> "passwordError"
+  )
+
+
+  lazy val errorFieldByKey: Map[String, String] =
+    errorIdToFields.map {
+      case (k, v) => k.key -> v
+    }
+
+  private def getErrorField(id: String) = errorFieldByKey.get(id)
+
+  def apply(ids : Seq[String]) : RegisterErrorViewModel = {
+    val errors = ids.map(id => id -> getErrorField(id)).toMap
+
+    val usernameErrors = errors.filter {
+      case (k,Some(v)) => v == "usernameError"
+      case _ => false
+    }.map {
+      case (k, v) => ErrorViewModel(k)
+    }.toSeq
+
+    val emailErrors = errors.filter {
+      case (k,Some(v)) => v == "emailError"
+      case _ => false
+    }.map {
+      case (k, v) => ErrorViewModel(k)
+    }.toSeq
+
+    val passwordErrors = errors.filter {
+      case (k,Some(v)) => v == "passwordError"
+      case _ => false
+    }.map {
+      case (k, v) => ErrorViewModel(k)
+    }.toSeq
+
+    val otherErrors = errors.filter {
+      case (k,None) => true
+      case _ => false
+    }.map {
+      case (k, v) => ErrorViewModel(k)
+    }.toSeq
+
+    RegisterErrorViewModel(usernameErrors, emailErrors, passwordErrors, otherErrors)
+  }
+
+
+
 }

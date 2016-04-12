@@ -13,8 +13,8 @@
 
   <p class="register-form__prelude">{{ registerPageText.divideText }}</p>
 
-  {{#each errors }}
-      <p id="{{ id }}" class="register-form__error">{{ message }}</p>
+  {{#each errors.otherErrors }}
+    <p id="{{ id }}" class="register-form__error">{{ message }}</p>
   {{/ each }}
 
   <fieldset class="register-form__fieldset">
@@ -35,15 +35,28 @@
       <input class="register-form__field--email" id="register_field_email" type="email" name="email" placeholder="{{ registerPageText.emailHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required />
     </div>
 
+      {{#each errors.emailErrors }}
+          <p id="{{ id }}" class="register-form__error">{{ message }}</p>
+      {{/ each }}
+
     <div class="register-form__control--username">
         <label class="register-form__label--username" for="register_field_username">{{ registerPageText.username }}</label>
         <input class="register-form__field--username" id="register_field_username" type="text" name="username" placeholder="{{ registerPageText.usernameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="6" maxlength="20" pattern="[a-zA-Z0-9]+" />
     </div>
 
-    <div class="register-form__control--password">
+      {{#each errors.usernameErrors }}
+          <p id="{{ id }}" class="register-form__error">{{ message }}</p>
+      {{/ each }}
+
+
+      <div class="register-form__control--password">
       <label class="register-form__label--password" for="register_field_password">{{ registerPageText.password }}</label>
       <input class="register-form__field--password" id="register_field_password" type="password" name="password" placeholder="{{ registerPageText.passwordHelp }}" required minlength="6" />
     </div>
+
+      {{#each errors.passwordErrors }}
+          <p id="{{ id }}" class="register-form__error">{{ message }}</p>
+      {{/ each }}
 
     <div class="register-form__control--gnm-marketing">
       <input class="register-form__checkbox--gnm-marketing" id="register_field_gnm_marketing" type="checkbox" name="receiveGnmMarketing" checked="checked" value="true"/>

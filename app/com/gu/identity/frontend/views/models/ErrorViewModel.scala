@@ -75,37 +75,22 @@ object RegisterErrorViewModel {
 
   private def getErrorField(id: String) = errorFieldByKey.get(id)
 
+  def mapErrorToField(errors: Map[String, Option[String]], errorType: Option[String]) = {
+      errors.filter {
+      case (k,v) => v == errorType
+      case _ => false
+    }.map {
+      case (k, v) => ErrorViewModel(k)
+    }.toSeq
+
+  }
+
   def apply(ids : Seq[String]) : RegisterErrorViewModel = {
     val errors = ids.map(id => id -> getErrorField(id)).toMap
-
-    val usernameErrors = errors.filter {
-      case (k,Some(v)) => v == "usernameError"
-      case _ => false
-    }.map {
-      case (k, v) => ErrorViewModel(k)
-    }.toSeq
-
-    val emailErrors = errors.filter {
-      case (k,Some(v)) => v == "emailError"
-      case _ => false
-    }.map {
-      case (k, v) => ErrorViewModel(k)
-    }.toSeq
-
-    val passwordErrors = errors.filter {
-      case (k,Some(v)) => v == "passwordError"
-      case _ => false
-    }.map {
-      case (k, v) => ErrorViewModel(k)
-    }.toSeq
-
-    val otherErrors = errors.filter {
-      case (k,None) => true
-      case _ => false
-    }.map {
-      case (k, v) => ErrorViewModel(k)
-    }.toSeq
-
+    val usernameErrors = mapErrorToField(errors, Option("usernameError"))
+    val emailErrors = mapErrorToField(errors, Option("emailError"))
+    val passwordErrors = mapErrorToField(errors, Option("passwordError"))
+    val otherErrors = mapErrorToField(errors, Option(null))
     RegisterErrorViewModel(usernameErrors, emailErrors, passwordErrors, otherErrors)
   }
 

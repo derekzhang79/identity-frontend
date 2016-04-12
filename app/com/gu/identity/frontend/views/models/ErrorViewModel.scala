@@ -75,7 +75,7 @@ object RegisterErrorViewModel {
 
   private def getErrorField(id: String) = errorFieldByKey.get(id)
 
-  def mapErrorToField(errors: Map[String, Option[String]], errorType: Option[String]) = {
+  def mapErrorToErrorType(errors: Map[String, Option[String]], errorType: Option[String]) = {
       errors.filter {
       case (k,v) => v == errorType
       case _ => false
@@ -87,10 +87,10 @@ object RegisterErrorViewModel {
 
   def apply(ids : Seq[String]) : RegisterErrorViewModel = {
     val errors = ids.map(id => id -> getErrorField(id)).toMap
-    val usernameErrors = mapErrorToField(errors, Option("usernameError"))
-    val emailErrors = mapErrorToField(errors, Option("emailError"))
-    val passwordErrors = mapErrorToField(errors, Option("passwordError"))
-    val otherErrors = mapErrorToField(errors, Option(null))
+    val usernameErrors = mapErrorToErrorType(errors, Option("usernameError"))
+    val emailErrors = mapErrorToErrorType(errors, Option("emailError"))
+    val passwordErrors = mapErrorToErrorType(errors, Option("passwordError"))
+    val otherErrors = mapErrorToErrorType(errors, Option(null))
     RegisterErrorViewModel(usernameErrors, emailErrors, passwordErrors, otherErrors)
   }
 

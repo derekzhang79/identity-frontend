@@ -1,10 +1,12 @@
 package com.gu.identity.frontend.logging
 
+import akka.actor.ActorSystem
 import com.amazonaws.handlers.AsyncHandler
-import com.amazonaws.regions.{Regions, Region}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsyncClient
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest}
 import com.gu.identity.frontend.configuration.Configuration._
+import scala.concurrent.duration._
+import play.api.libs.concurrent.Execution.Implicits._
 
 object LoggingAsyncHandler extends AsyncHandler[PutMetricDataRequest, Void] with Logging {
   def onError(exception: Exception) {
@@ -38,13 +40,41 @@ object SuccessfulActionCloudwatchLogging {
       )
   }
 
+  private def createSmallDataPointRequest(namespace: String, metricName: String) = {
+    new PutMetricDataRequest()
+      .withNamespace(namespace)
+      .withMetricData(
+        new MetricDatum()
+          .withMetricName(metricName)
+          .withUnit("Count")
+          .withValue(0.000000001d)
+          .withDimensions(stageDimension)
+      )
+  }
+
   def putSignIn(): Unit = {
     val request = createRequest("SuccessfulSignIns", "SuccessfulSignIn")
+    cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
+  }
+
+  def putSmallDataPointSignIn(): Unit = {
+    val request = createSmallDataPointRequest("SuccessfulSignIns", "SuccessfulSignIn")
     cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
   }
 
   def putRegister(): Unit = {
     val request = createRequest("SuccessfulRegistrations", "SuccessfulRegistration")
     cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
+  }
+}
+
+class SmallDataPointCloudwatchLogging(actorSystem: ActorSystem) extends Logging {
+
+  def start = {
+    logger.info("Starting to send small data points to Cloudwatch every 10 seconds")
+
+    actorSystem.scheduler.schedule(10.seconds, 10.seconds) {
+      SuccessfulActionCloudwatchLogging.putSmallDataPointSignIn()
+    }
   }
 }

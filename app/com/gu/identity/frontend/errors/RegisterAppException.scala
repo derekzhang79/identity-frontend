@@ -15,6 +15,7 @@ object RegisterServiceAppException {
   def apply(clientError: IdentityClientError): RegisterServiceAppException =
     clientError match {
       case ClientRegistrationUsernameConflictError => RegisterUsernameConflictAppException
+      case ClientRegistrationEmailValidationError => RegisterEmailInvalidConflictAppException
       case ClientRegistrationEmailConflictError => RegisterEmailConflictAppException
       case err: ClientBadRequestError => RegisterServiceBadRequestException(clientError)
       case err: ClientGatewayError => RegisterServiceGatewayAppException(clientError)
@@ -42,6 +43,13 @@ case object RegisterEmailConflictAppException
   with RegisterServiceAppException {
 
   val id = RegisterEmailConflictErrorID
+}
+
+case object RegisterEmailInvalidConflictAppException
+  extends ServiceBadRequestAppException(ClientRegistrationEmailValidationError)
+  with RegisterServiceAppException {
+
+  val id = RegisterActionInvalidEmailErrorID
 }
 
 case object RegisterUsernameConflictAppException

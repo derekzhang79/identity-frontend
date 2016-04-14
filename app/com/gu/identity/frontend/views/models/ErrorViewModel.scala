@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.views.models
 
+import com.gu.identity.frontend.errors.ErrorIDs._
 import com.gu.identity.frontend.errors.{ErrorID, ErrorIDs}
-import play.api.i18n.Messages
 
 case class ErrorViewModel(id: String, message: String) extends ViewModel
 

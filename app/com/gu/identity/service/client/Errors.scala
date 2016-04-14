@@ -74,6 +74,10 @@ case object ClientRegistrationEmailConflictError
   with ClientBadRequestError
   with NoStackTrace
 
+case object ClientRegistrationEmailValidationError
+  extends AbstractIdentityClientError("Invalid emailAddress:", context = Some("user.primaryEmailAddress"))
+  with ClientBadRequestError
+  with NoStackTrace
 
 case object ClientRateLimitError
   extends AbstractIdentityClientError("Rate limit exceeded")
@@ -99,6 +103,7 @@ object ClientBadRequestError {
       case ClientRegistrationUsernameConflictError.message => ClientRegistrationUsernameConflictError
       case ClientRegistrationUsernameConflictError.messageForReservedUser => ClientRegistrationUsernameConflictError
       case ClientRegistrationEmailConflictError.message => ClientRegistrationEmailConflictError
+      case ClientRegistrationEmailValidationError.message => ClientRegistrationEmailValidationError
       case ClientRateLimitError.message => ClientRateLimitError
       case _ => OtherClientBadRequestError(message, description, context)
     }

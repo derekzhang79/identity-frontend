@@ -64,7 +64,7 @@ object RegisterActionRequestBody {
     import ReturnUrl.FormMapping.returnUrl
 
     private val username: Mapping[String] = text.verifying(
-      "error.username", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
+      "error.password", name => name.length > 5 && name.length < 73
     )
 
     private val password: Mapping[String] = text.verifying(

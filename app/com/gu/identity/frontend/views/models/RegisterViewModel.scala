@@ -18,8 +18,7 @@ case class RegisterViewModel(
     terms: TermsViewModel,
 
     hasErrors: Boolean,
-    errors: Seq[ErrorViewModel],
-
+    errors: RegisterErrorViewModel,
     showStandfirst: Boolean,
 
     csrfToken: Option[CSRFToken],
@@ -41,7 +40,7 @@ object RegisterViewModel {
   def apply(
       configuration: Configuration,
       activeTests: ActiveMultiVariantTests,
-      errors: Seq[ErrorViewModel],
+      errors: Seq[String],
       csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
@@ -60,7 +59,7 @@ object RegisterViewModel {
       terms = Terms.getTermsModel(group),
 
       hasErrors = errors.nonEmpty,
-      errors = errors,
+      errors = RegisterErrorViewModel(errors),
 
       showStandfirst = showStandfirst(activeTests, clientId),
 

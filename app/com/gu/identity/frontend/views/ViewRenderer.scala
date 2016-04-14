@@ -59,7 +59,7 @@ object ViewRenderer {
     val model = RegisterViewModel(
       configuration = configuration,
       activeTests = activeTests,
-      errors = errorIds.map(ErrorViewModel.apply),
+      errors = errorIds,
       csrfToken = csrfToken,
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation,

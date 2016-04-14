@@ -5,7 +5,7 @@ import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.errors.ErrorHandler
 import com.gu.identity.frontend.filters.{HtmlCompressorFilter, SecurityHeadersFilter, Filters}
-import com.gu.identity.frontend.logging.MetricsLoggingActor
+import com.gu.identity.frontend.logging.{SmallDataPointCloudwatchLogging, MetricsLoggingActor}
 import com.gu.identity.frontend.services.{GoogleRecaptchaServiceHandler, IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import com.gu.identity.service.client.IdentityClient
 import jp.co.bizreach.play2handlebars.HandlebarsPlugin
@@ -61,6 +61,10 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   // Makes sure the logback.xml file is being found in DEV environments
   if (environment.mode == Mode.Dev) {
     Logger.configure(environment)
+  }
+
+  if (environment.mode == Mode.Prod) {
+    new SmallDataPointCloudwatchLogging(actorSystem).start
   }
 
   applicationLifecycle.addStopHook(() => terminateActor()(defaultContext))

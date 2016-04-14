@@ -467,7 +467,7 @@
         "AlarmDescription": "Low number of users signing in.",
         "Namespace": "SuccessfulSignIns",
         "MetricName": "SuccessfulSignIn",
-        "Statistic": "Average",
+        "Statistic": "Sum",
         "ComparisonOperator": "LessThanThreshold",
         "Threshold": "0.9",
         "Period": "1200",
@@ -475,6 +475,12 @@
         "AlarmActions": [
           { "Ref": "TopicSendEmail" },
           { "Ref": "TopicPagerDutyAlerts" }
+        ],
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": { "Ref": "Stage"}
+          }
         ]
       }
     },

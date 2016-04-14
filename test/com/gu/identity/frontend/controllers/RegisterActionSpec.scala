@@ -467,7 +467,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "return register-error-password if password is too long" in new WithControllerMockedDependencies {
-      val password = "123456789012345678901"
+      val password = "Di1^mPd*]x;5TA&d}n:a@z;@C#auId$*\"*S$wtrkjj*m0D5\"u25^t'SJR7Am#ggw5?^o57@v3"
 
       val result = call(controller.register, fakeRegisterRequest(password = password))
 

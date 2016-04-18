@@ -5,6 +5,7 @@ import com.gu.identity.service.client.HttpParameters
 import play.api.mvc.RequestHeader
 
 case class TrackingData(returnUrl:Option[String],
+                        trackingReturnUrl:Option[String],
                         registrationType: Option[String],
                         omnitureSVi: Option[String],
                         ipAddress: Option[String],
@@ -12,6 +13,7 @@ case class TrackingData(returnUrl:Option[String],
                         userAgent: Option[String]) {
   def parameters: HttpParameters = List(
     returnUrl.map("returnUrl" -> _),
+    trackingReturnUrl.map("trackingReturnUrl" -> _),
     registrationType.map("trackingRegistrationType" -> _),
     omnitureSVi.map("trackingOmnitureSVI" -> _),
     ipAddress.map("trackingIpAddress" -> _),
@@ -25,6 +27,7 @@ object TrackingData extends RemoteAddress {
   def apply(request: RequestHeader, returnUrl: Option[String]): TrackingData = {
     TrackingData(
       returnUrl = returnUrl,
+      trackingReturnUrl = returnUrl,
       registrationType = request.getQueryString("type"),
       omnitureSVi =  request.cookies.get("S_VI").map(_.value),
       ipAddress = clientIp(request),

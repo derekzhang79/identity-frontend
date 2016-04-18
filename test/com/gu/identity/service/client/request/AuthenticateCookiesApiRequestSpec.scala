@@ -14,6 +14,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
 
   val trackingData = TrackingData(
     returnUrl = Some("https://profile.theguardian.com"),
+    trackingReturnUrl = Some("https://profile.theguardian.com"),
     registrationType = Some("facebook"),
     omnitureSVi = Some("omnitureCode"),
     ipAddress = Some("127.0.0.1"),

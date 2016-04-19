@@ -8,21 +8,25 @@ sealed trait TermsViewModel{
   def conditionsText: String
   def termsOfServiceText: String
   def privacyPolicyText: String
-  val termsOfServiceUrl: String = "http://www.theguardian.com/help/terms-of-service"
-  val privacyPolicyUrl: String = "http://www.theguardian.com/help/privacy-policy"
+  def termsOfServiceUrl: String
+  def privacyPolicyUrl: String
 }
 
 case class BasicTermsViewModel private(
     conditionsText: String,
     termsOfServiceText: String,
-    privacyPolicyText: String)
+    termsOfServiceUrl: String,
+    privacyPolicyText: String,
+    privacyPolicyUrl: String)
   extends ViewModel with TermsViewModel {
 }
 
 case class TeachersTermsViewModel private(
     conditionsText: String,
     termsOfServiceText: String,
+    termsOfServiceUrl: String,
     privacyPolicyText: String,
+    privacyPolicyUrl: String,
     extendedConditionsText: String,
     extendedTermsOfServiceUrl: String,
     extendedPrivacyPolicyUrl: String)
@@ -33,7 +37,9 @@ case class TeachersTermsViewModel private(
 case class JobsTermsViewModel(
     conditionsText: String,
     termsOfServiceText: String,
+    termsOfServiceUrl: String,
     privacyPolicyText: String,
+    privacyPolicyUrl: String,
     extendedConditionsText: String,
     extendedTermsOfServiceUrl: String,
     extendedPrivacyPolicyUrl: String)
@@ -47,7 +53,9 @@ object BasicTermsViewModel {
     BasicTermsViewModel(
       conditionsText = text.conditionsText,
       termsOfServiceText = text.termsOfServiceText,
-      privacyPolicyText = text.privacyPolicyText
+      termsOfServiceUrl = text.termsOfServiceUrl,
+      privacyPolicyText = text.privacyPolicyText,
+      privacyPolicyUrl = text.privacyPolicyUrl
     )
   }
 }
@@ -58,7 +66,9 @@ object TeachersTermsViewModel {
     TeachersTermsViewModel(
       conditionsText = text.basicTermsText.conditionsText,
       termsOfServiceText = text.basicTermsText.termsOfServiceText,
+      termsOfServiceUrl = text.basicTermsText.termsOfServiceUrl,
       privacyPolicyText = text.basicTermsText.privacyPolicyText,
+      privacyPolicyUrl = text.basicTermsText.privacyPolicyUrl,
       extendedConditionsText = text.conditionsText,
       extendedTermsOfServiceUrl = "http://teachers.theguardian.com/Terms.htm",
       extendedPrivacyPolicyUrl = "http://teachers.theguardian.com/privacypolicy.htm"
@@ -72,7 +82,9 @@ object JobsTermsViewModel {
     JobsTermsViewModel(
       conditionsText = text.basicTermsText.conditionsText,
       termsOfServiceText = text.basicTermsText.termsOfServiceText,
+      termsOfServiceUrl = text.basicTermsText.termsOfServiceUrl,
       privacyPolicyText = text.basicTermsText.privacyPolicyText,
+      privacyPolicyUrl = text.basicTermsText.privacyPolicyUrl,
       extendedConditionsText = text.conditionsText,
       extendedTermsOfServiceUrl = "https://jobs.theguardian.com/terms-and-conditions/",
       extendedPrivacyPolicyUrl = "https://jobs.theguardian.com/privacy-policy/"

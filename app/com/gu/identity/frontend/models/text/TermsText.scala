@@ -5,7 +5,9 @@ import play.api.i18n.Messages
 case class TermsText private(
      conditionsText: String,
      termsOfServiceText: String,
-     privacyPolicyText: String)
+     termsOfServiceUrl: String,
+     privacyPolicyText: String,
+     privacyPolicyUrl: String)
 
 case class TeachersTermsText private(
     basicTermsText: TermsText,
@@ -20,7 +22,9 @@ object TermsText {
     TermsText(
       conditionsText = messages("terms.conditions"),
       termsOfServiceText = messages("terms.termsOfService"),
-      privacyPolicyText = messages("terms.privacyPolicy")
+      termsOfServiceUrl = messages("terms.termsOfServiceUrl"),
+      privacyPolicyText = messages("terms.privacyPolicy"),
+      privacyPolicyUrl = messages("terms.privacyPolicyUrl")
     )
 }
 

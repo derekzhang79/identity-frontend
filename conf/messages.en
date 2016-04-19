@@ -38,7 +38,9 @@ register.createAccount=Create account
 # com.gu.identity.frontend.models.text.TermsText
 terms.conditions=By proceeding, you agree to the Guardian''s
 terms.termsOfService=Terms of Service
+terms.termsOfServiceUrl=http://www.theguardian.com/help/terms-of-service
 terms.privacyPolicy=Privacy Policy
+terms.privacyPolicyUrl=http://www.theguardian.com/help/privacy-policy
 terms.teachersConditions=and Guardian Teacher Network''s
 terms.jobsConditions=and Guardian Jobs''
 

@@ -10,7 +10,11 @@ class SignInFormModel {
     this.formElement = formElement;
     this.emailFieldElement = emailField;
 
+    document.querySelector('#signin_field_email').setAttribute('autocomplete', 'username');
+    document.querySelector('#signin_field_password').setAttribute('autocomplete', 'current-password');
+
     this.addBindings();
+    this.smartLock();
   }
 
   addBindings() {
@@ -29,7 +33,68 @@ class SignInFormModel {
     this.state.save( email );
   }
 
+  smartLockSubmit() {
+
+    const formElement = this.formElement.elem
+
+    //formElement.setIdAttribute("id", true)
+
+    console.log(formElement)
+
+    if (navigator.credentials) {
+      var c = new PasswordCredential(formElement);
+      fetch(formElement.action, {credentials: c, method: 'POST'})
+        .then(r => {
+        if (r.type == 'opaqueredirect')
+      { // If we're redirected, success!
+        navigator.credentials.store(c).then(_ => {
+          window.location = "http://www.theguardian.com/international";
+      })
+        ;
+      }
+    else
+      {
+        // Do something clever to handle the sign-in error.
+      }
+    })
+      ;
+    }
+
+  }
+
+  smartLock() {
+  // And then try to grab credentials:
+    navigator.credentials.get({
+        password: true,
+        federated: {
+          "providers": [ "https://facebook.com", "https://accounts.google.com" ]
+        }
+        /*
+         Adding `, unmediated: true` here would grab credentials automatically if
+         they've allowed that access, and would just return `undefined` without
+         asking the user if they haven't.
+         */
+      })
+      .then(c => {
+      if (c instanceof PasswordCredential) {
+      c.additionalData = new FormData(document.querySelector('#signin-form'));
+      c.idName = "email";
+      fetch("/actions/signin", { credentials: c, method: 'POST' })
+        .then(r => {
+        if (r.type == 'opaqueredirect') { // If we're redirected, success!
+        navigator.credentials.store(c).then(_ => {
+          window.location = "http://www.theguardian.com/international";
+      });
+      } else {
+        // Do something clever to handle the sign-in error.
+      }
+    });
+    }
+  });
+  }
+
   formSubmitted() {
+    this.smartLockSubmit();
     this.saveState();
   }
 

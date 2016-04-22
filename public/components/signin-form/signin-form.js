@@ -10,9 +10,6 @@ class SignInFormModel {
     this.formElement = formElement;
     this.emailFieldElement = emailField;
 
-    document.querySelector('#signin_field_email').setAttribute('autocomplete', 'username');
-    document.querySelector('#signin_field_password').setAttribute('autocomplete', 'current-password');
-
     this.addBindings();
     this.smartLock();
   }

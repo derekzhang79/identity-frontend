@@ -49,8 +49,6 @@ oauth.signIn=Sign in with {0}
 oauth.register=Sign up with {0}
 oauth.facebook=Facebook
 oauth.google=Google
-oauth.permission.a=We won''t share or post any activity to Facebook or Google
-oauth.permission.b=We''ll never post without your permission
 
 header.backtext=Back to the Guardian
 header.logo=The Guardian

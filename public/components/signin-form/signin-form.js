@@ -32,39 +32,30 @@ class SignInFormModel {
 
   smartLockSubmit() {
 
-    const formElement = this.formElement.elem
-
-    //formElement.setIdAttribute("id", true)
-
-    console.log(formElement)
+    const formElement = this.formElement.elem;
 
     if (navigator.credentials) {
       var c = new PasswordCredential(formElement);
       fetch(formElement.action, {credentials: c, method: 'POST'})
         .then(r => {
-        if (r.type == 'opaqueredirect')
-      { // If we're redirected, success!
-        navigator.credentials.store(c).then(_ => {
-          window.location = "http://www.theguardian.com/international";
-      })
-        ;
-      }
-    else
-      {
-        // Do something clever to handle the sign-in error.
-      }
-    })
+        if (r.type == 'opaqueredirect' && !r.url.endsWith('/actions/signin')) {
+          navigator.credentials.store(c).then(_ => {
+            window.location = getElementById( 'signin_returnUrl' ).value();
+          });
+        }
+        })
       ;
     }
 
   }
 
   smartLock() {
-  // And then try to grab credentials:
+
+    // And then try to grab credentials:
     navigator.credentials.get({
         password: true,
         federated: {
-          "providers": [ "https://facebook.com", "https://accounts.google.com" ]
+          "providers": ["https://facebook.com", "https://accounts.google.com"]
         }
         /*
          Adding `, unmediated: true` here would grab credentials automatically if
@@ -73,21 +64,24 @@ class SignInFormModel {
          */
       })
       .then(c => {
-      if (c instanceof PasswordCredential) {
+      if (c instanceof PasswordCredential)
+    {
       c.additionalData = new FormData(document.querySelector('#signin-form'));
       c.idName = "email";
-      fetch("/actions/signin", { credentials: c, method: 'POST' })
+      fetch("/actions/signin", {credentials: c, method: 'POST'})
         .then(r => {
-        if (r.type == 'opaqueredirect') { // If we're redirected, success!
+        if (r.type == 'opaqueredirect')
+      { // If we're redirected, success!
         navigator.credentials.store(c).then(_ => {
-          window.location = "http://www.theguardian.com/international";
-      });
-      } else {
-        // Do something clever to handle the sign-in error.
+          window.location = getElementById('signin_returnUrl').value();
+      })
+        ;
       }
-    });
+    })
+      ;
     }
-  });
+  })
+    ;
   }
 
   formSubmitted() {

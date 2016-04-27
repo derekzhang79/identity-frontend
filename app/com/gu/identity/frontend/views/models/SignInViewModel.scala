@@ -53,7 +53,7 @@ object SignInViewModel {
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
       getRecaptchaModel(configuration, isError = !errors.isEmpty, recaptchaEnabled = configuration.recaptchaEnabled)
 
-    val resources = getResources(layout, recaptchaModel) ++ Seq(IndirectlyLoadedExternalResources("https://profile-origin.thegulocal.com/actions/signin"))
+    val resources = getResources(layout, recaptchaModel) ++ Seq(IndirectlyLoadedExternalResources(UrlBuilder(configuration.identityProfileBaseUrl,routes.SigninAction.signIn())))
 
     SignInViewModel(
       layout = layout,

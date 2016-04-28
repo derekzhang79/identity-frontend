@@ -29,6 +29,8 @@ POST       /actions/csp/report            com.gu.identity.frontend.controllers.C
 
 GET        /management/healthcheck        com.gu.identity.frontend.controllers.HealthCheck.healthCheck
 
+GET        /.well-known/assetlinks.json    com.gu.identity.frontend.controllers.DigitalAssetLinks.links
+
 GET        /management/manifest           com.gu.identity.frontend.controllers.Manifest.manifest
 
 GET        /static/*file                  controllers.Assets.versioned(path="/public", file: Asset)

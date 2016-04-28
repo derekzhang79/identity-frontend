@@ -21,7 +21,5 @@ class DigitalAssetLinks(val configuration: Configuration) extends Controller {
     val json = JsArray(Seq(Json.toJson((webAsset)))) ++ JsArray(Seq(Json.toJson((appAsset))))
     Ok(json)
   }
-
-
 }
 

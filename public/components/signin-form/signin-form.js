@@ -54,14 +54,6 @@ class SignInFormModel {
     // And then try to grab credentials:
     navigator.credentials.get({
         password: true,
-        federated: {
-          "providers": ["https://facebook.com", "https://accounts.google.com"]
-        }
-        /*
-         Adding `, unmediated: true` here would grab credentials automatically if
-         they've allowed that access, and would just return `undefined` without
-         asking the user if they haven't.
-         */
       })
       .then(c => {
       if (c instanceof PasswordCredential)

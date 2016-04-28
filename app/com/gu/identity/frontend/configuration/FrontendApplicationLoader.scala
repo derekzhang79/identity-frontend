@@ -38,7 +38,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
 
   lazy val applicationController = new Application(frontendConfiguration, messagesApi, csrfConfig)
   lazy val healthcheckController = new HealthCheck()
-  lazy val digitalAssetLinksController = new DigitalAssetLinks()
+  lazy val digitalAssetLinksController = new DigitalAssetLinks(frontendConfiguration)
   lazy val manifestController = new Manifest()
   lazy val cspReporterController = new CSPViolationReporter()
   lazy val googleRecaptchaServiceHandler = new GoogleRecaptchaServiceHandler(wsClient, frontendConfiguration)

@@ -47,6 +47,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       case Right(cookies) => Right {
         logSuccessfulSignin()
         SeeOther(successfulReturnUrl.url)
+          .withHeaders(("X-GU-ID-Login-Success", "true"))
           .withCookies(cookies: _*)
       }
     }

@@ -1,16 +1,17 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
-import com.gu.identity.frontend.logging.{LogOnErrorAction, MetricsLoggingActor, Logging}
-import com.gu.identity.frontend.models._
+import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
 import com.gu.identity.frontend.errors.RedirectOnError
-import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
+import com.gu.identity.frontend.logging.{LogOnErrorAction, Logging, MetricsLoggingActor}
+import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.request.SignInActionRequestBody
 import com.gu.identity.frontend.services._
-import play.api.i18n.{MessagesApi, I18nSupport}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc.{Request, Controller}
+import play.api.libs.iteratee.Enumerator
+import play.api.libs.json.{JsBoolean, JsObject}
+import play.api.mvc._
 
 
 /**
@@ -46,11 +47,16 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       case Left(errors) => Left(errors)
       case Right(cookies) => Right {
         logSuccessfulSignin()
-        SeeOther(successfulReturnUrl.url)
-          .withHeaders(("X-GU-ID-Login-Success", "true"))
-          .withCookies(cookies: _*)
+        successfulSignInResponse(successfulReturnUrl, cookies)
       }
     }
+  }
+
+  def successfulSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result = {
+    val body: Array[Byte] = JsObject(Seq("success" -> JsBoolean(true))).toString.getBytes("UTF-8")
+    Result(header = ResponseHeader(303), body = Enumerator(body))
+      .withHeaders(LOCATION -> successfulReturnUrl.url)
+      .withCookies(cookies: _*)
   }
 
 }

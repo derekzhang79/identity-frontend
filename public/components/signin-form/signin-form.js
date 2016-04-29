@@ -30,7 +30,7 @@ class SignInFormModel {
     this.state.save( email );
   }
 
-  smartLockSubmit() {
+  smartLockSetupOnSubmit() {
 
     const formElement = this.formElement.elem;
 
@@ -38,44 +38,39 @@ class SignInFormModel {
       var c = new PasswordCredential(formElement);
       fetch(formElement.action, {credentials: c, method: 'POST'})
         .then(r => {
-        if (r.type == 'opaqueredirect' && !r.url.endsWith('/actions/signin')) {
-          navigator.credentials.store(c).then(_ => {
-            window.location = getElementById( 'signin_returnUrl' ).value();
-          });
-        }
-        })
-      ;
+          if (r.type == 'opaqueredirect' && !r.url.endsWith('/actions/signin')) {
+            this.storeRedirect(c);
+          }
+        });
+      }
     }
-
-  }
 
   smartLock() {
     navigator.credentials.get({
         password: true,
       })
       .then(c => {
-      if (c instanceof PasswordCredential)
-    {
-      c.additionalData = new FormData(document.querySelector('#signin-form'));
-      c.idName = "email";
-      fetch("/actions/signin", {credentials: c, method: 'POST'})
-        .then(r => {
-        if (r.type == 'opaqueredirect')
-      {
-        navigator.credentials.store(c).then(_ => {
-          window.location = getElementById('signin_returnUrl').value();
-      })
-        ;
-      }
-    })
-      ;
-    }
-  })
-    ;
+        if (c instanceof PasswordCredential) {
+          c.additionalData = new FormData(document.querySelector('#signin-form'));
+          c.idName = "email";
+          fetch("/actions/signin", {credentials: c, method: 'POST'})
+            .then(r => {
+              if (r.type == 'opaqueredirect') {
+                this.storeRedirect(c);
+              }
+            })
+          };
+      });
+  }
+
+  storeRedirect(c) {
+    navigator.credentials.store(c).then(_ => {
+      window.location = getElementById('signin_returnUrl').value();
+    });
   }
 
   formSubmitted() {
-    this.smartLockSubmit();
+    this.smartLockSetupOnSubmit();
     this.saveState();
   }
 

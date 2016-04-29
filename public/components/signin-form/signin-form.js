@@ -50,8 +50,6 @@ class SignInFormModel {
   }
 
   smartLock() {
-
-    // And then try to grab credentials:
     navigator.credentials.get({
         password: true,
       })
@@ -63,7 +61,7 @@ class SignInFormModel {
       fetch("/actions/signin", {credentials: c, method: 'POST'})
         .then(r => {
         if (r.type == 'opaqueredirect')
-      { // If we're redirected, success!
+      {
         navigator.credentials.store(c).then(_ => {
           window.location = getElementById('signin_returnUrl').value();
       })

@@ -43,11 +43,7 @@ class SignInFormModel {
             return;
           }
           else {
-           // r.json().then(function(data) {
-         //   alert("Hello");
-           // });
           r.json().then(j => {
-            console.log("URL " + j.url)
             window.location = j.url
             return;
           });

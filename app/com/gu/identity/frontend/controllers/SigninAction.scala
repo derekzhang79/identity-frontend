@@ -27,38 +27,23 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     LogOnErrorAction(logger) andThen
     CSRFCheck(csrfConfig)
 
-  val bodyParser = SignInActionRequestBody.bodyParser
-
-  def signIn = SignInServiceAction(bodyParser) { request: Request[SignInActionRequestBody] =>
-    val body = request.body
-
-    val trackingData = TrackingData(request, body.returnUrl.flatMap(_.toStringOpt))
-    lazy val returnUrl = body.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, body.clientId))
-
-    val successfulReturnUrl = body.groupCode match {
-      case Some(validGroupCode) => {
-        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, body.skipConfirmation, skipThirdPartyLandingPage = true, body.clientId, validGroupCode, config)
-      }
-      case _ => returnUrl
-    }
-
-
-    identityService.authenticate(body, trackingData).map {
-      case Left(errors) => Left(errors)
-      case Right(cookies) => Right {
-        logSuccessfulSignin()
-        successfulSignInResponse(successfulReturnUrl, cookies)
-      }
-    }
-  }
-
   val SignInSmartLockServiceAction =
     ServiceAction andThen
       ResultOnError(redirectRoute) andThen
       LogOnErrorAction(logger) andThen
       CSRFCheck(csrfConfig)
 
-  def signInWithSmartLock = SignInSmartLockServiceAction(bodyParser) { request: Request[SignInActionRequestBody] =>
+  val bodyParser = SignInActionRequestBody.bodyParser
+
+  def signIn = SignInServiceAction(bodyParser) {
+    signInAction(successfulSignInResponse(_, _))
+  }
+
+  def signInWithSmartLock = SignInSmartLockServiceAction(bodyParser) {
+    signInAction(successfulSmartLockSignInResponse(_, _))
+  }
+
+  def signInAction(sucessResponse: (ReturnUrl, Seq[Cookie]) => Result) = { request: Request[SignInActionRequestBody] =>
     val body = request.body
 
     val trackingData = TrackingData(request, body.returnUrl.flatMap(_.toStringOpt))
@@ -71,26 +56,22 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
       case _ => returnUrl
     }
 
-
     identityService.authenticate(body, trackingData).map {
       case Left(errors) => Left(errors)
       case Right(cookies) => Right {
         logSuccessfulSignin()
-        successfulSmartLockSignInResponse(successfulReturnUrl, cookies)
+        sucessResponse(successfulReturnUrl, cookies)
       }
     }
   }
 
   def successfulSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result = {
-    val body: Array[Byte] = JsObject(Seq("success" -> JsBoolean(true))).toString.getBytes("UTF-8")
-    Result(header = ResponseHeader(303), body = Enumerator(body))
-      .withHeaders(LOCATION -> successfulReturnUrl.url)
-      .withCookies(cookies: _*)
+      SeeOther(successfulReturnUrl.url)
+        .withCookies(cookies: _*)
   }
 
   def successfulSmartLockSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result = {
-    val body: Array[Byte] = JsObject(Seq("success" -> JsString(successfulReturnUrl.url))).toString.getBytes("UTF-8")
-    Ok(body)
+    Ok("")
       .withCookies(cookies: _*)
   }
 }

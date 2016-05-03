@@ -36,19 +36,7 @@ class SignInFormModel {
 
     if (navigator.credentials) {
       var c = new PasswordCredential(formElement);
-      fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
-        .then(r => {
-          if (r.status == 200) {
-            this.storeRedirect(c);
-            return;
-          }
-          else {
-          r.json().then(j => {
-            window.location = j.url
-            return;
-          });
-          }
-        });
+      this.smartLockSignIn(c);
       }
     }
 
@@ -60,20 +48,7 @@ class SignInFormModel {
         if (c instanceof PasswordCredential) {
           c.additionalData = new FormData(document.querySelector('#signin_form'));
           c.idName = "email";
-          fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
-            .then(r => {
-              if (r.status == 200) {
-                this.storeRedirect(c);
-                return;
-              }
-              else {
-                 r.json().then(j => {
-                   console.log("URL " + j.url)
-                   window.location = j.url
-                   return;
-                 });
-              }
-            });
+          this.smartLockSignIn(c);
           };
       });
   }
@@ -81,6 +56,22 @@ class SignInFormModel {
   storeRedirect(c) {
     navigator.credentials.store(c).then(_ => {
       window.location = getElementById('signin_returnUrl').value();
+    });
+  }
+
+  smartLockSignIn(c) {
+    fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
+      .then(r => {
+        if (r.status == 200) {
+          this.storeRedirect(c);
+          return;
+        }
+        else {
+          r.json().then(j => {
+          window.location = j.url
+          return;
+        });
+      }
     });
   }
 

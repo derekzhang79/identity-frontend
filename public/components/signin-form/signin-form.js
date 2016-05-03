@@ -36,10 +36,16 @@ class SignInFormModel {
 
     if (navigator.credentials) {
       var c = new PasswordCredential(formElement);
-      fetch(formElement.action, {credentials: c, method: 'POST'})
+      fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
         .then(r => {
-          if (r.type == 'opaqueredirect' && !r.url.endsWith('/actions/signin')) {
+          if (r.status == 200) {
             this.storeRedirect(c);
+            return;
+          }
+          else {
+           // r.json().then(function(data) {
+            alert("Hello");
+           // });
           }
         });
       }
@@ -51,14 +57,18 @@ class SignInFormModel {
       })
       .then(c => {
         if (c instanceof PasswordCredential) {
-          c.additionalData = new FormData(document.querySelector('#signin-form'));
+          c.additionalData = new FormData(document.querySelector('#signin_form'));
           c.idName = "email";
-          fetch("/actions/signin", {credentials: c, method: 'POST'})
+          fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
             .then(r => {
-              if (r.type == 'opaqueredirect') {
+              if (r.status == 200) {
                 this.storeRedirect(c);
+                return;
               }
-            })
+              else {
+                alert("Hello");
+              }
+            });
           };
       });
   }

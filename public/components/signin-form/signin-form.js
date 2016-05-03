@@ -44,8 +44,13 @@ class SignInFormModel {
           }
           else {
            // r.json().then(function(data) {
-            alert("Hello");
+         //   alert("Hello");
            // });
+          r.json().then(j => {
+            console.log("URL " + j.url)
+            window.location = j.url
+            return;
+          });
           }
         });
       }
@@ -66,7 +71,11 @@ class SignInFormModel {
                 return;
               }
               else {
-                alert("Hello");
+                 r.json().then(j => {
+                   console.log("URL " + j.url)
+                   window.location = j.url
+                   return;
+                 });
               }
             });
           };

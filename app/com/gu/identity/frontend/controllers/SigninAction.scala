@@ -2,7 +2,7 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
-import com.gu.identity.frontend.errors.RedirectOnError
+import com.gu.identity.frontend.errors.{ResultOnError, RedirectOnError}
 import com.gu.identity.frontend.logging.{LogOnErrorAction, Logging, MetricsLoggingActor}
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.request.SignInActionRequestBody
@@ -52,7 +52,13 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     }
   }
 
-  def signInWithSmartLock = SignInServiceAction(bodyParser) { request: Request[SignInActionRequestBody] =>
+  val SignInSmartLockServiceAction =
+    ServiceAction andThen
+      ResultOnError(redirectRoute) andThen
+      LogOnErrorAction(logger) andThen
+      CSRFCheck(csrfConfig)
+
+  def signInWithSmartLock = SignInSmartLockServiceAction(bodyParser) { request: Request[SignInActionRequestBody] =>
     val body = request.body
 
     val trackingData = TrackingData(request, body.returnUrl.flatMap(_.toStringOpt))

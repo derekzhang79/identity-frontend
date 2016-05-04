@@ -41,16 +41,18 @@ class SignInFormModel {
     }
 
   smartLock() {
-    navigator.credentials.get({
-        password: true,
-      })
-      .then(c => {
-        if (c instanceof PasswordCredential) {
-          c.additionalData = new FormData(document.querySelector('#signin_form'));
-          c.idName = "email";
-          this.smartLockSignIn(c);
+    if (navigator.credentials) {
+      navigator.credentials.get({
+          password: true,
+        })
+        .then(c => {
+          if (c instanceof PasswordCredential) {
+            c.additionalData = new FormData(document.querySelector('#signin_form'));
+            c.idName = "email";
+            this.smartLockSignIn(c);
           };
-      });
+        });
+    }
   }
 
   storeRedirect(c) {

@@ -9,6 +9,7 @@
  */
 export function domElement( elem ) {
   return Object.freeze({
+    elem: elem,
     select: domElementFunctionProxy.bind( null, elem, 'select' ),
     on: domElementEventHandler.bind( null, elem ),
     value: domElementValueExtractor.bind( null, elem, 'value' ),

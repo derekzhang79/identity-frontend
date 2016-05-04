@@ -21,6 +21,8 @@ POST       /actions/agree                 com.gu.identity.frontend.controllers.T
 
 POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
 
+POST       /actions/signin/smartlock      com.gu.identity.frontend.controllers.SigninAction.signInWithSmartLock
+
 POST       /actions/register              com.gu.identity.frontend.controllers.RegisterAction.register
 
 POST       /actions/reset                 com.gu.identity.frontend.controllers.ResetPasswordAction.reset
@@ -28,6 +30,8 @@ POST       /actions/reset                 com.gu.identity.frontend.controllers.R
 POST       /actions/csp/report            com.gu.identity.frontend.controllers.CSPViolationReporter.cspReport
 
 GET        /management/healthcheck        com.gu.identity.frontend.controllers.HealthCheck.healthCheck
+
+GET        /.well-known/assetlinks.json    com.gu.identity.frontend.controllers.DigitalAssetLinks.links
 
 GET        /management/manifest           com.gu.identity.frontend.controllers.Manifest.manifest
 

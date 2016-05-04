@@ -1,6 +1,6 @@
 <form id="signin_form" class="signin-form{{# hasErrors }}--with-errors{{/ hasErrors }}" action="{{ actions.signIn }}" method="POST">
   <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
-  <input type="hidden" name="returnUrl" value="{{returnUrl}}">
+  <input type="hidden" id="signin_returnUrl" name="returnUrl" value="{{returnUrl}}">
   <input type="hidden" name="skipConfirmation" value="{{skipConfirmation}}">
 
   {{# group }}
@@ -21,12 +21,12 @@
 
     <div class="signin-form__control--email">
       <label class="signin-form__label--email" for="signin_field_email">{{signInPageText.email}}</label>
-      <input class="signin-form__field--email" id="signin_field_email" type="email" name="email" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}"/>
+      <input class="signin-form__field--email" id="signin_field_email" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}"/>
     </div>
 
     <div class="signin-form__control--password">
       <label class="signin-form__label--password" for="signin_field_password">{{signInPageText.password}}</label>
-      <input class="signin-form__field--password" id="signin_field_password" type="password" name="password" />
+      <input class="signin-form__field--password" id="signin_field_password" type="password" name="password" autocomplete="current-password"/>
     </div>
     <div class="signin-form__cta--reset"><a class="signin-form__cta-link--reset" href="{{forgotPasswordUrl}}">{{signInPageText.forgottenPassword}}</a></div>
 

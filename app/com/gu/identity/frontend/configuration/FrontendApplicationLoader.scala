@@ -38,6 +38,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
 
   lazy val applicationController = new Application(frontendConfiguration, messagesApi, csrfConfig)
   lazy val healthcheckController = new HealthCheck()
+  lazy val digitalAssetLinksController = new DigitalAssetLinks(frontendConfiguration)
   lazy val manifestController = new Manifest()
   lazy val cspReporterController = new CSPViolationReporter()
   lazy val googleRecaptchaServiceHandler = new GoogleRecaptchaServiceHandler(wsClient, frontendConfiguration)
@@ -69,5 +70,5 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
 
   applicationLifecycle.addStopHook(() => terminateActor()(defaultContext))
 
-  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signOutController, thirdPartyTsAndCsController, signinController, registerController, resetPasswordController, cspReporterController, healthcheckController, manifestController, assets, redirects)
+  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signOutController, thirdPartyTsAndCsController, signinController, registerController, resetPasswordController, cspReporterController, healthcheckController, digitalAssetLinksController, manifestController, assets, redirects)
 }

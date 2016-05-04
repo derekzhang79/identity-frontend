@@ -11,6 +11,7 @@ class SignInFormModel {
     this.emailFieldElement = emailField;
 
     this.addBindings();
+    this.smartLock();
   }
 
   addBindings() {
@@ -29,7 +30,55 @@ class SignInFormModel {
     this.state.save( email );
   }
 
+  smartLockSetupOnSubmit() {
+
+    if (navigator.credentials) {
+      const formElement = this.formElement.elem;
+
+      var c = new PasswordCredential(formElement);
+      this.smartLockSignIn(c);
+    }
+  }
+
+  smartLock() {
+    if (navigator.credentials) {
+      navigator.credentials.get({
+          password: true,
+        })
+        .then(c => {
+          if (c instanceof PasswordCredential) {
+            c.additionalData = new FormData(document.querySelector('#signin_form'));
+            c.idName = "email";
+            this.smartLockSignIn(c);
+          };
+        });
+    }
+  }
+
+  storeRedirect(c) {
+    navigator.credentials.store(c).then(_ => {
+      window.location = getElementById('signin_returnUrl').value();
+    });
+  }
+
+  smartLockSignIn(c) {
+    fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
+      .then(r => {
+        if (r.status == 200) {
+          this.storeRedirect(c);
+          return;
+        }
+        else {
+          r.json().then(j => {
+          window.location = j.url
+          return;
+        });
+      }
+    });
+  }
+
   formSubmitted() {
+    this.smartLockSetupOnSubmit();
     this.saveState();
   }
 

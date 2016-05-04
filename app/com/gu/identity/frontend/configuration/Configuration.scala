@@ -30,7 +30,8 @@ case class Configuration(
   identityCookiePublicKey: String,
 
   // endpoint for reporting errors to Sentry
-  sentryDsn: String,
+  sentryDsnJs: String,
+  sentryDsnScala: String,
 
   underlying: PlayConfiguration)
 
@@ -69,7 +70,9 @@ object Configuration {
 
       identityCookiePublicKey = getString("identityCookie.publicKey"),
 
-      sentryDsn = getString("sentry.dsn"),
+      sentryDsnJs = getString("sentry.dsn.js"),
+
+      sentryDsnScala = getString("sentry.dsn.scala"),
 
       underlying = appConfiguration
     )
@@ -99,7 +102,9 @@ object Configuration {
 
     identityCookiePublicKey = "",
 
-    sentryDsn = "--stubbed-sentry-dsn--",
+    sentryDsnJs = "--stubbed-sentry-dsn-js--",
+
+    sentryDsnScala = "--stubbed-sentry-dsn-scala--",
 
     underlying = PlayConfiguration.empty
   )

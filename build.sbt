@@ -24,7 +24,8 @@ libraryDependencies ++= Seq(
   "com.gu.identity" %% "identity-cookie" % "3.51",
   "com.typesafe.akka" %% "akka-actor" % "2.4.1",
   "com.typesafe.akka" %% "akka-slf4j" % "2.4.0",
-  "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.54"
+  "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.54",
+  "com.getsentry.raven" % "raven-logback" % "7.2.1"
 )
 
 // Set logs options and default local resource for running locally (run and test)
@@ -52,6 +53,8 @@ buildInfoKeys := Seq[BuildInfoKey](
   } catch { case e: Exception => "unknown" })),
   BuildInfoKey.constant("buildNumber", Option(System.getenv("CIRCLE_BUILD_NUM")) getOrElse "DEV")
 )
+
+buildInfoOptions += BuildInfoOption.ToMap
 
 // Disable packaging of scaladoc
 sources in (Compile, doc) := Seq.empty

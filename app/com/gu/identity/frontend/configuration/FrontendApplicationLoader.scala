@@ -5,7 +5,7 @@ import com.gu.identity.frontend.controllers._
 import com.gu.identity.frontend.csrf.CSRFConfig
 import com.gu.identity.frontend.errors.ErrorHandler
 import com.gu.identity.frontend.filters.{HtmlCompressorFilter, SecurityHeadersFilter, Filters}
-import com.gu.identity.frontend.logging.{SmallDataPointCloudwatchLogging, MetricsLoggingActor}
+import com.gu.identity.frontend.logging.{SmallDataPointCloudwatchLogging, MetricsLoggingActor, SentryLogging}
 import com.gu.identity.frontend.services.{GoogleRecaptchaServiceHandler, IdentityServiceRequestHandler, IdentityServiceImpl, IdentityService}
 import com.gu.identity.service.client.IdentityClient
 import jp.co.bizreach.play2handlebars.HandlebarsPlugin
@@ -71,4 +71,6 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   applicationLifecycle.addStopHook(() => terminateActor()(defaultContext))
 
   override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signOutController, thirdPartyTsAndCsController, signinController, registerController, resetPasswordController, cspReporterController, healthcheckController, digitalAssetLinksController, manifestController, assets, redirects)
+
+  val sentryLogging = new SentryLogging(frontendConfiguration) // don't make it lazy
 }

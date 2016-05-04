@@ -99,7 +99,7 @@ object LayoutViewModel {
 
     val config = JavascriptConfig(
       omnitureAccount = configuration.omnitureAccount,
-      sentryDsn = configuration.sentryDsn,
+      sentryDsn = configuration.sentryDsnJs,
       mvtTests = MultiVariantTests.all.toSeq
     )
 

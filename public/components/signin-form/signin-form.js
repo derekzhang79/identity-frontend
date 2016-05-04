@@ -32,9 +32,9 @@ class SignInFormModel {
 
   smartLockSetupOnSubmit() {
 
-    const formElement = this.formElement.elem;
-
     if (navigator.credentials) {
+      const formElement = this.formElement.elem;
+
       var c = new PasswordCredential(formElement);
       this.smartLockSignIn(c);
       }

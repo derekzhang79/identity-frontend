@@ -37,8 +37,8 @@ class SignInFormModel {
 
       var c = new PasswordCredential(formElement);
       this.smartLockSignIn(c);
-      }
     }
+  }
 
   smartLock() {
     if (navigator.credentials) {

@@ -1,5 +1,6 @@
 package test.pages
 
+import org.openqa.selenium.JavascriptExecutor
 import test.util.{Browser, LoadablePage}
 
 class FacebookProvidedInfoDialog extends LoadablePage with Browser {
@@ -7,7 +8,10 @@ class FacebookProvidedInfoDialog extends LoadablePage with Browser {
 
   def hasLoaded(): Boolean = pageHasElement(fieldSet)
 
-  def uncheckEmailPermission(): Unit = checkbox(cssSelector("input[value='email']")).clear()
+  def uncheckEmailPermission() {
+    // checkbox(cssSelector("input[value='email']")).clear()
+    driver.asInstanceOf[JavascriptExecutor].executeScript("document.querySelector(\"input[value='email']\").click()")
+  }
 
   private lazy val fieldSet = id("u_0_s")
 }

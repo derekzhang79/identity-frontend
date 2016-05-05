@@ -35,6 +35,6 @@
     "cookie-cutter": "^0.1.1",
     "curl-amd": "^0.8.12",
     "lodash": "^4.0.1",
-    "raven-js": "2.2.1"
+    "raven-js": "3.0.2"
   }
 }

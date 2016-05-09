@@ -70,7 +70,7 @@ class SignInFormModel {
         }
         else {
           r.json().then(j => {
-          window.location = j.url
+          window.location = j.url;
           return;
         });
       }

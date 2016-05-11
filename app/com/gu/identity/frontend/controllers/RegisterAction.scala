@@ -65,7 +65,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   }
 
   private def registerSuccessResult(returnUrl: ReturnUrl, cookies: Seq[PlayCookie]) = {
-    logSuccessfulRegister
+    logSuccessfulRegister()
     SeeOther(returnUrl.url).withCookies(cookies: _*)
   }
 }

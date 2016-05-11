@@ -6,12 +6,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MetricsLoggingActor {
 
-  def logSuccessfulRegister(): Unit = {
+  val logSuccessfulRegister = () => {
     MetricsLoggingActor.logSuccessfulRegister()
   }
 
-  def logSuccessfulSignin(): Unit = {
+  val logSuccessfulSignin = () => {
     MetricsLoggingActor.logSuccessfulSignin()
+  }
+
+  val logSuccessfulSmartLockSignin = () => {
+    MetricsLoggingActor.logSuccessfulSmartLockSignin()
   }
 
   def terminateActor()(implicit executionContext: ExecutionContext): Future[Unit] = {
@@ -22,6 +26,7 @@ trait MetricsLoggingActor {
 private sealed trait Message {}
 
 private object SignIn extends Message
+private object SmartLockSignIn extends Message
 private object Register extends Message
 private object Terminate extends Message
 
@@ -37,6 +42,10 @@ private object MetricsLoggingActor {
     successfulActionLogger ! SignIn
   }
 
+  def logSuccessfulSmartLockSignin(): Unit = {
+    successfulActionLogger ! SmartLockSignIn
+  }
+
   def terminateActor(): Future[Terminated] = {
     successfulActionLogger ! PoisonPill
     system.terminate()
@@ -48,6 +57,9 @@ private class MetricsActor extends Actor with Logging{
   override def receive: Receive = {
     case SignIn => {
       SuccessfulActionCloudwatchLogging.putSignIn()
+    }
+    case SmartLockSignIn => {
+      SuccessfulActionCloudwatchLogging.putSmartLockSignIn()
     }
     case Register => {
       SuccessfulActionCloudwatchLogging.putRegister()

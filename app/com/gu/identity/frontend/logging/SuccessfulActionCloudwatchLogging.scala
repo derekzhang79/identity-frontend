@@ -57,6 +57,11 @@ object SuccessfulActionCloudwatchLogging {
     cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
   }
 
+  def putSmartLockSignIn(): Unit = {
+    val request = createRequest("SuccessfulSmartLockSignIns", "SuccessfulSmartLockSignIn")
+    cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)
+  }
+
   def putSmallDataPointSignIn(): Unit = {
     val request = createSmallDataPointRequest("SuccessfulSignIns", "SuccessfulSignIn")
     cloudwatch.putMetricDataAsync(request, LoggingAsyncHandler)

@@ -3,7 +3,7 @@
 import { getElementById, sessionStorage } from '../browser/browser';
 
 const STORAGE_KEY = 'gu_id_signIn_state';
-
+const SMART_LOCK_STORAGE_KEY = 'gu_id_smartLock_state';
 
 class SignInFormModel {
   constructor( formElement, emailField ) {
@@ -20,6 +20,7 @@ class SignInFormModel {
 
   loadState() {
     this.state = SignInFormState.fromStorage();
+    this.smartLockStatus = SmartLockState.fromStorage();
     this.emailFieldElement.setValue( this.state.email );
   }
 
@@ -62,19 +63,22 @@ class SignInFormModel {
   }
 
   smartLockSignIn(c) {
-    fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
-      .then(r => {
-        if (r.status == 200) {
-          this.storeRedirect(c);
-          return;
-        }
-        else {
-          r.json().then(j => {
-          window.location = j.url;
-          return;
-        });
-      }
-    });
+    if (this.smartLockStatus) {
+        fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
+          .then(r => {
+            if (r.status == 200) {
+              this.storeRedirect(c);
+              return;
+            }
+            else {
+             r.json().then(j => {
+               this.smartLockStatus = new SmartLockState( false );
+               window.location = j.url;
+               return;
+             });
+          }
+      });
+    }
   }
 
   formSubmitted() {
@@ -113,6 +117,29 @@ class SignInFormState {
     const existingState = sessionStorage.getJSON( STORAGE_KEY );
 
     return SignInFormState.fromObject( existingState )
+  }
+}
+
+class SmartLockState {
+  constructor(status = true ) {
+    this.smartLockFailed = status;
+  }
+
+  save() {
+    sessionStorage.setJSON( SMART_LOCK_STORAGE_KEY, this );
+  }
+
+  /**
+   * @return {SmartLockState}
+   */
+  static fromObject( { status } = {} ) {
+    return new SmartLockState( status );
+  }
+
+  static fromStorage() {
+    const existingState = sessionStorage.getJSON( SMART_LOCK_STORAGE_KEY );
+
+    return SmartLockState.fromObject( existingState )
   }
 }
 

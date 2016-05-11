@@ -75,7 +75,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
       case Right(user) => {
         authenticate(request, trackingData).map {
           case Left(signInErrors) => {
-            logger.error(s"User could not be logged in after registering: $signInErrors")
+            logger.error(s"User ${request.username} could not be logged in after successfully registering: $signInErrors $trackingData")
             signInErrors.foreach { err =>
               logger.error(s"Sign in error after registering: ${err.getMessage}", err)
             }

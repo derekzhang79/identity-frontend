@@ -37,6 +37,8 @@ class SignInFormModel {
       const formElement = this.formElement.elem;
 
       var c = new PasswordCredential(formElement);
+      this.smartLockStatus = new SmartLockState( true );
+      this.smartLockStatus.save();
       this.smartLockSignIn(c);
     }
   }
@@ -63,16 +65,19 @@ class SignInFormModel {
   }
 
   smartLockSignIn(c) {
-    if (this.smartLockStatus) {
+    if (this.smartLockStatus.status) {
         fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
           .then(r => {
             if (r.status == 200) {
+              this.smartLockStatus = new SmartLockState( true );
+              this.smartLockStatus.save();
               this.storeRedirect(c);
               return;
             }
             else {
              r.json().then(j => {
                this.smartLockStatus = new SmartLockState( false );
+               this.smartLockStatus.save();
                window.location = j.url;
                return;
              });
@@ -122,7 +127,7 @@ class SignInFormState {
 
 class SmartLockState {
   constructor(status = true ) {
-    this.smartLockFailed = status;
+    this.status = status;
   }
 
   save() {

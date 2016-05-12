@@ -37,7 +37,7 @@ class SignInFormModel {
       const formElement = this.formElement.elem;
 
       var c = new PasswordCredential(formElement);
-      this.updateSmartLockStatus(true)
+      this.updateSmartLockStatus(true);
       this.smartLockSignIn(c);
     }
   }
@@ -68,13 +68,13 @@ class SignInFormModel {
         fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
           .then(r => {
             if (r.status == 200) {
-              this.updateSmartLockStatus(true)
+              this.updateSmartLockStatus(true);
               this.storeRedirect(c);
               return;
             }
             else {
              r.json().then(j => {
-               this.updateSmartLockStatus(false)
+               this.updateSmartLockStatus(false);
                window.location = j.url;
                return;
              });

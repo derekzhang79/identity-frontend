@@ -6,13 +6,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MetricsLoggingActor {
 
-  def logSuccessfulRegister(): Unit = {
-    MetricsLoggingActor.logSuccessfulRegister()
-  }
+  val logSuccessfulRegister = () => MetricsLoggingActor.logSuccessfulRegister()
 
-  def logSuccessfulSignin(): Unit = {
-    MetricsLoggingActor.logSuccessfulSignin()
-  }
+  val logSuccessfulSignin = () => MetricsLoggingActor.logSuccessfulSignin()
+
+  val logSuccessfulSmartLockSignin = () => MetricsLoggingActor.logSuccessfulSmartLockSignin()
 
   def terminateActor()(implicit executionContext: ExecutionContext): Future[Unit] = {
     MetricsLoggingActor.terminateActor().map(_ => ())
@@ -22,6 +20,7 @@ trait MetricsLoggingActor {
 private sealed trait Message {}
 
 private object SignIn extends Message
+private object SmartLockSignIn extends Message
 private object Register extends Message
 private object Terminate extends Message
 
@@ -37,6 +36,10 @@ private object MetricsLoggingActor {
     successfulActionLogger ! SignIn
   }
 
+  def logSuccessfulSmartLockSignin(): Unit = {
+    successfulActionLogger ! SmartLockSignIn
+  }
+
   def terminateActor(): Future[Terminated] = {
     successfulActionLogger ! PoisonPill
     system.terminate()
@@ -46,12 +49,9 @@ private object MetricsLoggingActor {
 private class MetricsActor extends Actor with Logging{
 
   override def receive: Receive = {
-    case SignIn => {
-      SuccessfulActionCloudwatchLogging.putSignIn()
-    }
-    case Register => {
-      SuccessfulActionCloudwatchLogging.putRegister()
-    }
+    case SignIn => SuccessfulActionCloudwatchLogging.putSignIn()
+    case SmartLockSignIn => SuccessfulActionCloudwatchLogging.putSmartLockSignIn()
+    case Register => SuccessfulActionCloudwatchLogging.putRegister()
     case _ =>  logger.info("Unexpected Message received by metrics actor.")
   }
 }

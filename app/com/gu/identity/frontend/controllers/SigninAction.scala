@@ -36,14 +36,14 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
   val bodyParser = SignInActionRequestBody.bodyParser
 
   def signIn = SignInServiceAction(bodyParser) {
-    signInAction(successfulSignInResponse(_, _))
+    signInAction(successfulSignInResponse(_, _), logSuccessfulSignin)
   }
 
   def signInWithSmartLock = SignInSmartLockServiceAction(bodyParser) {
-    signInAction(successfulSmartLockSignInResponse(_, _))
+    signInAction(successfulSmartLockSignInResponse(_, _), logSuccessfulSmartLockSignin)
   }
 
-  def signInAction(sucessResponse: (ReturnUrl, Seq[Cookie]) => Result) = { request: Request[SignInActionRequestBody] =>
+  def signInAction(sucessResponse: (ReturnUrl, Seq[Cookie]) => Result, metricsLogger: () => Unit) = { request: Request[SignInActionRequestBody] =>
     val body = request.body
 
     val trackingData = TrackingData(request, body.returnUrl.flatMap(_.toStringOpt))
@@ -59,7 +59,7 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
     identityService.authenticate(body, trackingData).map {
       case Left(errors) => Left(errors)
       case Right(cookies) => Right {
-        logSuccessfulSignin()
+        metricsLogger()
         sucessResponse(successfulReturnUrl, cookies)
       }
     }

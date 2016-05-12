@@ -6,17 +6,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MetricsLoggingActor {
 
-  val logSuccessfulRegister = () => {
-    MetricsLoggingActor.logSuccessfulRegister()
-  }
+  val logSuccessfulRegister = () => MetricsLoggingActor.logSuccessfulRegister()
 
-  val logSuccessfulSignin = () => {
-    MetricsLoggingActor.logSuccessfulSignin()
-  }
+  val logSuccessfulSignin = () => MetricsLoggingActor.logSuccessfulSignin()
 
-  val logSuccessfulSmartLockSignin = () => {
-    MetricsLoggingActor.logSuccessfulSmartLockSignin()
-  }
+  val logSuccessfulSmartLockSignin = () => MetricsLoggingActor.logSuccessfulSmartLockSignin()
 
   def terminateActor()(implicit executionContext: ExecutionContext): Future[Unit] = {
     MetricsLoggingActor.terminateActor().map(_ => ())

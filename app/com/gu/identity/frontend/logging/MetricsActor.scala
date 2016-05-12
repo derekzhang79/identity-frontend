@@ -49,15 +49,9 @@ private object MetricsLoggingActor {
 private class MetricsActor extends Actor with Logging{
 
   override def receive: Receive = {
-    case SignIn => {
-      SuccessfulActionCloudwatchLogging.putSignIn()
-    }
-    case SmartLockSignIn => {
-      SuccessfulActionCloudwatchLogging.putSmartLockSignIn()
-    }
-    case Register => {
-      SuccessfulActionCloudwatchLogging.putRegister()
-    }
+    case SignIn => SuccessfulActionCloudwatchLogging.putSignIn()
+    case SmartLockSignIn => SuccessfulActionCloudwatchLogging.putSmartLockSignIn()
+    case Register => SuccessfulActionCloudwatchLogging.putRegister()
     case _ =>  logger.info("Unexpected Message received by metrics actor.")
   }
 }

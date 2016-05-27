@@ -1,6 +1,8 @@
 package com.gu.identity.frontend.views.models
 
 
+import java.net.URI
+
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.text._
 import com.gu.identity.frontend.controllers._
@@ -23,7 +25,8 @@ object TsAndCsViewModel {
     configuration: Configuration,
     clientId: Option[ClientID],
     group: GroupCode,
-    returnUrl: ReturnUrl)(implicit messages: Messages): TsAndCsViewModel = {
+    returnUrl: ReturnUrl,
+    signOutLink: URI)(implicit messages: Messages): TsAndCsViewModel = {
 
     val layout = LayoutViewModel(configuration, clientId, Some(returnUrl))
     TsAndCsViewModel(
@@ -31,7 +34,7 @@ object TsAndCsViewModel {
       resources = layout.resources,
       indirectResources = layout.indirectResources,
       clientId = clientId,
-      tsAndCsPageText = TsAndCsPageText.getPageText(group),
+      tsAndCsPageText = TsAndCsPageText.getPageText(group, signOutLink),
       groupCode = group.id,
       returnUrl = returnUrl.url
     )

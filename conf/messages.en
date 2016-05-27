@@ -113,7 +113,7 @@ errors.unexpected.details=Error details: {0}
 
 # com.gu.identity.frontend.models.text.ThirdPartyTsAndCsText
 thirdPartyTerms.title=Welcome to Guardian {0}
-thirdPartyTerms.explanation=By connecting your account you get access to a range of features:
+thirdPartyTerms.explanation=Click ''continue'' to automatically use your existing Guardian account to sign in with Guardian {0}
 thirdPartyTerms.continueButton=Continue
 thirdPartyTerms.terms=By proceeding, you agree to Guardian {0}
 thirdPartyTerms.termsOfService=Terms of Service
@@ -125,6 +125,8 @@ thirdPartyTerms.teachersFeatures=Download teaching resources
 thirdPartyTerms.jobsPageTitle=Jobs
 thirdPartyTerms.jobsTitle=Jobs
 thirdPartyTerms.jobsServiceName=Jobs''
-thirdPartyTerms.jobsFeature1=Receive relevant jobs into your inbox
-thirdPartyTerms.jobsFeature2=Upload your CV and let potential employers find you
-thirdPartyTerms.jobsFeature3=Shortlist jobs that interest you, so that you can come back to them later
+thirdPartyTerms.jobsFeatureIntro=By activating your Guardian Jobs account you will receive a welcome email detailing the range of career-enhancing features that can be set up on our jobs site.  These include:
+thirdPartyTerms.jobsFeature1=Creating a Job Alert and receiving relevant jobs straight to your inbox
+thirdPartyTerms.jobsFeature2=Shortlisting jobs that interest you so you can access them later on different devices
+thirdPartyTerms.jobsFeature3=Uploading your CV and let employers find you
+thirdPartyTerms.jobsFeatureOutro=Or <a href="{0}">sign out</a> to browse jobs anonymously.

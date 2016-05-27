@@ -9,11 +9,14 @@
   </section>
 
   <section class="third-party-ts-and-cs">
+    <p class="third-party-terms__feature-intro">{{tsAndCsPageText.featureIntro}}</p>
     <ul class="third-party-terms__features-list">
     {{#each tsAndCsPageText.features}}
       <li class="third-party-terms__features-list-item">{{this}}</li>
     {{/each}}
     </ul>
+
+    <p class="third-party-terms__feature-outro">{{{tsAndCsPageText.featureOutro}}}</p>
 
     <form method="POST" action="{{continueFormUrl}}" >
       <input type="hidden" name="groupCode" value="{{ groupCode }}">

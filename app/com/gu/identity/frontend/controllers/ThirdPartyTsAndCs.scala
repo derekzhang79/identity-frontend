@@ -1,5 +1,7 @@
 package com.gu.identity.frontend.controllers
 
+import java.net.URI
+
 import com.gu.identity.frontend.authentication.UserAuthenticatedActionBuilder._
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.logging.Logging
@@ -45,10 +47,11 @@ class ThirdPartyTsAndCs(identityService: IdentityService, config: Configuration,
   }
 
   def confirm(groupCode: GroupCode, returnUrl: ReturnUrl, clientId: Option[ClientID], skipConfirmation: Boolean, userCookie: Cookie): Future[Either[ServiceExceptions, Result]] = {
+    val signOutLink = new URI(routes.SignOutAction.signOut(Some(returnUrl.url)).url)
     checkUserForGroupMembership(groupCode, userCookie).flatMap {
       case Right(true) => Future.successful(Right(SeeOther(returnUrl.url)))
       case Right(false) if skipConfirmation => addToGroup(groupCode, userCookie, returnUrl)
-      case Right(false) => Future.successful(Right(renderTsAndCs(config, clientId, groupCode, returnUrl)))
+      case Right(false) => Future.successful(Right(renderTsAndCs(config, clientId, groupCode, returnUrl, signOutLink)))
       case Left(errors) => {
         logger.warn(s"Could not check user's group membership status {}", errors)
         Future.successful(Left(errors))

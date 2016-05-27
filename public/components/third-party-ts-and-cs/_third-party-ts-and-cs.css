@@ -8,6 +8,12 @@
   padding-left: 2rem;
 }
 
+.third-party-terms__feature-intro,
+.third-party-terms__feature-outro {
+  @extend %font-text-1;
+  margin-top: 0;
+}
+
 .third-party-terms__features-list-item {
   @extend %font-text-1;
   color: #333;

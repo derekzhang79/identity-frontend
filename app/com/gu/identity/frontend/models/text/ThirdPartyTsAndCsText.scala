@@ -1,6 +1,8 @@
 package com.gu.identity.frontend.models.text
 
-import com.gu.identity.frontend.models.{GuardianJobs, GuardianTeachersNetwork, GroupCode, ReturnUrl}
+import java.net.URI
+
+import com.gu.identity.frontend.models.{GroupCode, GuardianJobs, GuardianTeachersNetwork}
 import play.api.i18n.Messages
 
 case class BaseTsAndCsText private(
@@ -15,7 +17,7 @@ object BaseTsAndCsText {
   def apply(title: String, serviceName: String)(implicit messages: Messages): BaseTsAndCsText = {
     BaseTsAndCsText(
       title = messages("thirdPartyTerms.title", title),
-      explanationText = messages("thirdPartyTerms.explanation"),
+      explanationText = messages("thirdPartyTerms.explanation", title),
       continueButtonText = messages("thirdPartyTerms.continueButton"),
       termsText = messages("thirdPartyTerms.terms", serviceName),
       termsOfServiceLinkText = messages("thirdPartyTerms.termsOfService"),
@@ -27,6 +29,8 @@ object BaseTsAndCsText {
 case class ThirdPartyTsAndCsText (
     pageTitle: String,
     title: String,
+    featureIntro: Option[String] = None,
+    featureOutro: Option[String] = None,
     features: Seq[String],
     serviceName: String,
     termsOfServiceLink: String,
@@ -50,12 +54,14 @@ object TeachersTsAndCsText {
 }
 
 object JobsTsAndCsText {
-  def apply()(implicit messages: Messages): ThirdPartyTsAndCsText = {
+  def apply(signOutLink: URI)(implicit messages: Messages): ThirdPartyTsAndCsText = {
     val title = messages("thirdPartyTerms.jobsTitle")
     val serviceName = messages("thirdPartyTerms.jobsServiceName")
     ThirdPartyTsAndCsText(
       pageTitle = messages("thirdPartyTerms.jobsPageTitle"),
       title = title,
+      featureIntro = Some(messages("thirdPartyTerms.jobsFeatureIntro")),
+      featureOutro = Some(messages("thirdPartyTerms.jobsFeatureOutro", signOutLink)),
       features = Seq(
         messages("thirdPartyTerms.jobsFeature1"),
         messages("thirdPartyTerms.jobsFeature2"),
@@ -69,10 +75,10 @@ object JobsTsAndCsText {
 }
 
 object TsAndCsPageText {
-  def getPageText(group: GroupCode)(implicit messages: Messages): ThirdPartyTsAndCsText = {
+  def getPageText(group: GroupCode, signOutLink: URI)(implicit messages: Messages): ThirdPartyTsAndCsText = {
     group match {
       case GuardianTeachersNetwork => TeachersTsAndCsText()
-      case GuardianJobs => JobsTsAndCsText()
+      case GuardianJobs => JobsTsAndCsText(signOutLink)
     }
   }
 }

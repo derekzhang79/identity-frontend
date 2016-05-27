@@ -1,10 +1,12 @@
 package com.gu.identity.frontend.views
 
+import java.net.URI
+
 import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.HttpError
-import com.gu.identity.frontend.models.{GroupCode, ClientID, ReturnUrl}
-import com.gu.identity.frontend.mvt.{MultiVariantTestVariant, MultiVariantTest}
+import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
+import com.gu.identity.frontend.mvt.{MultiVariantTest, MultiVariantTestVariant}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
 import play.api.i18n.Messages
@@ -102,8 +104,8 @@ object ViewRenderer {
   def renderErrorPage(configuration: Configuration, error: HttpError, resultGenerator: Html => Result)(implicit messages: Messages) =
     renderViewModel("error-page", ErrorPageViewModel(configuration, error), resultGenerator)
 
-  def renderTsAndCs(configuration: Configuration, clientId: Option[ClientID], group: GroupCode, returnUrl: ReturnUrl)(implicit messages: Messages) = {
-    val model = TsAndCsViewModel(configuration, clientId, group, returnUrl)
+  def renderTsAndCs(configuration: Configuration, clientId: Option[ClientID], group: GroupCode, returnUrl: ReturnUrl, signOutLink: URI)(implicit messages: Messages) = {
+    val model = TsAndCsViewModel(configuration, clientId, group, returnUrl, signOutLink)
     renderViewModel("third-party-ts-and-cs-page", model)
   }
 

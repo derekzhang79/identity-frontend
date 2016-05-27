@@ -9,6 +9,7 @@
   </section>
 
   <section class="third-party-ts-and-cs">
+    <p class="third-party-terms__feature-intro">{{tsAndCsPageText.featureIntro}}</p>
     <ul class="third-party-terms__features-list">
     {{#each tsAndCsPageText.features}}
       <li class="third-party-terms__features-list-item">{{this}}</li>
@@ -20,6 +21,8 @@
       <input type="hidden" name="returnUrl" value="{{ returnUrl }}">
       <button type="submit" class="third-party-ts-and-cs__confirm-agree">{{tsAndCsPageText.baseText.continueButtonText}}</button>
     </form>
+
+    <p class="third-party-terms__feature-outro">{{{tsAndCsPageText.featureOutro}}}</p>
 
     <p class="third-party-terms__text">
       {{ tsAndCsPageText.baseText.termsText }}

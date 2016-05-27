@@ -16,13 +16,13 @@
     {{/each}}
     </ul>
 
-    <p class="third-party-terms__feature-outro">{{{tsAndCsPageText.featureOutro}}}</p>
-
     <form method="POST" action="{{continueFormUrl}}" >
       <input type="hidden" name="groupCode" value="{{ groupCode }}">
       <input type="hidden" name="returnUrl" value="{{ returnUrl }}">
       <button type="submit" class="third-party-ts-and-cs__confirm-agree">{{tsAndCsPageText.baseText.continueButtonText}}</button>
     </form>
+
+    <p class="third-party-terms__feature-outro">{{{tsAndCsPageText.featureOutro}}}</p>
 
     <p class="third-party-terms__text">
       {{ tsAndCsPageText.baseText.termsText }}

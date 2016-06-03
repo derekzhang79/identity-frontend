@@ -13,6 +13,5 @@ class FacebookAuthDialog extends LoadablePage with Browser {
 
   private lazy val confirmButton = name("__CONFIRM__")
 
-  // locating by inner text because ID attribute is not fixed by FB (u_0_q, u_0_s,...)
-  private lazy val editInfoLink = xpath("//a[contains(text(), 'Edit the info you provide')]")
+  private lazy val editInfoLink = id("u_0_q")
 }

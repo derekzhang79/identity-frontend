@@ -9,9 +9,12 @@ class FacebookAuthDialog extends LoadablePage with Browser {
 
   def confirm(): Unit = clickOn(confirmButton)
 
-  def editProvidedInfo(): Unit = clickOn(editInfoLink)
+  def editProvidedInfo(): Unit = clickOnOr(editInfoLinkA, editInfoLinkB, editInfoLinkC)
 
-  private lazy val confirmButton = name("__CONFIRM__")
+  private val confirmButton = name("__CONFIRM__")
 
-  private lazy val editInfoLink = id("u_0_q")
+  // Multiple editInfo links due to Facebook performing A/B testing
+  private val editInfoLinkA = id("u_0_q")
+  private val editInfoLinkB = id("u_0_p")
+  private val editInfoLinkC = id("u_0_m")
 }

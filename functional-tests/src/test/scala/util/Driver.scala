@@ -20,7 +20,6 @@ object Driver {
 
   def reset() = {
     Driver.manage().deleteAllCookies()
-    Driver.get("about:blank")
     Driver.get(Config.baseUrl)
   }
 

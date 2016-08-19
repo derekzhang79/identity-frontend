@@ -20,6 +20,7 @@ case class RegisterViewModel(
     hasErrors: Boolean,
     errors: RegisterErrorViewModel,
     showStandfirst: Boolean,
+    askForPhoneNumber: Boolean,
 
     csrfToken: Option[CSRFToken],
     returnUrl: String,
@@ -62,6 +63,7 @@ object RegisterViewModel {
       errors = RegisterErrorViewModel(errors),
 
       showStandfirst = showStandfirst(activeTests, clientId),
+      askForPhoneNumber = askForPhoneNumber(clientId),
 
       csrfToken = csrfToken,
       returnUrl = returnUrl.url,
@@ -79,6 +81,9 @@ object RegisterViewModel {
 
   private def showStandfirst(activeTests: ActiveMultiVariantTests, clientId: Option[ClientID]) =
     clientId.contains(GuardianMembersClientID) && activeTests.contains(RegisterMembershipStandfirstTest)
+
+  private def askForPhoneNumber(clientId: Option[ClientID]) =
+    clientId.contains(GuardianCommentersClientID)
 
 }
 

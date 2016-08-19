@@ -39,6 +39,15 @@
           <p id="{{ id }}" class="register-form__error">{{ message }}</p>
       {{/ each }}
 
+    {{# askForPhoneNumber }}
+      <div class="register-form__control--phone">
+          <label class="register-form__label--phone-country-code" for="register_field_phone_country_code">Country code</label>
+          <input class="register-form__field--phone-country-code" id="register_field_phone_country_code" type="text" name="coutry-code" placeholder="Country code" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="1" maxlength="6" pattern="[\+0-9]+" />
+          <label class="register-form__label--phone-number" for="register_field_phone_number">Phone number</label>
+          <input class="register-form__field--phone-number" id="register_field_phone_number" type="text" name="phone-number" placeholder="Phone number" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="4" maxlength="30" pattern="[0-9\(\)\-\s]+" />
+      </div>
+    {{/ askForPhoneNumber }}
+
     <div class="register-form__control--username">
         <label class="register-form__label--username" for="register_field_username">{{ registerPageText.username }}</label>
         <input class="register-form__field--username" id="register_field_username" type="text" name="username" placeholder="{{ registerPageText.usernameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="6" maxlength="20" pattern="[a-zA-Z0-9]+" />

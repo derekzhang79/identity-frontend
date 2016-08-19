@@ -20,6 +20,7 @@
 /** Register page **/
 
 @import "components/register-form/_register-form.css";
+@import "intl-tel-input/build/css/intlTelInput.css";
 
 /** Register Confirmation page **/
 

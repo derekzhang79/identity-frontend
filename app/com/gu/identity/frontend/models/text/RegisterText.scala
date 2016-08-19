@@ -20,7 +20,8 @@ case class RegisterText private(
     standfirst: String,
     title: String,
     username: String,
-    usernameHelp: String)
+    usernameHelp: String,
+    phone: String)
 
 object RegisterText {
   def apply()(implicit messages: Messages): RegisterText =
@@ -42,7 +43,8 @@ object RegisterText {
       standfirst = messages("register.standfirst"),
       title = messages("register.title"),
       username = messages("register.username"),
-      usernameHelp = messages("register.usernameHelp")
+      usernameHelp = messages("register.usernameHelp"),
+      phone = messages("register.phone")
     )
 }
 

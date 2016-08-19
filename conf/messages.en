@@ -34,6 +34,7 @@ register.3rdPartyMarketing=Send me messages from 3rd party organisations screene
 register.signInCta=Already have an account?
 register.signIn=Sign in
 register.createAccount=Create account
+register.phone=Mobile number
 
 # com.gu.identity.frontend.models.text.TermsText
 terms.conditions=By proceeding, you agree to the Guardian''s

@@ -106,6 +106,33 @@
   @extend %form__text-field;
 }
 
+/** Field: Phone number **/
+
+.register-form__control--phone-number {
+  @extend %form__control;
+  margin-bottom: 1.2rem;
+}
+
+.register-form__label--phone-number {
+  @extend %form__label;
+}
+
+.register-form__field--phone-number {
+  @extend %form__text-field;
+}
+
+.register-form__control--phone-number .intl-tel-input {
+  display: block;
+}
+
+.register-form__control--phone-number .intl-tel-input.allow-dropdown .flag-container:hover .selected-flag {
+  background-color: inherit;
+}
+
+.register-form__control--phone-number .iti-flag {
+  background-image: inline("../node_modules/intl-tel-input/build/img/flags.png");
+}
+
 
 /** Field (checkbox): GNM Marketing **/
 

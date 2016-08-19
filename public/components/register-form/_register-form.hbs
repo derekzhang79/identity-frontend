@@ -41,8 +41,17 @@
 
     {{# askForPhoneNumber }}
       <div class="register-form__control--phone-number">
-          <label class="register-form__label--phone-number" for="register_field_phone_number">{{ registerPageText.phone }}</label>
+          <label class="register-form__label--phone-number" for="register_field_phone_number">
+            {{ registerPageText.phone }}
+            <a class="register-form__link--why-phone-number">{{ registerPageText.whyPhone }}</a>
+          </label>
           <input class="register-form__field--phone-number" id="register_field_phone_number" type="tel" name="phone-number" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="3" maxlength="20" />
+          <div hidden class="register-form__tooltip--phone-number">
+            <button class="register-form__tooltip--phone-number__close" aria-label="Close tooltip" type="button">
+              <i class="register-form__icon--close"></i>
+            </button>
+            <p>{{ registerPageText.becausePhone }}</p>
+          </div>
       </div>
     {{/ askForPhoneNumber }}
 

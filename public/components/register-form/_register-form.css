@@ -111,6 +111,7 @@
 .register-form__control--phone-number {
   @extend %form__control;
   margin-bottom: 1.2rem;
+  position: relative;
 }
 
 .register-form__label--phone-number {
@@ -131,6 +132,39 @@
 
 .register-form__control--phone-number .iti-flag {
   background-image: inline("../node_modules/intl-tel-input/build/img/flags.png");
+}
+
+.register-form__link--why-phone-number {
+  margin-left: 2rem;
+}
+
+.register-form__tooltip--phone-number {
+  @extend %font-text-1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  padding: 2rem;
+  color: #333;
+  border: 2px solid #eaeaea;
+  background: #fff;
+  max-width: 36rem;
+}
+
+.register-form__tooltip--phone-number__close {
+  float: right;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+}
+
+.register-form__icon--close {
+  background-image: inline("../form-foundations/icon-close.svg");
+  width: 3rem;
+  height: 3rem;
+  display: block;
 }
 
 

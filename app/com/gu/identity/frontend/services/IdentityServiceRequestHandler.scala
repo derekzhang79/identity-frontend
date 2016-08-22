@@ -29,6 +29,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val deauthenticationCookiesListReads = Json.format[DeauthenticationCookiesResponseCookieList]
   implicit val deauthenticationReads = Json.format[DeauthenticationCookiesResponse]
 
+  implicit val registerRequestTelephoneNumberFormat = Json.format[RegisterRequestTelephoneNumber]
   implicit val registerRequestBodyPublicFieldsFormat = Json.format[RegisterRequestBodyPublicFields]
   implicit val registerRequestBodyPrivateFieldsFormat = Json.format[RegisterRequestBodyPrivateFields]
   implicit val registerRequestBodyStatusFieldsFormat = Json.format[RegisterRequestBodyStatusFields]

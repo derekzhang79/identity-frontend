@@ -34,6 +34,9 @@ register.3rdPartyMarketing=Send me messages from 3rd party organisations screene
 register.signInCta=Already have an account?
 register.signIn=Sign in
 register.createAccount=Create account
+register.phone=Mobile number
+register.whyPhone=Why is this needed?
+register.becausePhone=We use your mobile phone number for account verification purposes to prevent spam and abuse.
 
 # com.gu.identity.frontend.models.text.TermsText
 terms.conditions=By proceeding, you agree to the Guardian''s

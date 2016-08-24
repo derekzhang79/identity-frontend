@@ -86,10 +86,10 @@
     },
     "CertsMap": {
       "CODE": {
-        "ssl": "arn:aws:iam::942464564246:server-certificate/idapi.code.dev-theguardian.com-exp2018-09-15-utn"
+        "ssl": "certificate/8c077d9e-6021-44c2-8aac-bbfd865ce72d"
       },
       "PROD": {
-        "ssl": "arn:aws:iam::942464564246:server-certificate/sites.theguardian.com-exp2017-05-31"
+        "ssl": "certificate/9d732c7b-ba1e-4f1b-aa3f-4ca012ef8a5f"
       }
     }
   },
@@ -154,7 +154,7 @@
           "LoadBalancerPort": "443",
           "InstancePort": "8860",
           "Protocol": "HTTPS",
-          "SSLCertificateId": { "Fn::FindInMap": [ "CertsMap", { "Ref": "Stage" }, "ssl" ]}
+          "SSLCertificateId": {"Fn::Join" : [ ":", ["arn:aws:acm:eu-west-1", { "Ref": "AWS::AccountId" }, { "Fn::FindInMap": [ "CertsMap", { "Ref": "Stage" }, "ssl" ]}] ] }
         }],
         "CrossZone": "true",
         "HealthCheck": {

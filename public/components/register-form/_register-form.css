@@ -114,14 +114,6 @@
   position: relative;
 }
 
-.register-form__label--phone-number {
-  @extend %form__label;
-}
-
-.register-form__field--phone-number {
-  @extend %form__text-field;
-}
-
 .register-form__control--phone-number .intl-tel-input {
   display: block;
 }
@@ -132,6 +124,14 @@
 
 .register-form__control--phone-number .iti-flag {
   background-image: inline("../node_modules/intl-tel-input/build/img/flags.png");
+}
+
+.register-form__label--local-number {
+  @extend %form__label;
+}
+
+.register-form__field--local-number {
+  @extend %form__text-field;
 }
 
 .register-form__link--why-phone-number {

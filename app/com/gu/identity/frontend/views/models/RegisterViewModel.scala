@@ -32,7 +32,9 @@ case class RegisterViewModel(
     links: RegisterLinks,
 
     resources: Seq[PageResource with Product],
-    indirectResources: Seq[PageResource with Product])
+    indirectResources: Seq[PageResource with Product],
+    countryCodes: Option[CountryCodes]
+  )
   extends ViewModel with ViewModelResources
 
 
@@ -51,6 +53,7 @@ object RegisterViewModel {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
 
+    val codes = countryCodes(clientId)
     RegisterViewModel(
       layout = layout,
 
@@ -75,7 +78,10 @@ object RegisterViewModel {
       links = RegisterLinks(returnUrl, skipConfirmation, clientId),
 
       resources = layout.resources,
-      indirectResources = layout.indirectResources
+      indirectResources = layout.indirectResources,
+
+      countryCodes = codes
+
     )
   }
 
@@ -85,6 +91,12 @@ object RegisterViewModel {
   private def askForPhoneNumber(clientId: Option[ClientID]) =
     clientId.contains(GuardianCommentersClientID)
 
+  private def countryCodes(clientId: Option[ClientID]) : Option[CountryCodes] = {
+    clientId match {
+      case Some(c) => if (c.id == "comments") Option(CountryCodes.apply) else None
+      case _ => None
+    }
+  }
 }
 
 

@@ -112,7 +112,7 @@ class RegisterFormState {
    * @param {RegisterFormModel} form
    * @return {RegisterFormState}
    */
-  static fromForm( form ) {
+  static fromForm( form ) {                       gbnf
     return RegisterFormState.fromObject( form.fields.toJSON() );
   }
 }
@@ -124,9 +124,11 @@ export function init() {
   if ( form ) {
     form.loadState();
 
+/*
     if (form.fields.optionalPhoneNumber) {
       initPhoneField(form, form.fields.optionalPhoneNumber);
     }
+*/
   }
 
   return form;

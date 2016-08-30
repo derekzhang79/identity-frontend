@@ -118,12 +118,20 @@
   @extend %column-3;
   padding: 0 1rem;
   padding-left: 0;
+
+  @media (--viewport-max-mobile-landscape) {
+    width: 40%;
+  }
 }
 
 .register-form__control-column--local-number {
   @extend %column-9;
   padding: 0 1rem;
   padding-right: 0;
+
+  @media (--viewport-max-mobile-landscape) {
+    width: 60%;
+  }
 }
 
 .register-form__control-column--local-number--wide {
@@ -138,12 +146,19 @@
   background-color: inherit;
 }
 
-.register-form__control--phone-number .iti-flag {
+.intl-tel-input .iti-flag {
   background-image: inline("../node_modules/intl-tel-input/build/img/flags.png");
+
+  @media only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    background-image: inline("../node_modules/intl-tel-input/build/img/flags@2x.png");
+  }
 }
 
 .register-form__select--country-code {
   @extend %form__text-field;
+
+  /* select element don't respect line-height, but only height */
+  height: 3.5rem;
 }
 
 .register-form__label--country-code {
@@ -182,6 +197,19 @@
   padding: 0;
   border: 0;
   background-color: transparent;
+}
+
+.register-form__tooltip--phone-number--nojs {
+  position: relative;
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: 100%;
+  clear: both;
+}
+
+.register-form__tooltip--phone-number--nojs .register-form__tooltip--phone-number__close {
+  display: none;
 }
 
 .register-form__icon--close {

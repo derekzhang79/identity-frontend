@@ -14,16 +14,7 @@ export function initPhoneField (form, countryCodeElement, localNumberElement) {
       $(countryCodeElement.elem),
       $(localNumberElement.elem)
     );
-    $('.register-form__link--why-phone-number', formElement).on('click', toggleDropdown);
-    $('.register-form__tooltip--phone-number__close', formElement).on('click', toggleDropdown);
-
-    function toggleDropdown () {
-      if (tooltipElement.hasAttribute('hidden')) {
-        tooltipElement.removeAttribute('hidden');
-      } else {
-        tooltipElement.setAttribute('hidden', '');
-      }
-    }
+    initialiseTooltip($, tooltipElement, formElement);
   });
 }
 
@@ -42,5 +33,20 @@ function initializeFields (form, countryCode, localNumber) {
     const dialCode = localNumber.intlTelInput('getSelectedCountryData').dialCode;
     countryCode.val(dialCode);
     localNumber.val(localNumber.intlTelInput('getNumber').replace(new RegExp('^\\+' + dialCode), ''));
+  }
+}
+
+function initialiseTooltip ($, tooltip, formElement) {
+  tooltip.setAttribute('hidden', '');
+  $(tooltip).removeClass('register-form__tooltip--phone-number--nojs');
+  $('.register-form__link--why-phone-number', formElement).removeAttr('hidden').on('click', toggleDropdown);
+  $('.register-form__tooltip--phone-number__close', formElement).on('click', toggleDropdown);
+
+  function toggleDropdown () {
+    if (tooltip.hasAttribute('hidden')) {
+      tooltip.removeAttribute('hidden');
+    } else {
+      tooltip.setAttribute('hidden', '');
+    }
   }
 }

@@ -114,6 +114,18 @@
   position: relative;
 }
 
+.register-form__control-column--area-code {
+  @extend %column-3;
+  padding: 0 1rem;
+  padding-left: 0;
+}
+
+.register-form__control-column--local-number {
+  @extend %column-9;
+  padding: 0 1rem;
+  padding-right: 0;
+}
+
 .register-form__control--phone-number .intl-tel-input {
   display: block;
 }
@@ -124,6 +136,14 @@
 
 .register-form__control--phone-number .iti-flag {
   background-image: inline("../node_modules/intl-tel-input/build/img/flags.png");
+}
+
+.register-form__select--country-code {
+  @extend %form__text-field;
+}
+
+.register-form__label--country-code {
+  @extend %form__label;
 }
 
 .register-form__label--local-number {

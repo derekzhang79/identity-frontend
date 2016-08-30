@@ -40,6 +40,7 @@ object RegisterApiRequest {
   private def getPhoneNumber(request: RegisterActionRequestBody) : Option[RegisterRequestTelephoneNumber] =
     (request.countryCode, request.localNumber) match {
       case(Some(countryCode), Some(localNumber)) => Option(RegisterRequestTelephoneNumber(countryCode, localNumber))
+      case(None, Some(localNumber)) => Option(RegisterRequestTelephoneNumber("", localNumber))
       case _ => None
     }
 }

@@ -49,7 +49,7 @@ object RegisterText {
       username = messages("register.username"),
       usernameHelp = messages("register.usernameHelp"),
       phone = messages("register.phone"),
-      countryCode = messages("country.code"),
+      countryCode = messages("register.countryCode"),
       whyPhone = messages("register.whyPhone"),
       becausePhone = messages("register.becausePhone")
     )

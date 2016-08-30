@@ -43,31 +43,36 @@
     {{# askForPhoneNumber }}
 
         <div class="register-form__control--phone-number">
-            {{# countryCodes }}
-              <label class="register-form__label--country-code" for="register_field_country_code">
-                {{ registerPageText.countryCode }}
-              </label>
-                <select class="register-form__field--country-code" id="register_field_countryCode" type="tel" name="countryCode" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="3" maxlength="20" />
+            <div class="register-form__control-column--area-code">
+                <label class="register-form__label--country-code" for="register_field_country_code">
+                  {{ registerPageText.countryCode }}
+                </label>
+                <select class="register-form__select--country-code" id="register_field_countryCode" type="tel"
+                        name="countryCode" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
               {{#each countryCodes.codes }}
-                  <option value="{{ code }}">+{{ code }}
+              <option value="{{ code }}">+ {{ code }}</option>
               {{/ each }}
                 </select>
+            </div>
+            <div class="register-form__control-column--local-number">
                 <label class="register-form__label--local-number" for="register_field_local_number">
                   {{ registerPageText.phone }}
-                    <a class="register-form__link--why-phone-number">{{ registerPageText.whyPhone }}</a>
+                    <!--<a class="register-form__link--why-phone-number">{{ registerPageText.whyPhone }}</a>-->
                 </label>
-            {{/ countryCodes }}
+                <input class="register-form__field--local-number" id="register_field_localNumber" type="tel"
+                       name="localNumber" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"
+                       required minlength="3" maxlength="20"/>
+                <div hidden class="register-form__tooltip--phone-number">
+                    <button class="register-form__tooltip--phone-number__close" aria-label="Close tooltip"
+                            type="button">
+                        <i class="register-form__icon--close"></i>
+                    </button>
+                    <p>{{ registerPageText.becausePhone }}</p>
+                </div>
+            </div>
+        </div>
 
-              <input class="register-form__field--local-number" id="register_field_localNumber" type="tel" name="localNumber" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="3" maxlength="20" />
-              <div hidden class="register-form__tooltip--phone-number">
-                  <button class="register-form__tooltip--phone-number__close" aria-label="Close tooltip" type="button">
-                      <i class="register-form__icon--close"></i>
-                  </button>
-                  <p>{{ registerPageText.becausePhone }}</p>
-              </div>
-          </div>
-
-          <p id="{{ id }}" class="register-form__error">{{ message }}</p>
+        <p id="{{ id }}" class="register-form__error">{{ message }}</p>
     {{/ askForPhoneNumber }}
 
     <div class="register-form__control--username">

@@ -28,12 +28,10 @@ case class CountryCodeViewModel(code: Integer) extends ViewModel
 object CountryCodes extends PhoneNumbers {
 
   def apply = {
-      val codes = countryCodes.map{ c => CountryCodeViewModel(c) }
+      val codes = countryCodes.map{ c => CountryCodeViewModel(c)}
       new CountryCodes(codes)
   }
 }
 
-case class CountryCodes(codes: Seq[CountryCodeViewModel]) {
-  val s = codes.size
-}
+case class CountryCodes(codes: Seq[CountryCodeViewModel])
 

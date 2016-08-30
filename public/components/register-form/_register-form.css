@@ -126,6 +126,10 @@
   padding-right: 0;
 }
 
+.register-form__control-column--local-number--wide {
+  @extend %form__control;
+}
+
 .register-form__control--phone-number .intl-tel-input {
   display: block;
 }

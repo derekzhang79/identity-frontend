@@ -5,7 +5,7 @@ const PLUGIN_OPTIONS = {
 
 export function initPhoneField (form, countryCodeElement, localNumberElement) {
 
-  require( [ 'jquery', 'intl-tel-input', 'intl-tel-input/build/js/utils.js' ], ($) => {
+  require( [ 'jquery', 'intl-tel', 'intl-tel-utils' ], ($) => {
 
     const tooltipElement = form.formElement.elem.querySelector('.register-form__tooltip--phone-number');
     const formElement = form.formElement.elem;
@@ -30,11 +30,11 @@ export function initPhoneField (form, countryCodeElement, localNumberElement) {
 function initializeFields (form, countryCode, localNumber) {
   // The core view has a select and an input field. When JS is enabled and running
   // hide the select and replace it with a jQuery phone number plugin
+  localNumber.intlTelInput(PLUGIN_OPTIONS);
   countryCode.parent().hide();
   localNumber.parents('.register-form__control-column--local-number')
     .removeClass('register-form__control-column--local-number')
     .addClass('register-form__control-column--local-number--wide')
-  localNumber.intlTelInput(PLUGIN_OPTIONS);
 
   form.on('submit', updateHiddenField);
 

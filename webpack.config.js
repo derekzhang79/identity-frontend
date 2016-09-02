@@ -27,5 +27,11 @@ module.exports = {
     new webpack.optimize.UglifyJsPlugin( {
       mangle: false
     } )
-  ]
+  ],
+  resolve: {
+    alias: {
+      'intl-tel': 'intl-tel-input/build/js/intlTelInput',
+      'intl-tel-utils': 'intl-tel-input/build/js/utils.js'
+    }
+  }
 };

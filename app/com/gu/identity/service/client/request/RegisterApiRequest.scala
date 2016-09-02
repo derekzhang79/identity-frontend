@@ -1,5 +1,7 @@
 package com.gu.identity.service.client.request
 
+import javafx.scene.chart.LineChart.SortingPolicy
+
 import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 import com.gu.identity.frontend.request.RegisterActionRequestBody
 import com.gu.identity.service.client._
@@ -22,7 +24,8 @@ object RegisterApiRequest {
         RegisterRequestBodyPrivateFields(
           firstName = request.firstName,
           secondName = request.lastName,
-          registrationIp = clientIp.ip
+          registrationIp = clientIp.ip,
+          telephoneNumber = getPhoneNumber(request)
         ),
         RegisterRequestBodyStatusFields(
           receiveGnmMarketing = request.receiveGnmMarketing,
@@ -33,6 +36,13 @@ object RegisterApiRequest {
       trackingData = trackingData
     )
   }
+
+  private def getPhoneNumber(request: RegisterActionRequestBody) : Option[RegisterRequestTelephoneNumber] =
+    (request.countryCode, request.localNumber) match {
+      case(Some(countryCode), Some(localNumber)) => Option(RegisterRequestTelephoneNumber(countryCode, localNumber))
+      case(None, Some(localNumber)) => Option(RegisterRequestTelephoneNumber("", localNumber))
+      case _ => None
+    }
 }
 
 case class RegisterRequestBody(
@@ -48,9 +58,13 @@ case class RegisterRequestBodyPublicFields(username: String)
 case class RegisterRequestBodyPrivateFields(
     firstName: String,
     secondName: String,
-    registrationIp: String)
+    registrationIp: String,
+    telephoneNumber: Option[RegisterRequestTelephoneNumber] = None)
 
 case class RegisterRequestBodyStatusFields(
     receiveGnmMarketing: Boolean,
     receive3rdPartyMarketing: Boolean)
+
+case class RegisterRequestTelephoneNumber(countryCode: String, localNumber: String)
+
 

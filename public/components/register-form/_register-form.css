@@ -106,6 +106,119 @@
   @extend %form__text-field;
 }
 
+/** Field: Phone number **/
+
+.register-form__control--phone-number {
+  @extend %form__control;
+  margin-bottom: 1.2rem;
+  position: relative;
+}
+
+.register-form__control-column--area-code {
+  @extend %column-3;
+  padding: 0 1rem;
+  padding-left: 0;
+
+  @media (--viewport-max-mobile-landscape) {
+    width: 40%;
+  }
+}
+
+.register-form__control-column--local-number {
+  @extend %column-9;
+  padding: 0 1rem;
+  padding-right: 0;
+
+  @media (--viewport-max-mobile-landscape) {
+    width: 60%;
+  }
+}
+
+.register-form__control-column--local-number--wide {
+  @extend %form__control;
+}
+
+.register-form__control--phone-number .intl-tel-input {
+  display: block;
+}
+
+.register-form__control--phone-number .intl-tel-input.allow-dropdown .flag-container:hover .selected-flag {
+  background-color: inherit;
+}
+
+.intl-tel-input .iti-flag {
+  background-image: inline("../node_modules/intl-tel-input/build/img/flags.png");
+
+  @media only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+    background-image: inline("../node_modules/intl-tel-input/build/img/flags@2x.png");
+  }
+}
+
+.register-form__select--country-code {
+  @extend %form__text-field;
+
+  /* select element don't respect line-height, but only height */
+  height: 3.5rem;
+}
+
+.register-form__label--country-code {
+  @extend %form__label;
+}
+
+.register-form__label--local-number {
+  @extend %form__label;
+}
+
+.register-form__field--local-number {
+  @extend %form__text-field;
+}
+
+.register-form__link--why-phone-number {
+  margin-left: 2rem;
+}
+
+.register-form__tooltip--phone-number {
+  @extend %font-text-1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  padding: 2rem;
+  color: #333;
+  border: 2px solid #eaeaea;
+  background: #fff;
+  max-width: 36rem;
+}
+
+.register-form__tooltip--phone-number__close {
+  float: right;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+}
+
+.register-form__tooltip--phone-number--nojs {
+  position: relative;
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: 100%;
+  clear: both;
+}
+
+.register-form__tooltip--phone-number--nojs .register-form__tooltip--phone-number__close {
+  display: none;
+}
+
+.register-form__icon--close {
+  background-image: inline("../form-foundations/icon-close.svg");
+  width: 3rem;
+  height: 3rem;
+  display: block;
+}
+
 
 /** Field (checkbox): GNM Marketing **/
 

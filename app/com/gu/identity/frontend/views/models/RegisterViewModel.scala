@@ -20,6 +20,7 @@ case class RegisterViewModel(
     hasErrors: Boolean,
     errors: RegisterErrorViewModel,
     showStandfirst: Boolean,
+    askForPhoneNumber: Boolean,
 
     csrfToken: Option[CSRFToken],
     returnUrl: String,
@@ -31,7 +32,9 @@ case class RegisterViewModel(
     links: RegisterLinks,
 
     resources: Seq[PageResource with Product],
-    indirectResources: Seq[PageResource with Product])
+    indirectResources: Seq[PageResource with Product],
+    countryCodes: Option[CountryCodes]
+  )
   extends ViewModel with ViewModelResources
 
 
@@ -50,6 +53,7 @@ object RegisterViewModel {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
 
+    val codes = countryCodes(clientId)
     RegisterViewModel(
       layout = layout,
 
@@ -62,6 +66,7 @@ object RegisterViewModel {
       errors = RegisterErrorViewModel(errors),
 
       showStandfirst = showStandfirst(activeTests, clientId),
+      askForPhoneNumber = askForPhoneNumber(clientId),
 
       csrfToken = csrfToken,
       returnUrl = returnUrl.url,
@@ -73,13 +78,25 @@ object RegisterViewModel {
       links = RegisterLinks(returnUrl, skipConfirmation, clientId),
 
       resources = layout.resources,
-      indirectResources = layout.indirectResources
+      indirectResources = layout.indirectResources,
+
+      countryCodes = codes
+
     )
   }
 
   private def showStandfirst(activeTests: ActiveMultiVariantTests, clientId: Option[ClientID]) =
     clientId.contains(GuardianMembersClientID) && activeTests.contains(RegisterMembershipStandfirstTest)
 
+  private def askForPhoneNumber(clientId: Option[ClientID]) =
+    clientId.contains(GuardianCommentersClientID)
+
+  private def countryCodes(clientId: Option[ClientID]) : Option[CountryCodes] = {
+    clientId match {
+      case Some(c) => if (c.id == "comments") Option(CountryCodes.apply) else None
+      case _ => None
+    }
+  }
 }
 
 

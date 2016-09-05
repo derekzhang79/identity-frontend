@@ -9,16 +9,17 @@ const STORAGE_KEY = 'gu_id_register_state';
 
 
 class RegisterFormFields {
-  constructor(firstNameField, lastNameField, emailField, usernameField, optionalCountryCode, optionalPhoneNumber) {
+  constructor(firstNameField, lastNameField, emailField, usernameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber) {
     this.firstName = firstNameField;
     this.lastName = lastNameField;
     this.email = emailField;
     this.username = usernameField;
     this.optionalCountryCode = optionalCountryCode;
+    this.optionalCountryIsoName = optionalCountryIsoName;
     this.optionalPhoneNumber = optionalPhoneNumber;
   }
 
-  setValues( { firstName, lastName, email, username, optionalCountryCode, optionalPhoneNumber } = {} ) {
+  setValues( { firstName, lastName, email, username, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber } = {} ) {
     this.firstName.setValue( firstName );
     this.lastName.setValue( lastName );
     this.email.setValue( email );
@@ -28,6 +29,9 @@ class RegisterFormFields {
     }
     if (this.optionalCountryCode) {
       this.optionalCountryCode.setValue(optionalCountryCode);
+    }
+    if (this.optionalCountryIsoName) {
+      this.optionalCountryIsoName.setValue(optionalCountryIsoName);
     }
   }
 
@@ -42,10 +46,10 @@ class RegisterFormFields {
 
 
 class RegisterFormModel {
-  constructor( formElement, firstNameField, lastNameField, emailField, usernameField, optionalCountryCode, optionalPhoneNumber ) {
+  constructor( formElement, firstNameField, lastNameField, emailField, usernameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber ) {
     this.formElement = formElement;
 
-    this.fields = new RegisterFormFields( firstNameField, lastNameField, emailField, usernameField, optionalCountryCode, optionalPhoneNumber );
+    this.fields = new RegisterFormFields( firstNameField, lastNameField, emailField, usernameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber );
 
     this.addBindings();
   }
@@ -76,21 +80,23 @@ class RegisterFormModel {
     const usernameField = getElementById( 'register_field_username' );
     const optionalPhoneNumber = getElementById('register_field_localNumber');
     const optionalCountryCode = getElementById('register_field_countryCode');
+    const optionalCountryIsoName = getElementById('register_field_countryIsoName');
 
     if ( form && firstNameField && lastNameField && emailField && usernameField ) {
-      return new RegisterFormModel( form, firstNameField, lastNameField, emailField, usernameField, optionalCountryCode, optionalPhoneNumber );
+      return new RegisterFormModel( form, firstNameField, lastNameField, emailField, usernameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber );
     }
   }
 }
 
 
 class RegisterFormState {
-  constructor( firstName = "", lastName = "", email = "", username = "", optionalCountryCode = "", optionalPhoneNumber = "" ) {
+  constructor( firstName = "", lastName = "", email = "", username = "", optionalCountryCode = "", optionalCountryIsoName = "", optionalPhoneNumber = "" ) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.username = username;
     this.optionalCountryCode = optionalCountryCode;
+    this.optionalCountryIsoName = optionalCountryIsoName;
     this.optionalPhoneNumber = optionalPhoneNumber;
   }
 
@@ -101,8 +107,8 @@ class RegisterFormState {
   /**
    * @return {RegisterFormState}
    */
-  static fromObject( { firstName, lastName, email, username, optionalCountryCode, optionalPhoneNumber } = {} ) {
-    return new RegisterFormState( firstName, lastName, email, username, optionalCountryCode, optionalPhoneNumber );
+  static fromObject( { firstName, lastName, email, username, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber } = {} ) {
+    return new RegisterFormState( firstName, lastName, email, username, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber );
   }
 
   /**
@@ -131,7 +137,7 @@ export function init() {
     form.loadState();
 
     if (form.fields.optionalPhoneNumber) {
-      initPhoneField(form, form.fields.optionalCountryCode, form.fields.optionalPhoneNumber);
+      initPhoneField(form, form.fields.optionalCountryCode, form.fields.optionalCountryIsoName, form.fields.optionalPhoneNumber);
     }
   }
 

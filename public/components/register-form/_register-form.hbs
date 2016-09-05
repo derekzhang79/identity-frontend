@@ -47,11 +47,12 @@
                 <label class="register-form__label--country-code" for="register_field_countryCode">
                   {{ registerPageText.countryCode }}
                 </label>
+                <input type="hidden" id="register_field_countryIsoName" />
                 <select class="register-form__select--country-code" id="register_field_countryCode" type="tel"
                         name="countryCode" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
-              {{#each countryCodes.codes }}
-              <option value="{{ code }}">+ {{ code }}</option>
-              {{/ each }}
+                  {{#each countryCodes.codes }}
+                  <option value="{{ code }}">+ {{ code }}</option>
+                  {{/ each }}
                 </select>
             </div>
             <div class="register-form__control-column--local-number">

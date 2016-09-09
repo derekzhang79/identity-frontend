@@ -1,7 +1,5 @@
 package com.gu.identity.service.client.request
 
-import javafx.scene.chart.LineChart.SortingPolicy
-
 import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 import com.gu.identity.frontend.request.RegisterActionRequestBody
 import com.gu.identity.service.client._

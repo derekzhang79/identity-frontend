@@ -2,7 +2,7 @@ package com.gu.identity.frontend.views.models
 
 import buildinfo.BuildInfo
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.models.{GuardianMembersClientID, ReturnUrl, ClientID}
+import com.gu.identity.frontend.models.{ClientID, GuardianJobsClientID, GuardianMembersClientID, ReturnUrl}
 import com.gu.identity.frontend.models.Text.{HeaderText, LayoutText}
 import com.gu.identity.frontend.models.text.FooterText
 import com.gu.identity.frontend.mvt
@@ -156,6 +156,7 @@ object LayoutLinks {
   private def logoUrl(configuration: Configuration, clientId: Option[ClientID]) =
     clientId match {
       case Some(GuardianMembersClientID) => configuration.membershipBaseUrl
+      case Some(GuardianJobsClientID) => configuration.jobsBaseUrl
       case _ => configuration.dotcomBaseUrl
     }
 

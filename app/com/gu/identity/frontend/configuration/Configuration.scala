@@ -19,6 +19,8 @@ case class Configuration(
   dotcomBaseUrl: String,
   membershipBaseUrl: String,
 
+  jobsBaseUrl: String,
+
   identityFederationApiHost: String,
 
   omnitureAccount: String,
@@ -60,6 +62,8 @@ object Configuration {
 
       membershipBaseUrl = getString("identity.frontend.membershipBaseUrl"),
 
+      jobsBaseUrl = getString("identity.frontend.jobsBaseUrl"),
+
       omnitureAccount = getString("omniture.account"),
 
       googleRecaptchaSiteKey = getString("google.recaptcha.site"),
@@ -91,6 +95,7 @@ object Configuration {
 
     dotcomBaseUrl = "http://www.theguardian.com",
     membershipBaseUrl = "https://members.theguardian.com",
+    jobsBaseUrl = "https://jobs.theguardian.com",
 
     omnitureAccount = "--test-omniture-account--",
 

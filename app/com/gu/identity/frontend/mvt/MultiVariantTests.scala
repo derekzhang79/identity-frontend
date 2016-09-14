@@ -76,17 +76,6 @@ sealed trait MultiVariantTestVariant {
   val id: String
 }
 
-
-case object RegisterMembershipStandfirstTest extends MultiVariantTest {
-  val name = "RegisterMembershipStandfirst"
-  val audience = 0.5
-  val audienceOffset = 0.0
-  val isServerSide = true
-  val variants = Seq(RegisterMembershipStandfirstVariantA)
-}
-
-case object RegisterMembershipStandfirstVariantA extends MultiVariantTestVariant { val id = "A" }
-
 /**
  * Define a MVT at runtime - should only be used for tests.
  */
@@ -101,7 +90,7 @@ private[mvt] trait RuntimeMultiVariantTestVariant extends MultiVariantTestVarian
 
 object MultiVariantTests {
 
-  def all: Set[MultiVariantTest] = Set(RegisterMembershipStandfirstTest)
+  def all: Set[MultiVariantTest] = Set()
 
   def allActive = all.filter(_.active)
 

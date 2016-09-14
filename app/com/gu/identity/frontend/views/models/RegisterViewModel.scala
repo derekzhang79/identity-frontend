@@ -65,7 +65,7 @@ object RegisterViewModel {
       hasErrors = errors.nonEmpty,
       errors = RegisterErrorViewModel(errors),
 
-      showStandfirst = showStandfirst(activeTests, clientId),
+      showStandfirst = showStandfirst(clientId),
       askForPhoneNumber = askForPhoneNumber(clientId),
 
       csrfToken = csrfToken,
@@ -85,8 +85,8 @@ object RegisterViewModel {
     )
   }
 
-  private def showStandfirst(activeTests: ActiveMultiVariantTests, clientId: Option[ClientID]) =
-    clientId.contains(GuardianMembersClientID) && activeTests.contains(RegisterMembershipStandfirstTest)
+  private def showStandfirst(clientId: Option[ClientID]) =
+    clientId.contains(GuardianJobsClientID)
 
   private def askForPhoneNumber(clientId: Option[ClientID]) =
     clientId.contains(GuardianCommentersClientID)

@@ -8,7 +8,8 @@
       ],
       "data": {
         "port": "8860",
-        "bucket": "gu-identity-frontend-dist"
+        "bucket": "gu-identity-frontend-dist",
+        "publicReadAcl": false
       }
     }
   },

@@ -1,7 +1,3 @@
-:root {
-  --c-members-button: #7d0068;
-}
-
 .skin-members {
   .header__logo-link {
     background-image: inline("guardian-members-logo.svg");
@@ -16,21 +12,6 @@
 
     @media (--viewport-max-tablet) {
       background-position: -1010px top;
-    }
-  }
-
-  .register-form__submit-button,
-  .signin-form__submit-button,
-  .register-confirm__complete-registration-button {
-    background-color: var(--c-members-button);
-
-    &:focus,
-    &:hover {
-      background-color: color(var(--c-members-button) lightness(- 10%));
-    }
-
-    &:focus {
-      box-shadow: 0 0 2px 2px color(var(--c-members-button) alpha(50%));
     }
   }
 

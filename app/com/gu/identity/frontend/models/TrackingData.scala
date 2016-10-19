@@ -7,7 +7,6 @@ import play.api.mvc.RequestHeader
 case class TrackingData(returnUrl:Option[String],
                         trackingReturnUrl:Option[String],
                         registrationType: Option[String],
-                        omnitureSVi: Option[String],
                         ipAddress: Option[String],
                         referrer: Option[String],
                         userAgent: Option[String]) {
@@ -15,7 +14,6 @@ case class TrackingData(returnUrl:Option[String],
     returnUrl.map("returnUrl" -> _),
     trackingReturnUrl.map("trackingReturnUrl" -> _),
     registrationType.map("trackingRegistrationType" -> _),
-    omnitureSVi.map("trackingOmnitureSVI" -> _),
     ipAddress.map("trackingIpAddress" -> _),
     referrer.map("trackingReferer" -> _),
     userAgent.map("trackingUserAgent" -> _)
@@ -29,7 +27,6 @@ object TrackingData extends RemoteAddress {
       returnUrl = returnUrl,
       trackingReturnUrl = returnUrl,
       registrationType = request.getQueryString("type"),
-      omnitureSVi =  request.cookies.get("S_VI").map(_.value),
       ipAddress = clientIp(request),
       referrer =  request.headers.get("Referer"),
       userAgent = request.headers.get("User-Agent")

@@ -23,8 +23,6 @@ case class Configuration(
 
   identityFederationApiHost: String,
 
-  omnitureAccount: String,
-
   recaptchaEnabled: Boolean,
   googleRecaptchaSiteKey: String,
   googleRecaptchaSecretKey: String,
@@ -64,8 +62,6 @@ object Configuration {
 
       jobsBaseUrl = getString("identity.frontend.jobsBaseUrl"),
 
-      omnitureAccount = getString("omniture.account"),
-
       googleRecaptchaSiteKey = getString("google.recaptcha.site"),
 
       googleRecaptchaSecretKey = getString("google.recaptcha.secret"),
@@ -96,8 +92,6 @@ object Configuration {
     dotcomBaseUrl = "http://www.theguardian.com",
     membershipBaseUrl = "https://members.theguardian.com",
     jobsBaseUrl = "https://jobs.theguardian.com",
-
-    omnitureAccount = "--test-omniture-account--",
 
     googleRecaptchaSiteKey = "--recaptcha-key--",
 

@@ -70,7 +70,7 @@
         "LatencyAlarmThreshold": 0.5,
         "LatencyAlarmPeriod": 60,
         "NotificationAlarmPeriod": 1200,
-        "InstanceType": "t2.medium",
+        "InstanceType": "t2.small",
         "DesiredInstances": 3,
         "MaxInstances": 12
       },

@@ -159,7 +159,7 @@ const results = getClientSideActiveTestResults();
 ```
 
 #### Recording test results
-Test results will be recorded on page view automatically in Omniture and Ophan.
+Test results will be recorded on page view automatically in Ophan.
 But to have test results recorded correctly by the data team, a test definition
 must be created in the [guardian/frontend]() repo.
 

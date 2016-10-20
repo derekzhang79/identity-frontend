@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.views.models
 
+import buildinfo.BuildInfo
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
@@ -33,7 +34,8 @@ case class RegisterViewModel(
 
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product],
-    countryCodes: Option[CountryCodes]
+    countryCodes: Option[CountryCodes],
+    gitCommitId: String
   )
   extends ViewModel with ViewModelResources
 
@@ -80,8 +82,8 @@ object RegisterViewModel {
       resources = layout.resources,
       indirectResources = layout.indirectResources,
 
-      countryCodes = codes
-
+      countryCodes = codes,
+      gitCommitId = BuildInfo.gitCommitId
     )
   }
 

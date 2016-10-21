@@ -1,8 +1,7 @@
 {{# partial "pageTitle" }}{{ registerPageText.pageTitle }}{{/ partial }}
 
 {{# partial "content" }}
-
-  <h1 class="page-heading{{# showStandfirst }}--with-standfirst{{/ showStandfirst }}">{{ registerPageText.title }}</h1>
+  <h1 class="page-heading{{# showStandfirst }}--with-standfirst{{/ showStandfirst }} commitId="{{ gitCommitId }}">{{ registerPageText.title }}</h1>
 
   {{# showStandfirst }}
     <section class="page-standfirst">

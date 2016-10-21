@@ -146,17 +146,12 @@ export function init() {
 }
 
 function checkForCredentials() {
-  //Only do this for the membership registration page
-  if (!window.location.search.includes("returnUrl=https://membership.theguardian.com"))
-    return;
-
   if (navigator.credentials) {
     navigator.credentials.get({
       password: true,
     })
       .then(c => {
         if (c instanceof PasswordCredential) {
-          console.log("Credentials exist, redirect to sign in page");
           var link = getElementById("sign_in_page_link");
           window.location.replace(link.elem.href);
         }

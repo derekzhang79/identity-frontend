@@ -68,7 +68,7 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
   it should "Use the membership return url for clientId=members as the default fallback" in {
     val result = ReturnUrl(None, None, config, Some(GuardianMembersClientID))
 
-    result.url shouldEqual config.membershipBaseUrl
+    result.url shouldEqual config.preferredMembershipUrl
     result shouldBe 'default
   }
 }

@@ -153,7 +153,7 @@ object LayoutLinks {
 
   private def logoUrl(configuration: Configuration, clientId: Option[ClientID]) =
     clientId match {
-      case Some(GuardianMembersClientID) => configuration.membershipBaseUrl
+      case Some(GuardianMembersClientID) => configuration.preferredMembershipUrl
       case Some(GuardianJobsClientID) => configuration.jobsBaseUrl
       case _ => configuration.dotcomBaseUrl
     }

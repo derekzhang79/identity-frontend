@@ -49,7 +49,6 @@ case class LayoutViewModel private(
  * Config that will be exposed as Javascript inlined into the html response.
  */
 case class JavascriptConfig(
-    omnitureAccount: String,
     sentryDsn: String,
     mvtTests: Seq[MultiVariantTest],
     appVersion: String = BuildInfo.gitCommitId) {
@@ -98,7 +97,6 @@ object LayoutViewModel {
       .map(c => s"skin-${c.id}")
 
     val config = JavascriptConfig(
-      omnitureAccount = configuration.omnitureAccount,
       sentryDsn = configuration.sentryDsnJs,
       mvtTests = MultiVariantTests.all.toSeq
     )

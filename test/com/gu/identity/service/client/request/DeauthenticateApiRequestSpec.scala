@@ -18,7 +18,6 @@ class DeauthenticateApiRequestSpec extends WordSpec with Matchers with MockitoSu
     returnUrl = Some("https://profile.theguardian.com"),
     trackingReturnUrl = Some("https://profile.theguardian.com"),
     registrationType = Some("facebook"),
-    omnitureSVi = Some("omnitureCode"),
     ipAddress = Some("127.0.0.1"),
     referrer = Some("http://www.theguardian.com"),
     userAgent = Some("chrome")

@@ -41,7 +41,7 @@ object ReturnUrl {
     defaultFromUrl(configuration.dotcomBaseUrl)
 
   def defaultForMembership(configuration: Configuration) =
-    defaultFromUrl(configuration.membershipBaseUrl)
+    defaultFromUrl(configuration.preferredMembershipUrl)
 
   def defaultForClient(configuration: Configuration, clientId: Option[ClientID]) =
     clientId match {

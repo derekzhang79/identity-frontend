@@ -4,9 +4,9 @@ import play.api.i18n.Messages
 
 object Text {
   object SignInPageText {
-    def toMap(implicit messages: Messages): Map[String, String] = {
+    def toMap(isMembership: Boolean)(implicit messages: Messages): Map[String, String] = {
       Map (
-        "title" -> messages("signin.title"),
+        "title" -> (if(isMembership) messages("signin.title.membership") else messages("signin.title")),
         "pageTitle" -> messages("signin.pagetitle"),
         "prelude" -> messages("signin.prelude"),
         "preludeMoreInfo" -> messages("signin.prelude.moreinfo"),

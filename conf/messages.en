@@ -1,6 +1,7 @@
 layout.pagetitle=Identity | The Guardian
 
 signin.title=Sign in to the Guardian
+signin.title.membership=Sign in to the Guardian to become a member
 signin.pagetitle=Sign in
 signin.prelude=Creating an account means you can save articles for later, leave comments, enter competitions, become a member and lots more.
 signin.prelude.moreinfo=Want to know more?
@@ -18,6 +19,7 @@ signin.signup=Sign up
 # com.gu.identity.frontend.models.text.RegisterText
 register.pageTitle=Register
 register.title=Create your Guardian account
+register.title.membership=Create your Guardian account to become a member
 register.standfirst=Register today to shortlist and apply for jobs more easily.
 register.divideText=or
 register.name=Name

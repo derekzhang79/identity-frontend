@@ -28,7 +28,7 @@ case class RegisterText private(
     becausePhone: String)
 
 object RegisterText {
-  def apply()(implicit messages: Messages): RegisterText =
+  def loadText(isMembership : Boolean)(implicit messages: Messages): RegisterText =
     RegisterText(
       `3rdPartyMarketing` = messages("register.3rdPartyMarketing"),
       createAccount = messages("register.createAccount"),
@@ -45,7 +45,7 @@ object RegisterText {
       signIn = messages("register.signIn"),
       signInCta = messages("register.signInCta"),
       standfirst = messages("register.standfirst"),
-      title = messages("register.title"),
+      title = if(isMembership) messages("register.title.membership") else messages("register.title"),
       username = messages("register.username"),
       usernameHelp = messages("register.usernameHelp"),
       phone = messages("register.phone"),

@@ -131,6 +131,7 @@ class RegisterFormState {
 
 
 export function init() {
+  checkForCredentials();
   const form = RegisterFormModel.fromDocument();
 
   if ( form ) {
@@ -143,3 +144,18 @@ export function init() {
 
   return form;
 }
+
+function checkForCredentials() {
+  if (navigator.credentials) {
+    navigator.credentials.get({
+      password: true,
+    })
+      .then(c => {
+        if (c instanceof PasswordCredential) {
+          var link = getElementById("sign_in_page_link");
+          window.location.replace(link.elem.href);
+        }
+      });
+  }
+}
+

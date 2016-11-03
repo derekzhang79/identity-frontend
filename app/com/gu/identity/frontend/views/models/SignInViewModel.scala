@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views.models
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.csrf.CSRFToken
-import com.gu.identity.frontend.models.{GroupCode, ClientID, UrlBuilder, ReturnUrl}
+import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.models.Text._
 import com.gu.identity.frontend.mvt.ActiveMultiVariantTests
 import play.api.i18n.Messages
@@ -51,16 +51,21 @@ object SignInViewModel {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
-      getRecaptchaModel(configuration, isError = !errors.isEmpty, recaptchaEnabled = configuration.recaptchaEnabled)
+      getRecaptchaModel(configuration, isError = errors.nonEmpty, recaptchaEnabled = configuration.recaptchaEnabled)
 
     val resources = getResources(layout, recaptchaModel) ++ Seq(IndirectlyLoadedExternalResources(UrlBuilder(configuration.identityProfileBaseUrl,routes.SigninAction.signInWithSmartLock())))
+
+    val isMembership = clientId match {
+      case Some(GuardianMembersClientID) => true
+      case _ => false
+    }
 
     SignInViewModel(
       layout = layout,
 
       oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
-      signInPageText = SignInPageText.toMap,
+      signInPageText = SignInPageText.toMap(isMembership),
       terms = Terms.getTermsModel(group),
 
       hasErrors = errors.nonEmpty,

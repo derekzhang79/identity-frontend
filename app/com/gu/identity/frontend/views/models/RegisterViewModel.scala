@@ -56,12 +56,17 @@ object RegisterViewModel {
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
 
     val codes = countryCodes(clientId)
+
+    val isMembership = clientId match {
+      case Some(GuardianMembersClientID) => true
+      case _ => false
+    }
     RegisterViewModel(
       layout = layout,
 
       oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
-      registerPageText = RegisterText(),
+      registerPageText = RegisterText.loadText(isMembership),
       terms = Terms.getTermsModel(group),
 
       hasErrors = errors.nonEmpty,

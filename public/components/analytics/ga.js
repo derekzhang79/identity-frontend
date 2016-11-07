@@ -1,14 +1,16 @@
 /**
  * GA Tracking
  */
-export function init() {
+import { configuration } from '../configuration/configuration';
 
-  return record();
+export function init() {
+  const gaUID = configuration.gaUID;
+  return record(gaUID);
 }
 
-function record() {
+function record(gaUID) {
   loadGA();
-  ga('create', 'UA-78705427-4', 'auto');
+  ga('create', gaUID, 'auto');
   ga('send', 'pageview');
 }
 

@@ -33,6 +33,8 @@ case class Configuration(
   sentryDsnJs: String,
   sentryDsnScala: String,
 
+  gaUID: String,
+
   underlying: PlayConfiguration)
 
 
@@ -74,6 +76,8 @@ object Configuration {
 
       sentryDsnScala = getString("sentry.dsn.scala"),
 
+      gaUID = getString("ga-uid"),
+
       underlying = appConfiguration
     )
   }
@@ -104,6 +108,8 @@ object Configuration {
     sentryDsnJs = "--stubbed-sentry-dsn-js--",
 
     sentryDsnScala = "--stubbed-sentry-dsn-scala--",
+
+    gaUID = "UA-78705427-123123",
 
     underlying = PlayConfiguration.empty
   )

@@ -3,14 +3,15 @@
 import { getElementById } from '../browser/browser';
 
 class Configuration {
-  constructor( sentryDsn, mvtTests, appVersion ) {
+  constructor( sentryDsn, mvtTests, appVersion, gaUID ) {
     this.sentryDsn = sentryDsn;
     this.mvtTests = mvtTests;
     this.appVersion = appVersion;
+    this.gaUID = gaUID;
   }
 
-  static fromObject( { sentryDsn, mvtTests, appVersion } ) {
-    return new Configuration( sentryDsn, mvtTests, appVersion );
+  static fromObject( { sentryDsn, mvtTests, appVersion, gaUID } ) {
+    return new Configuration( sentryDsn, mvtTests, appVersion, gaUID );
   }
 
   static fromDocument() {

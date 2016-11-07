@@ -53,7 +53,8 @@ case class LayoutViewModel private(
 case class JavascriptConfig(
     sentryDsn: String,
     mvtTests: Seq[MultiVariantTest],
-    appVersion: String = BuildInfo.gitCommitId) {
+    appVersion: String = BuildInfo.gitCommitId,
+    gaUID: String) {
   self =>
 
   import mvt.Implicits._
@@ -100,7 +101,8 @@ object LayoutViewModel {
 
     val config = JavascriptConfig(
       sentryDsn = configuration.sentryDsnJs,
-      mvtTests = MultiVariantTests.all.toSeq
+      mvtTests = MultiVariantTests.all.toSeq,
+      gaUID = configuration.gaUID
     )
 
     val runtime = activeTests.headOption.map { _ =>

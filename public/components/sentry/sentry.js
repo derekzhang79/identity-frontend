@@ -9,7 +9,6 @@ import Raven from 'raven-js';
 import { configuration } from '../configuration/configuration';
 
 function init() {
-  const dsn = configuration.sentryDsn;
   const ravenOptions = {
     whitelistUrls: [
       /ophan\.co\.uk/

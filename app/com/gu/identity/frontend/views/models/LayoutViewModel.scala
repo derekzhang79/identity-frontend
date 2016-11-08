@@ -24,7 +24,9 @@ case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
     IndirectlyLoadedImageResources,
     IndirectlyLoadedInlinedImageResources,
     IndirectlyLoadedExternalScriptResources("https://j.ophan.co.uk"),
+    IndirectlyLoadedExternalScriptResources("https://www.google-analytics.com"),
     IndirectlyLoadedExternalResources("https://app.getsentry.com/api/"),
+    IndirectlyLoadedExternalImageResources("https://www.google-analytics.com"),
     IndirectlyLoadedExternalImageResources("https://hits-secure.theguardian.com"),
     IndirectlyLoadedExternalImageResources("https://sb.scorecardresearch.com"),
     IndirectlyLoadedExternalImageResources("https://ophan.theguardian.com")
@@ -51,7 +53,8 @@ case class LayoutViewModel private(
 case class JavascriptConfig(
     sentryDsn: String,
     mvtTests: Seq[MultiVariantTest],
-    appVersion: String = BuildInfo.gitCommitId) {
+    appVersion: String = BuildInfo.gitCommitId,
+    gaUID: String) {
   self =>
 
   import mvt.Implicits._
@@ -98,7 +101,8 @@ object LayoutViewModel {
 
     val config = JavascriptConfig(
       sentryDsn = configuration.sentryDsnJs,
-      mvtTests = MultiVariantTests.all.toSeq
+      mvtTests = MultiVariantTests.all.toSeq,
+      gaUID = configuration.gaUID
     )
 
     val runtime = activeTests.headOption.map { _ =>

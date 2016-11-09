@@ -1,4 +1,6 @@
 .skin-members {
+  background-color: white;
+
   .header__logo-link {
     background-image: inline("guardian-members-logo.svg");
     height: height("guardian-members-logo.svg");
@@ -14,7 +16,6 @@
       background-position: -1010px top;
     }
   }
-
 }
 
 

@@ -1,0 +1,23 @@
+{{# partial "pageTitle" }}{{ registerPageText.pageTitle }}{{/ partial }}
+
+{{# partial "content" }}
+
+    <h1 class="page-heading commitId="{{ gitCommitId }}">{{ registerPageText.title }}</h1>
+
+    <section class="register__progress-bar-mem">
+      {{> components/progress-bar-mem/_progress-bar-mem }}
+    </section>
+
+    <h2 class="page-heading--small-2"> Create your profile </h2>
+
+    <section class="register__cta-section">
+        <p class="register__cta--sign-in">{{ registerPageText.signInCta }} <a id="sign_in_page_link" class="register__cta-link--sign-in" href="{{ links.signIn }}">{{ registerPageText.signIn }}</a></p>
+    </section>
+    <section class="register__section">
+      {{> components/oauth-cta/_oauth-cta }}
+      {{> components/register-form/_register-form }}
+    </section>
+    {{> components/terms/_terms }}
+{{/ partial }}
+
+{{> layout}}

@@ -1,0 +1,24 @@
+.progress-bar-mem {
+  @extend %content-container;
+  list-style-type: none;
+
+  li {
+    @extend %column-4;
+    @extend %progress-bar__label;
+    display:inline;
+
+    background-color: #f6f6f6;
+    border-right: 1px solid #aad8f1;
+  }
+
+  .active {
+    background-color: #aad8f1;
+  }
+}
+
+%progress-bar__label {
+  @extend %font-text-sans-2;
+  text-align: center;
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+}

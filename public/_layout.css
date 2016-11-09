@@ -93,6 +93,18 @@ body > section:last-of-type {
   padding-top: 1.4rem;
 }
 
+/**
+ * Second version of smaller heading
+ */
+.page-heading--small-2 {
+  @extend %font-sub-heading-3;
+  @extend %content-container;
+  border-top: 1px solid #4bc6df;
+  margin-top: 0.85rem;
+  padding-bottom: 1.71rem;
+  padding-top: 0.28rem;
+}
+
 .page-heading--with-standfirst {
   @extend .page-heading;
 

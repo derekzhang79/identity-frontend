@@ -5,6 +5,7 @@ import play.api.i18n.Messages
 case class RegisterText private(
     `3rdPartyMarketing`: String,
     createAccount: String,
+    continue: String,
     divideText: String,
     email: String,
     emailHelp: String,
@@ -33,6 +34,7 @@ object RegisterText {
     RegisterText(
       `3rdPartyMarketing` = messages("register.3rdPartyMarketing"),
       createAccount = messages("register.createAccount"),
+      continue = messages("register.continue"),
       divideText = messages("register.divideText"),
       email = messages("register.email"),
       emailHelp = messages("register.emailHelp"),
@@ -46,7 +48,7 @@ object RegisterText {
       signIn = messages("register.signIn"),
       signInCta = messages("register.signInCta"),
       standfirst = messages("register.standfirst"),
-      title = if(isMembership) messages("register.title.membership") else messages("register.title"),
+      title = if(isMembership) messages("register.title.supporter") else messages("register.title"),
       username = messages("register.username"),
       usernameNote = messages("register.usernameNote"),
       usernameHelp = messages("register.usernameHelp"),

@@ -1,3 +1,12 @@
+
+%oauth-mem-form__control-column {
+  @extend %column-6;
+
+  @media (--viewport-max-mobile-landscape) {
+    width: 100%;
+  }
+}
+
 .skin-members {
   background-color: white;
 
@@ -16,8 +25,91 @@
       background-position: -1010px top;
     }
   }
-}
 
+  .page-heading {
+    @extend %content-container-v2;
+    margin-top: 0.6rem;
+  }
+
+  .page-heading--small-2 {
+    @extend %content-container-v2;
+    margin-top: 0.4rem;
+    padding-left: 0;
+  }
+
+  .register__cta-section {
+    @extend %content-container-v2;
+    margin-top: 2.4rem;
+    margin-bottom: 0.7rem;
+    padding-right: 0;
+    text-align: right;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .register__section {
+    background-color: white;
+  }
+
+  .oauth {
+    @extend %content-container-v2;
+
+    background-color: #f6f6f6;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .oauth__cta--facebook,
+  .oauth__cta--google {
+    @extend %oauth-mem-form__control-column;
+
+    @media (--viewport-max-mobile-landscape) {
+      float: none;
+    }
+  }
+
+  .register-form {
+    @extend %content-container-v3;
+    padding: 0;
+  }
+
+  .register-form__prelude {
+    background-color: #f6f6f6;
+  }
+
+  .register-form__fieldset {
+    background-color: #f6f6f6;
+    padding: 0 0.5rem;
+  }
+
+  .register-form__label--username-note {
+    @extend %font-text-sans-1;
+    color: #767676;
+  }
+
+  .register-form__control--gnm-marketing {
+    padding-top: 1.8rem;
+  }
+
+  .register-form__control--3rd-party-marketing {
+    padding-bottom: 1.8rem;
+  }
+
+  .terms {
+    @extend %content-container-v3;
+
+    p {
+      border: none;
+      padding-top: 1.2rem;
+    }
+  }
+
+  .register-form__submit-button {
+    margin-bottom: 3.6rem;
+  }
+}
 
 @media (--viewport-min-tablet) {
   .skin-members {

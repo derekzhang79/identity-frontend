@@ -64,6 +64,7 @@
   .oauth__cta--facebook,
   .oauth__cta--google {
     @extend %oauth-mem-form__control-column;
+    font-weight: bold;
 
     @media (--viewport-max-mobile-landscape) {
       float: none;
@@ -98,7 +99,9 @@
   }
 
   .terms {
-    @extend %content-container-v3;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
 
     p {
       border: none;

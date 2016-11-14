@@ -1,13 +1,15 @@
 
 %oauth-mem-form__control-column {
   @extend %column-6;
+  float: left;
 
   @media (--viewport-max-mobile-landscape) {
     width: 100%;
+    float: none;
   }
 }
 
-.skin-members-B {
+.skin-members {
   background-color: white;
 
   .header__logo-link {
@@ -37,6 +39,15 @@
     padding-left: 0;
   }
 
+  .register__progress-bar-mem {
+    @extend %content-container-v2;
+    border-bottom: 0.1rem solid #4bc6df;
+    margin-top: 3.2rem;
+    padding-right: 0;
+    padding-left: 0;
+    padding-bottom: 1.2rem;
+  }
+
   .register__cta-section {
     @extend %content-container-v2;
     margin-top: 2.4rem;
@@ -46,6 +57,7 @@
 
     p {
       margin: 0;
+      color: #767676;
     }
   }
 
@@ -58,12 +70,31 @@
     background-color: #f6f6f6;
     padding-top: 2rem;
     padding-bottom: 2rem;
+
+  }
+
+  .oauth__cta-wrapper {
+    @extend %oauth-mem-form__control-column;
+  }
+
+  .oauth__cta-wrapper:first-child {
+    @media (--viewport-min-mobile-landscape) {
+      padding-right: 1rem;
+    }
+  }
+
+  .oauth__cta-wrapper:last-child {
+    @media (--viewport-min-mobile-landscape) {
+      padding-left: 1rem;
+    }
   }
 
   .oauth__cta--facebook,
   .oauth__cta--google {
-    @extend %oauth-mem-form__control-column;
+
+    padding-left: 1rem;
     font-weight: bold;
+    text-align: center;
 
     @media (--viewport-max-mobile-landscape) {
       float: none;
@@ -77,11 +108,31 @@
 
   .register-form__prelude {
     background-color: #f6f6f6;
+
+    @media (--viewport-min-mobile-landscape) {
+      padding-top: 3.5rem;
+    }
   }
 
   .register-form__fieldset {
     background-color: #f6f6f6;
     padding: 0 0.5rem;
+  }
+
+  .register-form__label--username {
+    line-height: 1.8rem;
+  }
+
+  .register-form__field--username-mobile {
+    @media (--viewport-min-mobile-landscape) {
+      display: none;
+    }
+  }
+
+  .register-form__field--username-non-mobile {
+    @media (--viewport-max-mobile-landscape) {
+      display: none;
+    }
   }
 
   .register-form__label--username-note {
@@ -103,13 +154,38 @@
     padding-right: 0;
 
     p {
+      @extend %font-text-sans-1;
+      color: #767676;
       border: none;
       padding-top: 1.2rem;
+      margin-bottom: 1.8rem;
     }
   }
 
-  .register-form__submit-button {
+  .register-form__control--submit {
     margin-bottom: 3.6rem;
+  }
+
+  .register-form__submit-button {
+    @extend %font-text-sans-2;
+    font-size: 2rem;
+    height: 5rem;
+    border-radius: 65rem;
+    padding-left: 2rem;
+    padding-right: 5.5rem;
+    background: var(--c-form-button--submit) inline("arrow-white-right-circle.svg") center right no-repeat;
+    background-position: right 0.7rem center;
+  }
+
+  .register__bottom-progress-bar-mem {
+    @extend %content-container-v2;
+    padding-right: 0;
+    padding-left: 0;
+    padding-bottom: 1.2rem;
+
+    @media (--viewport-min-mobile-landscape) {
+      display: none;
+    }
   }
 }
 

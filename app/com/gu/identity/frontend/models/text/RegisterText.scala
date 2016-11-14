@@ -23,6 +23,8 @@ case class RegisterText private(
     username: String,
     usernameNote: String,
     usernameHelp: String,
+    usernameHelpShortened: String,
+    usernameHelpExpanded: String,
     phone: String,
     countryCode: String,
 
@@ -52,6 +54,8 @@ object RegisterText {
       username = messages("register.username"),
       usernameNote = messages("register.usernameNote"),
       usernameHelp = messages("register.usernameHelp"),
+      usernameHelpShortened = messages("register.usernameHelpShortened"),
+      usernameHelpExpanded = messages("register.usernameHelpExpanded"),
       phone = messages("register.phone"),
       countryCode = messages("register.countryCode"),
       whyPhone = messages("register.whyPhone"),

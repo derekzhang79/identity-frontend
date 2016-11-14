@@ -1,15 +1,8 @@
-.register__progress-bar-mem {
-  @extend %content-container-v2;
-  padding-right: 0;
-  padding-left: 0;
-  padding-bottom: 1.2rem;
-  border-bottom: 0.1rem solid #4bc6df;
-}
-
 .progress-bar-mem {
   list-style-type: none;
-  margin-top: 3.2rem;
   padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 
   li {
     @extend %column-4;
@@ -22,6 +15,10 @@
 
   .active {
     background-color: #aad8f1;
+  }
+
+  .last-step {
+    border-right: 0;
   }
 }
 

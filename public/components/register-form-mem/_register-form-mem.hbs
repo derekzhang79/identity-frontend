@@ -77,7 +77,8 @@
 
         <div class="register-form__control--username">
             <label class="register-form__label--username" for="register_field_username"><span>{{ registerPageText.username }}</span> <span class="register-form__label--username-note">{{ registerPageText.usernameNote }}</span></label>
-            <input class="register-form__field--username" id="register_field_username" type="text" name="username" placeholder="{{ registerPageText.usernameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="6" maxlength="20" title="{{ registerPageText.usernameHelp }}" pattern="[a-zA-Z0-9]+" />
+            <input class="register-form__field--username register-form__field--username-mobile" id="register_field_username" type="text" name="username" placeholder="{{ registerPageText.usernameHelpShortened }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="6" maxlength="20" title="{{ registerPageText.usernameHelp }}" pattern="[a-zA-Z0-9]+" />
+            <input class="register-form__field--username register-form__field--username-non-mobile register-form__field--username-non-mobile" id="register_field_username" type="text" name="username" placeholder="{{ registerPageText.usernameHelpExpanded }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="6" maxlength="20" title="{{ registerPageText.usernameHelp }}" pattern="[a-zA-Z0-9]+" />
         </div>
 
       {{#each errors.usernameErrors }}

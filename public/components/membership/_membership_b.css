@@ -7,7 +7,7 @@
   }
 }
 
-.skin-members {
+.skin-members-B {
   background-color: white;
 
   .header__logo-link {
@@ -55,7 +55,6 @@
 
   .oauth {
     @extend %content-container-v2;
-
     background-color: #f6f6f6;
     padding-top: 2rem;
     padding-bottom: 2rem;

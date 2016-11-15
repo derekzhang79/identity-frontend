@@ -75,6 +75,11 @@
   @extend %form__text-field;
 }
 
+.register-form__label--username-note {
+  @extend %font-text-sans-1;
+  color: #767676;
+}
+
 
 /** Field: Email **/
 

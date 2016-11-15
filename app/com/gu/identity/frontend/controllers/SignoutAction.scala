@@ -10,6 +10,7 @@ import com.gu.identity.frontend.utils.ExecutionContexts
 import play.api.http.HttpErrorHandler
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import play.api.http.HeaderNames
 
 import scala.concurrent.Future
 
@@ -18,7 +19,8 @@ class SignOutAction(identityService: IdentityService, val messagesApi: MessagesA
   implicit def cookieNameToString(cookieName: Name): String = cookieName.toString
 
   def signOut(returnUrl: Option[String]) = Action.async { implicit request =>
-    val validReturnUrl = ReturnUrl(returnUrl, config)
+    val referrer = request.headers.get(HeaderNames.REFERER)
+    val validReturnUrl = ReturnUrl(returnUrl ,referrer, config, None)
     val trackingData = TrackingData(request, None)
     request.cookies.get(CookieName.SC_GU_U).map { cookie =>
       identityService.deauthenticate(cookie, trackingData).map {

@@ -69,7 +69,7 @@ object ViewRenderer {
       group = group)
 
     clientId match {
-      case Some(GuardianMembersClientID) => renderViewModel("register-page-membership", model)
+      case Some(GuardianMembersClientID) => renderViewModel("register-page", model)
       case _ => renderViewModel("register-page", model)
     }
   }

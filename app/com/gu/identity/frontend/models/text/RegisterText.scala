@@ -50,7 +50,7 @@ object RegisterText {
       signIn = messages("register.signIn"),
       signInCta = messages("register.signInCta"),
       standfirst = messages("register.standfirst"),
-      title = if(isMembership) messages("register.title.supporter") else messages("register.title"),
+      title = if(isMembership) messages("register.title.membership") else messages("register.title"),
       username = messages("register.username"),
       usernameNote = messages("register.usernameNote"),
       usernameHelp = messages("register.usernameHelp"),

@@ -12,35 +12,19 @@
 .skin-membersB {
   background-color: #fff;
 
-  .header__logo-link {
-    background-image: inline("guardian-members-logo.svg");
-    height: height("guardian-members-logo.svg");
-    width: width("guardian-members-logo.svg");
-    margin: 1rem 0 1.4rem;
-  }
-
-  .header {
-    background-image: inline("bg-masthead-72px.png");
-    background-position: center top;
-
-    @media (--viewport-max-tablet) {
-      background-position: -1010px top;
-    }
-  }
-
   .page-heading {
-    @extend %content-container-v2;
+    @extend %content-container--with-padding;
     margin-top: 0.6rem;
   }
 
   .page-heading--small-2 {
-    @extend %content-container-v2;
+    @extend %content-container--with-padding;
     margin-top: 0.4rem;
     padding-left: 0;
   }
 
   .register__progress-bar-mem {
-    @extend %content-container-v2;
+    @extend %content-container--with-padding;
     border-bottom: 0.1rem solid #4bc6df;
     margin-top: 3.2rem;
     padding-right: 0;
@@ -49,7 +33,7 @@
   }
 
   .register__cta-section {
-    @extend %content-container-v2;
+    @extend %content-container--with-padding;
     margin-top: 2.4rem;
     margin-bottom: 0.7rem;
     padding-right: 0;
@@ -62,11 +46,11 @@
   }
 
   .register__section {
-    background-color: white;
+    background-color: #fff;
   }
 
   .oauth {
-    @extend %content-container-v2;
+    @extend %content-container--with-padding;
     background-color: #f6f6f6;
     padding-top: 2rem;
     padding-bottom: 2rem;
@@ -102,7 +86,7 @@
   }
 
   .register-form {
-    @extend %content-container-v3;
+    @extend %content-container--no-padding;
     padding: 0;
   }
 
@@ -178,7 +162,7 @@
   }
 
   .register__bottom-progress-bar-mem {
-    @extend %content-container-v2;
+    @extend %content-container--with-padding;
     padding-right: 0;
     padding-left: 0;
     padding-bottom: 1.2rem;

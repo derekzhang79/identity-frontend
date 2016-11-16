@@ -35,13 +35,17 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
     Cookie(name = CookieName.GU_U.toString, value = "GU_U", maxAge = None, path = "/", domain = Some("dev-theguardian.com"), secure = false, httpOnly = false)
   )
 
-  def fakeSignOutRequest(cookies: Seq[Cookie] = Seq.empty) = FakeRequest("GET", "/signout").withCookies(cookies: _*)
+  val referer = "http://www.theguardian.com/refs"
+  val signOutCookie = Cookie(name = CookieName.GU_SO.toString, value = "data_for_GU_SO")
+
+  def fakeSignOutRequest(cookies: Seq[Cookie] = Seq.empty) = FakeRequest("GET", "/signout")
+    .withCookies(cookies: _*)
+    .withHeaders("Referer" -> referer)
 
   "GET /signout" should {
 
     "redirect to returnUrl when user has SC_GU_U cookie" in new WithControllerMockedDependencies {
       val returnUrl = Some("http://www.theguardian.com/yeah")
-      val signOutCookie = Cookie(name = CookieName.GU_SO.toString, value = "data_for_GU_SO")
 
       val captor = ArgumentCaptor.forClass(classOf[Cookie])
 
@@ -66,8 +70,6 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
 
     "redirect to returnUrl when Identity API call fails" in new WithControllerMockedDependencies {
       val returnUrl = Some("http://www.theguardian.com/yeah")
-
-      val signOutCookie = Cookie(name = CookieName.GU_SO.toString, value = "data_for_GU_SO")
 
       when(mockIdentityService.deauthenticate(argAny[Cookie], argAny[TrackingData])(argAny[ExecutionContext]))
         .thenReturn {
@@ -99,7 +101,6 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
 
     "set GU_SO cookie when user has SC_GU_U cookie" in new WithControllerMockedDependencies {
       val returnUrl = Some("http://www.theguardian.com/yeah")
-      val signOutCookie = Cookie(name = CookieName.GU_SO.toString, value = "data_for_GU_SO")
 
       val captor = ArgumentCaptor.forClass(classOf[Cookie])
 
@@ -123,4 +124,26 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
 
   }
 
+  "redirect to referrer when no return is supplied" in new WithControllerMockedDependencies {
+
+    val captor = ArgumentCaptor.forClass(classOf[Cookie])
+
+    when(mockIdentityService.deauthenticate(captor.capture(), argAny[TrackingData])(argAny[ExecutionContext]))
+      .thenReturn {
+        Future.successful {
+          Right(Seq(signOutCookie))
+        }
+      }
+
+    val result = call(controller.signOut(None), fakeSignOutRequest(signedInCookies))
+    val resultCookies = cookies(result)
+
+    captor.getValue.name mustEqual secureCookie.name
+    captor.getValue.value mustEqual secureCookie.value
+
+    status(result) mustEqual SEE_OTHER
+    redirectLocation(result) mustEqual Some(referer)
+
+    resultCookies.size mustEqual 7
+  }
 }

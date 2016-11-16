@@ -18,7 +18,7 @@
 
 
 @media (--viewport-min-tablet) {
-  .skin-members-A {
+  .skin-members {
     @mixin header__back-link--dark;
   }
 }

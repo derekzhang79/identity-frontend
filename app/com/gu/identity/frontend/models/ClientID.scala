@@ -23,8 +23,14 @@ sealed trait ClientID extends Product2[ClientID, String] {
   def _2 = id
 }
 
-case object GuardianMembersClientID extends ClientID {
+case object GuardianMembersAClientID extends ClientID {
   val id = "members"
+
+  override def hasSkin = true
+}
+
+case object GuardianMembersBClientID extends ClientID {
+  val id = "membersB"
 
   override def hasSkin = true
 }
@@ -41,7 +47,7 @@ case object GuardianCommentersClientID extends ClientID {
 }
 
 object ClientID {
-  def all: Seq[ClientID] = Seq(GuardianMembersClientID, GuardianCommentersClientID, GuardianJobsClientID)
+  def all: Seq[ClientID] = Seq(GuardianMembersAClientID, GuardianMembersBClientID, GuardianCommentersClientID, GuardianJobsClientID)
 
   def apply(clientId: String): Option[ClientID] =
     all.find(_.id == clientId)

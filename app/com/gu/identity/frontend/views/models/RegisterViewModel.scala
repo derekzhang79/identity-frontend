@@ -58,7 +58,8 @@ object RegisterViewModel {
     val codes = countryCodes(clientId)
 
     val isMembership = clientId match {
-      case Some(GuardianMembersClientID) => true
+      case Some(GuardianMembersAClientID) => true
+      case Some(GuardianMembersBClientID) => true
       case _ => false
     }
     RegisterViewModel(
@@ -66,7 +67,7 @@ object RegisterViewModel {
 
       oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
-      registerPageText = RegisterText.loadText(isMembership),
+      registerPageText = RegisterText.loadText(clientId),
       terms = Terms.getTermsModel(group),
 
       hasErrors = errors.nonEmpty,

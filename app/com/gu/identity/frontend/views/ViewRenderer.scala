@@ -5,7 +5,7 @@ import java.net.URI
 import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.HttpError
-import com.gu.identity.frontend.models.{ClientID, GroupCode, GuardianMembersClientID, ReturnUrl}
+import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.mvt.{MultiVariantTest, MultiVariantTestVariant}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
@@ -69,7 +69,8 @@ object ViewRenderer {
       group = group)
 
     clientId match {
-      case Some(GuardianMembersClientID) => renderViewModel("register-page", model)
+      case Some(GuardianMembersAClientID) => renderViewModel("register-page", model)
+      case Some(GuardianMembersBClientID) => renderViewModel("register-page-membership", model)
       case _ => renderViewModel("register-page", model)
     }
   }

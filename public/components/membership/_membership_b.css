@@ -9,7 +9,7 @@
   }
 }
 
-.skin-members-B {
+.skin-membersB {
   background-color: white;
 
   .header__logo-link {
@@ -190,7 +190,7 @@
 }
 
 @media (--viewport-min-tablet) {
-  .skin-members {
+  .skin-membersB {
     @mixin header__back-link--dark;
   }
 }

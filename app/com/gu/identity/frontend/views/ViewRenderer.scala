@@ -5,7 +5,7 @@ import java.net.URI
 import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.HttpError
-import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
+import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.mvt.{MultiVariantTest, MultiVariantTestVariant}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
@@ -68,7 +68,11 @@ object ViewRenderer {
       clientId = clientId,
       group = group)
 
-    renderViewModel("register-page", model)
+    clientId match {
+      case Some(GuardianMembersAClientID) => renderViewModel("register-page", model)
+      case Some(GuardianMembersBClientID) => renderViewModel("register-page-membership", model)
+      case _ => renderViewModel("register-page", model)
+    }
   }
 
   def renderRegisterConfirmation(configuration: Configuration, returnUrl: ReturnUrl, clientId: Option[ClientID])(implicit messages: Messages) = {

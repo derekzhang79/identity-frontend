@@ -26,9 +26,13 @@
 
 @import "components/register-confirmation/_register-confirmation";
 
-/** Membership skin **/
+/** Membership skin A and B **/
 
 @import "components/membership/_membership.css";
+
+/** Progress Bar **/
+
+@import "components/progress-bar-mem/_progress-bar-mem.css";
 
 /** Jobs skin **/
 

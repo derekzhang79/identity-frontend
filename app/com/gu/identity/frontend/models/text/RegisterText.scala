@@ -1,10 +1,12 @@
 package com.gu.identity.frontend.models.text
 
+import com.gu.identity.frontend.models.{ClientID, GuardianMembersAClientID, GuardianMembersBClientID}
 import play.api.i18n.Messages
 
 case class RegisterText private(
     `3rdPartyMarketing`: String,
     createAccount: String,
+    continue: String,
     divideText: String,
     email: String,
     emailHelp: String,
@@ -22,6 +24,8 @@ case class RegisterText private(
     username: String,
     usernameNote: String,
     usernameHelp: String,
+    usernameHelpShortened: String,
+    usernameHelpExpanded: String,
     phone: String,
     countryCode: String,
 
@@ -29,10 +33,11 @@ case class RegisterText private(
     becausePhone: String)
 
 object RegisterText {
-  def loadText(isMembership : Boolean)(implicit messages: Messages): RegisterText =
+  def loadText(clientId : Option[ClientID])(implicit messages: Messages): RegisterText =
     RegisterText(
       `3rdPartyMarketing` = messages("register.3rdPartyMarketing"),
       createAccount = messages("register.createAccount"),
+      continue = messages("register.continue"),
       divideText = messages("register.divideText"),
       email = messages("register.email"),
       emailHelp = messages("register.emailHelp"),
@@ -46,10 +51,16 @@ object RegisterText {
       signIn = messages("register.signIn"),
       signInCta = messages("register.signInCta"),
       standfirst = messages("register.standfirst"),
-      title = if(isMembership) messages("register.title.membership") else messages("register.title"),
+      title = clientId match {
+        case Some(GuardianMembersAClientID) => messages("register.title.membership")
+        case Some(GuardianMembersBClientID) => messages("register.title.supporter")
+        case _ => messages("register.title")
+      },
       username = messages("register.username"),
       usernameNote = messages("register.usernameNote"),
       usernameHelp = messages("register.usernameHelp"),
+      usernameHelpShortened = messages("register.usernameHelpShortened"),
+      usernameHelpExpanded = messages("register.usernameHelpExpanded"),
       phone = messages("register.phone"),
       countryCode = messages("register.countryCode"),
       whyPhone = messages("register.whyPhone"),

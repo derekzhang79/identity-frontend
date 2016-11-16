@@ -9,7 +9,8 @@
     @extend %progress-bar__label;
     background-color: #f6f6f6;
     border-right: 0.1rem solid #aad8f1;
-    display:inline;
+    display: inline;
+    padding-right: 1rem;
   }
 
   .active {

@@ -16,6 +16,7 @@ signin.rememberme=Remember me
 signin.signin=Sign in
 signin.noaccount=Don''t have an account?
 signin.signup=Sign up
+signin.continue=Continue
 
 # com.gu.identity.frontend.models.text.RegisterText
 register.pageTitle=Register

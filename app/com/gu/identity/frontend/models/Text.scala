@@ -21,6 +21,7 @@ object Text {
         "noAccount" -> messages("signin.noaccount"),
         "signUp" -> messages("signin.signup"),
         "conditions" -> messages("signin.conditions"),
+        "continue" -> messages("signin.continue"),
         "termsOfService" -> messages("signin.termsofservice"),
         "privacyPolicy" -> messages("signin.privacypolicy")
       )

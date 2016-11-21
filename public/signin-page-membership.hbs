@@ -1,0 +1,36 @@
+{{# partial "pageTitle" }}{{ signInPageText.pageTitle }}{{/ partial }}
+
+{{# partial "content" }}
+
+  {{#showPrelude}}
+      <div class="signin__prelude">
+          <p>{{signInPageText.prelude}}</p>
+          <p> {{signInPageText.preludeMoreInfo}} <a href="http://www.theguardian.com/help/identity-faq"> {{signInPageText.preludeFaq}} </a>.</p>
+      </div>
+  {{/showPrelude}}
+
+  <h1 class="page-heading">{{ signInPageText.title }}</h1>
+
+  <section class="signin__progress-bar-mem">
+    {{> components/progress-bar-mem/_progress-bar-mem }}
+  </section>
+
+  <section class="signin__cta-section">
+      <p class="signin__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" class="signin__cta-link--signup" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
+  </section>
+
+  <section class="signin__section">
+    {{> components/oauth-cta/_oauth-cta }}
+    {{> components/signin-form/_signin-form }}
+  </section>
+
+  {{> components/terms/_terms }}
+
+  <section class="signin__bottom-progress-bar-mem">
+    {{> components/progress-bar-mem/_progress-bar-mem }}
+  </section>
+
+
+{{/partial}}
+
+{{> layout}}

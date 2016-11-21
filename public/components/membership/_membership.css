@@ -49,7 +49,8 @@
     padding-left: 0;
   }
 
-  .register__progress-bar-mem {
+  .register__progress-bar-mem,
+  .signin__progress-bar-mem {
     @extend %content-container--with-padding;
     border-bottom: 0.1rem solid #4bc6df;
     margin-top: 3.2rem;
@@ -58,7 +59,8 @@
     padding-bottom: 1.2rem;
   }
 
-  .register__cta-section {
+  .register__cta-section,
+  .signin__cta-section {
     @extend %content-container--with-padding;
     margin-top: 2.4rem;
     margin-bottom: 0.7rem;
@@ -71,7 +73,8 @@
     }
   }
 
-  .register__section {
+  .register__section,
+  .signin__section {
     background-color: #fff;
   }
 
@@ -111,12 +114,14 @@
     }
   }
 
-  .register-form {
+  .register-form,
+  .signin-form {
     @extend %content-container--no-padding;
     padding: 0;
   }
 
-  .register-form__prelude {
+  .register-form__prelude,
+  .signin-form__prelude {
     background-color: #f6f6f6;
 
     @media (--viewport-min-mobile-landscape) {
@@ -124,7 +129,8 @@
     }
   }
 
-  .register-form__fieldset {
+  .register-form__fieldset,
+  .signin-form__fieldset {
     background-color: #f6f6f6;
     padding: 0 0.5rem;
   }
@@ -187,7 +193,8 @@
     background-position: right 0.7rem center;
   }
 
-  .register__bottom-progress-bar-mem {
+  .register__bottom-progress-bar-mem,
+  .signin__bottom-progress-bar-mem {
     @extend %content-container--with-padding;
     padding-right: 0;
     padding-left: 0;
@@ -198,4 +205,3 @@
     }
   }
 }
-

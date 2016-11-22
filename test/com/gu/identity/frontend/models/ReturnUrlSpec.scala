@@ -40,6 +40,11 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
     validUrlPath(new URI("http://theguardian.com/register/confirm")) should be(true)
     validUrlPath(new URI("http://theguardian.com")) should be(true)
     validUrlPath(new URI("http://theguardian.com/politics")) should be(true)
+    validUrlPath(new URI("http://theguardian.com/politics")) should be(true)
+  }
+
+  it should "Determine valid jobs app logout url" in {
+    validUrlPath(new URI("sso.com.theguardian.jobs")) should be(false)
   }
 
 

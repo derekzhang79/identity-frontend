@@ -42,7 +42,10 @@ object ViewRenderer {
       group = group
     )
 
-    val view = "signin-page"
+    val view = clientId match {
+      case Some(GuardianMembersBClientID) => "signin-page-membership"
+      case _ => "signin-page"
+    }
 
     renderViewModel(view, model)
   }

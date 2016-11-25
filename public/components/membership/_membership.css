@@ -147,18 +147,6 @@
     line-height: 1.8rem;
   }
 
-  .register-form__field--username-mobile {
-    @media (--viewport-min-mobile-landscape) {
-      display: none;
-    }
-  }
-
-  .register-form__field--username-non-mobile {
-    @media (--viewport-max-mobile-landscape) {
-      display: none;
-    }
-  }
-
   .register-form__label--username-note {
     @extend %font-text-sans-1;
     color: #767676;

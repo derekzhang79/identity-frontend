@@ -14,7 +14,6 @@ sealed trait RegisterServiceAppException extends RegisterAppException
 object RegisterServiceAppException {
   def apply(clientError: IdentityClientError): RegisterServiceAppException =
     clientError match {
-      case ClientRegistrationUsernameConflictError => RegisterUsernameConflictAppException
       case ClientRegistrationEmailValidationError => RegisterEmailInvalidConflictAppException
       case ClientRegistrationEmailConflictError => RegisterEmailConflictAppException
       case err: ClientBadRequestError => RegisterServiceBadRequestException(clientError)
@@ -52,13 +51,6 @@ case object RegisterEmailInvalidConflictAppException
   val id = RegisterActionInvalidEmailErrorID
 }
 
-case object RegisterUsernameConflictAppException
-  extends ServiceBadRequestAppException(ClientRegistrationUsernameConflictError)
-  with RegisterServiceAppException {
-
-  val id = RegisterUsernameConflictErrorID
-}
-
 case class RegisterActionInvalidFirstNameAppException(message: String)
   extends AbstractAppException(message)
   with BadRequestAppException
@@ -83,12 +75,12 @@ case class RegisterActionInvalidEmailAppException(message: String)
   val id = RegisterActionInvalidEmailErrorID
 }
 
-case class RegisterActionInvalidUsernameAppException(message: String)
+case class RegisterActionInvalidDisplaynameAppException(message: String)
   extends AbstractAppException(message)
   with BadRequestAppException
   with RegisterAppException {
 
-  val id = RegisterActionInvalidUsernameErrorID
+  val id = RegisterActionInvalidDisplaynameErrorID
 }
 
 case class RegisterActionInvalidPasswordAppException(message: String)

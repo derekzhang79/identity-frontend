@@ -29,7 +29,7 @@ object ReturnUrl {
       .flatMap(uriOpt)
       .orElse(refererHeader.flatMap(uriOpt))
       .filter { uri =>
-        validDomain(uri) && validUrlPath(uri) || validUrl(uri)
+        validUris.contains(uri) || validDomain(uri) && validUrlPath(uri)
       }
       .map(uri => ReturnUrl(uri))
 
@@ -73,10 +73,6 @@ object ReturnUrl {
   private[models] def validDomain(uri: URI): Boolean = {
     val hostname = uri.getHost
     domains.exists(s".$hostname".endsWith(_))
-  }
-
-  private[models] def validUrl(uri: URI): Boolean = {
-    validUris.contains(uri)
   }
 
   private[models] def validUrlPath(uri: URI): Boolean = {

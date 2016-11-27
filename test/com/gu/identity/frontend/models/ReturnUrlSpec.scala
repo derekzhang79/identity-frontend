@@ -48,11 +48,6 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
     validUrlPath(new URI("http://theguardian.com/politics")) should be(true)
   }
 
-  it should "Determine valid uri" in {
-    validUrl(new URI("sso.com.theguardian.jobs://ssologoutsuccess")) should be(true)
-    validUrl(new URI("sso.com.theguardian.teachers://hello")) should be(false)
-  }
-
   it should "Retrieve default Return URL" in {
     def assertDefaultFallbackFor(in: ReturnUrl) = {
       in.url should be(config.dotcomBaseUrl)

@@ -24,10 +24,10 @@ object ErrorViewModel {
     RegisterBadRequestErrorID -> "One or more inputs was not valid; please try again.",
     RegisterActionBadRequestErrorID -> "One or more inputs was not valid; please try again.",
     RegisterEmailConflictErrorID -> "This email is already in use; please check you do not already have an account.",
-    RegisterActionInvalidFirstNameErrorID -> nonEmptyField("first name"),
-    RegisterActionInvalidLastNameErrorID -> nonEmptyField("last name"),
+    RegisterActionInvalidFirstNameErrorID -> alphaOnlyMinMaxLength("first name", 1, 20),
+    RegisterActionInvalidLastNameErrorID -> alphaOnlyMinMaxLength("last name", 1, 20),
     RegisterActionInvalidEmailErrorID -> "Invalid email address; please try again.",
-    RegisterActionInvalidDisplayNameErrorID -> "Invalid display name; your display name must be between 6 and 20 characters long and contain only letters and numbers.",
+    RegisterActionInvalidDisplayNameErrorID -> "Invalid display name; your display name must be between 2 and 30 characters long and contain only letters and numbers.",
     RegisterActionInvalidPasswordErrorID -> "Invalid password; your password must be between 6 and 72 characters long.",
 
     SocialRegistrationFacebookEmailErrorID -> "We need your email address when you sign in with Facebook so that we can keep in touch (you can choose which emails you receive in your account settings). Try again and allow access to your email address or provide it manually below.",
@@ -48,6 +48,8 @@ object ErrorViewModel {
     }
 
   private def nonEmptyField(fieldName: String) = s"${fieldName.capitalize} field must not be blank."
+
+  private def alphaOnlyMinMaxLength(fieldName: String, min: Int, max: Int) = s"${fieldName.capitalize} field must be between $min and $max characters long and contain only letters."
 
   val default: String = "There was an unexpected problem; please try again."
 

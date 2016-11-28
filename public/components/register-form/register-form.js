@@ -20,7 +20,7 @@ class RegisterFormFields {
     this.optionalHideDisplayName = optionalHideUsername;
   }
 
-  setValues( { firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername } = {} ) {
+  setValues( { firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber } = {} ) {
     this.firstName.setValue( firstName );
     this.lastName.setValue( lastName );
     this.email.setValue( email );
@@ -63,8 +63,7 @@ class RegisterFormModel {
 
   updateDisplayName(){
     if (this.fields.optionalHideDisplayName && this.fields.optionalHideDisplayName.value()) {
-      const username = this.fields.firstName.value() + this.fields.lastName.value();
-      console.log(username);
+      const username = (this.fields.firstName.value() + this.fields.lastName.value()).substring(0, 30); //limit the username to 30 chars as this is what the
       this.fields.displayName.setValue(username);
     }
   }

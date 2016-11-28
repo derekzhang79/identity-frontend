@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.views.models
 import com.gu.identity.frontend.errors.ErrorID
 import com.gu.identity.frontend.errors.ErrorIDs._
-case class RegisterErrorViewModel(usernameErrors: Seq[ErrorViewModel], emailErrors: Seq[ErrorViewModel], passwordErrors: Seq[ErrorViewModel], otherErrors: Seq[ErrorViewModel])
+case class RegisterErrorViewModel(displayNameErrors: Seq[ErrorViewModel], emailErrors: Seq[ErrorViewModel], passwordErrors: Seq[ErrorViewModel], otherErrors: Seq[ErrorViewModel])
 
 object RegisterErrorViewModel {
 
@@ -18,7 +18,7 @@ object RegisterErrorViewModel {
 
   private def getErrorField(id: String) = errorFieldByKey.get(id)
 
-  def mapErrorToErrorType(errors: Map[String, Option[String]], errorType: Option[String]) = {
+  def mapErrorToErrorType(errors: Map[String, Option[String]], errorType: Option[String]): Seq[ErrorViewModel] = {
     errors.filter {
       case (k, v) => v == errorType
       case _ => false

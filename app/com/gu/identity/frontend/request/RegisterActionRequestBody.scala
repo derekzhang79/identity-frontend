@@ -66,7 +66,7 @@ object RegisterActionRequestBody {
     import ReturnUrl.FormMapping.returnUrl
 
     def alphaNumericMinMaxLength(min : Int, max: Int): Mapping[String] = text.verifying(
-      "error.displayName", name => name.matches("[A-z0-9]+") && name.length > min && name.length < max
+      "error.displayName", name => name.matches("[A-z0-9]+") && name.length >= min && name.length <= max
     )
 
     private val password: Mapping[String] = text.verifying(
@@ -75,10 +75,10 @@ object RegisterActionRequestBody {
 
     def registerFormMapping(refererHeader: Option[String]): Mapping[RegisterActionRequestBody] =
       mapping(
-        "firstName" -> nonEmptyText,
-        "lastName" -> nonEmptyText,
+        "firstName" -> alphaNumericMinMaxLength(1, 20),
+        "lastName" -> alphaNumericMinMaxLength(1, 20),
         "email" -> email,
-        "displayName" -> alphaNumericMinMaxLength(5, 21),
+        "displayName" -> alphaNumericMinMaxLength(2, 30),
         "password" -> password,
         "countryCode" -> optional(text),
         "localNumber" -> optional(text),

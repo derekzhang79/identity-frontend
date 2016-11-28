@@ -23,6 +23,7 @@ register.pageTitle=Register
 register.title=Create your Guardian account
 register.title.membership=Create your Guardian account to become a member
 register.title.supporter=Become a Supporter
+register.title.member=Become a Member
 register.standfirst=Register today to shortlist and apply for jobs more easily.
 register.divideText=or
 register.name=Name

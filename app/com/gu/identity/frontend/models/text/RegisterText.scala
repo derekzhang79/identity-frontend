@@ -2,7 +2,6 @@ package com.gu.identity.frontend.models.text
 
 import com.gu.identity.frontend.models.{ClientID, GuardianMembersAClientID, GuardianMembersBClientID, ReturnUrl}
 import play.api.i18n.Messages
-import play.mvc.Http
 
 case class RegisterText private(
     `3rdPartyMarketing`: String,

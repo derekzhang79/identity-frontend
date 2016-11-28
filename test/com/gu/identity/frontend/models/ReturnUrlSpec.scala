@@ -31,8 +31,12 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
     ReturnUrl(None, Some("http://www.thegulocal.com/"), config, None) should be(ReturnUrl(new URI("http://www.thegulocal.com/")))
 
     ReturnUrl(None, Some("http://profile-origin2.thegulocal.com"), config, None) should be(ReturnUrl(new URI("http://profile-origin2.thegulocal.com")))
-  }
 
+    ReturnUrl(None, Some("sso.com.theguardian.jobs://ssologoutsuccess"), config, None) should be(ReturnUrl(new URI("sso.com.theguardian.jobs://ssologoutsuccess")))
+
+    ReturnUrl(None, Some("sso.com.theguardian.teachers://hello"), config, None) should be(ReturnUrl(new URI("http://www.theguardian.com"), isDefault = true))
+
+  }
 
   it should "Determine valid url path" in {
     validUrlPath(new URI("http://theguardian.com/signin")) should be(false)
@@ -41,7 +45,6 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
     validUrlPath(new URI("http://theguardian.com")) should be(true)
     validUrlPath(new URI("http://theguardian.com/politics")) should be(true)
   }
-
 
   it should "Retrieve default Return URL" in {
     def assertDefaultFallbackFor(in: ReturnUrl) = {

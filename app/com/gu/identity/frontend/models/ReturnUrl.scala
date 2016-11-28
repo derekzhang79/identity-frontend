@@ -19,6 +19,7 @@ object ReturnUrl {
 
   val domains = List(".theguardian.com", ".code.dev-theguardian.com", ".thegulocal.com")
   val invalidUrlPaths = List("/signin", "/register")
+  val validUris = List(new URI("sso.com.theguardian.jobs://ssologoutsuccess"))
 
   def apply(returnUrlParam: Option[String], configuration: Configuration): ReturnUrl =
     apply(returnUrlParam, refererHeader = None, configuration, clientId = None)
@@ -27,8 +28,9 @@ object ReturnUrl {
     returnUrlParam
       .flatMap(uriOpt)
       .orElse(refererHeader.flatMap(uriOpt))
-      .filter(validDomain)
-      .filter(validUrlPath)
+      .filter { uri =>
+        validUris.contains(uri) || validDomain(uri) && validUrlPath(uri)
+      }
       .map(uri => ReturnUrl(uri))
 
   def apply(returnUrlParam: Option[String], refererHeader: Option[String], configuration: Configuration, clientId: Option[ClientID]): ReturnUrl =

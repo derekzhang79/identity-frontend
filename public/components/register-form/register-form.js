@@ -94,7 +94,7 @@ class RegisterFormModel {
     const firstNameField = getElementById( 'register_field_firstname' );
     const lastNameField = getElementById( 'register_field_lastname' );
     const emailField = getElementById( 'register_field_email' );
-    const displayNameField = getElementById( 'register_field_displayname' );
+    const displayNameField = getElementById( 'register_field_displayName' );
     const optionalPhoneNumber = getElementById('register_field_localNumber');
     const optionalCountryCode = getElementById('register_field_countryCode');
     const optionalCountryIsoName = getElementById('register_field_countryIsoName');

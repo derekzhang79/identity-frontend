@@ -60,22 +60,22 @@
 }
 
 
-/** Field: Username **/
+/** Field: displayName **/
 
-.register-form__control--username {
+.register-form__control--displayName {
   @extend %form__control;
   margin-bottom: 1.2rem;
 }
 
-.register-form__label--username {
+.register-form__label--displayName {
   @extend %form__label;
 }
 
-.register-form__field--username {
+.register-form__field--displayName {
   @extend %form__text-field;
 }
 
-.register-form__label--username-note {
+.register-form__label--displayName-note {
   @extend %font-text-sans-1;
   color: #767676;
 }

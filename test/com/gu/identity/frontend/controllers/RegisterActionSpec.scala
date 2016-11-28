@@ -34,7 +34,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
      firstName: String = "first",
      lastName: String = "last",
      email: String = "test@email.com",
-     username: String = "username",
+     displayName: String = "displayName",
      password: String = "password",
      receiveGnmMarketing: Boolean = true,
      receive3rdPartyMarketing: Boolean = true,
@@ -45,7 +45,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "firstName" -> firstName,
       "lastName" -> lastName,
       "email" -> email,
-      "username" -> username,
+      "displayName" -> displayName,
       "password" -> password,
       "receiveGnmMarketing" -> receiveGnmMarketing.toString,
       "receive3rdPartyMarketing" -> receive3rdPartyMarketing.toString,
@@ -410,44 +410,44 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       queryParams.get("group") mustEqual group
     }
 
-    "return register-error-username if username is too short" in new WithControllerMockedDependencies {
-      val username = "12"
+    "return register-error-displayName if displayName is too short" in new WithControllerMockedDependencies {
+      val displayName = "12"
 
-      val result = call(controller.register, fakeRegisterRequest(username = username))
+      val result = call(controller.register, fakeRegisterRequest(displayName = displayName))
 
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("register-error-username")
+      queryParams.get("error") mustEqual Some("register-error-displayName")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
 
-    "return register-error-username if username is too long" in new WithControllerMockedDependencies {
-      val username = "123456789012345678901"
+    "return register-error-displayName if displayName is too long" in new WithControllerMockedDependencies {
+      val displayName = "123456789012345678901"
 
-      val result = call(controller.register, fakeRegisterRequest(username = username))
+      val result = call(controller.register, fakeRegisterRequest(displayName = displayName))
 
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("register-error-username")
+      queryParams.get("error") mustEqual Some("register-error-displayName")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }
 
-    "return register-error-username if username contains a non alphanumeric character" in new WithControllerMockedDependencies {
-      val username = "123456$"
+    "return register-error-displayName if displayName contains a non alphanumeric character" in new WithControllerMockedDependencies {
+      val displayName = "123456$"
 
-      val result = call(controller.register, fakeRegisterRequest(username = username))
+      val result = call(controller.register, fakeRegisterRequest(displayName = displayName))
 
       val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
       status(result) mustEqual SEE_OTHER
 
       queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("register-error-username")
+      queryParams.get("error") mustEqual Some("register-error-displayName")
 
       redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
     }

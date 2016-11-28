@@ -14,7 +14,7 @@ case class RegisterActionRequestBody private(
                                               firstName: String,
                                               lastName: String,
                                               email: String,
-                                              displayname: String,
+                                              displayName: String,
                                               password: String,
                                               countryCode: Option[String],
                                               localNumber: Option[String],
@@ -65,8 +65,8 @@ object RegisterActionRequestBody {
     import GroupCode.FormMappings.groupCode
     import ReturnUrl.FormMapping.returnUrl
 
-    private val displayname: Mapping[String] = text.verifying(
-      "error.displayname", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
+    private val displayName: Mapping[String] = text.verifying(
+      "error.displayName", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
     )
 
     private val password: Mapping[String] = text.verifying(
@@ -78,7 +78,7 @@ object RegisterActionRequestBody {
         "firstName" -> nonEmptyText,
         "lastName" -> nonEmptyText,
         "email" -> email,
-        "displayName" -> displayname,
+        "displayName" -> displayName,
         "password" -> password,
         "countryCode" -> optional(text),
         "localNumber" -> optional(text),

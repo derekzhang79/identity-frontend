@@ -53,7 +53,7 @@ object ErrorIDs {
   }
 
   case object RegisterActionInvalidDisplaynameErrorID extends ErrorID {
-    val key = "register-error-displayname"
+    val key = "register-error-displayName"
   }
 
   case object RegisterActionInvalidPasswordErrorID extends ErrorID {

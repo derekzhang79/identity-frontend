@@ -32,7 +32,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     val trackingData = TrackingData(request, body.returnUrl.flatMap(_.toStringOpt))
     identityService.registerThenSignIn(body, clientIp, trackingData).map {
       case Left(errors) =>
-        logger.error(s"User ${body.username} could not register: $errors $trackingData")
+        logger.error(s"Could not register: $errors $trackingData")
         Left(errors)
       case Right(cookies) => Right {
         registerSuccessRedirectUrl(cookies, body.returnUrl, body.skipConfirmation, body.groupCode, body.clientId)

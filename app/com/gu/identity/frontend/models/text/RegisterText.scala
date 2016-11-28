@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.models.text
 
-import com.gu.identity.frontend.models.{ClientID, GuardianMembersAClientID, GuardianMembersBClientID}
+import com.gu.identity.frontend.models.{ClientID, GuardianMembersAClientID, GuardianMembersBClientID, ReturnUrl}
 import play.api.i18n.Messages
 
 case class RegisterText private(
@@ -33,7 +33,7 @@ case class RegisterText private(
     becausePhone: String)
 
 object RegisterText {
-  def loadText(clientId : Option[ClientID])(implicit messages: Messages): RegisterText =
+  def loadText(clientId : Option[ClientID], returnUrl: ReturnUrl)(implicit messages: Messages): RegisterText =
     RegisterText(
       `3rdPartyMarketing` = messages("register.3rdPartyMarketing"),
       createAccount = messages("register.createAccount"),
@@ -53,7 +53,7 @@ object RegisterText {
       standfirst = messages("register.standfirst"),
       title = clientId match {
         case Some(GuardianMembersAClientID) => messages("register.title.membership")
-        case Some(GuardianMembersBClientID) => messages("register.title.supporter")
+        case Some(GuardianMembersBClientID) => if(returnUrl.url contains "supporter") messages("register.title.supporter") else messages("register.title.member")
         case _ => messages("register.title")
       },
       username = messages("register.username"),

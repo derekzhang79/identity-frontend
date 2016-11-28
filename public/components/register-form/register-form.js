@@ -17,7 +17,7 @@ class RegisterFormFields {
     this.optionalCountryCode = optionalCountryCode;
     this.optionalCountryIsoName = optionalCountryIsoName;
     this.optionalPhoneNumber = optionalPhoneNumber;
-    this.optionalHideUsername = optionalHideUsername;
+    this.optionalHideDisplayName = optionalHideUsername;
   }
 
   setValues( { firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername } = {} ) {
@@ -33,9 +33,6 @@ class RegisterFormFields {
     }
     if (this.optionalCountryIsoName) {
       this.optionalCountryIsoName.setValue(optionalCountryIsoName);
-    }
-    if (this.optionalHideUsername) {
-      this.optionalHideUsername.setValue(optionalHideUsername)
     }
   }
 
@@ -60,15 +57,15 @@ class RegisterFormModel {
 
   addBindings() {
     this.formElement.on( 'submit', this.formSubmitted.bind( this ) );
-    this.fields.firstName.on('blur', this.updateUsername.bind( this ));
-    this.fields.lastName.on('blur', this.updateUsername.bind( this ));
+    this.fields.firstName.on('blur', this.updateDisplayName.bind( this ));
+    this.fields.lastName.on('blur', this.updateDisplayName.bind( this ));
   }
 
-  updateUsername(){
-    if (this.fields.optionalHideUsername && this.fields.optionalHideUsername.value()) {
+  updateDisplayName(){
+    if (this.fields.optionalHideDisplayName && this.fields.optionalHideDisplayName.value()) {
       const username = this.fields.firstName.value() + this.fields.lastName.value();
       console.log(username);
-      this.fields.username.setValue(username);
+      this.fields.displayName.setValue(username);
     }
   }
 
@@ -83,9 +80,6 @@ class RegisterFormModel {
   }
 
   formSubmitted() {
-    if (this.fields.optionalHideUsername){
-      this.fields.username = this.fields.firstName + this.fields.lastName;
-    }
     this.saveState();
   }
 
@@ -98,7 +92,7 @@ class RegisterFormModel {
     const optionalPhoneNumber = getElementById('register_field_localNumber');
     const optionalCountryCode = getElementById('register_field_countryCode');
     const optionalCountryIsoName = getElementById('register_field_countryIsoName');
-    const optionalHideUsername = getElementById('register_field_hideUsername');
+    const optionalHideUsername = getElementById('register_field_hideDisplayName');
 
     if ( form && firstNameField && lastNameField && emailField && displayNameField ) {
       return new RegisterFormModel( form, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername);
@@ -108,7 +102,7 @@ class RegisterFormModel {
 
 
 class RegisterFormState {
-  constructor( firstName = "", lastName = "", email = "", displayName = "", optionalCountryCode = "", optionalCountryIsoName = "", optionalPhoneNumber = "", optionalHideUsername = false ) {
+  constructor( firstName = "", lastName = "", email = "", displayName = "", optionalCountryCode = "", optionalCountryIsoName = "", optionalPhoneNumber = "", optionalHideDisplayName = false ) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -116,7 +110,7 @@ class RegisterFormState {
     this.optionalCountryCode = optionalCountryCode;
     this.optionalCountryIsoName = optionalCountryIsoName;
     this.optionalPhoneNumber = optionalPhoneNumber;
-    this.optionalHideUsername = optionalHideUsername;
+    this.optionalHideDisplayName = optionalHideDisplayName;
   }
 
   save() {
@@ -126,8 +120,8 @@ class RegisterFormState {
   /**
    * @return {RegisterFormState}
    */
-  static fromObject( { firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername } = {} ) {
-    return new RegisterFormState( firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername );
+  static fromObject( { firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideDisplayName } = {} ) {
+    return new RegisterFormState( firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideDisplayName );
   }
 
   /**

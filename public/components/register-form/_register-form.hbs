@@ -2,8 +2,9 @@
   <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
   <input type="hidden" name="returnUrl" value="{{ returnUrl }}"/>
   <input type="hidden" name="skipConfirmation" value="{{ skipConfirmation }}"/>
-
-  <input type="hidden" name="hideUsername" id="register_field_hideUsername" value="{{ hideUsername }}"/>
+    {{# hideDisplayName }}
+        <input type="hidden" id="register_field_hideDisplayName" name="hideDisplayName" value="{{ hideDisplayName }}" />
+    {{/hideDisplayName}}
 
   {{# group }}
       <input type="hidden" name="groupCode" value="{{ group.id }}">
@@ -77,9 +78,9 @@
 
     {{/ askForPhoneNumber }}
 
-    <div class="register-form__control--displayName {{#if hideUsername}}hidden{{/if}}">
+    <div class="register-form__control--displayName {{#if hideDisplayName}}hidden{{/if}}">
         <label class="register-form__label--displayName" for="register_field_displayName"><span>{{ registerPageText.displayName }}</span> <span class="register-form__label--displayName-note">{{ registerPageText.displayNameNote }}</span></label>
-        <input class="register-form__field--displayName" id="register_field_displayName" type="text" name="displayName" placeholder="{{ registerPageText.displayNameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" title="{{ registerPageText.displayNameHelp }}" {{#unless hideUsername}} required minlength="6" maxlength="20" {{/unless}} />
+        <input class="register-form__field--displayName" id="register_field_displayName" type="text" name="displayName" placeholder="{{ registerPageText.displayNameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" title="{{ registerPageText.displayNameHelp }}" {{#unless hideDisplayName}} required minlength="6" maxlength="20" {{/unless}} />
     </div>
       {{#each errors.displayNameErrors }}
           <p id="{{ id }}" class="register-form__error">{{ message }}</p>

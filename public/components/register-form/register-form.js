@@ -9,7 +9,7 @@ const STORAGE_KEY = 'gu_id_register_state';
 
 
 class RegisterFormFields {
-  constructor(firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber) {
+  constructor(firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername) {
     this.firstName = firstNameField;
     this.lastName = lastNameField;
     this.email = emailField;
@@ -17,9 +17,10 @@ class RegisterFormFields {
     this.optionalCountryCode = optionalCountryCode;
     this.optionalCountryIsoName = optionalCountryIsoName;
     this.optionalPhoneNumber = optionalPhoneNumber;
+    this.optionalHideUsername = optionalHideUsername;
   }
 
-  setValues( { firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber } = {} ) {
+  setValues( { firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername } = {} ) {
     this.firstName.setValue( firstName );
     this.lastName.setValue( lastName );
     this.email.setValue( email );
@@ -32,6 +33,9 @@ class RegisterFormFields {
     }
     if (this.optionalCountryIsoName) {
       this.optionalCountryIsoName.setValue(optionalCountryIsoName);
+    }
+    if (this.optionalHideUsername) {
+      this.optionalHideUsername.setValue(optionalHideUsername)
     }
   }
 
@@ -46,16 +50,26 @@ class RegisterFormFields {
 
 
 class RegisterFormModel {
-  constructor( formElement, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber ) {
+  constructor( formElement, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername ) {
     this.formElement = formElement;
 
-    this.fields = new RegisterFormFields( firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber );
+    this.fields = new RegisterFormFields( firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername );
 
     this.addBindings();
   }
 
   addBindings() {
     this.formElement.on( 'submit', this.formSubmitted.bind( this ) );
+    this.fields.firstName.on('blur', this.updateUsername.bind( this ));
+    this.fields.lastName.on('blur', this.updateUsername.bind( this ));
+  }
+
+  updateUsername(){
+    if (this.fields.optionalHideUsername && this.fields.optionalHideUsername.value()) {
+      const username = this.fields.firstName.value() + this.fields.lastName.value();
+      console.log(username);
+      this.fields.username.setValue(username);
+    }
   }
 
   loadState() {
@@ -69,6 +83,9 @@ class RegisterFormModel {
   }
 
   formSubmitted() {
+    if (this.fields.optionalHideUsername){
+      this.fields.username = this.fields.firstName + this.fields.lastName;
+    }
     this.saveState();
   }
 
@@ -81,16 +98,17 @@ class RegisterFormModel {
     const optionalPhoneNumber = getElementById('register_field_localNumber');
     const optionalCountryCode = getElementById('register_field_countryCode');
     const optionalCountryIsoName = getElementById('register_field_countryIsoName');
+    const optionalHideUsername = getElementById('register_field_hideUsername');
 
     if ( form && firstNameField && lastNameField && emailField && displayNameField ) {
-      return new RegisterFormModel( form, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber );
+      return new RegisterFormModel( form, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername);
     }
   }
 }
 
 
 class RegisterFormState {
-  constructor( firstName = "", lastName = "", email = "", displayName = "", optionalCountryCode = "", optionalCountryIsoName = "", optionalPhoneNumber = "" ) {
+  constructor( firstName = "", lastName = "", email = "", displayName = "", optionalCountryCode = "", optionalCountryIsoName = "", optionalPhoneNumber = "", optionalHideUsername = false ) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -98,6 +116,7 @@ class RegisterFormState {
     this.optionalCountryCode = optionalCountryCode;
     this.optionalCountryIsoName = optionalCountryIsoName;
     this.optionalPhoneNumber = optionalPhoneNumber;
+    this.optionalHideUsername = optionalHideUsername;
   }
 
   save() {
@@ -107,8 +126,8 @@ class RegisterFormState {
   /**
    * @return {RegisterFormState}
    */
-  static fromObject( { firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber } = {} ) {
-    return new RegisterFormState( firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber );
+  static fromObject( { firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername } = {} ) {
+    return new RegisterFormState( firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername );
   }
 
   /**
@@ -152,7 +171,7 @@ function checkForCredentials() {
     })
       .then(c => {
         if (c instanceof PasswordCredential) {
-          var link = getElementById("sign_in_page_link");
+          const link = getElementById("sign_in_page_link");
           window.location.replace(link.elem.href);
         }
       });

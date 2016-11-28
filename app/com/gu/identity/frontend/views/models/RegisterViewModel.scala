@@ -22,6 +22,7 @@ case class RegisterViewModel(
     errors: RegisterErrorViewModel,
     showStandfirst: Boolean,
     askForPhoneNumber: Boolean,
+    hideUsername: Boolean,
 
     csrfToken: Option[CSRFToken],
     returnUrl: String,
@@ -75,6 +76,7 @@ object RegisterViewModel {
 
       showStandfirst = showStandfirst(clientId),
       askForPhoneNumber = askForPhoneNumber(clientId),
+      hideUsername = isMembership,
 
       csrfToken = csrfToken,
       returnUrl = returnUrl.url,

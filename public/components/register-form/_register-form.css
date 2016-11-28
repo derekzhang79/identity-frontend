@@ -19,6 +19,9 @@
   @extend %form__error;
 }
 
+.hidden {
+  display: none;
+}
 
 /** Field: Name **/
 

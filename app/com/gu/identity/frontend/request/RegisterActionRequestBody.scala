@@ -38,7 +38,7 @@ case class RegisterActionRequestBody private(
 
 object RegisterActionRequestBody {
 
-  lazy val bodyParser =
+  lazy val bodyParser: BodyParser[RegisterActionRequestBody] =
     FormRequestBodyParser("RegisterActionRequestBody")(registerForm)(handleFormErrors)
 
   def registerForm(requestHeader: RequestHeader): Form[RegisterActionRequestBody] =
@@ -78,7 +78,7 @@ object RegisterActionRequestBody {
         "firstName" -> nonEmptyText,
         "lastName" -> nonEmptyText,
         "email" -> email,
-        "displayName" -> displayName,
+        "displayName" -> nonEmptyText,
         "password" -> password,
         "countryCode" -> optional(text),
         "localNumber" -> optional(text),

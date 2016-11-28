@@ -67,7 +67,7 @@ object RegisterViewModel {
 
       oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
-      registerPageText = RegisterText.loadText(clientId, returnUrl),
+      registerPageText = RegisterText.loadText(clientId),
       terms = Terms.getTermsModel(group),
 
       hasErrors = errors.nonEmpty,

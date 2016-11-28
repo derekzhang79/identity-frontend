@@ -6,7 +6,7 @@ case class RegisterErrorViewModel(usernameErrors: Seq[ErrorViewModel], emailErro
 object RegisterErrorViewModel {
 
   val errorIdToFields: Map[ErrorID, String] = Map(
-    RegisterActionInvalidDisplaynameErrorID -> "displayNameError",
+    RegisterActionInvalidDisplayNameErrorID -> "displayNameError",
     RegisterActionInvalidEmailErrorID -> "emailError",
     RegisterEmailConflictErrorID -> "emailError",
     RegisterActionInvalidPasswordErrorID -> "passwordError"
@@ -29,10 +29,10 @@ object RegisterErrorViewModel {
 
   def apply(ids: Seq[String]): RegisterErrorViewModel = {
     val errors = ids.map(id => id -> getErrorField(id)).toMap
-    val usernameErrors = mapErrorToErrorType(errors, Some("usernameError"))
+    val displayNameErrors = mapErrorToErrorType(errors, Some("displayNameError"))
     val emailErrors = mapErrorToErrorType(errors, Some("emailError"))
     val passwordErrors = mapErrorToErrorType(errors, Some("passwordError"))
     val otherErrors = mapErrorToErrorType(errors, None)
-    RegisterErrorViewModel(usernameErrors, emailErrors, passwordErrors, otherErrors)
+    RegisterErrorViewModel(displayNameErrors, emailErrors, passwordErrors, otherErrors)
   }
 }

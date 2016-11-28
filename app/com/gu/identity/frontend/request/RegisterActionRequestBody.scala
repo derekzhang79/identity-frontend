@@ -53,7 +53,7 @@ object RegisterActionRequestBody {
     case FormError("firstName", msg, _) => RegisterActionInvalidFirstNameAppException(msg.headOption.getOrElse("unknown"))
     case FormError("lastName", msg, _) => RegisterActionInvalidLastNameAppException(msg.headOption.getOrElse("unknown"))
     case FormError("email", msg, _) => RegisterActionInvalidEmailAppException(msg.headOption.getOrElse("unknown"))
-    case FormError("displayName", msg, _) => RegisterActionInvalidDisplaynameAppException(msg.headOption.getOrElse("unknown"))
+    case FormError("displayName", msg, _) => RegisterActionInvalidDisplayNameAppException(msg.headOption.getOrElse("unknown"))
     case FormError("password", msg, _) => RegisterActionInvalidPasswordAppException(msg.headOption.getOrElse("unknown"))
     case FormError("groupCode", msg, _) => RegisterActionInvalidGroupAppException(msg.headOption.getOrElse("unknown"))
     case e => RegisterActionBadRequestAppException(s"Unexpected error: ${e.message}")
@@ -65,8 +65,8 @@ object RegisterActionRequestBody {
     import GroupCode.FormMappings.groupCode
     import ReturnUrl.FormMapping.returnUrl
 
-    private val displayName: Mapping[String] = text.verifying(
-      "error.displayName", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
+    def alphaNumericMinMaxLength(min : Int, max: Int): Mapping[String] = text.verifying(
+      "error.displayName", name => name.matches("[A-z0-9]+") && name.length > min && name.length < max
     )
 
     private val password: Mapping[String] = text.verifying(
@@ -78,7 +78,7 @@ object RegisterActionRequestBody {
         "firstName" -> nonEmptyText,
         "lastName" -> nonEmptyText,
         "email" -> email,
-        "displayName" -> nonEmptyText,
+        "displayName" -> alphaNumericMinMaxLength(5, 21),
         "password" -> password,
         "countryCode" -> optional(text),
         "localNumber" -> optional(text),

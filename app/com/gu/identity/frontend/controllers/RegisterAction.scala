@@ -2,28 +2,28 @@ package com.gu.identity.frontend.controllers
 
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.csrf.{CSRFConfig, CSRFCheck}
+import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
 import com.gu.identity.frontend.errors.RedirectOnError
-import com.gu.identity.frontend.logging.{LogOnErrorAction, MetricsLoggingActor, Logging}
+import com.gu.identity.frontend.logging.{LogOnErrorAction, Logging, MetricsLoggingActor}
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.request.RegisterActionRequestBody
-import com.gu.identity.frontend.services.{ServiceAction, IdentityService}
+import com.gu.identity.frontend.services.{IdentityService, ServiceAction, ServiceActionBuilder}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Cookie => PlayCookie, Controller}
+import play.api.mvc.{BodyParser, Controller, Request, Cookie => PlayCookie}
 
 
 class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi, val config: Configuration, csrfConfig: CSRFConfig) extends Controller with Logging with MetricsLoggingActor with I18nSupport {
 
   val redirectRoute: String = routes.Application.register().url
 
-  val RegisterServiceAction =
+  val RegisterServiceAction: ServiceActionBuilder[Request] =
     ServiceAction andThen
     RedirectOnError(redirectRoute) andThen
     LogOnErrorAction(logger) andThen
     CSRFCheck(csrfConfig)
 
-  val bodyParser = RegisterActionRequestBody.bodyParser
+  val bodyParser: BodyParser[RegisterActionRequestBody] = RegisterActionRequestBody.bodyParser
 
   def register = RegisterServiceAction(bodyParser) { request =>
     val clientIp = ClientIp(request)

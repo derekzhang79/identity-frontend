@@ -52,7 +52,7 @@
                   </label>
                   <input type="hidden" id="register_field_countryIsoName" />
                   <select class="register-form__select--country-code" id="register_field_countryCode" type="tel"
-                          name="countryCode" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
+                          name="countryCode" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false">
                 {{#each countryCodes.codes }}
                     <option value="{{ code }}">+ {{ code }}</option>
                 {{/ each }}
@@ -80,7 +80,7 @@
 
     <div class="register-form__control--displayName {{#if hideDisplayName}}hidden{{/if}}">
         <label class="register-form__label--displayName" for="register_field_displayName"><span>{{ registerPageText.displayName }}</span> <span class="register-form__label--displayName-note">{{ registerPageText.displayNameNote }}</span></label>
-        <input class="register-form__field--displayName" id="register_field_displayName" type="text" name="displayName" placeholder="{{ registerPageText.displayNameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" title="{{ registerPageText.displayNameHelp }}" {{#unless hideDisplayName}} required minlength="6" maxlength="20" {{/unless}} />
+        <input class="register-form__field--displayName" id="register_field_displayName" type="text" name="displayName" placeholder="{{ registerPageText.displayNameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" title="{{ registerPageText.displayNameHelp }}" {{#unless hideDisplayName}} required minlength="2" maxlength="40" {{/unless}} />
     </div>
       {{#each errors.displayNameErrors }}
           <p id="{{ id }}" class="register-form__error">{{ message }}</p>

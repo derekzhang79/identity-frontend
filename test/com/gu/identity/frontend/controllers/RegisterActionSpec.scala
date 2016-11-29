@@ -411,7 +411,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "return register-error-displayName if displayName is too short" in new WithControllerMockedDependencies {
-      val displayName = "12"
+      val displayName = "1"
 
       val result = call(controller.register, fakeRegisterRequest(displayName = displayName))
 
@@ -425,7 +425,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "return register-error-displayName if displayName is too long" in new WithControllerMockedDependencies {
-      val displayName = "123456789012345678901"
+      val displayName = "12345678901234567890123456789012345678901"
 
       val result = call(controller.register, fakeRegisterRequest(displayName = displayName))
 

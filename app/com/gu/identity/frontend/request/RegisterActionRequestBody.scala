@@ -78,7 +78,7 @@ object RegisterActionRequestBody {
         "firstName" -> alphaNumericMinMaxLength(1, 20),
         "lastName" -> alphaNumericMinMaxLength(1, 20),
         "email" -> email,
-        "displayName" -> alphaNumericMinMaxLength(2, 30),
+        "displayName" -> alphaNumericMinMaxLength(2, 40),
         "password" -> password,
         "countryCode" -> optional(text),
         "localNumber" -> optional(text),

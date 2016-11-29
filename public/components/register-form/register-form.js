@@ -63,7 +63,7 @@ class RegisterFormModel {
 
   updateDisplayName(){
     if (this.fields.optionalHideDisplayName && this.fields.optionalHideDisplayName.value()) {
-      const displayName = (this.fields.firstName.value() + this.fields.lastName.value());
+      const displayName = (this.fields.firstName.value() + ' ' + this.fields.lastName.value());
       this.fields.displayName.setValue(displayName);
     }
   }

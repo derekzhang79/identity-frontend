@@ -76,7 +76,7 @@ object RegisterViewModel {
 
       showStandfirst = showStandfirst(clientId),
       askForPhoneNumber = askForPhoneNumber(clientId),
-      hideDisplayName = isMembership,
+      hideDisplayName = List(Some(GuardianMembersAClientID), Some(GuardianMembersBClientID)).contains(clientId),
 
       csrfToken = csrfToken,
       returnUrl = returnUrl.url,

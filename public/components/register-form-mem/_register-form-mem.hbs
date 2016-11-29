@@ -82,9 +82,11 @@
         <label class="register-form__label--displayName" for="register_field_displayName"><span>{{ registerPageText.displayName }}</span> <span class="register-form__label--displayName-note">{{ registerPageText.displayNameNote }}</span></label>
         <input class="register-form__field--displayName" id="register_field_displayName" type="text" name="displayName" placeholder="{{ registerPageText.displayNameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" title="{{ registerPageText.displayNameHelp }}" {{#unless hideDisplayName}} required minlength="2" maxlength="40" {{/unless}} />
     </div>
-      {{#each errors.displayNameErrors }}
-          <p id="{{ id }}" class="register-form__error">{{ message }}</p>
-      {{/ each }}
+    {{# unless hideDisplayName}}
+        {{#each errors.displayNameErrors }}
+            <p id="{{ id }}" class="register-form__error">{{ message }}</p>
+        {{/ each }}
+    {{/unless}}
 
 
         <div class="register-form__control--password">

@@ -20,23 +20,17 @@ Ensure you have the correct [identity-frontend hosts](https://github.com/guardia
 
 ## SSL Certificates & nginx setup
 
-We have valid SSL certificates for thegulocal.com and the subdomains we use for local development.
+The certificates for the local subdomain `profile-origin.thegulocal.com` can be genereated without a signer and are set up as part of the `identity-frontend.conf` for nginx.
 
-The certificates for the local subdomain `profile-origin.thegulocal.com` are stored in the AWS S3 Identity bucket and are set up as part of the `identity-frontend.conf` for nginx.
-
-Follow these installation steps to correctly setup nginx and valid SSL certificates locally:
+Follow these installation steps to correctly setup nginx and unsigned SSL certificates locally:
 
 * Make sure you are in the base `identity-frontend` directory
 
-* Make sure you have access to the S3 bucket identity-local-ssl and download them using the [AWS CLI utility](https://aws.amazon.com/cli/) (the following command will download them in your current directory using your Identity profile on AWS):
-
 ```bash
 mkdir nginxCerts
-aws --profile identity s3 cp s3://identity-local-ssl/profile-origin-thegulocal-com-exp2016-11-10-bundle.crt ./nginxCerts 1>/dev/null
-aws --profile identity s3 cp s3://identity-local-ssl/profile-origin-thegulocal-com-exp2016-11-10.key ./nginxCerts 1>/dev/null
+openssl req -x509 -nodes -days 3650 -newkey rsa:1024 -keyout ./nginxCerts/profile-origin-thegulocal-com-exp2016-11-10.key -out ./nginxCerts/profile-origin-thegulocal-com-exp2016-11-10-bundle.crt
 ```
-
-**Note**: If you do not have Janus access to Identity, we can grant your team specific access, which means you would substitute `--profile identity` with e.g. `--profile membership`. Contact the Identity team if you require access to these files.
+make sure you set the name of the domain to profile-origin.thegulocal.com.  If you want to access it in chrome, when you get the error page, you need to type "badidea" and it will bypass the signer error.
 
 * Find the configuration folder of nginx by running:
 

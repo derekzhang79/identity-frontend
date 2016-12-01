@@ -22,13 +22,11 @@
   <section class="signin__section">
     {{> components/oauth-cta/_oauth-cta }}
     {{> components/signin-form-mem/_signin-form-mem }}
+    <section class="signin__bottom-progress-bar-mem">
+      {{> components/progress-bar-mem/_progress-bar-mem }}
+    </section>
   </section>
-
-  <section class="signin__bottom-progress-bar-mem">
-    {{> components/progress-bar-mem/_progress-bar-mem }}
-  </section>
-
-
+  
 {{/partial}}
 
 {{> layout}}

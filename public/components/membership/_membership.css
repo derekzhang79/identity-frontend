@@ -206,10 +206,13 @@
     @extend %content-container--with-padding;
     padding-right: 0;
     padding-left: 0;
-    padding-bottom: 1.2rem;
 
     @media (--viewport-min-mobile-landscape) {
       display: none;
     }
+  }
+
+  .register__bottom-progress-bar-mem > ul > li {
+    margin-bottom: 1.2rem;
   }
 }

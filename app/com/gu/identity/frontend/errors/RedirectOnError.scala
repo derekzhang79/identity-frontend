@@ -2,11 +2,12 @@ package com.gu.identity.frontend.errors
 
 import com.gu.identity.frontend.controllers.NoCache
 import com.gu.identity.frontend.models.UrlBuilder
+import com.gu.identity.frontend.request.RegisterActionRequestBody
 import com.gu.identity.frontend.request.RequestParameters.CoreSessionParameters
 import com.gu.identity.frontend.utils.ErrorRecoveryActionBuilder
 import play.api.libs.json._
 import play.api.mvc._
-import play.api.mvc.Results.{SeeOther, BadRequest}
+import play.api.mvc.Results.{BadRequest, SeeOther}
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal

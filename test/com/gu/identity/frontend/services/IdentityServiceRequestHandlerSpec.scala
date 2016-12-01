@@ -27,7 +27,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
     "Encode correct json when using a Register Request." in {
       val email = "test@guardian.co.uk"
       val password = "some%thing"
-      val username = "myUsername"
+      val displayName = "myDisplayname"
       val firstName = "First"
       val secondName = "Last"
       val receiveGnmMarketing = false
@@ -37,7 +37,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val requestBody = RegisterRequestBody(
         email,
         password,
-        RegisterRequestBodyPublicFields(username),
+        RegisterRequestBodyPublicFields(displayName),
         RegisterRequestBodyPrivateFields(firstName, secondName, registrationIp),
         RegisterRequestBodyStatusFields(receiveGnmMarketing, receive3rdPartyMarketing)
       )
@@ -46,7 +46,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
 
       (jsonResult \ "primaryEmailAddress").validate[String].asOpt.value should equal(email)
       (jsonResult \ "password").validate[String].asOpt.value should equal(password)
-      (jsonResult \ "publicFields" \ "username").validate[String].asOpt.value should equal(username)
+      (jsonResult \ "publicFields" \ "displayName").validate[String].asOpt.value should equal(displayName)
       (jsonResult \ "privateFields" \ "firstName").validate[String].asOpt.value should equal(firstName)
       (jsonResult \ "privateFields" \ "secondName").validate[String].asOpt.value should equal(secondName)
       (jsonResult \ "privateFields" \ "registrationIp").validate[String].asOpt.value should equal(registrationIp)

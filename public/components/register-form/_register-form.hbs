@@ -2,6 +2,9 @@
   <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
   <input type="hidden" name="returnUrl" value="{{ returnUrl }}"/>
   <input type="hidden" name="skipConfirmation" value="{{ skipConfirmation }}"/>
+    {{# hideDisplayName }}
+        <input type="hidden" id="register_field_hideDisplayName" name="hideDisplayName" value="{{ hideDisplayName }}" />
+    {{/hideDisplayName}}
 
   {{# group }}
       <input type="hidden" name="groupCode" value="{{ group.id }}">
@@ -23,10 +26,10 @@
       <label class="register-form__label--name" for="register_field_firstname">{{ registerPageText.name }}</label>
 
       <div class="register-form__control-column--firstname">
-        <input class="register-form__field--firstname" id="register_field_firstname" type="text" name="firstName" placeholder="{{ registerPageText.firstName }}" required autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <input class="register-form__field--firstname" id="register_field_firstname" type="text" name="firstName" placeholder="{{ registerPageText.firstName }}" title="{{ registerPageText.firstOrLastNameHelp }}" required autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" pattern="[a-zA-Z0-9]+" />
       </div>
       <div class="register-form__control-column--lastname">
-        <input class="register-form__field--lastname" id="register_field_lastname" type="text" name="lastName" placeholder="{{ registerPageText.lastName }}" required autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        <input class="register-form__field--lastname" id="register_field_lastname" type="text" name="lastName" placeholder="{{ registerPageText.lastName }}" title="{{ registerPageText.firstOrLastNameHelp }}" required autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" pattern="[a-zA-Z0-9]+" />
       </div>
     </div>
 
@@ -75,13 +78,15 @@
 
     {{/ askForPhoneNumber }}
 
-    <div class="register-form__control--username">
-        <label class="register-form__label--username" for="register_field_username"><span>{{ registerPageText.username }}</span> <span class="register-form__label--username-note">{{ registerPageText.usernameNote }}</span></label>
-        <input class="register-form__field--username" id="register_field_username" type="text" name="username" placeholder="{{ registerPageText.usernameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required minlength="6" maxlength="20" title="{{ registerPageText.usernameHelp }}" pattern="[a-zA-Z0-9]+" />
+    <div class="register-form__control--displayName {{# hideDisplayName}}hidden{{/hideDisplayName}}">
+        <label class="register-form__label--displayName" for="register_field_displayName"><span>{{ registerPageText.displayName }}</span> <span class="register-form__label--displayName-note">{{ registerPageText.displayNameNote }}</span></label>
+        <input class="register-form__field--displayName" id="register_field_displayName" type="text" name="displayName" placeholder="{{ registerPageText.displayNameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" title="{{ registerPageText.displayNameHelp }}" {{#unless hideDisplayName}} required minlength="2" maxlength="40" pattern="[a-zA-Z0-9]+" {{/unless}} />
     </div>
-      {{#each errors.usernameErrors }}
+    {{# unless hideDisplayName}}
+      {{#each errors.displayNameErrors }}
           <p id="{{ id }}" class="register-form__error">{{ message }}</p>
       {{/ each }}
+    {{/unless}}
 
 
       <div class="register-form__control--password">

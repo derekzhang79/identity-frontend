@@ -11,20 +11,20 @@ import play.api.mvc.{RequestHeader, Result, BodyParsers, BodyParser}
 
 
 case class RegisterActionRequestBody private(
-    firstName: String,
-    lastName: String,
-    email: String,
-    username: String,
-    password: String,
-    countryCode: Option[String],
-    localNumber: Option[String],
-    receiveGnmMarketing: Boolean,
-    receive3rdPartyMarketing: Boolean,
-    returnUrl: Option[ReturnUrl],
-    skipConfirmation: Option[Boolean],
-    groupCode: Option[GroupCode],
-    clientId: Option[ClientID],
-    csrfToken: String)
+                                              firstName: String,
+                                              lastName: String,
+                                              email: String,
+                                              displayName: String,
+                                              password: String,
+                                              countryCode: Option[String],
+                                              localNumber: Option[String],
+                                              receiveGnmMarketing: Boolean,
+                                              receive3rdPartyMarketing: Boolean,
+                                              returnUrl: Option[ReturnUrl],
+                                              skipConfirmation: Option[Boolean],
+                                              groupCode: Option[GroupCode],
+                                              clientId: Option[ClientID],
+                                              csrfToken: String)
   extends SignInRequestParameters
   with ReturnUrlRequestParameter
   with SkipConfirmationRequestParameter
@@ -38,7 +38,7 @@ case class RegisterActionRequestBody private(
 
 object RegisterActionRequestBody {
 
-  lazy val bodyParser =
+  lazy val bodyParser: BodyParser[RegisterActionRequestBody] =
     FormRequestBodyParser("RegisterActionRequestBody")(registerForm)(handleFormErrors)
 
   def registerForm(requestHeader: RequestHeader): Form[RegisterActionRequestBody] =
@@ -53,7 +53,7 @@ object RegisterActionRequestBody {
     case FormError("firstName", msg, _) => RegisterActionInvalidFirstNameAppException(msg.headOption.getOrElse("unknown"))
     case FormError("lastName", msg, _) => RegisterActionInvalidLastNameAppException(msg.headOption.getOrElse("unknown"))
     case FormError("email", msg, _) => RegisterActionInvalidEmailAppException(msg.headOption.getOrElse("unknown"))
-    case FormError("username", msg, _) => RegisterActionInvalidUsernameAppException(msg.headOption.getOrElse("unknown"))
+    case FormError("displayName", msg, _) => RegisterActionInvalidDisplayNameAppException(msg.headOption.getOrElse("unknown"))
     case FormError("password", msg, _) => RegisterActionInvalidPasswordAppException(msg.headOption.getOrElse("unknown"))
     case FormError("groupCode", msg, _) => RegisterActionInvalidGroupAppException(msg.headOption.getOrElse("unknown"))
     case e => RegisterActionBadRequestAppException(s"Unexpected error: ${e.message}")
@@ -65,8 +65,8 @@ object RegisterActionRequestBody {
     import GroupCode.FormMappings.groupCode
     import ReturnUrl.FormMapping.returnUrl
 
-    private val username: Mapping[String] = text.verifying(
-      "error.username", name => name.matches("[A-z0-9]+") && name.length > 5 && name.length < 21
+    def alphaNumericMinMaxLength(min : Int, max: Int): Mapping[String] = text.verifying(
+      "error.displayName", name => name.matches("[A-z0-9]+") && name.length >= min && name.length <= max
     )
 
     private val password: Mapping[String] = text.verifying(
@@ -75,10 +75,10 @@ object RegisterActionRequestBody {
 
     def registerFormMapping(refererHeader: Option[String]): Mapping[RegisterActionRequestBody] =
       mapping(
-        "firstName" -> nonEmptyText,
-        "lastName" -> nonEmptyText,
+        "firstName" -> alphaNumericMinMaxLength(1, 20),
+        "lastName" -> alphaNumericMinMaxLength(1, 20),
         "email" -> email,
-        "username" -> username,
+        "displayName" -> alphaNumericMinMaxLength(2, 40),
         "password" -> password,
         "countryCode" -> optional(text),
         "localNumber" -> optional(text),

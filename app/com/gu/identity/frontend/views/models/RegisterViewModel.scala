@@ -11,31 +11,32 @@ import play.api.i18n.Messages
 
 
 case class RegisterViewModel(
-    layout: LayoutViewModel,
+                              layout: LayoutViewModel,
 
-    oauth: OAuthRegistrationViewModel,
+                              oauth: OAuthRegistrationViewModel,
 
-    registerPageText: RegisterText,
-    terms: TermsViewModel,
+                              registerPageText: RegisterText,
+                              terms: TermsViewModel,
 
-    hasErrors: Boolean,
-    errors: RegisterErrorViewModel,
-    showStandfirst: Boolean,
-    askForPhoneNumber: Boolean,
+                              hasErrors: Boolean,
+                              errors: RegisterErrorViewModel,
+                              showStandfirst: Boolean,
+                              askForPhoneNumber: Boolean,
+                              hideDisplayName: Boolean,
 
-    csrfToken: Option[CSRFToken],
-    returnUrl: String,
-    skipConfirmation: Boolean,
-    clientId: Option[ClientID],
-    group: Option[GroupCode],
+                              csrfToken: Option[CSRFToken],
+                              returnUrl: String,
+                              skipConfirmation: Boolean,
+                              clientId: Option[ClientID],
+                              group: Option[GroupCode],
 
-    actions: RegisterActions,
-    links: RegisterLinks,
+                              actions: RegisterActions,
+                              links: RegisterLinks,
 
-    resources: Seq[PageResource with Product],
-    indirectResources: Seq[PageResource with Product],
-    countryCodes: Option[CountryCodes],
-    gitCommitId: String
+                              resources: Seq[PageResource with Product],
+                              indirectResources: Seq[PageResource with Product],
+                              countryCodes: Option[CountryCodes],
+                              gitCommitId: String
   )
   extends ViewModel with ViewModelResources
 
@@ -75,6 +76,7 @@ object RegisterViewModel {
 
       showStandfirst = showStandfirst(clientId),
       askForPhoneNumber = askForPhoneNumber(clientId),
+      hideDisplayName = List(Some(GuardianMembersAClientID), Some(GuardianMembersBClientID)).contains(clientId),
 
       csrfToken = csrfToken,
       returnUrl = returnUrl.url,

@@ -14,6 +14,15 @@ function record(gaUID) {
   ga('send', 'pageview');
 }
 
+export function customMetric(event) {
+  console.log("Custom event");
+
+  var metricValue = '1';
+  ga('send', 'event', 'category', 'action', {
+    'metric2': metricValue
+  });
+}
+
 function loadGA() {
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

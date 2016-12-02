@@ -4,10 +4,10 @@ import akka.util.Timeout
 import com.gu.identity.cookie.{IdentityCookieDecoder, IdentityKeys}
 import com.gu.identity.frontend.authentication.CookieName
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.errors.{GetUserAppException, AssignGroupAppException, ErrorHandler}
+import com.gu.identity.frontend.errors.{AssignGroupAppException, ErrorHandler, GetUserAppException}
 import com.gu.identity.frontend.models.{GroupCode, ReturnUrl}
 import com.gu.identity.frontend.services.IdentityService
-import com.gu.identity.service.client.{ClientGatewayError, AssignGroupResponse}
+import com.gu.identity.service.client.{AssignGroupResponse, ClientGatewayError}
 import com.gu.identity.service.client.models.{User, UserGroup}
 import com.gu.identity.model.{User => CookieUser}
 import org.mockito.Matchers.{any => argAny}

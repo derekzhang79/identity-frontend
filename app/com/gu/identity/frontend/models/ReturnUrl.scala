@@ -18,26 +18,29 @@ case class ReturnUrl private[models](
 object ReturnUrl {
 
   val domains = List(".theguardian.com", ".code.dev-theguardian.com", ".thegulocal.com")
-  val invalidUrlPaths = List("/signin", "/register")
   val validUris = List(new URI("sso.com.theguardian.jobs://ssologoutsuccess"))
+  val defaultInvalidUrlPaths = List("/signin", "/register")
 
-  def apply(returnUrlParam: Option[String], configuration: Configuration): ReturnUrl =
-    apply(returnUrlParam, refererHeader = None, configuration, clientId = None)
-
-  def apply(returnUrlParam: Option[String], refererHeader: Option[String]): Option[ReturnUrl] =
+  def opt(returnUrlParam: Option[String], refererHeader: Option[String], invalidUrlPaths: List[String]): Option[ReturnUrl] =
     returnUrlParam
       .flatMap(uriOpt)
       .orElse(refererHeader.flatMap(uriOpt))
       .filter { uri =>
-        validUris.contains(uri) || validDomain(uri) && validUrlPath(uri)
+        validUris.contains(uri) || validDomain(uri) && validUrlPath(uri, invalidUrlPaths)
       }
       .map(uri => ReturnUrl(uri))
 
-  def apply(returnUrlParam: Option[String], refererHeader: Option[String], configuration: Configuration, clientId: Option[ClientID]): ReturnUrl =
-    apply(returnUrlParam, refererHeader)
+  def apply(returnUrlParam: Option[String], refererHeader: Option[String], configuration: Configuration, clientId: Option[ClientID], invalidUrlPaths: List[String]): ReturnUrl =
+    opt(returnUrlParam, refererHeader, invalidUrlPaths)
       .getOrElse {
         defaultForClient(configuration, clientId)
       }
+
+  def apply(returnUrlParam: Option[String], configuration: Configuration): ReturnUrl =
+    apply(returnUrlParam, refererHeader = None, configuration, clientId = None,  ReturnUrl.defaultInvalidUrlPaths)
+
+  def apply(returnUrlParam: Option[String], refererHeader: Option[String], configuration: Configuration, clientId: Option[ClientID]): ReturnUrl =
+    apply(returnUrlParam, refererHeader, configuration, clientId, ReturnUrl.defaultInvalidUrlPaths)
 
   def default(configuration: Configuration) =
     defaultFromUrl(configuration.dotcomBaseUrl)
@@ -75,7 +78,7 @@ object ReturnUrl {
     domains.exists(s".$hostname".endsWith(_))
   }
 
-  private[models] def validUrlPath(uri: URI): Boolean = {
+  private[models] def validUrlPath(uri: URI, invalidUrlPaths: List[String]): Boolean = {
     val urlPath = uri.getPath
     !invalidUrlPaths.contains(urlPath)
   }
@@ -86,7 +89,7 @@ object ReturnUrl {
     import play.api.data.Forms.{optional, text}
 
     def returnUrl(refererHeader: Option[String]): Mapping[Option[ReturnUrl]] =
-      optional(text).transform(ReturnUrl.apply(_: Option[String], refererHeader), _.flatMap(_.toStringOpt))
+      optional(text).transform(ReturnUrl.opt(_: Option[String], refererHeader, defaultInvalidUrlPaths), _.flatMap(_.toStringOpt))
   }
 
 }

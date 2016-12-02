@@ -36,14 +36,18 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
 
     ReturnUrl(None, Some("sso.com.theguardian.teachers://hello"), config, None) should be(ReturnUrl(new URI("http://www.theguardian.com"), isDefault = true))
 
+    ReturnUrl(Some("https://profile.theguardian.com/register"), None, config, None, List("/signin")) should be(ReturnUrl(new URI("https://profile.theguardian.com/register")))
+
+
   }
 
   it should "Determine valid url path" in {
-    validUrlPath(new URI("http://theguardian.com/signin")) should be(false)
-    validUrlPath(new URI("http://theguardian.com/register")) should be(false)
-    validUrlPath(new URI("http://theguardian.com/register/confirm")) should be(true)
-    validUrlPath(new URI("http://theguardian.com")) should be(true)
-    validUrlPath(new URI("http://theguardian.com/politics")) should be(true)
+    validUrlPath(new URI("http://theguardian.com/signin"), defaultInvalidUrlPaths) should be(false)
+    validUrlPath(new URI("http://theguardian.com/register"), defaultInvalidUrlPaths) should be(false)
+    validUrlPath(new URI("http://theguardian.com/register"), List("/signin")) should be(true)
+    validUrlPath(new URI("http://theguardian.com/register/confirm"), defaultInvalidUrlPaths) should be(true)
+    validUrlPath(new URI("http://theguardian.com"), defaultInvalidUrlPaths) should be(true)
+    validUrlPath(new URI("http://theguardian.com/politics"), defaultInvalidUrlPaths) should be(true)
   }
 
   it should "Retrieve default Return URL" in {

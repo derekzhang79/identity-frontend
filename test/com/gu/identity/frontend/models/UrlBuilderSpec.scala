@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.models
 
-import java.net.{URLEncoder, URI}
+import java.net.{URI, URLEncoder}
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.errors.{SeqAppExceptions, SignInActionBadRequestAppException, UnexpectedAppException}

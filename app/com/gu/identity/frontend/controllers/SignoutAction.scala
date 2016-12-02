@@ -20,7 +20,7 @@ class SignOutAction(identityService: IdentityService, val messagesApi: MessagesA
 
   def signOut(returnUrl: Option[String]) = Action.async { implicit request =>
     val referrer = request.headers.get(HeaderNames.REFERER)
-    val validReturnUrl = ReturnUrl(returnUrl ,referrer, config, None)
+    val validReturnUrl = ReturnUrl(returnUrl ,referrer, config, None, List("/signin"))
     val trackingData = TrackingData(request, None)
     request.cookies.get(CookieName.SC_GU_U).map { cookie =>
       identityService.deauthenticate(cookie, trackingData).map {

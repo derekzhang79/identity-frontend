@@ -26,7 +26,6 @@ function record(gaUID) {
 }
 
 function buildGoogleAnalyticsEvent(event) {
-
   const category = 'identity';
   const action = event.name;
   const fieldsObject = {

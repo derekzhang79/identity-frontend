@@ -16,12 +16,12 @@ export function init() {
 
 function record(gaUID) {
   loadGA();
-  ga('create', gaUID, 'auto');
-  ga('send', 'pageview');
+  ga('create', gaUID, 'auto', gaTracker);
+  ga(gaTracker + '.send', 'pageview');
 }
 
 export function customMetric(event) {
-  ga('send', 'event',
+  ga(gaTracker + '.send', 'event',
     buildGoogleAnalyticsEvent(event, '1'));
 }
 

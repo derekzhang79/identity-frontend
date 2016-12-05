@@ -1,7 +1,7 @@
 /*global window, document*/
 
 import { getElementById, sessionStorage } from '../browser/browser';
-import { customMetric as customMetric } from '../analytics/ga';
+import { customMetric } from '../analytics/ga';
 
 const STORAGE_KEY = 'gu_id_signIn_state';
 const SMART_LOCK_STORAGE_KEY = 'gu_id_smartLock_state';

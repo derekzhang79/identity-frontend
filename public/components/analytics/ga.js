@@ -7,7 +7,8 @@ const gaTracker = 'IdentityPropertyTracker';
 const events = {
   metricMap: {
     'SmartLockSignin': 'metric3',
-  }};
+  }
+};
 
 export function init() {
   const gaUID = configuration.gaUID;
@@ -25,11 +26,9 @@ function record(gaUID) {
 }
 
 function buildGoogleAnalyticsEvent(event) {
-  const category = 'identity';
-  const action = event.name;
   const fieldsObject = {
-    eventCategory: category,
-    eventAction: action,
+    eventCategory: 'identity',
+    eventAction: event.name,
     dimension3: 'profile.theguardian.com',
     dimension4: navigator.userAgent,
     dimension5: window.location.href,

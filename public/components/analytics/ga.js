@@ -14,15 +14,15 @@ export function init() {
   return record(gaUID);
 }
 
+export function customMetric(event) {
+  ga(gaTracker + '.send', 'event',
+    buildGoogleAnalyticsEvent(event));
+}
+
 function record(gaUID) {
   loadGA();
   ga('create', gaUID, 'auto', gaTracker);
   ga(gaTracker + '.send', 'pageview');
-}
-
-export function customMetric(event) {
-  ga(gaTracker + '.send', 'event',
-    buildGoogleAnalyticsEvent(event, '1'));
 }
 
 function buildGoogleAnalyticsEvent(event) {

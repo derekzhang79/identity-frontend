@@ -425,21 +425,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "return register-error-displayName if displayName is too long" in new WithControllerMockedDependencies {
-      val displayName = "12345678901234567890123456789012345678901"
-
-      val result = call(controller.register, fakeRegisterRequest(displayName = displayName))
-
-      val queryParams = UrlDecoder.getQueryParams(redirectLocation(result).get)
-      status(result) mustEqual SEE_OTHER
-
-      queryParams.contains("error") mustEqual true
-      queryParams.get("error") mustEqual Some("register-error-displayName")
-
-      redirectLocation(result).get must startWith (routes.Application.register(Seq.empty, None).url)
-    }
-
-    "return register-error-displayName if displayName contains a non alphanumeric character" in new WithControllerMockedDependencies {
-      val displayName = "123456$"
+      val displayName = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901"
 
       val result = call(controller.register, fakeRegisterRequest(displayName = displayName))
 

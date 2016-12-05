@@ -26,10 +26,10 @@
       <label class="register-form__label--name" for="register_field_firstname">{{ registerPageText.name }}</label>
 
       <div class="register-form__control-column--firstname">
-        <input class="register-form__field--firstname" id="register_field_firstname" type="text" name="firstName" placeholder="{{ registerPageText.firstName }}" title="{{ registerPageText.firstOrLastNameHelp }}" required autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" pattern="[a-zA-Z0-9]+" />
+        <input class="register-form__field--firstname" id="register_field_firstname" type="text" name="firstName" placeholder="{{ registerPageText.firstName }}" title="{{ registerPageText.firstOrLastNameHelp }}" required maxlength="25" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
       </div>
       <div class="register-form__control-column--lastname">
-        <input class="register-form__field--lastname" id="register_field_lastname" type="text" name="lastName" placeholder="{{ registerPageText.lastName }}" title="{{ registerPageText.firstOrLastNameHelp }}" required autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" pattern="[a-zA-Z0-9]+" />
+        <input class="register-form__field--lastname" id="register_field_lastname" type="text" name="lastName" placeholder="{{ registerPageText.lastName }}" title="{{ registerPageText.firstOrLastNameHelp }}" required maxlength="25" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
       </div>
     </div>
 
@@ -80,7 +80,7 @@
 
     <div class="register-form__control--displayName {{# hideDisplayName}}hidden{{/hideDisplayName}}">
         <label class="register-form__label--displayName" for="register_field_displayName"><span>{{ registerPageText.displayName }}</span> <span class="register-form__label--displayName-note">{{ registerPageText.displayNameNote }}</span></label>
-        <input class="register-form__field--displayName" id="register_field_displayName" type="text" name="displayName" placeholder="{{ registerPageText.displayNameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" title="{{ registerPageText.displayNameHelp }}" {{#unless hideDisplayName}} required minlength="2" maxlength="40" pattern="[a-zA-Z0-9\ ]+" {{/unless}} />
+        <input class="register-form__field--displayName" id="register_field_displayName" type="text" name="displayName" placeholder="{{ registerPageText.displayNameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" title="{{ registerPageText.displayNameHelp }}" {{#unless hideDisplayName}} required minlength="2" maxlength="50" {{/unless}} />
     </div>
     {{# unless hideDisplayName}}
       {{#each errors.displayNameErrors }}

@@ -15,8 +15,7 @@ export function init() {
 }
 
 export function customMetric(event) {
-  ga(gaTracker + '.send', 'event',
-    buildGoogleAnalyticsEvent(event));
+  ga(gaTracker + '.send', 'event', buildGoogleAnalyticsEvent(event));
 }
 
 function record(gaUID) {

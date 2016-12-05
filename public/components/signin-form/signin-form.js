@@ -10,11 +10,6 @@ class SignInFormModel {
   constructor( formElement, emailField ) {
     this.formElement = formElement;
     this.emailFieldElement = emailField;
-
-    const event = { name: 'signin', value: 'signin'};
-
-    customMetric(event);
-
     this.addBindings();
     this.smartLock();
   }
@@ -74,6 +69,7 @@ class SignInFormModel {
           .then(r => {
             if (r.status == 200) {
               this.updateSmartLockStatus(true);
+              customMetric({ name: 'SigninSuccessful', type: 'SmartLockSignin'});
               this.storeRedirect(c);
               return;
             }

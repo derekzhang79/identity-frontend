@@ -33,6 +33,8 @@ function buildGoogleAnalyticsEvent(event) {
     eventCategory: category,
     eventAction: action,
     dimension3: 'profile.theguardian.com',
+    dimension27: navigator.userAgent,
+    dimension29: window.location.href,
     forceSSL: true
   };
 

@@ -3,15 +3,46 @@
  */
 import { configuration } from '../configuration/configuration';
 
+const gaTracker = 'IdentityPropertyTracker';
+const events = {
+  metricMap: {
+    'SmartLockSignin': 'metric3',
+  }
+};
+
 export function init() {
   const gaUID = configuration.gaUID;
   return record(gaUID);
 }
 
+export function customMetric(event) {
+  ga(gaTracker + '.send', 'event', buildGoogleAnalyticsEvent(event));
+}
+
 function record(gaUID) {
   loadGA();
-  ga('create', gaUID, 'auto');
-  ga('send', 'pageview');
+  ga('create', gaUID, 'auto', gaTracker);
+  ga(gaTracker + '.send', 'pageview');
+}
+
+function buildGoogleAnalyticsEvent(event) {
+  const fieldsObject = {
+    eventCategory: 'identity',
+    eventAction: event.name,
+    eventLabel: event.type,
+    dimension3: 'profile.theguardian.com',
+    dimension4: navigator.userAgent,
+    dimension5: window.location.href,
+    forceSSL: true
+  };
+
+  // Increment the appropriate metric based on the event type
+  const metricId = events.metricMap[event.type];
+  if (metricId) {
+    fieldsObject[metricId] = 1;
+  }
+
+  return fieldsObject;
 }
 
 function loadGA() {

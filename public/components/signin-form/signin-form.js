@@ -1,6 +1,7 @@
 /*global window, document*/
 
 import { getElementById, sessionStorage } from '../browser/browser';
+import { customMetric } from '../analytics/ga';
 
 const STORAGE_KEY = 'gu_id_signIn_state';
 const SMART_LOCK_STORAGE_KEY = 'gu_id_smartLock_state';
@@ -9,7 +10,6 @@ class SignInFormModel {
   constructor( formElement, emailField ) {
     this.formElement = formElement;
     this.emailFieldElement = emailField;
-
     this.addBindings();
     this.smartLock();
   }
@@ -36,7 +36,7 @@ class SignInFormModel {
     if (navigator.credentials) {
       const formElement = this.formElement.elem;
 
-      var c = new PasswordCredential(formElement);
+      const c = new PasswordCredential(formElement);
       this.updateSmartLockStatus(true);
       this.smartLockSignIn(c);
     }
@@ -69,6 +69,7 @@ class SignInFormModel {
           .then(r => {
             if (r.status == 200) {
               this.updateSmartLockStatus(true);
+              customMetric({ name: 'SigninSuccessful', type: 'SmartLockSignin'});
               this.storeRedirect(c);
               return;
             }

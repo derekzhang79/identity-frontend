@@ -11,10 +11,6 @@
 
   <h1 class="page-heading">{{ signInPageText.title }}</h1>
 
-  <section class="signin__progress-bar-mem">
-    {{> components/progress-bar-mem/_progress-bar-mem }}
-  </section>
-
   <section class="signin__cta-section">
       <p class="signin__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" class="signin__cta-link--signup" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
   </section>
@@ -22,11 +18,8 @@
   <section class="signin__section">
     {{> components/oauth-cta/_oauth-cta }}
     {{> components/signin-form-mem/_signin-form-mem }}
-    <section class="signin__bottom-progress-bar-mem">
-      {{> components/progress-bar-mem/_progress-bar-mem }}
-    </section>
   </section>
-  
+
 {{/partial}}
 
 {{> layout}}

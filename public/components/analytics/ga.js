@@ -29,6 +29,7 @@ function buildGoogleAnalyticsEvent(event) {
   const fieldsObject = {
     eventCategory: 'identity',
     eventAction: event.name,
+    eventLabel: event.type,
     dimension3: 'profile.theguardian.com',
     dimension4: navigator.userAgent,
     dimension5: window.location.href,

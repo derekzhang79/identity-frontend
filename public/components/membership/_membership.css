@@ -42,17 +42,13 @@
     @extend %content-container--with-padding;
     padding-left: 0;
     margin-top: 0.6rem;
+    padding-bottom: 2.4rem;
+    margin-bottom: 0.2rem;
+    border-bottom: 0.1rem solid #4bc6df;
   }
 
   .page-heading--small-2 {
     @extend %content-container--with-padding;
-    margin-top: 1.2rem;
-
-    @media (--viewport-min-tablet) {
-      margin-top: 3.6rem;
-    }
-    padding-top: 0.2rem;
-    border-top: 0.1rem solid #4bc6df;
     padding-left: 0;
   }
 
@@ -69,7 +65,7 @@
   .register__cta-section,
   .signin__cta-section {
     @extend %content-container--with-padding;
-    margin-top: 1.2rem;
+    margin-top: 0.6rem;
     margin-bottom: 0.7rem;
     padding-right: 0;
     text-align: right;

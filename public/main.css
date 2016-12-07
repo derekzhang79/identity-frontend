@@ -30,10 +30,6 @@
 
 @import "components/membership/_membership.css";
 
-/** Progress Bar **/
-
-@import "components/progress-bar-mem/_progress-bar-mem.css";
-
 /** Jobs skin **/
 
 @import "components/jobs/_jobs.css";

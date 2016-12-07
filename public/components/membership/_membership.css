@@ -40,29 +40,22 @@
 
   .page-heading {
     @extend %content-container--with-padding;
+    padding-left: 0;
     margin-top: 0.6rem;
+    padding-bottom: 2.4rem;
+    margin-bottom: 0.2rem;
+    border-bottom: 0.1rem solid #4bc6df;
   }
 
   .page-heading--small-2 {
     @extend %content-container--with-padding;
-    margin-top: 0.4rem;
     padding-left: 0;
-  }
-
-  .register__progress-bar-mem,
-  .signin__progress-bar-mem {
-    @extend %content-container--with-padding;
-    border-bottom: 0.1rem solid #4bc6df;
-    margin-top: 3.2rem;
-    padding-right: 0;
-    padding-left: 0;
-    padding-bottom: 1.2rem;
   }
 
   .register__cta-section,
   .signin__cta-section {
     @extend %content-container--with-padding;
-    margin-top: 2.4rem;
+    margin-top: 0.6rem;
     margin-bottom: 0.7rem;
     padding-right: 0;
     text-align: right;
@@ -199,20 +192,5 @@
     padding-right: 5.5rem;
     background: var(--c-form-button--submit) inline("arrow-white-right-circle.svg") center right no-repeat;
     background-position: right 0.7rem center;
-  }
-
-  .register__bottom-progress-bar-mem,
-  .signin__bottom-progress-bar-mem {
-    @extend %content-container--with-padding;
-    padding-right: 0;
-    padding-left: 0;
-
-    @media (--viewport-min-mobile-landscape) {
-      display: none;
-    }
-  }
-
-  .register__bottom-progress-bar-mem > ul > li {
-    margin-bottom: 1.2rem;
   }
 }

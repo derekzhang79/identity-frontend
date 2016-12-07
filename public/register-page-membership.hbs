@@ -4,10 +4,6 @@
 
     <h1 class="page-heading commitId="{{ gitCommitId }}">{{ registerPageText.title }}</h1>
 
-    <section class="register__progress-bar-mem">
-      {{> components/progress-bar-mem/_progress-bar-mem }}
-    </section>
-
     <h2 class="page-heading--small-2"> Create your profile </h2>
 
     <section class="register__cta-section">
@@ -16,9 +12,6 @@
     <section class="register__section">
       {{> components/oauth-cta/_oauth-cta }}
       {{> components/register-form-mem/_register-form-mem }}
-      <section class="register__bottom-progress-bar-mem">
-        {{> components/progress-bar-mem/_progress-bar-mem }}
-      </section>
     </section>
 
 {{/ partial }}

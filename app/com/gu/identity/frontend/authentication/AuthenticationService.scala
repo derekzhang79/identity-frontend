@@ -13,7 +13,7 @@ object AuthenticationService {
   val knownCookies: Seq[GuardianCookie] = Seq(
     DotComCookie(CookieName.gu_user_features_expiry, secure = false),
     DotComCookie(CookieName.gu_paying_member, secure = false),
-    IdentityCookie(CookieName.GU_U, secure = false),
+    IdentityCookie(CookieName.GU_U, secure = true),
     IdentityCookie(CookieName.GU_ID_CSRF, secure = true),
     IdentityCookie(CookieName.GU_PROFILE_CSRF, secure = true),
     IdentityCookie(CookieName.SC_GU_U, secure = true)

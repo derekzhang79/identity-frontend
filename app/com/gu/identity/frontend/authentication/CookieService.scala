@@ -22,7 +22,8 @@ object CookieService {
   def signInCookies(cookies: Seq[IdentityApiCookie], rememberMe: Boolean, now: Option[DateTime] = None)(config: Configuration): Seq[PlayCookie] = {
     cookies.map { c =>
       val maxAge = if (rememberMe) Some(getMaxAge(c.expires, now)) else None
-      val secureHttpOnly = CookieName.isSecureCookie(c.name)
+      val secureCookie = CookieName.isSecureCookie(c.name)
+      val httpOnlyCookie = CookieName.isHttpOnly(c.name)
       val cookieMaxAgeOpt = maxAge.filterNot(_ => c.isSession)
 
       PlayCookie(
@@ -31,8 +32,8 @@ object CookieService {
         maxAge = cookieMaxAgeOpt,
         path = "/",
         domain = Some(config.identityCookieDomain),
-        secure = secureHttpOnly,
-        httpOnly = secureHttpOnly
+        secure = secureCookie,
+        httpOnly = httpOnlyCookie
       )
     }
   }

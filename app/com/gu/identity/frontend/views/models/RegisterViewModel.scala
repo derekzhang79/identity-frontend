@@ -58,10 +58,6 @@ object RegisterViewModel {
 
     val codes = countryCodes(clientId)
 
-    val isMembership = clientId match {
-      case Some(GuardianMembersClientID) => true
-      case _ => false
-    }
     RegisterViewModel(
       layout = layout,
 

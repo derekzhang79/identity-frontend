@@ -56,8 +56,7 @@ object SignInViewModel {
     val resources = getResources(layout, recaptchaModel) ++ Seq(IndirectlyLoadedExternalResources(UrlBuilder(configuration.identityProfileBaseUrl,routes.SigninAction.signInWithSmartLock())))
 
     val isMembership = clientId match {
-      case Some(GuardianMembersAClientID) => true
-      case Some(GuardianMembersBClientID) => true
+      case Some(GuardianMembersClientID) => true
       case _ => false
     }
 

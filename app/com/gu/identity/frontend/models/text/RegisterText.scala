@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.models.text
 
-import com.gu.identity.frontend.models.{ClientID, GuardianMembersAClientID, GuardianMembersBClientID}
+import com.gu.identity.frontend.models.{ClientID, GuardianMembersClientID}
 import play.api.i18n.Messages
 
 case class RegisterText private(
@@ -54,8 +54,7 @@ object RegisterText {
       signInCta = messages("register.signInCta"),
       standfirst = messages("register.standfirst"),
       title = clientId match {
-        case Some(GuardianMembersAClientID) => messages("register.title.membership")
-        case Some(GuardianMembersBClientID) => messages("register.title.supporter")
+        case Some(GuardianMembersClientID) => messages("register.title.supporter")
         case _ => messages("register.title")
       },
       displayName = messages("register.displayName"),

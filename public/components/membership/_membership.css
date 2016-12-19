@@ -1,5 +1,4 @@
-.skin-members,
-.skin-membersB {
+.skin-members {
   .header__logo-link {
     background-image: inline("guardian-members-logo.svg");
     height: height("guardian-members-logo.svg");
@@ -19,8 +18,7 @@
 }
 
 @media (--viewport-min-tablet) {
-  .skin-members,
-  .skin-membersB {
+  .skin-members {
     @mixin header__back-link--dark;
   }
 }
@@ -35,7 +33,7 @@
   }
 }
 
-.skin-membersB {
+.skin-members {
   background-color: #fff;
 
   .page-heading {

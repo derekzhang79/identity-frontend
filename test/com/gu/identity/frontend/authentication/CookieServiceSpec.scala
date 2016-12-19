@@ -82,7 +82,7 @@ class CookieServiceSpec extends PlaySpec {
 
       "set correct flag on GU_SO cookie" in {
         val cookieResult = CookieService.signOutCookies(signOutCookiesFromApi)(configuration)
-        cookieResult.filter(c => c.name == CookieName.GU_SO.toString).head.secure mustEqual false
+        cookieResult.filter(c => c.name == CookieName.GU_SO.toString).head.secure mustEqual true
         cookieResult.filter(c => c.name == CookieName.GU_SO.toString).head.httpOnly mustEqual false
       }
 

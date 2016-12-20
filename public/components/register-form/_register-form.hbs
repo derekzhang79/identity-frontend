@@ -1,13 +1,15 @@
 <form id="register_form" class="register-form" action="{{ actions.register }}" method="POST">
+
   <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
   <input type="hidden" name="returnUrl" value="{{ returnUrl }}"/>
   <input type="hidden" name="skipConfirmation" value="{{ skipConfirmation }}"/>
-    {{# hideDisplayName }}
-        <input type="hidden" id="register_field_hideDisplayName" name="hideDisplayName" value="{{ hideDisplayName }}" />
-    {{/hideDisplayName}}
+
+  {{# hideDisplayName }}
+    <input type="hidden" id="register_field_hideDisplayName" name="hideDisplayName" value="{{ hideDisplayName }}" />
+  {{/hideDisplayName}}
 
   {{# group }}
-      <input type="hidden" name="groupCode" value="{{ group.id }}">
+    <input type="hidden" name="groupCode" value="{{ group.id }}">
   {{/ group }}
 
   {{# clientId }}
@@ -21,96 +23,9 @@
   {{/ each }}
 
   <fieldset class="register-form__fieldset">
-
-    <div class="register-form__control--name">
-      <label class="register-form__label--name" for="register_field_firstname">{{ registerPageText.name }}</label>
-
-      <div class="register-form__control-column--firstname">
-        <input class="register-form__field--firstname" id="register_field_firstname" type="text" name="firstName" placeholder="{{ registerPageText.firstName }}" title="{{ registerPageText.firstOrLastNameHelp }}" required maxlength="25" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
-      </div>
-      <div class="register-form__control-column--lastname">
-        <input class="register-form__field--lastname" id="register_field_lastname" type="text" name="lastName" placeholder="{{ registerPageText.lastName }}" title="{{ registerPageText.firstOrLastNameHelp }}" required maxlength="25" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" />
-      </div>
-    </div>
-
-    <div class="register-form__control--email">
-      <label class="register-form__label--email" for="register_field_email">{{ registerPageText.email }}</label>
-      <input class="register-form__field--email" id="register_field_email" type="email" name="email" placeholder="{{ registerPageText.emailHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" required />
-    </div>
-
-
-    {{#each errors.emailErrors }}
-        <p id="{{ id }}" class="register-form__error">{{ message }}</p>
-    {{/ each }}
-
-    {{# askForPhoneNumber }}
-
-        <div class="register-form__control--phone-number">
-            <div class="register-form__control-column--area-code">
-                <label class="register-form__label--country-code" for="register_field_countryCode">
-                  {{ registerPageText.countryCode }}
-                </label>
-                <input type="hidden" id="register_field_countryIsoName" />
-                <select class="register-form__select--country-code" id="register_field_countryCode" type="tel"
-                        name="countryCode" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"/>
-                  {{#each countryCodes.codes }}
-                  <option value="{{ code }}">+ {{ code }}</option>
-                  {{/ each }}
-                </select>
-            </div>
-            <div class="register-form__control-column--local-number">
-                <label class="register-form__label--local-number" for="register_field_localNumber">
-                  {{ registerPageText.phone }}
-                  <a hidden class="register-form__link--why-phone-number">{{ registerPageText.whyPhone }}</a>
-                </label>
-                <input class="register-form__field--local-number" id="register_field_localNumber" type="tel"
-                       name="localNumber" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false"
-                       required minlength="3" maxlength="20"/>
-            </div>
-            <div class="register-form__tooltip--phone-number register-form__tooltip--phone-number--nojs">
-              <button class="register-form__tooltip--phone-number__close" aria-label="Close tooltip"
-              type="button">
-              <i class="register-form__icon--close"></i>
-            </button>
-            <p>{{ registerPageText.becausePhone }}</p>
-          </div>
-        </div>
-
-    {{/ askForPhoneNumber }}
-
-    <div class="register-form__control--displayName {{# hideDisplayName}}hidden{{/hideDisplayName}}">
-        <label class="register-form__label--displayName" for="register_field_displayName"><span>{{ registerPageText.displayName }}</span> <span class="register-form__label--displayName-note">{{ registerPageText.displayNameNote }}</span></label>
-        <input class="register-form__field--displayName" id="register_field_displayName" type="text" name="displayName" placeholder="{{ registerPageText.displayNameHelp }}" autocomplete="on" autocapitalize="off" autocorrect="off" spellcheck="false" title="{{ registerPageText.displayNameHelp }}" {{#unless hideDisplayName}} required minlength="2" maxlength="50" {{/unless}} />
-    </div>
-    {{# unless hideDisplayName}}
-      {{#each errors.displayNameErrors }}
-          <p id="{{ id }}" class="register-form__error">{{ message }}</p>
-      {{/ each }}
-    {{/unless}}
-
-
-      <div class="register-form__control--password">
-      <label class="register-form__label--password" for="register_field_password">{{ registerPageText.password }}</label>
-      <input class="register-form__field--password" id="register_field_password" type="password" name="password" placeholder="{{ registerPageText.passwordHelp }}" required minlength="6" />
-    </div>
-
-      {{#each errors.passwordErrors }}
-          <p id="{{ id }}" class="register-form__error">{{ message }}</p>
-      {{/ each }}
-
-    <div class="register-form__control--gnm-marketing">
-      <input class="register-form__checkbox--gnm-marketing" id="register_field_gnm_marketing" type="checkbox" name="receiveGnmMarketing" checked="checked" value="true"/>
-      <label class="register-form__label--gnm-marketing" for="register_field_gnm_marketing">{{ registerPageText.gnmMarketing }}</label>
-    </div>
-
-    <div class="register-form__control--3rd-party-marketing">
-        <input class="register-form__checkbox--3rd-party-marketing" id="register_field_3rd-party_marketing" type="checkbox" name="receive3rdPartyMarketing" value="true"/>
-        <label class="register-form__label--3rd-party-marketing" for="register_field_3rd-party_marketing">{{ registerPageText.3rdPartyMarketing }}</label>
-    </div>
-
+    {{> components/register-form/_form-fields}}
     <div class="register-form__control--submit">
       <button class="register-form__submit-button" id="register_submit" type="submit">{{ registerPageText.createAccount }}</button>
     </div>
-
   </fieldset>
 </form>

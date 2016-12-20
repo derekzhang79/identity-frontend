@@ -50,8 +50,7 @@ object ReturnUrl {
 
   def defaultForClient(configuration: Configuration, clientId: Option[ClientID]) =
     clientId match {
-      case Some(GuardianMembersAClientID) => defaultForMembership(configuration)
-      case Some(GuardianMembersBClientID) => defaultForMembership(configuration)
+      case Some(GuardianMembersClientID) => defaultForMembership(configuration)
       case _ => default(configuration)
     }
 

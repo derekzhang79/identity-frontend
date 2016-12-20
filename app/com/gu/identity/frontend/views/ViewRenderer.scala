@@ -43,7 +43,7 @@ object ViewRenderer {
     )
 
     val view = clientId match {
-      case Some(GuardianMembersBClientID) => "signin-page-membership"
+      case Some(GuardianMembersClientID) => "signin-page-membership"
       case _ => "signin-page"
     }
 
@@ -72,8 +72,7 @@ object ViewRenderer {
       group = group)
 
     clientId match {
-      case Some(GuardianMembersAClientID) => renderViewModel("register-page", model)
-      case Some(GuardianMembersBClientID) => renderViewModel("register-page-membership", model)
+      case Some(GuardianMembersClientID) => renderViewModel("register-page-membership", model)
       case _ => renderViewModel("register-page", model)
     }
   }

@@ -32,7 +32,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
   val signedInCookies = Seq(
     secureCookie,
     Cookie(name = CookieName.SC_GU_LA.toString, value = "SC_GU_LA", maxAge = None, path = "/", domain = Some("dev-theguardian.com"), secure = true, httpOnly = true),
-    Cookie(name = CookieName.GU_U.toString, value = "GU_U", maxAge = None, path = "/", domain = Some("dev-theguardian.com"), secure = false, httpOnly = false)
+    Cookie(name = CookieName.GU_U.toString, value = "GU_U", maxAge = None, path = "/", domain = Some("dev-theguardian.com"), secure = true, httpOnly = false)
   )
 
   val referer = "http://www.theguardian.com/refs"

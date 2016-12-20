@@ -6,12 +6,11 @@ import play.api.mvc.{Cookie => PlayCookie}
 
 sealed trait GuardianCookie {
   def name: CookieName.Name
-  def secure: Boolean
 }
 
-final case class DotComCookie(name: CookieName.Name, secure: Boolean) extends GuardianCookie
+final case class DotComCookie(name: CookieName.Name) extends GuardianCookie
 
-final case class IdentityCookie(name: CookieName.Name, secure: Boolean) extends GuardianCookie
+final case class IdentityCookie(name: CookieName.Name) extends GuardianCookie
 
 final case class IdentityApiCookie(name: String, value: String, isSession: Boolean, expires: DateTime)
 
@@ -22,7 +21,7 @@ object CookieService {
   def signInCookies(cookies: Seq[IdentityApiCookie], rememberMe: Boolean, now: Option[DateTime] = None)(config: Configuration): Seq[PlayCookie] = {
     cookies.map { c =>
       val maxAge = if (rememberMe) Some(getMaxAge(c.expires, now)) else None
-      val secureHttpOnly = CookieName.isSecureCookie(c.name)
+      val httpOnlyCookie = CookieName.isHttpOnly(c.name)
       val cookieMaxAgeOpt = maxAge.filterNot(_ => c.isSession)
 
       PlayCookie(
@@ -31,8 +30,8 @@ object CookieService {
         maxAge = cookieMaxAgeOpt,
         path = "/",
         domain = Some(config.identityCookieDomain),
-        secure = secureHttpOnly,
-        httpOnly = secureHttpOnly
+        secure = true,
+        httpOnly = httpOnlyCookie
       )
     }
   }
@@ -47,7 +46,7 @@ object CookieService {
         maxAge = maxAgeOpt,
         path = "/",
         domain = Some(config.identityCookieDomain),
-        secure = false,
+        secure = true,
         httpOnly = false
       )
 

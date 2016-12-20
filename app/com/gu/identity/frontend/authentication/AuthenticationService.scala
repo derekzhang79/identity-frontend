@@ -11,12 +11,12 @@ case class AuthenticatedUser(userId: String)
 object AuthenticationService {
 
   val knownCookies: Seq[GuardianCookie] = Seq(
-    DotComCookie(CookieName.gu_user_features_expiry, secure = false),
-    DotComCookie(CookieName.gu_paying_member, secure = false),
-    IdentityCookie(CookieName.GU_U, secure = false),
-    IdentityCookie(CookieName.GU_ID_CSRF, secure = true),
-    IdentityCookie(CookieName.GU_PROFILE_CSRF, secure = true),
-    IdentityCookie(CookieName.SC_GU_U, secure = true)
+    DotComCookie(CookieName.gu_user_features_expiry),
+    DotComCookie(CookieName.gu_paying_member),
+    IdentityCookie(CookieName.GU_U),
+    IdentityCookie(CookieName.GU_ID_CSRF),
+    IdentityCookie(CookieName.GU_PROFILE_CSRF),
+    IdentityCookie(CookieName.SC_GU_U)
   )
 
   implicit def cookieNameToString(cookieName: Name): String = cookieName.toString
@@ -34,7 +34,7 @@ object AuthenticationService {
       newCookies: Seq[Cookie] = Seq.empty): Result = {
 
     val cookiesToDiscard: Seq[DiscardingCookie] = knownCookies.map { cookie =>
-      DiscardingCookie(name = cookie.name, path = "/", domain = Some(cookieDomain), secure = cookie.secure)
+      DiscardingCookie(name = cookie.name, path = "/", domain = Some(cookieDomain), secure = true)
     }
 
     NoCache(

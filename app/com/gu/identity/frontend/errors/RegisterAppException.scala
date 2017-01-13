@@ -16,6 +16,7 @@ object RegisterServiceAppException {
     clientError match {
       case ClientRegistrationEmailValidationError => RegisterEmailInvalidConflictAppException
       case ClientRegistrationEmailConflictError => RegisterEmailConflictAppException
+      case ClientRegistrationEmailReservedError => RegisterEmailReservedAppException
       case err: ClientBadRequestError => RegisterServiceBadRequestException(clientError)
       case err: ClientGatewayError => RegisterServiceGatewayAppException(clientError)
     }
@@ -42,6 +43,13 @@ case object RegisterEmailConflictAppException
   with RegisterServiceAppException {
 
   val id = RegisterEmailConflictErrorID
+}
+
+case object RegisterEmailReservedAppException
+  extends ServiceBadRequestAppException(ClientRegistrationEmailReservedError)
+    with RegisterServiceAppException {
+
+  val id = RegisterEmailReservedErrorID
 }
 
 case object RegisterEmailInvalidConflictAppException

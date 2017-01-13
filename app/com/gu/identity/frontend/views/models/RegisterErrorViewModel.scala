@@ -9,6 +9,7 @@ object RegisterErrorViewModel {
     RegisterActionInvalidDisplayNameErrorID -> "displayNameError",
     RegisterActionInvalidEmailErrorID -> "emailError",
     RegisterEmailConflictErrorID -> "emailError",
+    RegisterEmailReservedErrorID -> "emailError",
     RegisterActionInvalidPasswordErrorID -> "passwordError"
   )
   lazy val errorFieldByKey: Map[String, String] =

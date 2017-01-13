@@ -23,6 +23,7 @@ object ErrorViewModel {
     RegisterBadRequestErrorID -> "One or more inputs was not valid; please try again.",
     RegisterActionBadRequestErrorID -> "One or more inputs was not valid; please try again.",
     RegisterEmailConflictErrorID -> "You already have a Guardian account. Please sign in or use another email address.",
+    RegisterEmailReservedErrorID -> "This email is not available. Please use another email address.",
     RegisterActionInvalidFirstNameErrorID -> minMaxLength("First name", 1, 25),
     RegisterActionInvalidLastNameErrorID -> minMaxLength("Last name", 1, 25),
     RegisterActionInvalidEmailErrorID -> "Invalid email address; please try again.",

@@ -14,51 +14,9 @@ Configuration files:
 
 # Local development
 
-## Hosts
+## Nginx setup
 
-Ensure you have the correct [identity-frontend hosts](https://github.com/guardian/identity-frontend/blob/master/nginx/hosts) included in the /etc/hosts file on your machine
-
-## SSL Certificates & nginx setup
-
-The certificates for the local subdomain `profile-origin.thegulocal.com` can be genereated without a signer and are set up as part of the `identity-frontend.conf` for nginx.
-
-Follow these installation steps to correctly setup nginx and unsigned SSL certificates locally:
-
-* Make sure you are in the base `identity-frontend` directory
-
-```bash
-mkdir nginxCerts
-openssl req -x509 -nodes -days 3650 -newkey rsa:1024 -keyout ./nginxCerts/profile-origin-thegulocal-com-exp2016-11-10.key -out ./nginxCerts/profile-origin-thegulocal-com-exp2016-11-10-bundle.crt
-```
-make sure you set the name of the domain to profile-origin.thegulocal.com.  If you want to access it in chrome, when you get the error page, you need to type "badidea" and it will bypass the signer error.
-
-* Find the configuration folder of nginx by running:
-
-```bash
-nginxHome=`nginx -V 2>&1 | grep "configure arguments:" | sed 's/[^*]*conf-path=\([^ ]*\)\/nginx\.conf.*/\1/g'`
-```
-
-`echo $nginxHome` should display the name of the folder.
-
-* Create symbolic links for the certificates and identity-frontend configuration file for nginx (note: this might require `sudo`)
-
-```bash
-sudo ln -fs `pwd`/nginxCerts/profile-origin-thegulocal-com-exp2016-11-10-bundle.crt $nginxHome/profile-origin-thegulocal-com-exp2016-11-10-bundle.crt
-sudo ln -fs `pwd`/nginxCerts/profile-origin-thegulocal-com-exp2016-11-10.key $nginxHome/profile-origin-thegulocal-com-exp2016-11-10.key
-sudo ln -fs `pwd`/nginx/identity-frontend.conf $nginxHome/sites-enabled/identity-frontend.conf
-```
-
-* Restart nginx:
-
-```bash
-sudo nginx -s stop
-sudo nginx
-```
-
-* Optional - verify that your configuration is set up as expected
-
-    - `ls -la $nginxHome` should show the certificates correctly symlinked to the **full pathname** of the downloaded certificates
-    - `ls -la $nginxHome/sites-enabled` should show `identity-frontend.conf`  correctly symlinked to the **full pathname** of `identity-frontend/nginx/identity-frontend.conf`
+Clone [identity-platform](https://github.com/guardian/identity-platform) and follow its [README](https://github.com/guardian/identity-platform/blob/master/README.md#setup-nginx-for-local-development)
 
 ## Configuration
 

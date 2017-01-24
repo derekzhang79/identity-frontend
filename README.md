@@ -37,7 +37,7 @@ Requires:
 
  - [JDK 8](http://openjdk.java.net)
  - [sbt](http://www.scala-sbt.org)
- - [Node.js 4.x](https://nodejs.org)
+ - [Node.js](https://nodejs.org) - version is specified by [.nvmrc](.nvmrc), execute [`$ nvm use`](https://github.com/creationix/nvm#nvmrc) to use it
 
 To run the application in development mode use:
 

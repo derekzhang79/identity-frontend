@@ -1,6 +1,5 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.errors.ErrorIDs._
 import com.gu.identity.frontend.errors.{ErrorID, ErrorIDs}
 
 case class ErrorViewModel(id: String, message: String) extends ViewModel
@@ -23,7 +22,7 @@ object ErrorViewModel {
     RegisterGatewayErrorID -> "There was a problem creating your account; please try again.",
     RegisterBadRequestErrorID -> "One or more inputs was not valid; please try again.",
     RegisterActionBadRequestErrorID -> "One or more inputs was not valid; please try again.",
-    RegisterEmailConflictErrorID -> "This email is already in use; please check you do not already have an account.",
+    RegisterEmailConflictErrorID -> "You already have a Guardian account. Please sign in or use another email address.",
     RegisterActionInvalidFirstNameErrorID -> minMaxLength("First name", 1, 25),
     RegisterActionInvalidLastNameErrorID -> minMaxLength("Last name", 1, 25),
     RegisterActionInvalidEmailErrorID -> "Invalid email address; please try again.",

@@ -1,15 +1,17 @@
 package com.gu.identity.frontend.controllers
 
+import com.gu.identity.frontend.analytics.AnalyticsEventActor
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFConfig
-import com.gu.identity.frontend.errors.{SignInServiceGatewayAppException, SignInServiceBadRequestException}
+import com.gu.identity.frontend.errors.{SignInServiceBadRequestException, SignInServiceGatewayAppException}
+import com.gu.identity.frontend.logging.MetricsLoggingActor
 import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
 import com.gu.identity.frontend.services._
-import com.gu.identity.service.client.{ClientGatewayError, ClientBadRequestError}
+import com.gu.identity.service.client.{ClientBadRequestError, ClientGatewayError}
 import org.mockito.ArgumentMatcher
 import org.mockito.Mockito._
-import org.mockito.Matchers.{any => argAny, argThat}
+import org.mockito.Matchers.{argThat, any => argAny}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.i18n.MessagesApi
@@ -31,7 +33,10 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
     val config = Configuration.testConfiguration
-    lazy val controller = new SigninAction(mockIdentityService, messages, fakeCsrfConfig, config)
+    val metricsActor = mock[MetricsLoggingActor]
+    val eventActor = mock[AnalyticsEventActor]
+
+    lazy val controller = new SigninAction(mockIdentityService, messages, metricsActor, eventActor, fakeCsrfConfig, config)
 
     def mockAuthenticate(
         email: String,

@@ -1,23 +1,32 @@
 package com.gu.identity.frontend.controllers
 
+import com.gu.identity.frontend.analytics.AnalyticsEventActor
+import com.gu.identity.frontend.analytics.client.SigninEventRequest
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
-import com.gu.identity.frontend.errors.{ResultOnError, RedirectOnError}
+import com.gu.identity.frontend.errors.{RedirectOnError, ResultOnError}
 import com.gu.identity.frontend.logging.{LogOnErrorAction, Logging, MetricsLoggingActor}
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.request.SignInActionRequestBody
 import com.gu.identity.frontend.services._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.iteratee.Enumerator
-import play.api.libs.json.{JsString, JsBoolean, JsObject}
 import play.api.mvc._
 
 
 /**
- * Form actions controller
+ * Form actions controller]
  */
-class SigninAction(identityService: IdentityService, val messagesApi: MessagesApi, csrfConfig: CSRFConfig, config: Configuration) extends Controller with Logging with MetricsLoggingActor with I18nSupport {
+class SigninAction(
+    identityService: IdentityService,
+    val messagesApi: MessagesApi,
+    metricsActor: MetricsLoggingActor,
+    eventActor: AnalyticsEventActor,
+    csrfConfig: CSRFConfig,
+    config: Configuration)
+  extends Controller
+    with Logging
+    with I18nSupport {
 
   val redirectRoute: String = routes.Application.signIn().url
 
@@ -35,32 +44,36 @@ class SigninAction(identityService: IdentityService, val messagesApi: MessagesAp
 
   val bodyParser = SignInActionRequestBody.bodyParser
 
+  def signInMetricsLogger(request: Request[SignInActionRequestBody]) = {
+    metricsActor.logSuccessfulSignin()
+    eventActor.sendSuccessfulSignin(SigninEventRequest(request))
+  }
+
   def signIn = SignInServiceAction(bodyParser) {
-    signInAction(successfulSignInResponse(_, _), logSuccessfulSignin)
+    signInAction(successfulSignInResponse, signInMetricsLogger)
   }
 
   def signInWithSmartLock = SignInSmartLockServiceAction(bodyParser) {
-    signInAction(successfulSmartLockSignInResponse(_, _), logSuccessfulSmartLockSignin)
+    signInAction(successfulSmartLockSignInResponse, _ => metricsActor.logSuccessfulSmartLockSignin())
   }
 
-  def signInAction(sucessResponse: (ReturnUrl, Seq[Cookie]) => Result, metricsLogger: () => Unit) = { request: Request[SignInActionRequestBody] =>
+  def signInAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] =>
     val body = request.body
 
     val trackingData = TrackingData(request, body.returnUrl.flatMap(_.toStringOpt))
     lazy val returnUrl = body.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, body.clientId))
 
     val successfulReturnUrl = body.groupCode match {
-      case Some(validGroupCode) => {
+      case Some(validGroupCode) =>
         UrlBuilder.buildThirdPartyReturnUrl(returnUrl, body.skipConfirmation, skipThirdPartyLandingPage = true, body.clientId, validGroupCode, config)
-      }
       case _ => returnUrl
     }
 
     identityService.authenticate(body, trackingData).map {
       case Left(errors) => Left(errors)
       case Right(cookies) => Right {
-        metricsLogger()
-        sucessResponse(successfulReturnUrl, cookies)
+        metricsLogger(request)
+        successResponse(successfulReturnUrl, cookies)
       }
     }
   }

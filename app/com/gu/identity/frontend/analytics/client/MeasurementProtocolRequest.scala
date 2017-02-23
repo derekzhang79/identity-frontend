@@ -8,7 +8,7 @@ import play.api.mvc.Request
 trait MeasurementProtocolRequestBody[T] {
   def apply(request: Request[T], config: Configuration): String = {
     val params = commonBodyParameters(
-      request.cookies.get("_ga").get.value, // TODO: use the actual client ID (pass from client)
+      request.cookies.get("_ga").map(_.value).getOrElse(""), // TODO: use the actual client ID (pass from client)
       request.remoteAddress,
       request.headers.get("User-Agent").getOrElse(""),
       request.acceptLanguages.headOption.map(_.language).getOrElse(""),

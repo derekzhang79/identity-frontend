@@ -1,6 +1,8 @@
 package com.gu.identity.frontend.controllers
 
 
+import com.gu.identity.frontend.analytics.AnalyticsEventActor
+import com.gu.identity.frontend.analytics.client.RegisterEventRequest
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
 import com.gu.identity.frontend.errors.RedirectOnError
@@ -8,12 +10,21 @@ import com.gu.identity.frontend.logging.{LogOnErrorAction, Logging, MetricsLoggi
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.request.RegisterActionRequestBody
 import com.gu.identity.frontend.services.{IdentityService, ServiceAction, ServiceActionBuilder}
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{BodyParser, Controller, Request, Cookie => PlayCookie}
 
 
-class RegisterAction(identityService: IdentityService, val messagesApi: MessagesApi, val config: Configuration, csrfConfig: CSRFConfig) extends Controller with Logging with MetricsLoggingActor with I18nSupport {
+class RegisterAction(
+    identityService: IdentityService,
+    val messagesApi: MessagesApi,
+    metricsLoggingActor: MetricsLoggingActor,
+    analyticsEventActor: AnalyticsEventActor,
+    val config: Configuration,
+    csrfConfig: CSRFConfig)
+  extends Controller
+    with Logging
+    with I18nSupport {
 
   val redirectRoute: String = routes.Application.register().url
 
@@ -25,7 +36,7 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
 
   val bodyParser: BodyParser[RegisterActionRequestBody] = RegisterActionRequestBody.bodyParser
 
-  def register = RegisterServiceAction(bodyParser) { request =>
+  def register = RegisterServiceAction(bodyParser) { implicit request =>
     val clientIp = ClientIp(request)
     val body = request.body
 
@@ -41,7 +52,13 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
   }
 
 
-  private def registerSuccessRedirectUrl(cookies: Seq[PlayCookie], returnUrlOpt: Option[ReturnUrl], skipConfirmation: Option[Boolean], group: Option[GroupCode], clientId: Option[ClientID]) = {
+  private def registerSuccessRedirectUrl(
+      cookies: Seq[PlayCookie],
+      returnUrlOpt: Option[ReturnUrl],
+      skipConfirmation: Option[Boolean],
+      group: Option[GroupCode],
+      clientId: Option[ClientID])(implicit request: Request[RegisterActionRequestBody]) = {
+
     val returnUrl = returnUrlOpt.getOrElse(ReturnUrl.defaultForClient(config, clientId))
     val registrationConfirmUrl = UrlBuilder(config.identityProfileBaseUrl, routes.Application.confirm())
     (group, skipConfirmation.getOrElse(false)) match {
@@ -64,8 +81,9 @@ class RegisterAction(identityService: IdentityService, val messagesApi: Messages
     }
   }
 
-  private def registerSuccessResult(returnUrl: ReturnUrl, cookies: Seq[PlayCookie]) = {
-    logSuccessfulRegister()
+  private def registerSuccessResult(returnUrl: ReturnUrl, cookies: Seq[PlayCookie])(implicit request: Request[RegisterActionRequestBody]) = {
+    metricsLoggingActor.logSuccessfulRegister()
+    analyticsEventActor.sendSuccessfulRegister(RegisterEventRequest(request))
     SeeOther(returnUrl.url).withCookies(cookies: _*)
   }
 }

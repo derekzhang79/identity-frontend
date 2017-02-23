@@ -1,21 +1,5 @@
 package com.gu.identity.frontend.logging
 import akka.actor._
-import play.api.Logger
-
-import scala.concurrent.{ExecutionContext, Future}
-
-trait MetricsLoggingActor {
-
-  val logSuccessfulRegister = () => MetricsLoggingActor.logSuccessfulRegister()
-
-  val logSuccessfulSignin = () => MetricsLoggingActor.logSuccessfulSignin()
-
-  val logSuccessfulSmartLockSignin = () => MetricsLoggingActor.logSuccessfulSmartLockSignin()
-
-  def terminateActor()(implicit executionContext: ExecutionContext): Future[Unit] = {
-    MetricsLoggingActor.terminateActor().map(_ => ())
-  }
-}
 
 private sealed trait Message {}
 
@@ -24,29 +8,26 @@ private object SmartLockSignIn extends Message
 private object Register extends Message
 private object Terminate extends Message
 
-private object MetricsLoggingActor {
-  private val system = ActorSystem()
-  val successfulActionLogger = system.actorOf(Props[MetricsActor])
+class MetricsLoggingActor(metricsActor: ActorRef) {
 
-  def logSuccessfulRegister(): Unit = {
-    successfulActionLogger ! Register
+  def logSuccessfulRegister() = {
+    metricsActor ! Register
   }
 
-  def logSuccessfulSignin(): Unit = {
-    successfulActionLogger ! SignIn
+  def logSuccessfulSignin() = {
+    metricsActor ! SignIn
   }
 
-  def logSuccessfulSmartLockSignin(): Unit = {
-    successfulActionLogger ! SmartLockSignIn
+  def logSuccessfulSmartLockSignin() = {
+    metricsActor ! SmartLockSignIn
   }
 
-  def terminateActor(): Future[Terminated] = {
-    successfulActionLogger ! PoisonPill
-    system.terminate()
+  def terminateActor() = {
+    metricsActor ! PoisonPill
   }
 }
 
-private class MetricsActor extends Actor with Logging{
+class MetricsActor extends Actor with Logging {
 
   override def receive: Receive = {
     case SignIn => SuccessfulActionCloudwatchLogging.putSignIn()

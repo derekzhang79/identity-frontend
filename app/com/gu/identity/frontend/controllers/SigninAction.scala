@@ -23,7 +23,7 @@ class SigninAction(
     metricsActor: MetricsLoggingActor,
     eventActor: AnalyticsEventActor,
     csrfConfig: CSRFConfig,
-    config: Configuration)
+    val config: Configuration)
   extends Controller
     with Logging
     with I18nSupport {
@@ -46,7 +46,7 @@ class SigninAction(
 
   def signInMetricsLogger(request: Request[SignInActionRequestBody]) = {
     metricsActor.logSuccessfulSignin()
-    eventActor.sendSuccessfulSignin(SigninEventRequest(request))
+    eventActor.sendSuccessfulSignin(SigninEventRequest(request, config))
   }
 
   def signIn = SignInServiceAction(bodyParser) {
@@ -78,14 +78,12 @@ class SigninAction(
     }
   }
 
-  def successfulSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result = {
-      SeeOther(successfulReturnUrl.url)
-        .withCookies(cookies: _*)
-  }
+  def successfulSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
+    SeeOther(successfulReturnUrl.url)
+      .withCookies(cookies: _*)
 
-  def successfulSmartLockSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result = {
+  def successfulSmartLockSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
     Ok("")
       .withCookies(cookies: _*)
-  }
 }
 

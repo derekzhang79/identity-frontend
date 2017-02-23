@@ -83,7 +83,7 @@ class RegisterAction(
 
   private def registerSuccessResult(returnUrl: ReturnUrl, cookies: Seq[PlayCookie])(implicit request: Request[RegisterActionRequestBody]) = {
     metricsLoggingActor.logSuccessfulRegister()
-    analyticsEventActor.sendSuccessfulRegister(RegisterEventRequest(request))
+    analyticsEventActor.sendSuccessfulRegister(RegisterEventRequest(request, config))
     SeeOther(returnUrl.url).withCookies(cookies: _*)
   }
 }

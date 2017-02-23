@@ -1,18 +1,19 @@
 package com.gu.identity.frontend.analytics.client
 
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.request.{RegisterActionRequestBody, SignInActionRequestBody}
 import play.api.mvc.Request
 
 
 trait MeasurementProtocolRequestBody[T] {
-  def apply(request: Request[T]): String = {
+  def apply(request: Request[T], config: Configuration): String = {
     val params = commonBodyParameters(
       request.cookies.get("_ga").get.value, // TODO: use the actual client ID (pass from client)
       request.remoteAddress,
       request.headers.get("User-Agent").getOrElse(""),
       request.acceptLanguages.headOption.map(_.language).getOrElse(""),
       request.host + request.uri,
-      request.domain
+      config.gaUID
     ) ++ extraBodyParams
 
     encodeBody(params: _*)
@@ -26,10 +27,10 @@ trait MeasurementProtocolRequestBody[T] {
       userAgent: String,
       userLanguage: String,
       url: String,
-      domain: String): Seq[(String, String)] =
+      gaUID: String): Seq[(String, String)] =
     Seq(
       "v" -> "1",
-      "tid" -> "UA-78705427-4", // TODO: config
+      "tid" -> gaUID,
       "cid" -> clientId,
       "t" -> "event",
       "uip" -> ipAddress,
@@ -38,7 +39,7 @@ trait MeasurementProtocolRequestBody[T] {
       "ul" -> userLanguage,
       "dl" -> url,
       "ec" -> "identity",
-      "cd3" -> domain, // TODO: or hardcoded profile.theguardian.com?
+      "cd3" -> "profile.theguardian.com",
       "cd4" -> userAgent,
       "cd5" -> url
     )
@@ -51,7 +52,7 @@ trait MeasurementProtocolRequestBody[T] {
 }
 
 trait MeasurementProtocolRequest {
-  val url: String = s"https://www.google-analytics.com/debug/collect" // TODO: env
+  val url: String = s"https://www.google-analytics.com/collect"
   val body: String
 }
 
@@ -63,8 +64,8 @@ private object SigninEventRequestBody extends MeasurementProtocolRequestBody[Sig
   )
 }
 
-case class SigninEventRequest(request: Request[SignInActionRequestBody]) extends MeasurementProtocolRequest {
-  override val body = SigninEventRequestBody(request)
+case class SigninEventRequest(request: Request[SignInActionRequestBody], config: Configuration) extends MeasurementProtocolRequest {
+  override val body = SigninEventRequestBody(request, config)
 }
 
 private object RegisterEventRequestBody extends MeasurementProtocolRequestBody[RegisterActionRequestBody] {
@@ -75,6 +76,6 @@ private object RegisterEventRequestBody extends MeasurementProtocolRequestBody[R
   )
 }
 
-case class RegisterEventRequest(request: Request[RegisterActionRequestBody]) extends MeasurementProtocolRequest {
-  override val body = RegisterEventRequestBody(request)
+case class RegisterEventRequest(request: Request[RegisterActionRequestBody], config: Configuration) extends MeasurementProtocolRequest {
+  override val body = RegisterEventRequestBody(request, config)
 }

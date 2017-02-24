@@ -122,6 +122,10 @@ object ErrorIDs {
     val key = "error-forgery-token"
   }
 
+  case object MissingGaClientIdErrorID extends ErrorID {
+    val key = "error-ga-client-id"
+  }
+
   case object RateLimitedErrorID extends ErrorID {
     val key = "rate-limited"
   }

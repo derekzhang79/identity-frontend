@@ -1,14 +1,15 @@
 package com.gu.identity.frontend.analytics.client
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.request.RequestParameters.GaClientIdRequestParameter
 import com.gu.identity.frontend.request.{RegisterActionRequestBody, SignInActionRequestBody}
 import play.api.mvc.Request
 
 
-trait MeasurementProtocolRequestBody[T] {
+trait MeasurementProtocolRequestBody[T <: GaClientIdRequestParameter] {
   def apply(request: Request[T], config: Configuration): String = {
     val params = commonBodyParameters(
-      request.cookies.get("_ga").map(_.value).getOrElse(""), // TODO: use the actual client ID (pass from client)
+      request.body.gaClientId,
       request.remoteAddress,
       request.headers.get("User-Agent").getOrElse(""),
       request.acceptLanguages.headOption.map(_.language).getOrElse(""),

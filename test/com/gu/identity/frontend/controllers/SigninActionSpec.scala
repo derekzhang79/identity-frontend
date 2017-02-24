@@ -77,7 +77,8 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
       password.map("password" -> _),
       rememberMe.map("rememberMe" -> _),
       returnUrl.map("returnUrl" -> _),
-      Some("csrfToken" -> "~~fake token~~")
+      Some("csrfToken" -> "~~fake token~~"),
+      Some("gaClientId" -> "~~fake client id~~")
     ).flatten
 
     FakeRequest("POST", "/actions/signin")

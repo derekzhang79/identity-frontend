@@ -56,7 +56,8 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "returnUrl" -> returnUrl.getOrElse("http://none.com"),
       "skipConfirmation" -> skipConfirmation.getOrElse(false).toString,
       "groupCode" -> groupCode.getOrElse(""),
-      "csrfToken" -> "~stubbedToken~")
+      "csrfToken" -> "~stubbedToken~",
+      "gaClientId" -> "~~fake client id~~")
 
     FakeRequest("POST", "/actions/register")
       .withFormUrlEncodedBody(bodyParams: _*)

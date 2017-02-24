@@ -16,13 +16,15 @@ case class SignInActionRequestBody private(
     skipConfirmation: Option[Boolean],
     clientId: Option[ClientID],
     groupCode: Option[GroupCode],
-    csrfToken: String)
+    csrfToken: String,
+    gaClientId: String)
   extends SignInRequestParameters
   with ReturnUrlRequestParameter
   with SkipConfirmationRequestParameter
   with ClientIdRequestParameter
   with GroupRequestParameter
   with CSRFTokenRequestParameter
+  with GaClientIdRequestParameter
 
 
 object SignInActionRequestBody {
@@ -44,6 +46,7 @@ object SignInActionRequestBody {
     case FormError("email", _, _) => SignInInvalidCredentialsAppException
     case FormError("password", _, _) => SignInInvalidCredentialsAppException
     case FormError("csrfToken", _, _) => ForgeryTokenAppException("Missing csrfToken on request")
+    case FormError("gaClientId", _, _) => MissingGaClientId("Missing GA client ID on request")
     case e => SignInActionBadRequestAppException(s"Unexpected error: ${e.message}")
   }
 
@@ -63,7 +66,8 @@ object SignInActionRequestBody {
         "skipConfirmation" -> optional(boolean),
         "clientId" -> optional(clientId),
         "groupCode" -> optional(groupCode),
-        "csrfToken" -> text
+        "csrfToken" -> text,
+        "gaClientId" -> text
       )(SignInActionRequestBody.apply)(SignInActionRequestBody.unapply)
 
   }

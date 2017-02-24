@@ -11,6 +11,8 @@
     <input type="hidden" name="clientId" value="{{ clientId.id }}">
   {{/ clientId }}
 
+  <input type="hidden" class="js-ga-client-id" name="gaClientId" value="">
+
   <p class="signin-form__prelude">{{signInPageText.divideText}}</p>
 
   {{#each errors }}

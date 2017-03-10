@@ -46,7 +46,7 @@ class SigninAction(
 
   def signInMetricsLogger(request: Request[SignInActionRequestBody]) = {
     metricsActor.logSuccessfulSignin()
-    eventActor.sendSuccessfulSignin(SigninEventRequest(request, config))
+    eventActor.sendSuccessfulSignin(SigninEventRequest(request, config.gaUID))
   }
 
   def signIn = SignInServiceAction(bodyParser) {

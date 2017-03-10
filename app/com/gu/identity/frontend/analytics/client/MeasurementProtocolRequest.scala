@@ -1,20 +1,19 @@
 package com.gu.identity.frontend.analytics.client
 
-import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.request.RequestParameters.GaClientIdRequestParameter
 import com.gu.identity.frontend.request.{RegisterActionRequestBody, SignInActionRequestBody}
 import play.api.mvc.Request
 
 
 trait MeasurementProtocolRequestBody[T <: GaClientIdRequestParameter] {
-  def apply(request: Request[T], config: Configuration): String = {
+  def apply(request: Request[T], gaUID: String): String = {
     val params = commonBodyParameters(
       request.body.gaClientId,
       request.remoteAddress,
       request.headers.get("User-Agent").getOrElse(""),
       request.acceptLanguages.headOption.map(_.language).getOrElse(""),
       request.host + request.uri,
-      config.gaUID
+      gaUID
     ) ++ extraBodyParams
 
     encodeBody(params: _*)
@@ -65,8 +64,8 @@ private object SigninEventRequestBody extends MeasurementProtocolRequestBody[Sig
   )
 }
 
-case class SigninEventRequest(request: Request[SignInActionRequestBody], config: Configuration) extends MeasurementProtocolRequest {
-  override val body = SigninEventRequestBody(request, config)
+case class SigninEventRequest(request: Request[SignInActionRequestBody], gaUID: String) extends MeasurementProtocolRequest {
+  override val body = SigninEventRequestBody(request, gaUID)
 }
 
 private object RegisterEventRequestBody extends MeasurementProtocolRequestBody[RegisterActionRequestBody] {
@@ -77,6 +76,6 @@ private object RegisterEventRequestBody extends MeasurementProtocolRequestBody[R
   )
 }
 
-case class RegisterEventRequest(request: Request[RegisterActionRequestBody], config: Configuration) extends MeasurementProtocolRequest {
-  override val body = RegisterEventRequestBody(request, config)
+case class RegisterEventRequest(request: Request[RegisterActionRequestBody], gaUID: String) extends MeasurementProtocolRequest {
+  override val body = RegisterEventRequestBody(request, gaUID)
 }

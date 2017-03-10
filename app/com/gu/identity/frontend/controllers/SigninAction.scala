@@ -15,7 +15,7 @@ import play.api.mvc._
 
 
 /**
- * Form actions controller]
+ * Form actions controller
  */
 class SigninAction(
     identityService: IdentityService,

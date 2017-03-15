@@ -83,7 +83,13 @@ class RegisterAction(
 
   private def registerSuccessResult(returnUrl: ReturnUrl, cookies: Seq[PlayCookie])(implicit request: Request[RegisterActionRequestBody]) = {
     metricsLoggingActor.logSuccessfulRegister()
-    analyticsEventActor.sendSuccessfulRegister(RegisterEventRequest(request, config.gaUID))
+
+    if(request.body.gaClientId.isDefined) {
+      analyticsEventActor.sendSuccessfulRegister(RegisterEventRequest(request, config.gaUID))
+    } else {
+      logger.warn("No GA Client ID passed with request")
+    }
+
     SeeOther(returnUrl.url).withCookies(cookies: _*)
   }
 }

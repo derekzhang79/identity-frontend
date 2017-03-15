@@ -46,7 +46,12 @@ class SigninAction(
 
   def signInMetricsLogger(request: Request[SignInActionRequestBody]) = {
     metricsActor.logSuccessfulSignin()
-    eventActor.sendSuccessfulSignin(SigninEventRequest(request, config.gaUID))
+
+    if(request.body.gaClientId.isDefined) {
+      eventActor.sendSuccessfulSignin(SigninEventRequest(request, config.gaUID))
+    } else {
+      logger.warn("No GA Client ID passed with request")
+    }
   }
 
   def signIn = SignInServiceAction(bodyParser) {

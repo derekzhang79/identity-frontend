@@ -87,7 +87,7 @@ class RegisterAction(
     if(request.body.gaClientId.isDefined) {
       analyticsEventActor.sendSuccessfulRegister(RegisterEventRequest(request, config.gaUID))
     } else {
-      logger.warn("No GA Client ID passed with request")
+      logger.warn("No GA Client ID passed for register request")
     }
 
     SeeOther(returnUrl.url).withCookies(cookies: _*)

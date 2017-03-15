@@ -50,7 +50,7 @@ class SigninAction(
     if(request.body.gaClientId.isDefined) {
       eventActor.sendSuccessfulSignin(SigninEventRequest(request, config.gaUID))
     } else {
-      logger.warn("No GA Client ID passed with request")
+      logger.warn("No GA Client ID passed for sign in request")
     }
   }
 

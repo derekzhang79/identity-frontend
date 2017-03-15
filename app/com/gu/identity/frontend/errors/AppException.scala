@@ -70,10 +70,3 @@ case class ForgeryTokenAppException(message: String)
   with BadRequestAppException {
   val id = ForgeryTokenErrorID
 }
-
-
-case class MissingGaClientId(message: String)
-  extends AbstractAppException(message)
-    with BadRequestAppException {
-  val id = MissingGaClientIdErrorID
-}

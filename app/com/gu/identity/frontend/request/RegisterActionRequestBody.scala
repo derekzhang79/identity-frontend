@@ -25,7 +25,7 @@ case class RegisterActionRequestBody private(
                                               groupCode: Option[GroupCode],
                                               clientId: Option[ClientID],
                                               csrfToken: String,
-                                              gaClientId: String)
+                                              gaClientId: Option[String])
   extends SignInRequestParameters
   with ReturnUrlRequestParameter
   with SkipConfirmationRequestParameter
@@ -52,7 +52,6 @@ object RegisterActionRequestBody {
 
   private def handleFormErrors(formError: FormError): AppException = formError match {
     case FormError("csrfToken", _, _) => ForgeryTokenAppException("Missing csrfToken on request")
-    case FormError("gaClientId", _, _) => MissingGaClientId("Missing GA client ID on request")
     case FormError("firstName", msg, _) => RegisterActionInvalidFirstNameAppException(msg.headOption.getOrElse("unknown"))
     case FormError("lastName", msg, _) => RegisterActionInvalidLastNameAppException(msg.headOption.getOrElse("unknown"))
     case FormError("email", msg, _) => RegisterActionInvalidEmailAppException(msg.headOption.getOrElse("unknown"))
@@ -92,7 +91,7 @@ object RegisterActionRequestBody {
         "groupCode" -> optional(groupCode),
         "clientId" -> optional(clientId),
         "csrfToken" -> text,
-        "gaClientId" -> text
+        "gaClientId" -> optional(text)
       )(RegisterActionRequestBody.apply)(RegisterActionRequestBody.unapply)
   }
 }

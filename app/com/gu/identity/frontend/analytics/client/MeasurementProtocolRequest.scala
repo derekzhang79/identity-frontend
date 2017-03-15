@@ -1,22 +1,28 @@
 package com.gu.identity.frontend.analytics.client
 
+import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.request.RequestParameters.GaClientIdRequestParameter
 import com.gu.identity.frontend.request.{RegisterActionRequestBody, SignInActionRequestBody}
 import play.api.mvc.Request
 
 
-trait MeasurementProtocolRequestBody[T <: GaClientIdRequestParameter] {
-  def apply(request: Request[T], gaUID: String): String = {
-    val params = commonBodyParameters(
-      request.body.gaClientId,
-      request.remoteAddress,
-      request.headers.get("User-Agent").getOrElse(""),
-      request.acceptLanguages.headOption.map(_.language).getOrElse(""),
-      request.host + request.uri,
-      gaUID
-    ) ++ extraBodyParams
+trait MeasurementProtocolRequestBody[T <: GaClientIdRequestParameter] extends Logging {
+  def apply(request: Request[T], gaUID: String): Option[String] = {
+    request.body.gaClientId.map { clientId =>
+      val params = commonBodyParameters(
+        clientId,
+        request.remoteAddress,
+        request.headers.get("User-Agent").getOrElse(""),
+        request.acceptLanguages.headOption.map(_.language).getOrElse(""),
+        request.host + request.uri,
+        gaUID
+      ) ++ extraBodyParams
 
-    encodeBody(params: _*)
+      encodeBody(params: _*)
+    } orElse {
+      logger.warn("No GA Client ID passed with request")
+      None
+    }
   }
 
   protected val extraBodyParams: Seq[(String, String)] = Seq()
@@ -53,7 +59,7 @@ trait MeasurementProtocolRequestBody[T <: GaClientIdRequestParameter] {
 
 trait MeasurementProtocolRequest {
   val url: String = s"https://www.google-analytics.com/collect"
-  val body: String
+  val body: Option[String]
 }
 
 private object SigninEventRequestBody extends MeasurementProtocolRequestBody[SignInActionRequestBody] {

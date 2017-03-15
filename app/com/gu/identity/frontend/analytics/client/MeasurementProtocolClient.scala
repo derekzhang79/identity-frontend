@@ -10,7 +10,10 @@ class MeasurementProtocolClient(ws: WSClient) extends Logging {
   def sendSuccessfulRegisterEvent(registerEventRequest: RegisterEventRequest) = makeRequest(registerEventRequest)
 
   private def makeRequest(request: MeasurementProtocolRequest) =
-    ws.url(request.url)
-      .withRequestTimeout(2000)
-      .post(request.body)
+    request.body.foreach { body =>
+      ws.url(request.url)
+        .withRequestTimeout(2000)
+        .post(body)
+    }
+
 }

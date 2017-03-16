@@ -24,13 +24,15 @@ case class RegisterActionRequestBody private(
                                               skipConfirmation: Option[Boolean],
                                               groupCode: Option[GroupCode],
                                               clientId: Option[ClientID],
-                                              csrfToken: String)
+                                              csrfToken: String,
+                                              gaClientId: Option[String])
   extends SignInRequestParameters
   with ReturnUrlRequestParameter
   with SkipConfirmationRequestParameter
   with ClientIdRequestParameter
   with GroupRequestParameter
-  with CSRFTokenRequestParameter {
+  with CSRFTokenRequestParameter
+  with GaClientIdRequestParameter {
 
   // activate "rememberMe" on registrations
   val rememberMe = true
@@ -88,7 +90,8 @@ object RegisterActionRequestBody {
         "skipConfirmation" -> optional(boolean),
         "groupCode" -> optional(groupCode),
         "clientId" -> optional(clientId),
-        "csrfToken" -> text
+        "csrfToken" -> text,
+        "gaClientId" -> optional(text)
       )(RegisterActionRequestBody.apply)(RegisterActionRequestBody.unapply)
   }
 }

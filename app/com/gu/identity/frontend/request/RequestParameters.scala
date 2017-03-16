@@ -19,6 +19,10 @@ object RequestParameters {
     val clientId: Option[ClientID]
   }
 
+  trait GaClientIdRequestParameter extends RequestParameter {
+    val gaClientId: Option[String]
+  }
+
   trait GroupRequestParameter extends RequestParameter {
     val groupCode: Option[GroupCode]
   }

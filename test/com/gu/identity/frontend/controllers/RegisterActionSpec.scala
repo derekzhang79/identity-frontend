@@ -1,9 +1,11 @@
 package com.gu.identity.frontend.controllers
 
+import com.gu.identity.frontend.analytics.AnalyticsEventActor
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFConfig
-import com.gu.identity.frontend.errors.{RegisterServiceGatewayAppException, RegisterServiceBadRequestException}
-import com.gu.identity.frontend.models.{UrlBuilder, ClientIp, TrackingData}
+import com.gu.identity.frontend.errors.{RegisterServiceBadRequestException, RegisterServiceGatewayAppException}
+import com.gu.identity.frontend.logging.MetricsLoggingActor
+import com.gu.identity.frontend.models.{ClientIp, TrackingData, UrlBuilder}
 import com.gu.identity.frontend.services.IdentityService
 import com.gu.identity.frontend.utils.UrlDecoder
 import com.gu.identity.service.client.{ClientBadRequestError, ClientGatewayError}
@@ -26,8 +28,10 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     val mockIdentityService = mock[IdentityService]
     val messages = mock[MessagesApi]
     val config = Configuration.testConfiguration
+    val metricsActor = mock[MetricsLoggingActor]
+    val eventActor = mock[AnalyticsEventActor]
 
-    val controller = new RegisterAction(mockIdentityService, messages, config, fakeCsrfConfig)
+    val controller = new RegisterAction(mockIdentityService, messages, metricsActor, eventActor, config, fakeCsrfConfig)
   }
 
   def fakeRegisterRequest(
@@ -52,7 +56,8 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       "returnUrl" -> returnUrl.getOrElse("http://none.com"),
       "skipConfirmation" -> skipConfirmation.getOrElse(false).toString,
       "groupCode" -> groupCode.getOrElse(""),
-      "csrfToken" -> "~stubbedToken~")
+      "csrfToken" -> "~stubbedToken~",
+      "gaClientId" -> "~~fake client id~~")
 
     FakeRequest("POST", "/actions/register")
       .withFormUrlEncodedBody(bodyParams: _*)

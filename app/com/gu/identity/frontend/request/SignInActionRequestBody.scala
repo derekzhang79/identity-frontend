@@ -16,13 +16,15 @@ case class SignInActionRequestBody private(
     skipConfirmation: Option[Boolean],
     clientId: Option[ClientID],
     groupCode: Option[GroupCode],
-    csrfToken: String)
+    csrfToken: String,
+    gaClientId: Option[String])
   extends SignInRequestParameters
   with ReturnUrlRequestParameter
   with SkipConfirmationRequestParameter
   with ClientIdRequestParameter
   with GroupRequestParameter
   with CSRFTokenRequestParameter
+  with GaClientIdRequestParameter
 
 
 object SignInActionRequestBody {
@@ -63,7 +65,8 @@ object SignInActionRequestBody {
         "skipConfirmation" -> optional(boolean),
         "clientId" -> optional(clientId),
         "groupCode" -> optional(groupCode),
-        "csrfToken" -> text
+        "csrfToken" -> text,
+        "gaClientId" -> optional(text)
       )(SignInActionRequestBody.apply)(SignInActionRequestBody.unapply)
 
   }

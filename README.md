@@ -49,6 +49,16 @@ so making changes locally will result in compile being triggered automatically.
 
 Client side sources will automatically be compiled using the `npm run build` command.
 
+## Running against local Identity API
+
+To run the application against a local installation of Identity API then update your `/etc/gu/identity-frontend.conf` to include:
+
+    identity.api.host=idapi.thegulocal.com
+
+And update the `identity.api.key` to:
+
+    identity.api.key=frontend-dev-client-token
+
 ## Development and Contributing
 See [CONTRIBUTING.MD](https://github.com/guardian/identity-frontend/blob/master/CONTRIBUTING.md).
 

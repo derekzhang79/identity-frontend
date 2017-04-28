@@ -13,6 +13,8 @@ import com.gu.identity.frontend.services.{IdentityService, ServiceAction, Servic
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{BodyParser, Controller, Request, Cookie => PlayCookie}
+import Configuration.Environment._
+import com.gu.tip.Tip
 
 
 class RegisterAction(
@@ -82,6 +84,7 @@ class RegisterAction(
   }
 
   private def registerSuccessResult(returnUrl: ReturnUrl, cookies: Seq[PlayCookie])(implicit request: Request[RegisterActionRequestBody]) = {
+    if (stage == "PROD") Tip.verify("Account Registration")
     metricsLoggingActor.logSuccessfulRegister()
 
     if(request.body.gaClientId.isDefined) {

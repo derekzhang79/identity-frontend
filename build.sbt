@@ -26,7 +26,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-slf4j" % "2.4.0",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.54",
   "com.getsentry.raven" % "raven-logback" % "7.2.1",
-  "com.googlecode.libphonenumber" % "libphonenumber" % "7.2.4"
+  "com.googlecode.libphonenumber" % "libphonenumber" % "7.2.4",
+  "com.gu" %% "tip" % "0.3.2"
 )
 
 // Set logs options and default local resource for running locally (run and test)

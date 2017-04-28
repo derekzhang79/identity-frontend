@@ -1,0 +1,5 @@
+- name: Account Registration
+  description: User registered an account
+
+- name: Account Signin
+  description: User signed into the account

@@ -12,7 +12,8 @@ import com.gu.identity.frontend.services._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._
-
+import Configuration.Environment._
+import com.gu.tip.Tip
 
 /**
  * Form actions controller
@@ -77,6 +78,7 @@ class SigninAction(
     identityService.authenticate(body, trackingData).map {
       case Left(errors) => Left(errors)
       case Right(cookies) => Right {
+        if (stage == "PROD") Tip.verify("Account Signin")
         metricsLogger(request)
         successResponse(successfulReturnUrl, cookies)
       }

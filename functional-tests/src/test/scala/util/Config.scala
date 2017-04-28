@@ -17,12 +17,12 @@ object Config {
   private val idApiUrlsByStage = Map(
     "PROD" -> "idapi.theguardian.com",
     "CODE" -> "idapi.code.dev-theguardian.com",
-    "DEV"  -> "idapi.code.dev-theguardian.com")
+    "DEV"  -> "idapi.thegulocal.com")
 
   private val homepageUrlsByStage = Map(
     "PROD" -> "https://www.theguardian.com",
     "CODE" -> "http://m.code.dev-theguardian.com",
-    "DEV"  -> "http://m.code.dev-theguardian.com")
+    "DEV"  -> "http://m.thegulocal.com")
 
   var stage = conf.getString("stage")
 

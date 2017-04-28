@@ -1,9 +1,12 @@
 package test.util
 
 import java.net.URL
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.{Cookie, Platform, WebDriver}
-import org.openqa.selenium.remote.{RemoteWebDriver, DesiredCapabilities}
+
+import io.github.bonigarcia.wdm.ChromeDriverManager
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.{Cookie, WebDriver}
+import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
+
 import scala.collection.JavaConverters._
 
 /** There should be only a single instance of WebDriver (Singleton Pattern) */
@@ -29,16 +32,21 @@ object Driver {
     manage().addCookie(new Cookie(name, value))
   }
 
-  private lazy val driver: WebDriver = {
+  private lazy val driver: WebDriver =
     if (Config.webDriverRemoteUrl.isEmpty)
-      new FirefoxDriver
-    else {
-      val url = new URL(Config.webDriverRemoteUrl)
-      val capabilities = DesiredCapabilities.firefox()
-      capabilities.setCapability("platform", Platform.WIN8)
-      capabilities.setCapability("name", "identity-frontend")
-      capabilities.setCapability("timeZone", "London")
-      new RemoteWebDriver(url, capabilities)
-    }
+      instantiateLocalBrowser()
+    else
+      instantiateRemoteBrowser()
+
+  private def instantiateLocalBrowser(): WebDriver = {
+    ChromeDriverManager.getInstance().setup()
+    new ChromeDriver()
+  }
+
+  private def instantiateRemoteBrowser(): WebDriver = {
+    val caps = DesiredCapabilities.chrome()
+    caps.setCapability("platform", "Windows 8.1")
+    caps.setCapability("name", "identity-frontend")
+    new RemoteWebDriver(new URL(Config.webDriverRemoteUrl), caps)
   }
 }

@@ -16,9 +16,9 @@
     <input type="hidden" name="clientId" value="{{ clientId.id }}">
   {{/ clientId }}
 
-    <input type="hidden" class="js-ga-client-id" name="gaClientId" value="">
+  <input id="js-ga-client-id" type="hidden" name="gaClientId" value="">
 
-    <p class="register-form__prelude">{{ registerPageText.divideText }}</p>
+  <p class="register-form__prelude">{{ registerPageText.divideText }}</p>
 
   {{#each errors.otherErrors }}
     <p id="{{ id }}" class="register-form__error">{{ message }}</p>

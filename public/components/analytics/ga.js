@@ -19,10 +19,17 @@ export function customMetric(event) {
   ga(gaTracker + '.send', 'event', buildGoogleAnalyticsEvent(event));
 }
 
+export function fetchTracker(callback) {
+  ga(function() {
+    // Save the GA client id to be passed with the form submission
+    const tracker = ga.getByName(gaTracker);
+    return callback(tracker);
+  });
+}
+
 function record(gaUID) {
   loadGA();
   ga('create', gaUID, 'auto', gaTracker);
-  saveClientId();
   ga(gaTracker + '.send', 'pageview');
 }
 
@@ -44,15 +51,6 @@ function buildGoogleAnalyticsEvent(event) {
   }
 
   return fieldsObject;
-}
-
-function saveClientId() {
-  ga(function() {
-    // Save the GA client id to be passed with the form submission
-    const tracker = ga.getByName(gaTracker);
-    const clientIdElem = document.getElementsByClassName('js-ga-client-id')[0];
-    if(clientIdElem) clientIdElem.value = tracker.get('clientId');
-  });
 }
 
 function loadGA() {

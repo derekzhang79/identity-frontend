@@ -1,4 +1,3 @@
-
 import { getElementById, sessionStorage } from '../browser/browser';
 
 import { mapValues as _mapValues } from '../lib/lodash';
@@ -53,6 +52,7 @@ class RegisterFormModel {
     this.fields = new RegisterFormFields( firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername );
 
     this.addBindings();
+    this.saveClientId();
   }
 
   addBindings() {
@@ -76,6 +76,14 @@ class RegisterFormModel {
   saveState() {
     this.state = RegisterFormState.fromForm( this );
     this.state.save();
+  }
+
+  saveClientId() {
+    fetchTracker(function(tracker) {
+      // Save the GA client id to be passed with the form submission
+      const clientIdElem = document.getElementsByClassName('js-ga-client-id')[0];
+      if(clientIdElem) clientIdElem.value = tracker.get('clientId');
+    });
   }
 
   formSubmitted() {

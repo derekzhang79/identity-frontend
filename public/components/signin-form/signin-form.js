@@ -1,7 +1,7 @@
 /*global window, document*/
 
 import { getElementById, sessionStorage } from '../browser/browser';
-import { customMetric } from '../analytics/ga';
+import { customMetric, fetchTracker } from '../analytics/ga';
 
 const STORAGE_KEY = 'gu_id_signIn_state';
 const SMART_LOCK_STORAGE_KEY = 'gu_id_smartLock_state';
@@ -12,6 +12,7 @@ class SignInFormModel {
     this.emailFieldElement = emailField;
     this.addBindings();
     this.smartLock();
+    this.saveClientId();
   }
 
   addBindings() {
@@ -87,6 +88,14 @@ class SignInFormModel {
   updateSmartLockStatus(status) {
     this.smartLockStatus = new SmartLockState( status );
     this.smartLockStatus.save();
+  }
+
+  saveClientId() {
+    fetchTracker(function(tracker) {
+      // Save the GA client id to be passed with the form submission
+      const clientIdElem = document.getElementsByClassName('js-ga-client-id')[0];
+      if(clientIdElem) clientIdElem.value = tracker.get('clientId');
+    });
   }
 
   formSubmitted() {

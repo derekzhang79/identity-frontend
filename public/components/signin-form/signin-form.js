@@ -7,9 +7,10 @@ const STORAGE_KEY = 'gu_id_signIn_state';
 const SMART_LOCK_STORAGE_KEY = 'gu_id_smartLock_state';
 
 class SignInFormModel {
-  constructor( formElement, emailField ) {
+  constructor( formElement, emailField, gaClientIdElement ) {
     this.formElement = formElement;
     this.emailFieldElement = emailField;
+    this.gaClientIdElement = gaClientIdElement;
     this.addBindings();
     this.smartLock();
     this.saveClientId();
@@ -91,10 +92,9 @@ class SignInFormModel {
   }
 
   saveClientId() {
-    fetchTracker(function(tracker) {
+    fetchTracker((tracker) => {
       // Save the GA client id to be passed with the form submission
-      const clientIdElem = document.getElementsByClassName('js-ga-client-id')[0];
-      if(clientIdElem) clientIdElem.value = tracker.get('clientId');
+      this.gaClientIdElement.value = tracker.get('clientId');
     });
   }
 
@@ -106,9 +106,10 @@ class SignInFormModel {
   static fromDocument() {
     const form = getElementById( 'signin_form' );
     const emailField = getElementById( 'signin_field_email' );
+    const gaClientIdField = getElementById( 'signin_ga_client_id' );
 
     if ( form && emailField ) {
-      return new SignInFormModel( form, emailField );
+      return new SignInFormModel( form, emailField, gaClientIdField );
     }
   }
 }

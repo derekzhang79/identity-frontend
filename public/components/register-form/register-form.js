@@ -46,11 +46,12 @@ class RegisterFormFields {
 
 
 class RegisterFormModel {
-  constructor( formElement, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername ) {
+  constructor( formElement, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername, gaClientIdElement ) {
     this.formElement = formElement;
+    this.gaClientIdElement = gaClientIdElement;
 
     this.fields = new RegisterFormFields( firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername );
-
+    
     this.addBindings();
     this.saveClientId();
   }
@@ -79,10 +80,9 @@ class RegisterFormModel {
   }
 
   saveClientId() {
-    fetchTracker(function(tracker) {
+    fetchTracker((tracker) => {
       // Save the GA client id to be passed with the form submission
-      const clientIdElem = document.getElementsByClassName('js-ga-client-id')[0];
-      if(clientIdElem) clientIdElem.value = tracker.get('clientId');
+      this.gaClientIdElement.value = tracker.get( 'clientId' );
     });
   }
 
@@ -100,9 +100,10 @@ class RegisterFormModel {
     const optionalCountryCode = getElementById('register_field_countryCode');
     const optionalCountryIsoName = getElementById('register_field_countryIsoName');
     const optionalHideUsername = getElementById('register_field_hideDisplayName');
+    const gaClientIdElement = getElementById('register_ga_client_id');
 
-    if ( form && firstNameField && lastNameField && emailField && displayNameField ) {
-      return new RegisterFormModel( form, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername);
+    if ( form && firstNameField && lastNameField && emailField && displayNameField && gaClientIdElement ) {
+      return new RegisterFormModel( form, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername, gaClientIdElement );
     }
   }
 }

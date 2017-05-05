@@ -4,6 +4,8 @@ import { mapValues as _mapValues } from '../lib/lodash';
 
 import { initPhoneField } from '../lib/phone-field';
 
+import { fetchTracker } from '../analytics/ga';
+
 const STORAGE_KEY = 'gu_id_register_state';
 
 
@@ -82,7 +84,7 @@ class RegisterFormModel {
   saveClientId() {
     fetchTracker((tracker) => {
       // Save the GA client id to be passed with the form submission
-      this.gaClientIdElement.value = tracker.get( 'clientId' );
+      this.gaClientIdElement.setValue(tracker.get( 'clientId' ));
     });
   }
 

@@ -2,6 +2,7 @@
 
 import { getElementById, sessionStorage } from '../browser/browser';
 import { customMetric, fetchTracker } from '../analytics/ga';
+import { init as initOAuthBindings } from '../oauth-cta/_oauth-cta.js';
 
 const STORAGE_KEY = 'gu_id_signIn_state';
 const SMART_LOCK_STORAGE_KEY = 'gu_id_smartLock_state';
@@ -14,6 +15,7 @@ class SignInFormModel {
     this.addBindings();
     this.smartLock();
     this.saveClientId();
+    initOAuthBindings();
   }
 
   addBindings() {

@@ -21,7 +21,6 @@ export function customMetric(event) {
 
 export function fetchTracker(callback) {
   ga(function() {
-    // Save the GA client id to be passed with the form submission
     const tracker = ga.getByName(gaTracker);
     return callback(tracker);
   });

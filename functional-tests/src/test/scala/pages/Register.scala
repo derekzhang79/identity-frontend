@@ -16,14 +16,12 @@ class Register(val testUser: EmailTestUser) extends LoadablePage with Browser {
     val firstName = id("register_field_firstname")
     val lastName = id("register_field_lastname")
     val email = id("register_field_email")
-    val username = id("register_field_username")
     val password = id("register_field_password")
 
     def fillIn() = {
       setValue(firstName, testUser.name)
       setValue(lastName, testUser.name)
       setValue(email, s"${testUser.name}@gu.com")
-      setValue(username, testUser.name)
       setValue(password, testUser.name)
     }
   }

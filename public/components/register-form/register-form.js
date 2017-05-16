@@ -56,7 +56,7 @@ class RegisterFormModel {
     this.gaClientIdElement = gaClientIdElement;
 
     this.fields = new RegisterFormFields( firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername );
-    
+
     this.addBindings();
     this.saveClientId();
     initOAuthBindings();
@@ -88,7 +88,9 @@ class RegisterFormModel {
   saveClientId() {
     fetchTracker((tracker) => {
       // Save the GA client id to be passed with the form submission
-      this.gaClientIdElement.setValue(tracker.get( 'clientId' ));
+      if(this.gaClientIdElement) {
+        this.gaClientIdElement.setValue(tracker.get('clientId'));
+      }
     });
   }
 

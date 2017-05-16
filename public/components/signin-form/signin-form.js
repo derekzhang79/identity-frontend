@@ -96,7 +96,9 @@ class SignInFormModel {
   saveClientId() {
     fetchTracker((tracker) => {
       // Save the GA client id to be passed with the form submission
-      this.gaClientIdElement.setValue(tracker.get('clientId'));
+      if(this.gaClientIdElement) {
+        this.gaClientIdElement.setValue(tracker.get('clientId'));
+      }
     });
   }
 

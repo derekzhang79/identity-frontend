@@ -1,9 +1,13 @@
-
 import { getElementById, sessionStorage } from '../browser/browser';
 
 import { mapValues as _mapValues } from '../lib/lodash';
 
 import { initPhoneField } from '../lib/phone-field';
+
+import { fetchTracker } from '../analytics/ga';
+
+import { init as initOAuthBindings } from '../oauth-cta/_oauth-cta.js';
+
 
 const STORAGE_KEY = 'gu_id_register_state';
 
@@ -47,12 +51,15 @@ class RegisterFormFields {
 
 
 class RegisterFormModel {
-  constructor( formElement, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername ) {
+  constructor( formElement, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername, gaClientIdElement ) {
     this.formElement = formElement;
+    this.gaClientIdElement = gaClientIdElement;
 
     this.fields = new RegisterFormFields( firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername );
 
     this.addBindings();
+    this.saveClientId();
+    initOAuthBindings();
   }
 
   addBindings() {
@@ -78,6 +85,15 @@ class RegisterFormModel {
     this.state.save();
   }
 
+  saveClientId() {
+    fetchTracker((tracker) => {
+      // Save the GA client id to be passed with the form submission
+      if(this.gaClientIdElement) {
+        this.gaClientIdElement.setValue(tracker.get('clientId'));
+      }
+    });
+  }
+
   formSubmitted() {
     this.saveState();
   }
@@ -92,9 +108,10 @@ class RegisterFormModel {
     const optionalCountryCode = getElementById('register_field_countryCode');
     const optionalCountryIsoName = getElementById('register_field_countryIsoName');
     const optionalHideUsername = getElementById('register_field_hideDisplayName');
+    const gaClientIdElement = getElementById('register_ga_client_id');
 
-    if ( form && firstNameField && lastNameField && emailField && displayNameField ) {
-      return new RegisterFormModel( form, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername);
+    if ( form && firstNameField && lastNameField && emailField && displayNameField && gaClientIdElement ) {
+      return new RegisterFormModel( form, firstNameField, lastNameField, emailField, displayNameField, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber, optionalHideUsername, gaClientIdElement );
     }
   }
 }

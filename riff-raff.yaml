@@ -1,0 +1,9 @@
+stacks:
+  - identity
+regions:
+  - eu-west-1
+deployments:
+  identity-frontend:
+    type: autoscaling
+    parameters:
+      bucket: gu-identity-frontend-dist

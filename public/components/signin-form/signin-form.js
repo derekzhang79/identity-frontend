@@ -1,17 +1,21 @@
 /*global window, document*/
 
 import { getElementById, sessionStorage } from '../browser/browser';
-import { customMetric } from '../analytics/ga';
+import { customMetric, fetchTracker } from '../analytics/ga';
+import { init as initOAuthBindings } from '../oauth-cta/_oauth-cta.js';
 
 const STORAGE_KEY = 'gu_id_signIn_state';
 const SMART_LOCK_STORAGE_KEY = 'gu_id_smartLock_state';
 
 class SignInFormModel {
-  constructor( formElement, emailField ) {
+  constructor( formElement, emailField, gaClientIdElement ) {
     this.formElement = formElement;
     this.emailFieldElement = emailField;
+    this.gaClientIdElement = gaClientIdElement;
     this.addBindings();
     this.smartLock();
+    this.saveClientId();
+    initOAuthBindings();
   }
 
   addBindings() {
@@ -89,6 +93,15 @@ class SignInFormModel {
     this.smartLockStatus.save();
   }
 
+  saveClientId() {
+    fetchTracker((tracker) => {
+      // Save the GA client id to be passed with the form submission
+      if(this.gaClientIdElement) {
+        this.gaClientIdElement.setValue(tracker.get('clientId'));
+      }
+    });
+  }
+
   formSubmitted() {
     this.smartLockSetupOnSubmit();
     this.saveState();
@@ -97,9 +110,10 @@ class SignInFormModel {
   static fromDocument() {
     const form = getElementById( 'signin_form' );
     const emailField = getElementById( 'signin_field_email' );
+    const gaClientIdField = getElementById( 'signin_ga_client_id' );
 
     if ( form && emailField ) {
-      return new SignInFormModel( form, emailField );
+      return new SignInFormModel( form, emailField, gaClientIdField );
     }
   }
 }

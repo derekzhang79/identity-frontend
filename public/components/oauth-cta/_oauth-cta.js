@@ -12,7 +12,7 @@ export default class OAuthCtaModel {
       const clientId = encodeURI(tracker.get( 'clientId' ));
 
       for ( let elem of this.oAuthCtaAnchors ) {
-        const connector = window.location.search.length ? '&' : '?';
+        const connector = elem.search.length ? '&' : '?';
         elem.setAttribute( 'href', `${elem.getAttribute( 'href' )}${connector}gaClientId=${clientId}` );
       }
     });

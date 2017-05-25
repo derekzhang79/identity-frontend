@@ -7,3 +7,4 @@ deployments:
     type: autoscaling
     parameters:
       bucket: gu-identity-frontend-dist
+      publicReadAcl: false

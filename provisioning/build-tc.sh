@@ -8,4 +8,4 @@ mkdir target
 
 cp provisioning/riff-raff.yaml target/
 
-cp -R provisioning target/packages
+cp -R provisioning/dist target/identity-frontend-provisioning/

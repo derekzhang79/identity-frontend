@@ -1,5 +1,5 @@
 stacks:
-- frontend
+- identity
 regions:
 - eu-west-1
 deployments:
@@ -9,3 +9,4 @@ deployments:
       bucket: gu-identity-frontend-dist
       cacheControl: max-age=600
       prefixPackage: false
+      publicReadAcl: false

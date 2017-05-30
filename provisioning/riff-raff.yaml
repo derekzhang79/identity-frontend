@@ -8,3 +8,4 @@ deployments:
     parameters:
       bucket: gu-identity-frontend-dist
       prefixPackage: false
+      cacheControl: max-age=600

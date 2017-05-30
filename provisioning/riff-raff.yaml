@@ -9,4 +9,3 @@ deployments:
       bucket: gu-identity-frontend-dist
       cacheControl: max-age=600
       prefixPackage: false
-      publicReadAcl: false

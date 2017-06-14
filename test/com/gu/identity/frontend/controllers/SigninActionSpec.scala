@@ -97,7 +97,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
     "redirect to returnUrl when passed authentication" in new WithControllerMockedDependencies {
       val email = "me@me.com"
       val password = "password"
-      val returnUrl = Some("http://www.theguardian.com/yeah")
+      val returnUrl = Some("https://www.theguardian.com/yeah")
 
       val testCookie = Cookie("SC_GU_U", "##hash##")
 
@@ -121,7 +121,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
     "redirect to sign in page when failed authentication" in new WithControllerMockedDependencies {
       val email = "me@me.com"
       val password = "password"
-      val returnUrl = Some("http://www.theguardian.com/yeah")
+      val returnUrl = Some("https://www.theguardian.com/yeah")
 
       when(mockAuthenticate(email, password))
         .thenReturn {
@@ -140,7 +140,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
     "redirect to sign in page when service error" in new WithControllerMockedDependencies {
       val email = "me@me.com"
       val password = "password"
-      val returnUrl = Some("http://www.theguardian.com/yeah")
+      val returnUrl = Some("https://www.theguardian.com/yeah")
 
       when(mockAuthenticate(email, password))
         .thenReturn {
@@ -160,7 +160,7 @@ class SigninActionSpec extends PlaySpec with MockitoSugar {
     "redirect to sign in page when error from future" in new WithControllerMockedDependencies {
       val email = "me@me.com"
       val password = "password"
-      val returnUrl = Some("http://www.theguardian.com/yeah")
+      val returnUrl = Some("https://www.theguardian.com/yeah")
 
       when(mockAuthenticate(email, password))
         .thenReturn {

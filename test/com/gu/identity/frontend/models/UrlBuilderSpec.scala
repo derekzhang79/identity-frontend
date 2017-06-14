@@ -32,9 +32,9 @@ class UrlBuilderSpec extends FlatSpec with Matchers{
   }
 
   it should "create valid url when provided a valid returnUrl object" in {
-    val returnUrl = ReturnUrl(Some("http://www.theguardian.com/uk"), Configuration.testConfiguration)
+    val returnUrl = ReturnUrl(Some("https://www.theguardian.com/uk"), Configuration.testConfiguration)
 
-    UrlBuilder("/register/confirm", returnUrl) should be("/register/confirm?returnUrl=http%3A%2F%2Fwww.theguardian.com%2Fuk")
+    UrlBuilder("/register/confirm", returnUrl) should be("/register/confirm?returnUrl=https%3A%2F%2Fwww.theguardian.com%2Fuk")
   }
 
   it should "create valid url without any returnUrl when provided the default returnUrl" in {
@@ -45,14 +45,14 @@ class UrlBuilderSpec extends FlatSpec with Matchers{
 
   it should "Include group code in return url when one is provided" in {
     val baseUrl = "/register/confirm"
-    val returnUrl = ReturnUrl(Some("http://www.theguardian.com/uk"), Configuration.testConfiguration)
+    val returnUrl = ReturnUrl(Some("https://www.theguardian.com/uk"), Configuration.testConfiguration)
     val group = Some("ABC")
 
     val result = UrlBuilder(baseUrl, returnUrl, skipConfirmation = None, clientId = None, group = group, skipThirdPartyLandingPage = None)
-    result should be("/register/confirm?returnUrl=http%3A%2F%2Fwww.theguardian.com%2Fuk&group=ABC")
+    result should be("/register/confirm?returnUrl=https%3A%2F%2Fwww.theguardian.com%2Fuk&group=ABC")
   }
 
-  private def getThirdPartyUri(baseDomain: String = "oauth.thegulocal.com", url: String = "http://www.profile.theguardian.com/agree/GRS"): URI = {
+  private def getThirdPartyUri(baseDomain: String = "oauth.thegulocal.com", url: String = "https://www.profile.theguardian.com/agree/GRS"): URI = {
     val baseDomain = "oauth.thegulocal.com"
     val baseUrl = s"http://$baseDomain"
     val returnUrl = ReturnUrl(Some(url), Configuration.testConfiguration)
@@ -62,7 +62,7 @@ class UrlBuilderSpec extends FlatSpec with Matchers{
   }
 
   it should "return a url including a reference to the third party additional ts and cs page" in {
-    val returnUrl = "http://www.profile.theguardian.com/agree/GRS"
+    val returnUrl = "https://www.profile.theguardian.com/agree/GRS"
     val encodedUrl = URLEncoder.encode(returnUrl, "UTF-8")
     val validUri = getThirdPartyUri(returnUrl)
     val query = validUri.getQuery

@@ -9,7 +9,7 @@ case class RegisterConfirmationViewModel private(
     layout: LayoutViewModel,
     returnUrl: String,
     registerConfirmationPageText: RegisterConfirmationText,
-    faqUrl: String = "http://www.theguardian.com/help/identity-faq",
+    faqUrl: String = "https://www.theguardian.com/help/identity-faq",
     emailUserHelpUrl: String = "mailto:userhelp@theguardian.com?subject=Account help",
     resetPasswordUrl: String,
     signOutUrl: String,

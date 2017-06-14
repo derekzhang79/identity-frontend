@@ -93,7 +93,7 @@ object Configuration {
 
     identityProfileBaseUrl = "https://profile.code.dev-theguardian.com",
 
-    dotcomBaseUrl = "http://www.theguardian.com",
+    dotcomBaseUrl = "https://www.theguardian.com",
     preferredMembershipUrl = "https://membership.theguardian.com/supporter",
     jobsBaseUrl = "https://jobs.theguardian.com",
 

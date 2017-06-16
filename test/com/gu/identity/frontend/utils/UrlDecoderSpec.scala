@@ -6,17 +6,17 @@ class UrlDecoder$Test extends PlaySpec {
 
   "getQueryParams" should {
     "return a map containing a return url" in {
-      val queryParams = UrlDecoder.getQueryParams("/register?returnUrl=http://www.theguardian.com/test")
+      val queryParams = UrlDecoder.getQueryParams("/register?returnUrl=https://www.theguardian.com/test")
 
       queryParams.contains("returnUrl") mustEqual true
-      queryParams.get("returnUrl") mustEqual Some("http://www.theguardian.com/test")
+      queryParams.get("returnUrl") mustEqual Some("https://www.theguardian.com/test")
     }
 
     "return a map containing a return url and an error" in {
-      val queryParams = UrlDecoder.getQueryParams("/register?error=error-bad-gateway&returnUrl=http://www.theguardian.com/test")
+      val queryParams = UrlDecoder.getQueryParams("/register?error=error-bad-gateway&returnUrl=https://www.theguardian.com/test")
 
       queryParams.contains("returnUrl") mustEqual true
-      queryParams.get("returnUrl") mustEqual Some("http://www.theguardian.com/test")
+      queryParams.get("returnUrl") mustEqual Some("https://www.theguardian.com/test")
       queryParams.contains("error") mustEqual true
       queryParams.get("error") mustEqual Some("error-bad-gateway")
     }

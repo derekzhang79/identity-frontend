@@ -149,7 +149,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
       val userGroup = UserGroup(groupCode, "Group/GTNF")
       val userGroups = List(userGroup)
       val user = User(userGroups = userGroups)
-      val url = Some("http://www.theguardian.com/sport")
+      val url = Some("https://www.theguardian.com/sport")
       val returnUrl = ReturnUrl(url, Configuration.testConfiguration)
       val cookie = Cookie("Name", "Value")
       val timeout = Timeout(5 seconds)
@@ -174,7 +174,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
       val userGroup = UserGroup("ABC", "Group/ABC")
       val userGroups = List(userGroup)
       val user = User(userGroups = userGroups)
-      val url = Some("http://www.theguardian.com/sport")
+      val url = Some("https://www.theguardian.com/sport")
       val returnUrl = ReturnUrl(url, Configuration.testConfiguration)
       val cookie = Cookie("Name", "Value")
       val timeout = Timeout(5 seconds)
@@ -206,7 +206,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
       val userGroup = UserGroup("ABC", "Group/ABC")
       val userGroups = List(userGroup)
       val user = User(userGroups = userGroups)
-      val url = Some("http://www.theguardian.com/sport")
+      val url = Some("https://www.theguardian.com/sport")
       val returnUrl = ReturnUrl(url, Configuration.testConfiguration)
       val cookie = Cookie("Name", "Value")
       val timeout = Timeout(5 seconds)
@@ -242,7 +242,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
 
     "return a result of the return url when user has successfully been added to the group" in new WithControllerMockedDependencies {
       val groupCode = "GTNF"
-      val returnUrl = "http://www.theguardian.com/sport"
+      val returnUrl = "https://www.theguardian.com/sport"
       val cookie = validCookie
       val fakeRequest = successfulFakeRequest(groupCode, returnUrl, cookie)
 
@@ -260,7 +260,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
 
     "return bad request when it is not possible to add the user to group" in new WithControllerMockedDependencies {
       val groupCode = "GTNF"
-      val returnUrl = "http://www.theguardian.com/sport"
+      val returnUrl = "https://www.theguardian.com/sport"
       val cookie = validCookie
       val fakeRequest = successfulFakeRequest(groupCode, returnUrl, cookie)
 
@@ -280,7 +280,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
 
     "return a not found error if group code is invalid" in new WithControllerMockedDependencies {
       val groupCode = "ABC"
-      val returnUrl = "http://www.theguardian.com/sport"
+      val returnUrl = "https://www.theguardian.com/sport"
       val cookie = validCookie
       val fakeRequest = successfulFakeRequest(groupCode, returnUrl, cookie)
 
@@ -300,7 +300,7 @@ class ThirdPartyTsAndCsSpec extends PlaySpec with MockitoSugar{
 
     "return bad request when the form submission to add to group action is invalid" in new WithControllerMockedDependencies {
       val groupCode = "GTNF"
-      val returnUrl = "http://www.theguardian.com/sport"
+      val returnUrl = "https://www.theguardian.com/sport"
       val cookie = validCookie
       val fakeRequest = FakeRequest("POST", "/actions/GTNF")
         .withFormUrlEncodedBody("group" -> groupCode, "returnUrl" -> returnUrl)

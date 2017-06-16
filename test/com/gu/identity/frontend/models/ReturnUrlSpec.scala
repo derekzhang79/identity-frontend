@@ -13,20 +13,20 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
 
   it should "determine valid domain" in {
 
-    validDomain(new URI("http://www.theguardian.com")) should be(true)
-    validDomain(new URI("http://jobs.theguardian.com")) should be(true)
-    validDomain(new URI("http://code.dev-theguardian.com")) should be(true)
+    validDomain(new URI("https://www.theguardian.com")) should be(true)
+    validDomain(new URI("https://jobs.theguardian.com")) should be(true)
+    validDomain(new URI("https://code.dev-theguardian.com")) should be(true)
     validDomain(new URI("http://thegulocal.com")) should be(true)
     validDomain(new URI("http://baddomain.com")) should be(false)
   }
 
   it should "construct return url" in {
 
-    ReturnUrl(Some("http://www.theguardian.com/uk"), None, config, None) should be(ReturnUrl(new URI("http://www.theguardian.com/uk")))
-    ReturnUrl(None, Some("http://www.theguardian.com/uk"), config, None) should be(ReturnUrl(new URI("http://www.theguardian.com/uk")))
+    ReturnUrl(Some("https://www.theguardian.com/uk"), None, config, None) should be(ReturnUrl(new URI("https://www.theguardian.com/uk")))
+    ReturnUrl(None, Some("https://www.theguardian.com/uk"), config, None) should be(ReturnUrl(new URI("https://www.theguardian.com/uk")))
 
-    ReturnUrl(Some("http://jobs.theguardian.com/apply"), None, config, None) should be(ReturnUrl(new URI("http://jobs.theguardian.com/apply")))
-    ReturnUrl(None, Some("http://jobs.theguardian.com/apply"), config, None) should be(ReturnUrl(new URI("http://jobs.theguardian.com/apply")))
+    ReturnUrl(Some("https://jobs.theguardian.com/apply"), None, config, None) should be(ReturnUrl(new URI("https://jobs.theguardian.com/apply")))
+    ReturnUrl(None, Some("https://jobs.theguardian.com/apply"), config, None) should be(ReturnUrl(new URI("https://jobs.theguardian.com/apply")))
 
     ReturnUrl(None, Some("http://www.thegulocal.com/"), config, None) should be(ReturnUrl(new URI("http://www.thegulocal.com/")))
 
@@ -34,7 +34,7 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
 
     ReturnUrl(None, Some("sso.com.theguardian.jobs://ssologoutsuccess"), config, None) should be(ReturnUrl(new URI("sso.com.theguardian.jobs://ssologoutsuccess")))
 
-    ReturnUrl(None, Some("sso.com.theguardian.teachers://hello"), config, None) should be(ReturnUrl(new URI("http://www.theguardian.com"), isDefault = true))
+    ReturnUrl(None, Some("sso.com.theguardian.teachers://hello"), config, None) should be(ReturnUrl(new URI("https://www.theguardian.com"), isDefault = true))
 
     ReturnUrl(Some("https://profile.theguardian.com/register"), None, config, None, List("/signin")) should be(ReturnUrl(new URI("https://profile.theguardian.com/register")))
 
@@ -69,7 +69,7 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
 
     ReturnUrl(None, None, codeConfig, None) should be(ReturnUrl(new URI("http://m.code.dev-theguardian.com"), isDefault = true))
 
-    ReturnUrl(None, None, config, None) should be(ReturnUrl(new URI("http://www.theguardian.com"), isDefault = true))
+    ReturnUrl(None, None, config, None) should be(ReturnUrl(new URI("https://www.theguardian.com"), isDefault = true))
   }
 
   it should "Use the membership return url for clientId=members as the default fallback" in {

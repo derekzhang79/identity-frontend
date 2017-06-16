@@ -42,7 +42,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
      password: String = "password",
      receiveGnmMarketing: Boolean = true,
      receive3rdPartyMarketing: Boolean = true,
-     returnUrl: Option[String] = Some("http://www.theguardian.com"),
+     returnUrl: Option[String] = Some("https://www.theguardian.com"),
      skipConfirmation: Option[Boolean] = None,
      groupCode: Option[String] = None) = {
     val bodyParams = Seq(
@@ -77,7 +77,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
   //Registration Success Skip Confirmation is true, no group code
 
     "redirect to theguardian.com and sign user in when registration is successful skipConfirmation is true and no group code" in new WithControllerMockedDependencies {
-      val returnUrl = Some("http://www.theguardian.com/test")
+      val returnUrl = Some("https://www.theguardian.com/test")
       val testCookie = Cookie("SC_GU_U", "##hash##")
       val skipConfirmation = Some(true)
 
@@ -150,7 +150,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "include a return url when registration is successful skipConfirmation is false and no group code" in new WithControllerMockedDependencies {
-      val returnUrl = "http://www.theguardian.com/test?returnUrl=www.theguardian.com"
+      val returnUrl = "https://www.theguardian.com/test?returnUrl=www.theguardian.com"
       val testCookie = Cookie("SC_GU_U", "##hash##")
       val skipConfirmation = Some(false)
 
@@ -207,7 +207,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "include a return url when registration is successful skipConfirmation is true and group code is valid" in new WithControllerMockedDependencies {
-      val returnUrl = "http://www.theguardian.com/test?returnUrl=www.theguardian.com"
+      val returnUrl = "https://www.theguardian.com/test?returnUrl=www.theguardian.com"
       val skipConfirmation = Some(true)
       val group = Some("GRS")
       val testCookie = Cookie("SC_GU_U", "##hash##")
@@ -226,7 +226,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "include skipConfirmation param when registration is successful skipConfirmation is true and group code is valid" in new WithControllerMockedDependencies {
-      val returnUrl = Some("http://www.theguardian.com/test")
+      val returnUrl = Some("https://www.theguardian.com/test")
       val skipConfirmation = Some(true)
       val group = Some("GRS")
       val testCookie = Cookie("SC_GU_U", "##hash##")
@@ -246,7 +246,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "include skipThirdPartyLandingPage param when registration is successful skipConfirmation is true and group code is valid" in new WithControllerMockedDependencies {
-      val returnUrl = Some("http://www.theguardian.com/test")
+      val returnUrl = Some("https://www.theguardian.com/test")
       val skipConfirmation = Some(true)
       val group = Some("GRS")
       val testCookie = Cookie("SC_GU_U", "##hash##")
@@ -305,7 +305,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "include a return url when registration is successful skipConfirmation is false and group code is valid" in new WithControllerMockedDependencies {
-      val returnUrl = Some("http://www.theguardian.com/test")
+      val returnUrl = Some("https://www.theguardian.com/test")
       val skipConfirmation = Some(false)
       val group = Some("GRS")
       val testCookie = Cookie("SC_GU_U", "##hash##")

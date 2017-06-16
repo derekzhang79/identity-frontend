@@ -17,7 +17,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
     trackingReturnUrl = Some("https://profile.theguardian.com"),
     registrationType = Some("facebook"),
     ipAddress = Some("127.0.0.1"),
-    referrer = Some("http://www.theguardian.com"),
+    referrer = Some("https://www.theguardian.com"),
     userAgent = Some("chrome")
   )
 

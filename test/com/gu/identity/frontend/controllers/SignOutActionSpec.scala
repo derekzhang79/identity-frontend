@@ -35,7 +35,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
     Cookie(name = CookieName.GU_U.toString, value = "GU_U", maxAge = None, path = "/", domain = Some("dev-theguardian.com"), secure = true, httpOnly = false)
   )
 
-  val referer = "http://www.theguardian.com/refs"
+  val referer = "https://www.theguardian.com/refs"
   val signOutCookie = Cookie(name = CookieName.GU_SO.toString, value = "data_for_GU_SO")
 
   def fakeSignOutRequest(cookies: Seq[Cookie] = Seq.empty) = FakeRequest("GET", "/signout")
@@ -45,7 +45,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
   "GET /signout" should {
 
     "redirect to returnUrl when user has SC_GU_U cookie" in new WithControllerMockedDependencies {
-      val returnUrl = Some("http://www.theguardian.com/yeah")
+      val returnUrl = Some("https://www.theguardian.com/yeah")
 
       val captor = ArgumentCaptor.forClass(classOf[Cookie])
 
@@ -69,7 +69,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "redirect to returnUrl when Identity API call fails" in new WithControllerMockedDependencies {
-      val returnUrl = Some("http://www.theguardian.com/yeah")
+      val returnUrl = Some("https://www.theguardian.com/yeah")
 
       when(mockIdentityService.deauthenticate(argAny[Cookie], argAny[TrackingData])(argAny[ExecutionContext]))
         .thenReturn {
@@ -88,7 +88,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "redirect to returnUrl despite lack of SC_GU_U cookie" in new WithControllerMockedDependencies {
-      val returnUrl = Some("http://www.theguardian.com/yeah")
+      val returnUrl = Some("https://www.theguardian.com/yeah")
 
       val result = call(controller.signOut(returnUrl), fakeSignOutRequest(Seq.empty))
       val resultCookies = cookies(result)
@@ -100,7 +100,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
     }
 
     "set GU_SO cookie when user has SC_GU_U cookie" in new WithControllerMockedDependencies {
-      val returnUrl = Some("http://www.theguardian.com/yeah")
+      val returnUrl = Some("https://www.theguardian.com/yeah")
 
       val captor = ArgumentCaptor.forClass(classOf[Cookie])
 

@@ -1,13 +1,58 @@
 .skin-members {
   .header__logo-link {
-    background-image: inline("guardian-members-logo.svg");
-    height: height("guardian-members-logo.svg");
-    width: width("guardian-members-logo.svg");
     margin: 1rem 0 1.4rem;
+    height: 42px;
+    width: 224px;
+
+    @media (--viewport-min-mobile-landscape) {
+      height: 49px;
+      width: 261px;
+    }
+
+    @media (--viewport-min-tablet) {
+      height: 68px;
+      width:362px;
+    }
+
+  }
+
+  .header__back-link {
+    display: none;
+  }
+
+  .header__inner {
+    width: 100%;
+
+    @media (--viewport-min-mobile-landscape) {
+      width: 480px;
+    }
+
+    @media (--viewport-min-phablet) {
+      width: 660px;
+      max-width: 660px;
+      padding-right:0;
+    }
+
+    @media(--viewport-min-tablet) {
+      width: 100%;
+    }
+
+    @media(--viewport-min-desktop) {
+      max-width: 980px;
+    }
+
+    @media(--viewport-min-leftCol) {
+      max-width: 1140px;
+    }
+
+    @media(--viewport-min-wide) {
+      max-width: 1300px;
+    }
+
   }
 
   .header {
-    background-image: inline("bg-masthead-72px.png");
+
     background-position: center top;
 
     @media (--viewport-max-tablet) {

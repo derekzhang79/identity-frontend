@@ -1,3 +1,34 @@
+%membership-header-container {
+  width: 100%;
+
+  @media (--viewport-min-mobile-landscape) {
+    width: 480px;
+  }
+
+  @media (--viewport-phablet) {
+    width: 66rem;
+    max-width: 66rem;
+    padding-right: 0;
+  }
+
+  @media (--viewport-min-tablet) {
+    width:100%;
+  }
+
+  @media (--viewport-min-desktop) {
+    max-width: 98rem;
+  }
+
+  @media (--viewport-min-leftCol) {
+    max-width: 114rem;
+  }
+
+  @media (--viewport-min-wide) {
+    max-width: 130rem;
+  }
+}
+
+
 .skin-members {
   .header__logo-link {
     margin: 1rem 0 1.4rem;
@@ -21,34 +52,7 @@
   }
 
   .header__inner {
-    width: 100%;
-
-    @media (--viewport-min-mobile-landscape) {
-      width: 480px;
-    }
-
-    @media (--viewport-min-phablet) {
-      width: 660px;
-      max-width: 660px;
-      padding-right:0;
-    }
-
-    @media(--viewport-min-tablet) {
-      width: 100%;
-    }
-
-    @media(--viewport-min-desktop) {
-      max-width: 980px;
-    }
-
-    @media(--viewport-min-leftCol) {
-      max-width: 1140px;
-    }
-
-    @media(--viewport-min-wide) {
-      max-width: 1300px;
-    }
-
+    @extend %membership-header-container;
   }
 
   .header {

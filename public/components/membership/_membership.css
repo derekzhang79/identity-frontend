@@ -10,8 +10,8 @@
   }
 
   @media (--viewport-phablet) {
-    width: 66rem;
-    max-width: 66rem;
+    width: 660px;
+    max-width: 660px;
     padding-right: 0;
   }
 
@@ -20,15 +20,15 @@
   }
 
   @media (--viewport-min-desktop) {
-    max-width: 98rem;
+    max-width: 980px;
   }
 
   @media (--viewport-min-leftCol) {
-    max-width: 114rem;
+    max-width: 1140px;
   }
 
   @media (--viewport-min-wide) {
-    max-width: 130rem;
+    max-width: 1300px;
   }
 }
 

@@ -6,17 +6,16 @@
   width: 100%;
 
   @media (--viewport-min-mobile-landscape) {
-    width: 480px;
+    max-width: 480px;
   }
 
   @media (--viewport-phablet) {
-    width: 660px;
     max-width: 660px;
     padding-right: 0;
   }
 
   @media (--viewport-min-tablet) {
-    width:100%;
+    max-width: 740px;
   }
 
   @media (--viewport-min-desktop) {

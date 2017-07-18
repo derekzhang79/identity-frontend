@@ -17,6 +17,7 @@
 
 /* Viewports */
 @custom-media --viewport-mobile-wide (--viewport-min-mobile-landscape) and (--viewport-max-tablet);
+@custom-media --viewport-phablet (--viewport-min-phablet) and (--viewport-max-tablet);
 @custom-media --viewport-tablet (--viewport-min-tablet) and (--viewport-max-desktop);
 @custom-media --viewport-desktop (--viewport-min-desktop) and (--viewport-max-leftCol);
 @custom-media --viewport-wide (--viewport-min-leftCol);

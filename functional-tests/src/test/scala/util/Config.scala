@@ -12,7 +12,7 @@ object Config {
   private val baseUrlsByStage = Map(
     "PROD" -> "https://profile.theguardian.com",
     "CODE" -> "https://profile.code.dev-theguardian.com",
-    "DEV"  -> "https://profile-origin.thegulocal.com")
+    "DEV"  -> "https://profile.thegulocal.com")
 
   private val idApiUrlsByStage = Map(
     "PROD" -> "idapi.theguardian.com",

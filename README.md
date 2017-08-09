@@ -10,7 +10,7 @@ Web frontend for Sign in and Registration at [theguardian.com](http://theguardia
 Configuration files:
 - Environment-specific configuration (`conf/<ENV>.conf`)
 - Application configuration (`conf/application.conf`)
-- System file with additional properties (`/etc/gu/identity-frontend.conf` or `~/.gu/identity-frontend.conf`)
+- System file with additional properties (`/etc/gu/identity-frontend.conf`)
 
 # Local development
 

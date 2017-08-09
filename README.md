@@ -2,36 +2,32 @@
 
 [![Circle CI](https://circleci.com/gh/guardian/identity-frontend/tree/master.svg?style=shield)](https://circleci.com/gh/guardian/identity-frontend/tree/master)
 
-Web frontend for Sign in and Registration at [theguardian.com](http://theguardian.com).
+Frontend for Identity account sign in and registration at [theguardian.com](http://theguardian.com).
 
+## Configuration files
 
-# Application configuration
-
-Configuration files:
 - Environment-specific configuration (`conf/<ENV>.conf`)
 - Application configuration (`conf/application.conf`)
-- System file with additional properties (`/etc/gu/identity-frontend.conf`)
+- Private configuration (`/etc/gu/identity-frontend.conf`)
 
-# Local development
+## Local development
 
-## Nginx setup
+### Nginx setup
 
 Clone [identity-platform](https://github.com/guardian/identity-platform) and follow its [README](https://github.com/guardian/identity-platform/blob/master/README.md#setup-nginx-for-local-development)
 
-## Configuration
+### Configuration
 
-Install the local configuration file from s3:
+Download DEV private configuration from s3:
 
-```
-mkdir -p /etc/gu
+```bash
 aws s3 cp --profile identity s3://gu-identity-frontend-private/DEV/identity-frontend.conf /etc/gu
 ```
 
 **Note**: If you do not have Janus access to Identity, we can grant your team specific access, which means you would substitute `--profile identity` with e.g. `--profile membership`. Contact the Identity team if you require access to these files.
 
-You should now be able to start the application (`sbt run`), go to [https://profile.thegulocal.com/management/healthcheck](https://profile.thegulocal.com/management/healthcheck) and see a green padlock for your local SSL certificate as well as a 200 response.
 
-## Running the application
+### Running
 
 Requires:
 
@@ -49,27 +45,22 @@ so making changes locally will result in compile being triggered automatically.
 
 Client side sources will automatically be compiled using the `npm run build` command.
 
-## Running against local Identity API
+Test by hitting [https://profile.thegulocal.com/management/healthcheck](https://profile.thegulocal.com/management/healthcheck). 
 
-To run the application against a local installation of Identity API then update your `/etc/gu/identity-frontend.conf` to include:
+## Running against DEV Identity API
 
-    identity.api.host=idapi.thegulocal.com
+By default identity-frontend targets CODE Identity API. To target DEV Identity API update `/etc/gu/identity-frontend.conf` to include:
 
-And update the `identity.api.key` to:
+```hocon
+identity.api.host=idapi.thegulocal.com
+identity.api.key=frontend-dev-client-token
+```
+## Contributing
 
-    identity.api.key=frontend-dev-client-token
-
-## Development and Contributing
 See [CONTRIBUTING.MD](https://github.com/guardian/identity-frontend/blob/master/CONTRIBUTING.md).
 
-## Testing
+## Running Tests
 
-To run unit tests:
-
-    sbt test
-
-To run functional selenium tests in a browser:
-
-    sbt "project functional-tests" test
-
-Credentials for social functional tests are in private `DEV/identity-frontend.conf`.
+* Unit tests: `sbt test`
+* Functional tests: `sbt "project functional-tests" test`
+    

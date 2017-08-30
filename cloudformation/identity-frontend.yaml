@@ -204,16 +204,16 @@ Resources:
             aws s3 cp s3://gu-${App}-private/${Stage}/${App}.conf /etc/gu/${App}.conf
 
             tar -xvzf /${App}/${App}.tar.gz -C /${App}
-            cp /${App}/${App}/deploy/${App}-upstart.conf /etc/init/${App}.conf
+            cp /${App}/${App}/deploy/${App}.service /etc/systemd/system/${App}.service
 
             chown -R ${App} /${App}
 
-            sed -i "s/<APP>/${App}/g" /etc/init/${App}.conf
-            sed -i "s/<STAGE>/${Stage}/g" /etc/init/${App}.conf
-            sed -i "s/<PORT>/${Port}/g" /etc/init/${App}.conf
-            sed -i "s/<HEAP_SIZE_IN_MB>/$heap_size_in_mb/g" /etc/init/${App}.conf
+            sed -i "s/<APP>/${App}/g" /etc/systemd/system/${App}.service
+            sed -i "s/<STAGE>/${Stage}/g" /etc/systemd/system/${App}.service
+            sed -i "s/<PORT>/${Port}/g" /etc/systemd/system/${App}.service
+            sed -i "s/<HEAP_SIZE_IN_MB>/$heap_size_in_mb/g" /etc/systemd/system/${App}.service
 
-            service identity-frontend start
+            systemctl start identity-frontend
   LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:

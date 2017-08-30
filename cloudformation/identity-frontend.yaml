@@ -211,6 +211,7 @@ Resources:
             sed -i "s/<APP>/${App}/g" /etc/init/${App}.conf
             sed -i "s/<STAGE>/${Stage}/g" /etc/init/${App}.conf
             sed -i "s/<PORT>/${Port}/g" /etc/init/${App}.conf
+            sed -i "s/<HEAP_SIZE_IN_MB>/$heap_size_in_mb/g" /etc/init/${App}.conf
 
             service identity-frontend start
   LoadBalancerSecurityGroup:

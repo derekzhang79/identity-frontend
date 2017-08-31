@@ -1,7 +1,7 @@
 machine:
   timezone: UTC
   java:
-    version: oraclejdk8
+    version: openjdk8
   node:
     version: 4.5.0 # should match the version in .nvmrc
   environment:

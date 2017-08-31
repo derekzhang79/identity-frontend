@@ -1,0 +1,353 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Identity Frontend
+Parameters:
+  KeyName:
+    Description: The EC2 Key Pair to allow SSH access to the instances
+    Type: AWS::EC2::KeyPair::KeyName
+  Stage:
+    Description: Environment name
+    Type: String
+    AllowedValues:
+    - CODE
+    - PROD
+  SshAccessSecurityGroup:
+    Description: Security group that is allowed SSH access to the instances
+    Type: AWS::EC2::SecurityGroup::Id
+  VulnerabilityScanningSecurityGroup:
+    Description: Security group that grants access to the account's Vulnerability
+      Scanner
+    Type: AWS::EC2::SecurityGroup::Id
+  VpcId:
+    Description: ID of the VPC onto which to launch the application
+    Type: AWS::EC2::VPC::Id
+  PrivateVpcSubnets:
+    Description: Public subnets to use in VPC
+    Type: List<AWS::EC2::Subnet::Id>
+  PublicVpcSubnets:
+    Description: Public subnets to use for the ELB
+    Type: List<AWS::EC2::Subnet::Id>
+  AmiId:
+    Description: Custom AMI to use for instances, created using Packer
+    Type: String
+  LogstashHost:
+    Description: Logstash load balancer host
+    Type: String
+  AlarmEmailAddress:
+    Description: Contact email for alarms
+    Type: String
+  PagerDutyUrl:
+    Description: HTTPS url for pager duty notifications
+    Type: String
+  Stack:
+    Description: Application stack
+    Type: String
+    Default: identity
+  App:
+    Description: Application name
+    Type: String
+    Default: identity-frontend
+  LoadBalancerLogsS3Bucket:
+    Description: S3 Bucket to write ELB logs to
+    Type: String
+  Port:
+    Description: Port that the app listens on
+    Type: Number
+    Default: 8860
+Mappings:
+  StageVariables:
+    PROD:
+      AutoscalingNotificationsARN: arn:aws:sns:eu-west-1:942464564246:AutoscalingNotificationsPROD
+      LatencyAlarmThreshold: 0.5
+      LatencyAlarmPeriod: 60
+      NotificationAlarmPeriod: 1200
+      InstanceType: t2.small
+      DesiredInstances: 3
+      MaxInstances: 12
+    CODE:
+      AutoscalingNotificationsARN: arn:aws:sns:eu-west-1:942464564246:AutoscalingNotificationsCODE
+      LatencyAlarmThreshold: 5
+      LatencyAlarmPeriod: 1200
+      NotificationAlarmPeriod: 1200
+      InstanceType: t2.micro
+      DesiredInstances: 1
+      MaxInstances: 2
+  CertsMap:
+    CODE:
+      ssl: certificate/8c077d9e-6021-44c2-8aac-bbfd865ce72d
+    PROD:
+      ssl: certificate/9d732c7b-ba1e-4f1b-aa3f-4ca012ef8a5f
+Resources:
+  IdentityRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: s3:GetObject
+            Resource: arn:aws:s3:::gu-identity-*/*
+          - Effect: Allow
+            Action: ec2:DescribeTags
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - cloudwatch:*
+            - logs:*
+            Resource: '*'
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+      - !Ref 'IdentityRole'
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      LoadBalancerName: !Sub '${App}-${Stage}'
+      Scheme: internet-facing
+      Listeners:
+      - LoadBalancerPort: '443'
+        InstancePort: !Ref Port
+        Protocol: HTTPS
+        SSLCertificateId: !Sub
+          - 'arn:aws:acm:eu-west-1:${AWS::AccountId}:${CertId}'
+          - CertId: !FindInMap [CertsMap, !Ref 'Stage', ssl]
+      CrossZone: 'true'
+      HealthCheck:
+        Target: !Sub HTTP:${Port}/management/healthcheck
+        HealthyThreshold: '2'
+        UnhealthyThreshold: '10'
+        Interval: '30'
+        Timeout: '10'
+      Subnets: !Ref 'PublicVpcSubnets'
+      SecurityGroups:
+      - !Ref 'LoadBalancerSecurityGroup'
+      AccessLoggingPolicy:
+        EmitInterval: 5
+        Enabled: true
+        S3BucketName: !Ref 'LoadBalancerLogsS3Bucket'
+        S3BucketPrefix: !Sub 'ELBLogs/${Stack}/${App}/${Stage}'
+      ConnectionDrainingPolicy:
+        Enabled: 'true'
+        Timeout: '60'
+  AutoscalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AvailabilityZones: !GetAZs ''
+      LaunchConfigurationName: !Ref 'LaunchConfig'
+      MinSize: !FindInMap [StageVariables, !Ref 'Stage', DesiredInstances]
+      MaxSize: !FindInMap [StageVariables, !Ref 'Stage', MaxInstances]
+      DesiredCapacity: !FindInMap [StageVariables, !Ref 'Stage', DesiredInstances]
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 400
+      LoadBalancerNames:
+      - !Ref 'LoadBalancer'
+      Tags:
+      - Key: Stage
+        Value: !Ref 'Stage'
+        PropagateAtLaunch: 'true'
+      - Key: LogstashHost
+        Value: !Ref 'LogstashHost'
+        PropagateAtLaunch: 'true'
+      - Key: Name
+        Value: !Sub '${Stage}:${App}'
+        PropagateAtLaunch: 'true'
+      - Key: Stack
+        Value: !Ref 'Stack'
+        PropagateAtLaunch: 'true'
+      - Key: App
+        Value: !Ref 'App'
+        PropagateAtLaunch: 'true'
+      - Key: Role
+        Value: identity-frontend
+        PropagateAtLaunch: 'true'
+      NotificationConfiguration:
+        TopicARN: !FindInMap [StageVariables, !Ref 'Stage', AutoscalingNotificationsARN]
+        NotificationTypes:
+        - autoscaling:EC2_INSTANCE_LAUNCH_ERROR
+        - autoscaling:EC2_INSTANCE_TERMINATE_ERROR
+      VPCZoneIdentifier: !Ref 'PrivateVpcSubnets'
+  LaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'AmiId'
+      SecurityGroups:
+      - !Ref 'InstanceSecurityGroup'
+      - !Ref 'SshAccessSecurityGroup'
+      - !Ref 'VulnerabilityScanningSecurityGroup'
+      InstanceType: !FindInMap [StageVariables, !Ref 'Stage', InstanceType]
+      AssociatePublicIpAddress: 'False'
+      IamInstanceProfile: !Ref 'InstanceProfile'
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash -ev
+
+            source /identity-functions.sh
+            source /set-env.sh
+
+            installScriptFromBucket gu-identity-dist/${Stage} identity-bootstrap.sh
+            installScriptFromBucket gu-identity-dist/${Stage} logstash-setup.sh
+
+            aws s3 cp s3://gu-${App}-dist/${Stack}/${Stage}/${App}/${App}.tgz /${App}/${App}.tar.gz
+            aws s3 cp s3://gu-${App}-private/${Stage}/${App}.conf /etc/gu/${App}.conf
+
+            tar -xvzf /${App}/${App}.tar.gz -C /${App}
+            cp /${App}/${App}/deploy/${App}.service /etc/systemd/system/${App}.service
+
+            chown -R ${App} /${App}
+
+            sed -i "s/<APP>/${App}/g" /etc/systemd/system/${App}.service
+            sed -i "s/<STAGE>/${Stage}/g" /etc/systemd/system/${App}.service
+            sed -i "s/<PORT>/${Port}/g" /etc/systemd/system/${App}.service
+            sed -i "s/<HEAP_SIZE_IN_MB>/$heap_size_in_mb/g" /etc/systemd/system/${App}.service
+
+            systemctl start identity-frontend
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref 'VpcId'
+      GroupDescription: Open up HTTP access to load balancer
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '443'
+        ToPort: '443'
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: !Ref Port
+        ToPort: !Ref Port
+        CidrIp: 0.0.0.0/0
+      Tags:
+      - Key: Name
+        Value: !Sub 'identity-frontend-${Stage}-loadbalancer-sg'
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref 'VpcId'
+      GroupDescription: Open up HTTP access to load balancer
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: !Ref Port
+        ToPort: !Ref Port
+        SourceSecurityGroupId: !Ref 'LoadBalancerSecurityGroup'
+      Tags:
+      - Key: Name
+        Value: !Sub 'identity-frontend-${Stage}-instance-sg'
+  HighLatencyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: !Sub
+        - 'Scale-Up if latency is greater than ${Threshold} seconds over last ${Period} seconds'
+        - Period: !FindInMap [StageVariables, !Ref 'Stage', LatencyAlarmPeriod]
+          Threshold: !FindInMap [StageVariables, !Ref 'Stage', LatencyAlarmThreshold]
+      Namespace: AWS/ELB
+      MetricName: Latency
+      Statistic: Average
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+      - Name: LoadBalancer
+        Value: !Ref 'LoadBalancer'
+      Threshold: !FindInMap [StageVariables, !Ref 'Stage', LatencyAlarmThreshold]
+      Period: !FindInMap [StageVariables, !Ref 'Stage', LatencyAlarmPeriod]
+      EvaluationPeriods: '1'
+      AlarmActions:
+      - !Ref 'ScaleUpPolicy'
+      OKActions:
+      - !Ref 'ScaleDownPolicy'
+  ScaleUpPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref 'AutoscalingGroup'
+      AdjustmentType: PercentChangeInCapacity
+      ScalingAdjustment: '100'
+      Cooldown: '300'
+  ScaleDownPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AdjustmentType: ChangeInCapacity
+      AutoScalingGroupName: !Ref 'AutoscalingGroup'
+      Cooldown: '3600'
+      ScalingAdjustment: '-1'
+  TopicSendEmail:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: SendEmailToIdentityDev
+      Subscription:
+      - Endpoint: !Ref 'AlarmEmailAddress'
+        Protocol: email
+  TopicPagerDutyAlerts:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: PagerDutyTopic
+      Subscription:
+      - Endpoint: !Ref 'PagerDutyUrl'
+        Protocol: https
+  alarmNoHealthyHosts:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ActionsEnabled: 'true'
+      AlarmDescription: There are insufficient healthy hosts
+      ComparisonOperator: LessThanThreshold
+      EvaluationPeriods: '1'
+      MetricName: HealthyHostCount
+      Namespace: AWS/ELB
+      Period: '60'
+      Statistic: Average
+      Threshold: !FindInMap [StageVariables, !Ref 'Stage', DesiredInstances]
+      AlarmActions:
+      - !Ref 'TopicSendEmail'
+      - !Ref 'TopicPagerDutyAlerts'
+      InsufficientDataActions:
+      - !Ref 'TopicSendEmail'
+      - !Ref 'TopicPagerDutyAlerts'
+      OKActions:
+      - !Ref 'TopicPagerDutyAlerts'
+      Dimensions:
+      - Name: LoadBalancerName
+        Value: !Ref 'LoadBalancer'
+  alarmSignInInactivity:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Low number of users signing in.
+      Namespace: SuccessfulSignIns
+      MetricName: SuccessfulSignIn
+      Statistic: Sum
+      ComparisonOperator: LessThanThreshold
+      Threshold: '0.9'
+      Period: '1200'
+      EvaluationPeriods: '1'
+      AlarmActions:
+      - !Ref 'TopicSendEmail'
+      - !Ref 'TopicPagerDutyAlerts'
+      Dimensions:
+      - Name: Stage
+        Value: !Ref 'Stage'
+  alarmRegisterInactivity:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Low number of users registering.
+      Namespace: SuccessfulRegistrations
+      MetricName: SuccessfulRegistration
+      Statistic: Average
+      ComparisonOperator: LessThanThreshold
+      Threshold: '0.9'
+      Period: '3600'
+      EvaluationPeriods: '1'
+      AlarmActions:
+      - !Ref 'TopicSendEmail'
+      - !Ref 'TopicPagerDutyAlerts'
+Outputs:
+  LoadBalancer:
+    Value: !GetAtt 'LoadBalancer.DNSName'

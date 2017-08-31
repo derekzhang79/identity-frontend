@@ -3,7 +3,7 @@ machine:
   java:
     version: oraclejdk8
   node:
-    version: 4.2.2 # should match the version in .nvmrc
+    version: 4.5.0 # should match the version in .nvmrc
   environment:
     SBT_OPTS: "-Xmx1384M -XX:MaxMetaspaceSize=384M -XX:+UseCompressedOops"
 

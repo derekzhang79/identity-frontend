@@ -24,10 +24,10 @@ object ErrorViewModel {
     RegisterActionBadRequestErrorID -> "One or more inputs was not valid; please try again.",
     RegisterEmailConflictErrorID -> "You already have a Guardian account. Please sign in or use another email address.",
     RegisterEmailReservedErrorID -> "This email is not available. Please use another email address.",
-    RegisterActionInvalidFirstNameErrorID -> minMaxLength("First name", 1, 25),
-    RegisterActionInvalidLastNameErrorID -> minMaxLength("Last name", 1, 25),
+    RegisterActionInvalidFirstNameErrorID -> (minMaxLength("First name", 1, 25) + " " + invalidNameCharacters("First name")),
+    RegisterActionInvalidLastNameErrorID ->(minMaxLength("Last name", 1, 25) + " " + invalidNameCharacters("Last name")),
     RegisterActionInvalidEmailErrorID -> "Invalid email address; please try again.",
-    RegisterActionInvalidDisplayNameErrorID -> minMaxLength("Display name", 2, 50),
+    RegisterActionInvalidDisplayNameErrorID -> (minMaxLength("Display name", 2, 50) + " " + invalidNameCharacters("Display name")),
     RegisterActionInvalidPasswordErrorID -> "Invalid password; your password must be between 6 and 72 characters long.",
 
     SocialRegistrationFacebookEmailErrorID -> "We need your email address when you sign in with Facebook so that we can keep in touch (you can choose which emails you receive in your account settings). Try again and allow access to your email address or provide it manually below.",
@@ -50,6 +50,8 @@ object ErrorViewModel {
   private def nonEmptyField(fieldName: String) = s"${fieldName.capitalize} field must not be blank."
 
   private def minMaxLength(fieldName: String, min: Int, max: Int) = s"${fieldName.capitalize} field must be between $min and $max characters long."
+
+  private def invalidNameCharacters(fieldName: String) = s"${fieldName.capitalize} field may not contain the characters : or /."
 
   val default: String = "There was an unexpected problem; please try again."
 

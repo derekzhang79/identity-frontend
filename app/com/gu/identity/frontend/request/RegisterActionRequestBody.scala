@@ -2,12 +2,13 @@ package com.gu.identity.frontend.request
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.errors._
-import com.gu.identity.frontend.models.{ReturnUrl, ClientID, GroupCode}
+import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
 import com.gu.identity.frontend.request.RequestParameters._
 import play.api.data.Forms._
-import play.api.data.{FormError, Mapping, Form}
+import play.api.data.validation.Constraints
+import play.api.data.{Form, FormError, Mapping}
 import play.api.http.HeaderNames
-import play.api.mvc.{RequestHeader, Result, BodyParsers, BodyParser}
+import play.api.mvc.{BodyParser, BodyParsers, RequestHeader, Result}
 
 
 case class RegisterActionRequestBody private(
@@ -67,20 +68,22 @@ object RegisterActionRequestBody {
     import GroupCode.FormMappings.groupCode
     import ReturnUrl.FormMapping.returnUrl
 
-    def minMaxLength(min : Int, max: Int): Mapping[String] = text.verifying(
-      "error.displayName", name => name.length >= min && name.length <= max
+    def validNameText(min : Int, max: Int): Mapping[String] = text.verifying(
+      Constraints.minLength(min),
+      Constraints.maxLength(max),
+      Constraints.pattern("^[^/:]*$".r)
     )
 
     private val password: Mapping[String] = text.verifying(
-      "error.password", name => name.length > 5 && name.length < 73
+      "error.password", pwd => pwd.length > 5 && pwd.length < 73
     )
 
     def registerFormMapping(refererHeader: Option[String]): Mapping[RegisterActionRequestBody] =
       mapping(
-        "firstName" -> minMaxLength(1, 25),
-        "lastName" -> minMaxLength(1, 25),
+        "firstName" -> validNameText(1, 25),
+        "lastName" -> validNameText(1, 25),
         "email" -> email,
-        "displayName" -> minMaxLength(2, 50),
+        "displayName" -> validNameText(2, 50),
         "password" -> password,
         "countryCode" -> optional(text),
         "localNumber" -> optional(text),

@@ -25,7 +25,7 @@ object ErrorViewModel {
     RegisterEmailConflictErrorID -> "You already have a Guardian account. Please sign in or use another email address.",
     RegisterEmailReservedErrorID -> "This email is not available. Please use another email address.",
     RegisterActionInvalidFirstNameErrorID -> (minMaxLength("First name", 1, 25) + " " + invalidNameCharacters("First name")),
-    RegisterActionInvalidLastNameErrorID ->(minMaxLength("Last name", 1, 25) + " " + invalidNameCharacters("Last name"),
+    RegisterActionInvalidLastNameErrorID ->(minMaxLength("Last name", 1, 25) + " " + invalidNameCharacters("Last name")),
     RegisterActionInvalidEmailErrorID -> "Invalid email address; please try again.",
     RegisterActionInvalidDisplayNameErrorID -> (minMaxLength("Display name", 2, 50) + " " + invalidNameCharacters("Display name")),
     RegisterActionInvalidPasswordErrorID -> "Invalid password; your password must be between 6 and 72 characters long.",

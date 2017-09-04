@@ -51,7 +51,7 @@ object ErrorViewModel {
 
   private def minMaxLength(fieldName: String, min: Int, max: Int) = s"${fieldName.capitalize} field must be between $min and $max characters long."
 
-  private def invalidNameCharacters(fieldName: String) = s"${fieldName.capitalize} field may not the characters : or /."
+  private def invalidNameCharacters(fieldName: String) = s"${fieldName.capitalize} field may not contain the characters : or /."
 
   val default: String = "There was an unexpected problem; please try again."
 

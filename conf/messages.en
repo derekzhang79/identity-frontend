@@ -130,10 +130,15 @@ thirdPartyTerms.continueButton=Continue
 thirdPartyTerms.terms=By proceeding, you agree to Guardian {0}
 thirdPartyTerms.termsOfService=Terms of Service
 thirdPartyTerms.privacyPolicy=Privacy Policy
+
 thirdPartyTerms.teachersPageTitle=Teacher''s Network
 thirdPartyTerms.teachersTitle=Teacher''s Network
 thirdPartyTerms.teachersServiceName=Teacher Network''s
-thirdPartyTerms.teachersFeatures=Download teaching resources
+thirdPartyTerms.teachersFeaturesIntro=By activating your Guardian Teacher''s Network account you will be able to do the following:
+thirdPartyTerms.teachersFeatures1=Download teaching assets
+thirdPartyTerms.teachersFeatures2=Contribute new resources
+thirdPartyTerms.teachersFeatures3=Rate the quality of published resources
+
 thirdPartyTerms.jobsPageTitle=Jobs
 thirdPartyTerms.jobsTitle=Jobs
 thirdPartyTerms.jobsServiceName=Jobs''

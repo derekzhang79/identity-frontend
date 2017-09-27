@@ -44,10 +44,15 @@ object TeachersTsAndCsText {
     ThirdPartyTsAndCsText(
       pageTitle = messages("thirdPartyTerms.teachersPageTitle"),
       title = title,
-      features = Seq(messages("thirdPartyTerms.teachersFeatures")),
+      featureIntro = Some(messages("thirdPartyTerms.teachersFeaturesIntro")),
+      features = Seq(
+        messages("thirdPartyTerms.teachersFeatures1"),
+        messages("thirdPartyTerms.teachersFeatures2"),
+        messages("thirdPartyTerms.teachersFeatures3")
+      ),
       serviceName = serviceName,
-      termsOfServiceLink = "http://teachers.theguardian.com/Terms.htm",
-      privacyPolicyLink = "http://teachers.theguardian.com/privacypolicy.htm",
+      termsOfServiceLink = "https://teachers.theguardian.com/guardian-teacher-network-terms-and-conditions",
+      privacyPolicyLink = "https://teachers.theguardian.com/guardian-teacher-network-privacy-policy",
       baseText = BaseTsAndCsText(title, serviceName)
     )
   }

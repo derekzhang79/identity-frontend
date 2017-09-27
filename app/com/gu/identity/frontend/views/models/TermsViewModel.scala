@@ -70,8 +70,8 @@ object TeachersTermsViewModel {
       privacyPolicyText = text.basicTermsText.privacyPolicyText,
       privacyPolicyUrl = text.basicTermsText.privacyPolicyUrl,
       extendedConditionsText = text.conditionsText,
-      extendedTermsOfServiceUrl = "http://teachers.theguardian.com/Terms.htm",
-      extendedPrivacyPolicyUrl = "http://teachers.theguardian.com/privacypolicy.htm"
+      extendedTermsOfServiceUrl = "https://teachers.theguardian.com/guardian-teacher-network-terms-and-conditions",
+      extendedPrivacyPolicyUrl = "https://teachers.theguardian.com/guardian-teacher-network-privacy-policy"
     )
   }
 }
@@ -95,7 +95,7 @@ object JobsTermsViewModel {
 object Terms {
   def getTermsModel(group: Option[GroupCode])(implicit messages: Messages): TermsViewModel = {
     group match {
-      case Some(GuardianTeachersNetwork) => {TeachersTermsViewModel()}
+      case Some(GuardianTeachersNetwork) => TeachersTermsViewModel()
       case Some(GuardianJobs) => JobsTermsViewModel()
       case _ => BasicTermsViewModel()
     }

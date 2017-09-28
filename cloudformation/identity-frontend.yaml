@@ -26,8 +26,8 @@ Parameters:
   PublicVpcSubnets:
     Description: Public subnets to use for the ELB
     Type: List<AWS::EC2::Subnet::Id>
-  AmiId:
-    Description: Custom AMI to use for instances, created using Packer
+  AMI:
+    Description: Custom AMI to use for instances, created using Amigo
     Type: String
   LogstashHost:
     Description: Logstash load balancer host
@@ -95,7 +95,9 @@ Resources:
           Statement:
           - Effect: Allow
             Action: s3:GetObject
-            Resource: arn:aws:s3:::gu-identity-*/*
+            Resource:
+            - !Sub arn:aws:s3:::identity-artifacts/${Stage}/${App}/*
+            - !Sub arn:aws:s3:::identity-private-config/${Stage}/${App}/*
           - Effect: Allow
             Action: ec2:DescribeTags
             Resource: '*'
@@ -181,7 +183,7 @@ Resources:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
       KeyName: !Ref 'KeyName'
-      ImageId: !Ref 'AmiId'
+      ImageId: !Ref 'AMI'
       SecurityGroups:
       - !Ref 'InstanceSecurityGroup'
       - !Ref 'SshAccessSecurityGroup'
@@ -194,19 +196,35 @@ Resources:
           !Sub |
             #!/bin/bash -ev
 
-            source /identity-functions.sh
-            source /set-env.sh
+            mkdir /etc/gu
+            cat > /etc/gu/install_vars <<__END__
+            STAGE=${Stage}
+            app=${App}
+            region=${AWS::Region}
+            __END__
 
-            installScriptFromBucket gu-identity-dist/${Stage} identity-bootstrap.sh
-            installScriptFromBucket gu-identity-dist/${Stage} logstash-setup.sh
+            #Add User
+            addgroup ${Stack}
+            adduser --home /${App} --disabled-password --gecos \"\" ${App}
 
-            aws s3 cp s3://gu-${App}-dist/${Stack}/${Stage}/${App}/${App}.tgz /${App}/${App}.tar.gz
-            aws s3 cp s3://gu-${App}-private/${Stage}/${App}.conf /etc/gu/${App}.conf
+            aws s3 cp s3://identity-artifacts/${Stage}/${App}/${App}.tgz /${App}.tar.gz
+            aws s3 cp s3://identity-private-config/${Stage}/${App}/${App}.conf /etc/gu/${App}.conf
 
-            tar -xvzf /${App}/${App}.tar.gz -C /${App}
+            tar -xvzf /${App}.tar.gz -C /${App}
             cp /${App}/${App}/deploy/${App}.service /etc/systemd/system/${App}.service
 
             chown -R ${App} /${App}
+
+            # Files limit
+            cat > /etc/security/limits.d/nofile.conf <<__END__
+            * soft nofile 20000
+            * hard nofile 20000
+            __END__
+            chown root:root /etc/security/limits.d/nofile.conf
+
+            # systemd stuff
+            total_mem=$(grep MemTotal /proc/meminfo | awk '{ print $2 }')
+            heap_size_in_mb=$(python -c "print int($total_mem * 0.8 / 1024)")
 
             sed -i "s/<APP>/${App}/g" /etc/systemd/system/${App}.service
             sed -i "s/<STAGE>/${Stage}/g" /etc/systemd/system/${App}.service

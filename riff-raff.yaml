@@ -6,4 +6,17 @@ deployments:
   identity-frontend:
     type: autoscaling
     parameters:
-      bucket: gu-identity-frontend-dist
+      bucket: identity-artifacts
+      prefixStack: false
+    dependencies:
+      - update-ami
+  update-ami:
+    type: ami-cloudformation-parameter
+    parameters:
+      cloudFormationStackByTags: false
+      prependStackToCloudFormationStackName: false
+      cloudFormationStackName: IdentityFrontend
+      amiParametersToTags:
+        AMI:
+          Recipe: identity-base
+          AmigoStage: PROD

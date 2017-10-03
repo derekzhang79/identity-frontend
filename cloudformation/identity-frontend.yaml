@@ -207,10 +207,10 @@ Resources:
             addgroup ${Stack}
             adduser --home /${App} --disabled-password --gecos \"\" ${App}
 
-            aws s3 cp s3://identity-artifacts/${Stage}/${App}/${App}.tgz /${App}.tar.gz
+            aws s3 cp s3://identity-artifacts/${Stage}/${App}/${App}.zip /${App}
             aws s3 cp s3://identity-private-config/${Stage}/${App}/${App}.conf /etc/gu/${App}.conf
 
-            tar -xvzf /${App}.tar.gz -C /${App}
+            unzip -o /${App}/${App}.zip -d /${App}
             cp /${App}/${App}/deploy/${App}.service /etc/systemd/system/${App}.service
 
             chown -R ${App} /${App}

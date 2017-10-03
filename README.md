@@ -1,7 +1,5 @@
 # identity-frontend
 
-[![Circle CI](https://circleci.com/gh/guardian/identity-frontend/tree/master.svg?style=shield)](https://circleci.com/gh/guardian/identity-frontend/tree/master)
-
 Frontend for Identity account sign in and registration at [theguardian.com](http://theguardian.com).
 
 ## Configuration files

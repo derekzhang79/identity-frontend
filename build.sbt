@@ -1,3 +1,5 @@
+import com.typesafe.sbt.packager.MappingsHelper.directory
+
 name := "identity-frontend"
 
 organization := "com.gu.identity"
@@ -7,7 +9,7 @@ scalaVersion := "2.11.7"
 version := "1.0.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(
-  PlayScala, SbtNativePackager, UniversalPlugin, RiffRaffArtifact, BuildInfoPlugin, FrontendBuildPlugin)
+  PlayScala, UniversalPlugin, RiffRaffArtifact, BuildInfoPlugin, FrontendBuildPlugin)
 
 lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 
@@ -35,25 +37,26 @@ javaOptions ++= Seq("-Dlogs.home=logs", "-Dconfig.resource=DEV.conf")
 
 testOptions in Test += Tests.Argument("-oDF")
 
-// Config for packaging app for deployment with riffraff
-packageName in Universal := normalizedName.value
-
-riffRaffPackageType := (packageZipTarball in Universal).value
+// RiffRaff
+packageName in Universal := name.value
+mappings in Universal ++= directory("deploy")
+riffRaffPackageType := (packageBin in Universal).value
 riffRaffPackageName := name.value
 riffRaffManifestProjectName := s"identity:${name.value}"
-riffRaffBuildIdentifier := Option(System.getenv("CIRCLE_BUILD_NUM")).getOrElse("DEV")
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 
-mappings in Universal ++= (baseDirectory.value / "deploy" ***).get pair relativeTo(baseDirectory.value)
+// FIXME: riffraff should automatically detect these but it seems tc-build.sh is interfering with that
+riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("unknown")
+riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown") // %teamcity.build.branch%
 
 // Prout
 buildInfoKeys := Seq[BuildInfoKey](
   name,
-  BuildInfoKey.constant("gitCommitId", Option(System.getenv("CIRCLE_SHA1")) getOrElse(try {
+  BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse (try {
     "git rev-parse HEAD".!!.trim
   } catch { case e: Exception => "unknown" })),
-  BuildInfoKey.constant("buildNumber", Option(System.getenv("CIRCLE_BUILD_NUM")) getOrElse "DEV")
+  BuildInfoKey.constant("buildNumber", Option(System.getenv("BUILD_NUMBER")) getOrElse "DEV")
 )
 
 buildInfoOptions += BuildInfoOption.ToMap

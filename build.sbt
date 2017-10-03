@@ -45,6 +45,8 @@ riffRaffPackageName := name.value
 riffRaffManifestProjectName := s"identity:${name.value}"
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
+
+// FIXME: riffraff should automatically detect these but it seems tc-build.sh is interfering with that
 riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("unknown")
 riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown") // %teamcity.build.branch%
 

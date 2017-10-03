@@ -325,10 +325,8 @@ Resources:
       Statistic: Average
       Threshold: !FindInMap [StageVariables, !Ref 'Stage', DesiredInstances]
       AlarmActions:
-      - !Ref 'TopicSendEmail'
       - !Ref 'TopicPagerDutyAlerts'
       InsufficientDataActions:
-      - !Ref 'TopicSendEmail'
       - !Ref 'TopicPagerDutyAlerts'
       OKActions:
       - !Ref 'TopicPagerDutyAlerts'
@@ -347,7 +345,6 @@ Resources:
       Period: '1200'
       EvaluationPeriods: '1'
       AlarmActions:
-      - !Ref 'TopicSendEmail'
       - !Ref 'TopicPagerDutyAlerts'
       Dimensions:
       - Name: Stage
@@ -364,7 +361,6 @@ Resources:
       Period: '3600'
       EvaluationPeriods: '1'
       AlarmActions:
-      - !Ref 'TopicSendEmail'
       - !Ref 'TopicPagerDutyAlerts'
 Outputs:
   LoadBalancer:

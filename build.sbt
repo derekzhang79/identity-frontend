@@ -40,7 +40,6 @@ testOptions in Test += Tests.Argument("-oDF")
 // RiffRaff
 packageName in Universal := name.value
 mappings in Universal ++= directory("deploy")
-
 riffRaffPackageType := (packageBin in Universal).value
 riffRaffPackageName := name.value
 riffRaffManifestProjectName := s"identity:${name.value}"
@@ -48,7 +47,6 @@ riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffBuildIdentifier := Option(System.getenv("BUILD_NUMBER")).getOrElse("unknown")
 riffRaffManifestBranch := Option(System.getenv("BRANCH_NAME")).getOrElse("unknown") // %teamcity.build.branch%
-
 
 // Prout
 buildInfoKeys := Seq[BuildInfoKey](

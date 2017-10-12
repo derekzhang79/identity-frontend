@@ -6,7 +6,7 @@ import play.api.data.Forms._
 import play.api.data._
 
 class EmailValidationSpec extends FlatSpec with Matchers with AppendedClues{
-  it should "work" in {
+  it should "correctly detect valid and invalid email addresses" in {
     /*
       The regex used to validate email addresses is based on the one used by WebKit for html email validation
       and comes from here: https://html.spec.whatwg.org/#valid-e-mail-address

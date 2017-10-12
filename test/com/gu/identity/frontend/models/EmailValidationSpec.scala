@@ -1,11 +1,10 @@
 package com.gu.identity.frontend.models
 
-import com.gu.identity.frontend.request.RegisterActionRequestBody.FormMapping
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.request.RegisterActionRequestBody.FormMapping.dotlessDomainEmail
 import org.scalatest.{FlatSpec, Matchers}
-import play.api.data._
 import play.api.data.Forms._
+import play.api.data._
 
 class EmailValidationSpec extends FlatSpec with Matchers with Logging {
   it should "work" in {

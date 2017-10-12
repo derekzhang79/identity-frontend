@@ -89,7 +89,7 @@ object RegisterViewModel {
 
       countryCodes = codes,
       gitCommitId = BuildInfo.gitCommitId,
-      emailValidationRegex = "" // FormMapping.dotlessDomainEmailRegex.pattern.toString
+      emailValidationRegex = FormMapping.dotlessDomainEmailRegex.pattern.toString
     )
   }
 

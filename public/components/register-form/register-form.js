@@ -66,6 +66,11 @@ class RegisterFormModel {
     this.formElement.on( 'submit', this.formSubmitted.bind( this ) );
     this.fields.firstName.on('blur', this.updateDisplayName.bind( this ));
     this.fields.lastName.on('blur', this.updateDisplayName.bind( this ));
+    this.fields.email.on('invalid', this.validateEmail.bind( event ));
+  }
+
+  validateEmail(event) {
+    event.target.setCustomValidity('Please enter a valid email address');
   }
 
   updateDisplayName(){

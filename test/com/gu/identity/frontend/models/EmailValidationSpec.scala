@@ -1,12 +1,11 @@
 package com.gu.identity.frontend.models
 
-import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.request.RegisterActionRequestBody.FormMapping.dotlessDomainEmail
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{AppendedClues, FlatSpec, Matchers}
 import play.api.data.Forms._
 import play.api.data._
 
-class EmailValidationSpec extends FlatSpec with Matchers with Logging {
+class EmailValidationSpec extends FlatSpec with Matchers with AppendedClues{
   it should "work" in {
     /*
       The regex used to validate email addresses is based on the one used by WebKit for html email validation
@@ -50,7 +49,6 @@ class EmailValidationSpec extends FlatSpec with Matchers with Logging {
       "email@domain@domain.com", //Two @ sign
       ".email@domain.com", //Leading dot in address is not allowed
       "email.@domain.com", //Trailing dot in address is not allowed
-
       "あいうえお@domain.com", //Unicode char as address
       "email@domain.com (Joe Smith)", //Text followed email is not allowed
       "email@domain", //Missing top level domain (.com/.net/.org/etc)
@@ -63,18 +61,14 @@ class EmailValidationSpec extends FlatSpec with Matchers with Logging {
       )
     )
 
-    System.out.println("\nValid emails\n----------------------------")
     valid.foreach {
       email =>
-        System.out.println(s"Trying to bind valid email $email")
-        singleForm.bind(Map("email" -> email)).get shouldBe email
+        singleForm.bind(Map("email" -> email)).errors shouldBe Nil withClue s"$email failed to validate but is a valid email"
     }
 
-    System.out.println("\nInvalid emails\n----------------------------")
     invalid.foreach {
       email =>
-        System.out.println(s"Trying to bind invalid email $email")
-        singleForm.bind(Map("email" -> email)).errors.nonEmpty shouldBe true
+        singleForm.bind(Map("email" -> email)).errors.nonEmpty shouldBe true withClue s"$email validated but is an invalid email"
     }
 
   }

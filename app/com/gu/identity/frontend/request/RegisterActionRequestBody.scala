@@ -5,10 +5,12 @@ import com.gu.identity.frontend.errors._
 import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
 import com.gu.identity.frontend.request.RequestParameters._
 import play.api.data.Forms._
-import play.api.data.validation.Constraints
+import play.api.data.validation._
 import play.api.data.{Form, FormError, Mapping}
 import play.api.http.HeaderNames
 import play.api.mvc.{BodyParser, BodyParsers, RequestHeader, Result}
+
+import scala.util.matching.Regex
 
 
 case class RegisterActionRequestBody private(
@@ -62,12 +64,19 @@ object RegisterActionRequestBody {
     case e => RegisterActionBadRequestAppException(s"Unexpected error: ${e.message}")
   }
 
-
   object FormMapping {
     import ClientID.FormMapping.clientId
     import GroupCode.FormMappings.groupCode
     import ReturnUrl.FormMapping.returnUrl
 
+    // This regex is based on the one used by WebKit for html email validation, documented here:
+    // https://html.spec.whatwg.org/#valid-e-mail-address
+    // But with the additional constraint that the domain must not be dotless
+    val dotlessDomainEmailRegex: Regex = """^[a-zA-Z0-9!#$%&’*+\/=?^_`{|}~-][a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]*[a-zA-Z0-9!#$%&’*+\/=?^_`{|}~-]@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.(?:[a-zA-Z0-9\.](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$""".r
+
+    def dotlessDomainEmail: Mapping[String] = email.verifying(
+      Constraints.pattern(dotlessDomainEmailRegex)
+    )
     def validNameText(min : Int, max: Int): Mapping[String] = text.verifying(
       Constraints.minLength(min),
       Constraints.maxLength(max),
@@ -82,7 +91,7 @@ object RegisterActionRequestBody {
       mapping(
         "firstName" -> validNameText(1, 25),
         "lastName" -> validNameText(1, 25),
-        "email" -> email,
+        "email" -> dotlessDomainEmail,
         "displayName" -> validNameText(2, 50),
         "password" -> password,
         "countryCode" -> optional(text),

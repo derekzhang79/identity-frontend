@@ -7,6 +7,7 @@ import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.models.text.RegisterText
 import com.gu.identity.frontend.mvt._
+import com.gu.identity.frontend.request.RegisterActionRequestBody.FormMapping
 import play.api.i18n.Messages
 
 
@@ -36,7 +37,8 @@ case class RegisterViewModel(
                               resources: Seq[PageResource with Product],
                               indirectResources: Seq[PageResource with Product],
                               countryCodes: Option[CountryCodes],
-                              gitCommitId: String
+                              gitCommitId: String,
+                              emailValidationRegex: String
   )
   extends ViewModel with ViewModelResources
 
@@ -86,7 +88,8 @@ object RegisterViewModel {
       indirectResources = layout.indirectResources,
 
       countryCodes = codes,
-      gitCommitId = BuildInfo.gitCommitId
+      gitCommitId = BuildInfo.gitCommitId,
+      emailValidationRegex = "" // FormMapping.dotlessDomainEmailRegex.pattern.toString
     )
   }
 

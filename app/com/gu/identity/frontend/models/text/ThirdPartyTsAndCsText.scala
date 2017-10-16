@@ -38,13 +38,14 @@ case class ThirdPartyTsAndCsText (
     baseText: BaseTsAndCsText)
 
 object TeachersTsAndCsText {
-  def apply()(implicit messages: Messages): ThirdPartyTsAndCsText = {
+  def apply(signOutLink: URI)(implicit messages: Messages): ThirdPartyTsAndCsText = {
     val title = messages("thirdPartyTerms.teachersTitle").replace(' ', '\u00A0')
     val serviceName = messages("thirdPartyTerms.teachersServiceName")
     ThirdPartyTsAndCsText(
       pageTitle = messages("thirdPartyTerms.teachersPageTitle"),
       title = title,
-      featureIntro = Some(messages("thirdPartyTerms.teachersFeaturesIntro")),
+      featureIntro = Some(messages("thirdPartyTerms.teachersFeatureIntro")),
+      featureOutro = Some(messages("thirdPartyTerms.teachersFeatureOutro", signOutLink)),
       features = Seq(
         messages("thirdPartyTerms.teachersFeatures1"),
         messages("thirdPartyTerms.teachersFeatures2"),
@@ -82,7 +83,7 @@ object JobsTsAndCsText {
 object TsAndCsPageText {
   def getPageText(group: GroupCode, signOutLink: URI)(implicit messages: Messages): ThirdPartyTsAndCsText = {
     group match {
-      case GuardianTeachersNetwork => TeachersTsAndCsText()
+      case GuardianTeachersNetwork => TeachersTsAndCsText(signOutLink)
       case GuardianJobs => JobsTsAndCsText(signOutLink)
     }
   }

@@ -1,10 +1,5 @@
 {
   "checkpoints": {
-    "CODE": {
-      "url": "https://profile-origin.code.dev-theguardian.com/management/manifest",
-      "overdue": "15M",
-      "disableSSLVerification": true
-    },
     "PROD": { "url": "https://profile.theguardian.com/register", "overdue": "1H" }
   }
 }

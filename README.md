@@ -19,7 +19,7 @@ Clone [identity-platform](https://github.com/guardian/identity-platform) and fol
 Download DEV private configuration from s3:
 
 ```bash
-aws s3 cp --profile identity s3://gu-identity-frontend-private/DEV/identity-frontend.conf /etc/gu
+aws s3 cp --profile identity s3://identity-private-config/DEV/identity-frontend/identity-frontend.conf /etc/gu
 ```
 
 **Note**: If you do not have Janus access to Identity, we can grant your team specific access, which means you would substitute `--profile identity` with e.g. `--profile membership`. Contact the Identity team if you require access to these files.

@@ -2,6 +2,7 @@ package com.gu.identity.frontend.models.text
 
 import com.gu.identity.frontend.models.{ClientID, GuardianMembersClientID}
 import play.api.i18n.Messages
+import com.gu.identity.model.ConsentText
 
 case class RegisterText private(
                                  `3rdPartyMarketing`: String,
@@ -36,14 +37,14 @@ case class RegisterText private(
 object RegisterText {
   def loadText(clientId : Option[ClientID])(implicit messages: Messages): RegisterText =
     RegisterText(
-      `3rdPartyMarketing` = messages("register.3rdPartyMarketing"),
+      `3rdPartyMarketing` = ConsentText.currentConsents(ConsentText.ThirdParty.name),
       createAccount = messages("register.createAccount"),
       continue = messages("register.continue"),
       divideText = messages("register.divideText"),
       email = messages("register.email"),
       emailHelp = messages("register.emailHelp"),
       firstName = messages("register.firstName"),
-      gnmMarketing = messages("register.gnmMarketing"),
+      gnmMarketing = ConsentText.currentConsents(ConsentText.FirstParty.name),
       lastName = messages("register.lastName"),
       firstOrLastNameHelp = messages("register.firstOrLastNameHelp"),
       name = messages("register.name"),

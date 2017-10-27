@@ -13,10 +13,25 @@ import scala.concurrent.Future
 import scala.util.control.NonFatal
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
+import org.joda.time.DateTime
+import com.gu.identity.model.Consent
 
 class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequestHandler with ApplicationLogging {
 
   implicit val dateReads = jodaDateReads("yyyy-MM-dd'T'HH:mm:ssZ")
+
+  // Cannot use just Json.format[Consent] because:
+  // https://github.com/playframework/playframework/issues/2031
+  implicit val consentFormat = (
+    (__ \ 'actor).format[String] and
+    (__ \ 'consentIdentifier).format[String] and
+    (__ \ 'consentIdentifierVersion).format[Int] and
+    (__ \ 'hasConsented).format[Boolean] and
+    (__ \ 'timestamp).format[DateTime] and
+    (__ \ 'privacyPolicy).format[Int]
+  )(Consent.apply, unlift(Consent.unapply _))
 
   implicit val apiErrorResponseErrorReads = Json.format[ApiErrorResponseError]
   implicit val apiErrorResponseReads = Json.format[ApiErrorResponse]
@@ -32,7 +47,6 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val registerRequestTelephoneNumberFormat = Json.format[RegisterRequestTelephoneNumber]
   implicit val registerRequestBodyPublicFieldsFormat = Json.format[RegisterRequestBodyPublicFields]
   implicit val registerRequestBodyPrivateFieldsFormat = Json.format[RegisterRequestBodyPrivateFields]
-  implicit val registerRequestBodyStatusFieldsFormat = Json.format[RegisterRequestBodyStatusFields]
   implicit val registerRequestBodyFormat = Json.format[RegisterRequestBody]
 
   implicit val sendResetPasswordEmailRequestBody = Json.format[SendResetPasswordEmailRequestBody]

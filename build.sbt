@@ -13,7 +13,10 @@ lazy val root = (project in file(".")).enablePlugins(
 
 lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 
-resolvers += "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases"
+resolvers ++= Seq(
+  "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases",
+  Resolver.sonatypeRepo("snapshots") // FIXME: Is it OK to keep this?
+)
 
 libraryDependencies ++= Seq(
   "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",

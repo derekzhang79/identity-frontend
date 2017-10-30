@@ -4,7 +4,7 @@ import com.gu.identity.model.Consent
 import com.gu.identity.service.client.request._
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{Matchers, OptionValues, WordSpec}
-import play.api.libs.json.{JsArray, Json}
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSClient
 
 class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with MockitoSugar with OptionValues {
@@ -36,23 +36,23 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val registrationIp = "123.456.789.012"
       val consents = List(Consent("actor", "firstParty", true))
 
-      val requestBody = RegisterRequestBody(
+      val requestBodyModel = RegisterRequestBody(
         email,
         password,
         RegisterRequestBodyPublicFields(displayName),
         RegisterRequestBodyPrivateFields(firstName, secondName, registrationIp),
         consents
       )
-      val result: String = handler.handleRequestBody(requestBody)
-      val jsonResult = Json.parse(result)
+      val bodyString: String = handler.handleRequestBody(requestBodyModel)
+      val bodyJson: JsValue = Json.parse(bodyString)
 
-      (jsonResult \ "primaryEmailAddress").as[String] should equal(email)
-      (jsonResult \ "password").as[String] should equal(password)
-      (jsonResult \ "publicFields" \ "displayName").as[String] should equal(displayName)
-      (jsonResult \ "privateFields" \ "firstName").as[String] should equal(firstName)
-      (jsonResult \ "privateFields" \ "secondName").as[String] should equal(secondName)
-      (jsonResult \ "privateFields" \ "registrationIp").as[String] should equal(registrationIp)
-      ((jsonResult \ "consents")(0) \ "hasConsented").as[Boolean] should equal(consents.head.hasConsented)
+      (bodyJson \ "primaryEmailAddress").as[String] should equal(email)
+      (bodyJson \ "password").as[String] should equal(password)
+      (bodyJson \ "publicFields" \ "displayName").as[String] should equal(displayName)
+      (bodyJson \ "privateFields" \ "firstName").as[String] should equal(firstName)
+      (bodyJson \ "privateFields" \ "secondName").as[String] should equal(secondName)
+      (bodyJson \ "privateFields" \ "registrationIp").as[String] should equal(registrationIp)
+      ((bodyJson \ "consents")(0) \ "hasConsented").as[Boolean] should equal(consents.head.hasConsented)
     }
 
 

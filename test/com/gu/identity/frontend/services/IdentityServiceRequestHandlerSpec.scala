@@ -46,13 +46,13 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val result: String = handler.handleRequestBody(requestBody)
       val jsonResult = Json.parse(result)
 
-      (jsonResult \ "primaryEmailAddress").validate[String].asOpt.value should equal(email)
-      (jsonResult \ "password").validate[String].asOpt.value should equal(password)
-      (jsonResult \ "publicFields" \ "displayName").validate[String].asOpt.value should equal(displayName)
-      (jsonResult \ "privateFields" \ "firstName").validate[String].asOpt.value should equal(firstName)
-      (jsonResult \ "privateFields" \ "secondName").validate[String].asOpt.value should equal(secondName)
-      (jsonResult \ "privateFields" \ "registrationIp").validate[String].asOpt.value should equal(registrationIp)
-      ((jsonResult \ "consents")(0) \ "hasConsented").validate[Boolean].asOpt.value should equal(consents.head.hasConsented)
+      (jsonResult \ "primaryEmailAddress").as[String] should equal(email)
+      (jsonResult \ "password").as[String] should equal(password)
+      (jsonResult \ "publicFields" \ "displayName").as[String] should equal(displayName)
+      (jsonResult \ "privateFields" \ "firstName").as[String] should equal(firstName)
+      (jsonResult \ "privateFields" \ "secondName").as[String] should equal(secondName)
+      (jsonResult \ "privateFields" \ "registrationIp").as[String] should equal(registrationIp)
+      ((jsonResult \ "consents")(0) \ "hasConsented").as[Boolean] should equal(consents.head.hasConsented)
     }
 
 

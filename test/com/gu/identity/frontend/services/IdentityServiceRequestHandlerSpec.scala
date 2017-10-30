@@ -52,9 +52,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       (jsonResult \ "privateFields" \ "firstName").validate[String].asOpt.value should equal(firstName)
       (jsonResult \ "privateFields" \ "secondName").validate[String].asOpt.value should equal(secondName)
       (jsonResult \ "privateFields" \ "registrationIp").validate[String].asOpt.value should equal(registrationIp)
-
-      val consentsJsArr = (jsonResult \ "consents").as[JsArray]
-      (consentsJsArr(0) \ "hasConsented").validate[Boolean].asOpt.value should equal(consents.head.hasConsented)
+      ((jsonResult \ "consents")(0) \ "hasConsented").validate[Boolean].asOpt.value should equal(consents.head.hasConsented)
     }
 
 

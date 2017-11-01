@@ -12,7 +12,7 @@ Frontend for Identity account sign in and registration at [theguardian.com](http
 
 ### Nginx setup
 
-Clone [identity-platform](https://github.com/guardian/identity-platform) and follow its [nginx README](https://github.com/guardian/identity-platform/tree/master/nginx)
+Clone [identity-platform](https://github.com/guardian/identity-platform) and follow its [nginx README](https://github.com/guardian/identity-platform/blob/master/nginx/README.md)
 
 ### Configuration
 

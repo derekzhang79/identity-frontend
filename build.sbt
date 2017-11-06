@@ -13,10 +13,7 @@ lazy val root = (project in file(".")).enablePlugins(
 
 lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 
-resolvers ++= Seq(
-  "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases",
-  Resolver.sonatypeRepo("snapshots") // FIXME: Is it OK to keep this?
-)
+resolvers += "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases"
 
 libraryDependencies ++= Seq(
   "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
@@ -27,7 +24,7 @@ libraryDependencies ++= Seq(
   "jp.co.bizreach" %% "play2-handlebars" % "0.3.0",
   "com.mohiva" %% "play-html-compressor" % "0.5.0",
   "com.gu.identity" %% "identity-cookie" % "3.51",
-  "com.gu.identity" %% "identity-model" % "3.81-SNAPSHOT", // FIXME: Make sure to use release version
+  "com.gu.identity" %% "identity-model" % "3.81",
   "com.typesafe.akka" %% "akka-actor" % "2.4.1",
   "com.typesafe.akka" %% "akka-slf4j" % "2.4.0",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.54",

@@ -9,7 +9,7 @@ import com.gu.identity.frontend.mvt
 import com.gu.identity.frontend.mvt.{ActiveMultiVariantTests, MultiVariantTests, MultiVariantTest}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import com.gu.identity.frontend.configuration.Configuration._
+import com.gu.identity.frontend.configuration.Configuration.Environment
 
 case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
 

@@ -24,7 +24,7 @@ libraryDependencies ++= Seq(
   "jp.co.bizreach" %% "play2-handlebars" % "0.3.0",
   "com.mohiva" %% "play-html-compressor" % "0.5.0",
   "com.gu.identity" %% "identity-cookie" % "3.51",
-  "com.gu.identity" %% "identity-model" % "3.81",
+  "com.gu.identity" %% "identity-model" % "3.82-SNAPSHOT",
   "com.typesafe.akka" %% "akka-actor" % "2.4.1",
   "com.typesafe.akka" %% "akka-slf4j" % "2.4.0",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.54",

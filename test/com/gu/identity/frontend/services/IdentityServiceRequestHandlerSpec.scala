@@ -1,6 +1,6 @@
 package com.gu.identity.frontend.services
 
-import com.gu.identity.model.Consent
+import com.gu.identity.model.{Consent, ConsentText}
 import com.gu.identity.service.client.request._
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{Matchers, OptionValues, WordSpec}
@@ -34,7 +34,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val receiveGnmMarketing = false
       val receive3rdPartyMarketing = false
       val registrationIp = "123.456.789.012"
-      val consents = List(Consent("actor", "firstParty", true))
+      val consents = List(Consent("actor", ConsentText.FirstParty.name, true))
 
       val requestBodyModel = RegisterRequestBody(
         email,

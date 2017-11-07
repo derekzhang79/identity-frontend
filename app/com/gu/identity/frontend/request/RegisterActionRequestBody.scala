@@ -9,26 +9,26 @@ import play.api.data.validation._
 import play.api.data.{Form, FormError, Mapping}
 import play.api.http.HeaderNames
 import play.api.mvc.{BodyParser, BodyParsers, RequestHeader, Result}
+import com.gu.identity.model.{Consent, ConsentUnapply}
 
 import scala.util.matching.Regex
 
 
 case class RegisterActionRequestBody private(
-                                              firstName: String,
-                                              lastName: String,
-                                              email: String,
-                                              displayName: String,
-                                              password: String,
-                                              countryCode: Option[String],
-                                              localNumber: Option[String],
-                                              receiveGnmMarketing: Boolean,
-                                              receive3rdPartyMarketing: Boolean,
-                                              returnUrl: Option[ReturnUrl],
-                                              skipConfirmation: Option[Boolean],
-                                              groupCode: Option[GroupCode],
-                                              clientId: Option[ClientID],
-                                              csrfToken: String,
-                                              gaClientId: Option[String])
+    firstName: String,
+    lastName: String,
+    email: String,
+    displayName: String,
+    password: String,
+    countryCode: Option[String],
+    localNumber: Option[String],
+    consents: List[Consent],
+    returnUrl: Option[ReturnUrl],
+    skipConfirmation: Option[Boolean],
+    groupCode: Option[GroupCode],
+    clientId: Option[ClientID],
+    csrfToken: String,
+    gaClientId: Option[String])
   extends SignInRequestParameters
   with ReturnUrlRequestParameter
   with SkipConfirmationRequestParameter
@@ -96,8 +96,13 @@ object RegisterActionRequestBody {
         "password" -> password,
         "countryCode" -> optional(text),
         "localNumber" -> optional(text),
-        "receiveGnmMarketing" -> boolean,
-        "receive3rdPartyMarketing" -> boolean,
+        "consents" -> list(
+          mapping(
+            "actor" -> text,
+            "consentIdentifier" -> text,
+            "hasConsented" -> boolean
+          )(Consent.apply)(ConsentUnapply.unapply)
+        ),
         "returnUrl" -> returnUrl(refererHeader),
         "skipConfirmation" -> optional(boolean),
         "groupCode" -> optional(groupCode),

@@ -3,6 +3,7 @@ package com.gu.identity.service.client.request
 import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 import com.gu.identity.frontend.request.RegisterActionRequestBody
 import com.gu.identity.service.client._
+import com.gu.identity.model.Consent
 
 
 case class RegisterApiRequest(url: String, extraHeaders: HttpParameters = Nil, trackingData: TrackingData, override val body: Option[ApiRequestBody]) extends ApiRequest {
@@ -25,10 +26,7 @@ object RegisterApiRequest {
           registrationIp = clientIp.ip,
           telephoneNumber = getPhoneNumber(request)
         ),
-        RegisterRequestBodyStatusFields(
-          receiveGnmMarketing = request.receiveGnmMarketing,
-          receive3rdPartyMarketing = request.receive3rdPartyMarketing
-        )
+        request.consents
       )),
       extraHeaders = ApiRequest.commonApiHeaders(trackingData),
       trackingData = trackingData
@@ -48,7 +46,7 @@ case class RegisterRequestBody(
     password: String,
     publicFields: RegisterRequestBodyPublicFields,
     privateFields: RegisterRequestBodyPrivateFields,
-    statusFields: RegisterRequestBodyStatusFields)
+    consents: List[Consent])
   extends ApiRequestBody
 
 case class RegisterRequestBodyPublicFields(displayName: String)

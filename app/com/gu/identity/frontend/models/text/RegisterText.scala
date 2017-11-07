@@ -2,48 +2,48 @@ package com.gu.identity.frontend.models.text
 
 import com.gu.identity.frontend.models.{ClientID, GuardianMembersClientID}
 import play.api.i18n.Messages
+import com.gu.identity.model.ConsentText
+import ConsentText._
 
 case class RegisterText private(
-                                 `3rdPartyMarketing`: String,
-                                 createAccount: String,
-                                 continue: String,
-                                 divideText: String,
-                                 email: String,
-                                 emailHelp: String,
-                                 firstName: String,
-                                 gnmMarketing: String,
-                                 lastName: String,
-                                 firstOrLastNameHelp: String,
-                                 name: String,
-                                 pageTitle: String,
-                                 password: String,
-                                 passwordHelp: String,
-                                 signIn: String,
-                                 signInCta: String,
-                                 standfirst: String,
-                                 title: String,
-                                 displayName: String,
-                                 displayNameNote: String,
-                                 displayNameHelp: String,
-                                 displayNameHelpShortened: String,
-                                 displayNameHelpExpanded: String,
-                                 phone: String,
-                                 countryCode: String,
+   createAccount: String,
+   continue: String,
+   divideText: String,
+   email: String,
+   emailHelp: String,
+   firstName: String,
+   lastName: String,
+   firstOrLastNameHelp: String,
+   name: String,
+   pageTitle: String,
+   password: String,
+   passwordHelp: String,
+   signIn: String,
+   signInCta: String,
+   standfirst: String,
+   title: String,
+   displayName: String,
+   displayNameNote: String,
+   displayNameHelp: String,
+   displayNameHelpShortened: String,
+   displayNameHelpExpanded: String,
+   phone: String,
+   countryCode: String,
 
-                                 whyPhone: String,
-                                 becausePhone: String)
+   whyPhone: String,
+   becausePhone: String,
+   consent: ConsentRegisterText
+)
 
 object RegisterText {
   def loadText(clientId : Option[ClientID])(implicit messages: Messages): RegisterText =
     RegisterText(
-      `3rdPartyMarketing` = messages("register.3rdPartyMarketing"),
       createAccount = messages("register.createAccount"),
       continue = messages("register.continue"),
       divideText = messages("register.divideText"),
       email = messages("register.email"),
       emailHelp = messages("register.emailHelp"),
       firstName = messages("register.firstName"),
-      gnmMarketing = messages("register.gnmMarketing"),
       lastName = messages("register.lastName"),
       firstOrLastNameHelp = messages("register.firstOrLastNameHelp"),
       name = messages("register.name"),
@@ -65,7 +65,18 @@ object RegisterText {
       phone = messages("register.phone"),
       countryCode = messages("register.countryCode"),
       whyPhone = messages("register.whyPhone"),
-      becausePhone = messages("register.becausePhone")
+      becausePhone = messages("register.becausePhone"),
+      consent = ConsentRegisterText()
     )
 }
+
+case class ConsentRegisterText(
+  `1stPartyConsentIdentifier`: String = FirstParty.name,
+//  `1stPartyConsentText`: String = currentConsents(FirstParty.name),
+  `1stPartyConsentText`: String = "Keep me up to date with offers from the Guardian", // FIXME: Remove hardcoding once legal approves
+  `3rdPartyConsentIdentifier`: String = ThirdParty.name,
+//  `3rdPartyConsentText`: String = currentConsents(ThirdParty.name)
+  `3rdPartyConsentText`: String = "Send me messages from 3rd party organisations screened by the Guardian" // FIXME: FIXME: Remove hardcoding once legal approves
+)
+
 

@@ -1,9 +1,10 @@
 package com.gu.identity.frontend.services
 
+import com.gu.identity.model.{Consent, ConsentText}
 import com.gu.identity.service.client.request._
 import org.scalatest.mock.MockitoSugar
-import org.scalatest.{OptionValues, Matchers, WordSpec}
-import play.api.libs.json.Json
+import org.scalatest.{Matchers, OptionValues, WordSpec}
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSClient
 
 class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with MockitoSugar with OptionValues {
@@ -33,25 +34,25 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val receiveGnmMarketing = false
       val receive3rdPartyMarketing = false
       val registrationIp = "123.456.789.012"
+      val consents = List(Consent("actor", ConsentText.FirstParty.name, true))
 
-      val requestBody = RegisterRequestBody(
+      val requestBodyModel = RegisterRequestBody(
         email,
         password,
         RegisterRequestBodyPublicFields(displayName),
         RegisterRequestBodyPrivateFields(firstName, secondName, registrationIp),
-        RegisterRequestBodyStatusFields(receiveGnmMarketing, receive3rdPartyMarketing)
+        consents
       )
-      val result: String = handler.handleRequestBody(requestBody)
-      val jsonResult = Json.parse(result)
+      val bodyString: String = handler.handleRequestBody(requestBodyModel)
+      val bodyJson: JsValue = Json.parse(bodyString)
 
-      (jsonResult \ "primaryEmailAddress").validate[String].asOpt.value should equal(email)
-      (jsonResult \ "password").validate[String].asOpt.value should equal(password)
-      (jsonResult \ "publicFields" \ "displayName").validate[String].asOpt.value should equal(displayName)
-      (jsonResult \ "privateFields" \ "firstName").validate[String].asOpt.value should equal(firstName)
-      (jsonResult \ "privateFields" \ "secondName").validate[String].asOpt.value should equal(secondName)
-      (jsonResult \ "privateFields" \ "registrationIp").validate[String].asOpt.value should equal(registrationIp)
-      (jsonResult \ "statusFields" \ "receiveGnmMarketing").validate[Boolean].asOpt.value should equal(receiveGnmMarketing)
-      (jsonResult \ "statusFields" \ "receive3rdPartyMarketing").validate[Boolean].asOpt.value should equal(receive3rdPartyMarketing)
+      (bodyJson \ "primaryEmailAddress").as[String] should equal(email)
+      (bodyJson \ "password").as[String] should equal(password)
+      (bodyJson \ "publicFields" \ "displayName").as[String] should equal(displayName)
+      (bodyJson \ "privateFields" \ "firstName").as[String] should equal(firstName)
+      (bodyJson \ "privateFields" \ "secondName").as[String] should equal(secondName)
+      (bodyJson \ "privateFields" \ "registrationIp").as[String] should equal(registrationIp)
+      ((bodyJson \ "consents")(0) \ "hasConsented").as[Boolean] should equal(consents.head.hasConsented)
     }
 
 

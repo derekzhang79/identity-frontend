@@ -9,6 +9,7 @@ import com.gu.identity.frontend.mvt
 import com.gu.identity.frontend.mvt.{ActiveMultiVariantTests, MultiVariantTests, MultiVariantTest}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
+import com.gu.identity.frontend.configuration.Configuration._
 
 case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
 
@@ -169,8 +170,8 @@ object Favicons {
 
   import LocalResource.resolveAssetUrl
 
-  private var iconFiles = Seq(
-    "32x32.ico",
+  private val iconFiles = Seq(
+    (if (Environment.stage == "DEV") "32x32-dev.ico" else "32x32.ico"),
     "57x57.png",
     "72x72.png",
     "114x114.png",
@@ -178,10 +179,6 @@ object Favicons {
     "144x144.png",
     "152x152.png"
   )
-
-  if(play.api.Play.isDev(play.api.Play.current)){
-    iconFiles = iconFiles.updated(0,"32x32-dev.ico");
-  }
 
   private val iconBaseDir = "components/favicons"
 

@@ -72,11 +72,9 @@ object RegisterText {
 
 case class ConsentRegisterText(
   `1stPartyConsentIdentifier`: String = FirstParty.name,
-//  `1stPartyConsentText`: String = currentConsents(FirstParty.name),
-  `1stPartyConsentText`: String = "Keep me up to date with offers from the Guardian", // FIXME: Remove hardcoding once legal approves
+  `1stPartyConsentText`: String = currentConsents(FirstParty.name),
   `3rdPartyConsentIdentifier`: String = ThirdParty.name,
-//  `3rdPartyConsentText`: String = currentConsents(ThirdParty.name)
-  `3rdPartyConsentText`: String = "Send me messages from 3rd party organisations screened by the Guardian" // FIXME: FIXME: Remove hardcoding once legal approves
+  `3rdPartyConsentText`: String = currentConsents(ThirdParty.name)
 )
 
 

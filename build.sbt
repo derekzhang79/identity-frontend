@@ -15,6 +15,8 @@ lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 
 resolvers += "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases"
 
+val identityLibrariesVersion = "3.83"
+
 libraryDependencies ++= Seq(
   "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
   "org.scalatest" %% "scalatest" % "2.2.5" % "test",
@@ -23,8 +25,8 @@ libraryDependencies ++= Seq(
   filters,
   "jp.co.bizreach" %% "play2-handlebars" % "0.3.0",
   "com.mohiva" %% "play-html-compressor" % "0.5.0",
-  "com.gu.identity" %% "identity-cookie" % "3.51",
-  "com.gu.identity" %% "identity-model" % "3.83",
+  "com.gu.identity" %% "identity-cookie" % identityLibrariesVersion,
+  "com.gu.identity" %% "identity-model" % identityLibrariesVersion,
   "com.typesafe.akka" %% "akka-actor" % "2.4.1",
   "com.typesafe.akka" %% "akka-slf4j" % "2.4.0",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % "1.10.54",

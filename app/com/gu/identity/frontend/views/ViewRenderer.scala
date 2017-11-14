@@ -28,7 +28,8 @@ object ViewRenderer {
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
       clientId: Option[ClientID],
-      group: Option[GroupCode])
+      group: Option[GroupCode],
+      email: Option[String])
       (implicit messages: Messages) = {
 
     val model = SignInViewModel(
@@ -39,7 +40,8 @@ object ViewRenderer {
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation,
       clientId = clientId,
-      group = group
+      group = group,
+      email = email
     )
 
     val view = clientId match {
@@ -58,7 +60,8 @@ object ViewRenderer {
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
       clientId: Option[ClientID],
-      group: Option[GroupCode])
+      group: Option[GroupCode],
+      email: Option[String])
       (implicit messages: Messages) = {
 
     val model = RegisterViewModel(
@@ -69,7 +72,8 @@ object ViewRenderer {
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation,
       clientId = clientId,
-      group = group)
+      group = group,
+      email = email)
 
     clientId match {
       case Some(GuardianMembersClientID) => renderViewModel("register-page-membership", model)

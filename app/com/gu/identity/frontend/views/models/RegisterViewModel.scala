@@ -30,7 +30,7 @@ case class RegisterViewModel(
                               skipConfirmation: Boolean,
                               clientId: Option[ClientID],
                               group: Option[GroupCode],
-
+                              email: Option[String],
                               actions: RegisterActions,
                               links: RegisterLinks,
 
@@ -53,7 +53,8 @@ object RegisterViewModel {
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
       clientId: Option[ClientID],
-      group: Option[GroupCode])
+      group: Option[GroupCode],
+      email: Option[String])
       (implicit messages: Messages): RegisterViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
@@ -80,6 +81,7 @@ object RegisterViewModel {
       skipConfirmation = skipConfirmation.getOrElse(false),
       clientId = clientId,
       group = group,
+      email = email,
 
       actions = RegisterActions(),
       links = RegisterLinks(returnUrl, skipConfirmation, clientId),

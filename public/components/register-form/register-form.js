@@ -27,7 +27,10 @@ class RegisterFormFields {
   setValues( { firstName, lastName, email, displayName, optionalCountryCode, optionalCountryIsoName, optionalPhoneNumber } = {} ) {
     this.firstName.setValue( firstName );
     this.lastName.setValue( lastName );
-    this.email.setValue( email );
+    // If we don't receive an email from the backend model use local storage
+    if(this.email.value().length === 0){
+      this.email.setValue( email );
+    }
     this.displayName.setValue( displayName );
     if (this.optionalPhoneNumber) {
       this.optionalPhoneNumber.setValue(optionalPhoneNumber);

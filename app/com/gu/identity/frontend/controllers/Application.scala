@@ -6,7 +6,6 @@ import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
 import com.gu.identity.frontend.mvt.MultiVariantTestAction
 import com.gu.identity.frontend.views.ViewRenderer.{renderRegister, renderRegisterConfirmation, renderResetPassword, renderResetPasswordEmailSent, renderSignIn}
-import com.netaporter.uri.Uri
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 
@@ -18,7 +17,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
-    val email : Option[String] = getEmailFromUrl(req)
+    val email : Option[String] = req.getQueryString("email")
 
     renderSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
   }
@@ -28,7 +27,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
-    val email : Option[String] = getEmailFromUrl(req)
+    val email : Option[String] = req.getQueryString("email")
 
     renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
   }
@@ -50,18 +49,6 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
   def resetPasswordEmailSent(clientId: Option[String]) = Action {
     val clientIdOpt = ClientID(clientId)
     renderResetPasswordEmailSent(configuration, clientIdOpt)
-  }
-
-  def getEmailFromUrl(req: RequestHeader): Option[String] = {
-    if(req.queryString.contains("email")) {
-      req.getQueryString("email")
-    } else {
-      req.getQueryString("returnUrl")
-        .flatMap(returnUrl => {
-          Uri.parse(returnUrl).query.paramMap.get("email")
-            .flatMap(_.headOption)
-        })
-    }
   }
 }
 

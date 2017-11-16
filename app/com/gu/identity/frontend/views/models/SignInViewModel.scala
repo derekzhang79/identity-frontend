@@ -25,6 +25,7 @@ case class SignInViewModel private(
     skipConfirmation: Boolean = false,
     clientId: Option[ClientID],
     group: Option[GroupCode],
+    email:Option[String],
 
     registerUrl: String = "",
     forgotPasswordUrl: String = "",
@@ -47,7 +48,8 @@ object SignInViewModel {
    returnUrl: ReturnUrl,
    skipConfirmation: Option[Boolean],
    clientId: Option[ClientID],
-   group: Option[GroupCode])(implicit messages: Messages): SignInViewModel = {
+   group: Option[GroupCode],
+   email: Option[String])(implicit messages: Messages): SignInViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
@@ -73,6 +75,7 @@ object SignInViewModel {
       skipConfirmation = skipConfirmation.getOrElse(false),
       clientId = clientId,
       group = group,
+      email = email,
 
       registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
       forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.id)),

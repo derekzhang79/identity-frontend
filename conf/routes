@@ -31,6 +31,8 @@ POST       /actions/reset                 com.gu.identity.frontend.controllers.R
 
 POST       /actions/csp/report            com.gu.identity.frontend.controllers.CSPViolationReporter.cspReport
 
+GET        /signinWithToken               com.gu.identity.frontend.controllers.SigninAction.authenticate(token:String)
+
 GET        /management/healthcheck        com.gu.identity.frontend.controllers.HealthCheck.healthCheck
 
 GET        /.well-known/assetlinks.json    com.gu.identity.frontend.controllers.DigitalAssetLinks.links

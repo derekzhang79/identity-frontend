@@ -85,6 +85,29 @@ class SigninAction(
     }
   }
 
+  val TokenFromLinkServiceAction: ServiceActionBuilder[Request] =
+    ServiceAction andThen
+      RedirectOnError(redirectRoute) andThen
+      LogOnErrorAction(logger)
+
+  def authenticate(token:String) ={
+    TokenFromLinkServiceAction {
+      authenticateAction(successfulSignInResponse, token)
+    }
+  }
+
+
+  def authenticateAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String) = { implicit req: RequestHeader =>
+
+    // Todo Need a return URL to send to tracking data here
+    val trackingData = TrackingData(req, Some("test"))
+
+    identityService.authenticate(token, trackingData).map {
+      case Left(errors) => Left(errors)
+      case Right(cookies) => Right(successResponse(ReturnUrl.default(config), cookies))
+    }
+  }
+
   def successfulSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
     SeeOther(successfulReturnUrl.url)
       .withCookies(cookies: _*)

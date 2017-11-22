@@ -91,7 +91,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   def handleRequestBody(body: ApiRequestBody): String = body match {
     case b: RegisterRequestBody => Json.stringify(Json.toJson(b))
     case AuthenticateCookiesApiRequestBody(email, password) => encodeBody("email" -> email, "password" -> password)
-    case AuthenticateCookiesFromLinkApiRequestBody(token) => encodeBody("token" -> token)
+    case AuthenticateCookiesFromLinkApiRequestBody(token, iv) => encodeBody("token" -> token, "iv"->iv)
     case b: SendResetPasswordEmailRequestBody => Json.stringify(Json.toJson(b))
   }
 

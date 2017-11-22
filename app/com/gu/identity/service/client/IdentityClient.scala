@@ -9,13 +9,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class IdentityClient extends Logging {
 
   def authenticateCookies(email: String, password: String, rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
-    AuthenticateCookiesApiRequest(Some(email), Some(password), Some(rememberMe), None, trackingData) match {
+    AuthenticateCookiesApiRequest(Some(email), Some(password), Some(rememberMe), None, None, trackingData) match {
       case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(Seq(err)))
     }
 
-  def authenticateTokenCookies(token: String, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
-    AuthenticateCookiesApiRequest(None, None, None,Some(token), trackingData) match {
+  def authenticateTokenCookies(token: String, iv:String, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
+    AuthenticateCookiesApiRequest(None, None, None,Some(token), Some(iv),trackingData) match {
       case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(Seq()))
     }

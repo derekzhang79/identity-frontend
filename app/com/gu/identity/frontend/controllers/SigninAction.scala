@@ -99,8 +99,7 @@ class SigninAction(
 
   def authenticateAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String) = { implicit req: RequestHeader =>
 
-    // Todo Need a return URL to send to tracking data here
-    val trackingData = TrackingData(req, Some("test"))
+    val trackingData = TrackingData(req, ReturnUrl.default(config).toStringOpt)
 
     identityService.authenticate(token, trackingData).map {
       case Left(errors) => Left(errors)

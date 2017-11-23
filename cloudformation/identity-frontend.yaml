@@ -76,6 +76,8 @@ Mappings:
       ssl: certificate/8c077d9e-6021-44c2-8aac-bbfd865ce72d
     PROD:
       ssl: certificate/9d732c7b-ba1e-4f1b-aa3f-4ca012ef8a5f
+Conditions:
+  IsProd: !Equals [!Ref Stage, PROD]
 Resources:
   IdentityRole:
     Type: AWS::IAM::Role
@@ -375,6 +377,7 @@ Resources:
         Protocol: https
   alarmNoHealthyHosts:
     Type: AWS::CloudWatch::Alarm
+    Condition: IsProd
     Properties:
       ActionsEnabled: 'true'
       AlarmDescription: There are insufficient healthy hosts
@@ -396,6 +399,7 @@ Resources:
         Value: !Ref 'LoadBalancer'
   alarmSignInInactivity:
     Type: AWS::CloudWatch::Alarm
+    Condition: IsProd
     Properties:
       AlarmDescription: Low number of users signing in.
       Namespace: SuccessfulSignIns
@@ -412,6 +416,7 @@ Resources:
         Value: !Ref 'Stage'
   alarmRegisterInactivity:
     Type: AWS::CloudWatch::Alarm
+    Condition: IsProd
     Properties:
       AlarmDescription: Low number of users registering.
       Namespace: SuccessfulRegistrations

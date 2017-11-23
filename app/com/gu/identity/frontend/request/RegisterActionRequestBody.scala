@@ -98,9 +98,9 @@ object RegisterActionRequestBody {
         "localNumber" -> optional(text),
         "consents" -> list(
           mapping(
+            "id" -> text,
             "actor" -> text,
-            "consentIdentifier" -> text,
-            "hasConsented" -> boolean
+            "consented" -> boolean
           )(Consent.apply)(ConsentUnapply.unapply)
         ),
         "returnUrl" -> returnUrl(refererHeader),

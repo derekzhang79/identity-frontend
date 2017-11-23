@@ -2,8 +2,7 @@ package com.gu.identity.frontend.models.text
 
 import com.gu.identity.frontend.models.{ClientID, GuardianMembersClientID}
 import play.api.i18n.Messages
-import com.gu.identity.model.ConsentText
-import ConsentText._
+import com.gu.identity.model.Consent._
 
 case class RegisterText private(
    createAccount: String,
@@ -71,10 +70,10 @@ object RegisterText {
 }
 
 case class ConsentRegisterText(
-  `1stPartyConsentIdentifier`: String = FirstParty.name,
-  `1stPartyConsentText`: String = currentConsents(FirstParty.name),
-  `3rdPartyConsentIdentifier`: String = ThirdParty.name,
-  `3rdPartyConsentText`: String = currentConsents(ThirdParty.name)
+  `1stPartyConsentIdentifier`: String = FirstParty.id,
+  `1stPartyConsentText`: String = FirstParty.latestWording,
+  `3rdPartyConsentIdentifier`: String = ThirdParty.id,
+  `3rdPartyConsentText`: String = ThirdParty.latestWording
 )
 
 

@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.services
 
-import com.gu.identity.model.{Consent, ConsentText}
+import com.gu.identity.model.Consent._
+import com.gu.identity.model.Consent
 import com.gu.identity.service.client.request._
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{Matchers, OptionValues, WordSpec}
@@ -34,7 +35,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val receiveGnmMarketing = false
       val receive3rdPartyMarketing = false
       val registrationIp = "123.456.789.012"
-      val consents = List(Consent("actor", ConsentText.FirstParty.name, true))
+      val consents = List(Consent(FirstParty.id, "user", true))
 
       val requestBodyModel = RegisterRequestBody(
         email,
@@ -52,7 +53,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       (bodyJson \ "privateFields" \ "firstName").as[String] should equal(firstName)
       (bodyJson \ "privateFields" \ "secondName").as[String] should equal(secondName)
       (bodyJson \ "privateFields" \ "registrationIp").as[String] should equal(registrationIp)
-      ((bodyJson \ "consents")(0) \ "hasConsented").as[Boolean] should equal(consents.head.hasConsented)
+      ((bodyJson \ "consents")(0) \ "consented").as[Boolean] should equal(consents.head.consented)
     }
 
 

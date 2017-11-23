@@ -90,19 +90,19 @@ class SigninAction(
       RedirectOnError(redirectRoute) andThen
       LogOnErrorAction(logger)
 
-  def authenticate(token:String, iv:String) ={
+  def authenticate(token:String) ={
     TokenFromLinkServiceAction {
-      authenticateAction(successfulSignInResponse, token, iv)
+      authenticateAction(successfulSignInResponse, token)
     }
   }
 
 
-  def authenticateAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String, iv:String) = { implicit req: RequestHeader =>
+  def authenticateAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String) = { implicit req: RequestHeader =>
 
     // Todo Need a return URL to send to tracking data here
     val trackingData = TrackingData(req, Some("test"))
 
-    identityService.authenticate(token, iv, trackingData).map {
+    identityService.authenticate(token, trackingData).map {
       case Left(errors) => Left(errors)
       case Right(cookies) => Right(successResponse(ReturnUrl.default(config), cookies))
     }

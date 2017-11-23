@@ -23,7 +23,7 @@ trait IdentityService {
   type PlayCookies = Seq[PlayCookie]
 
   def authenticate(signInRequest: SignInRequestParameters, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
-  def authenticate(token: String, iv:String, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
+  def authenticate(token: String, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def deauthenticate(cookie: PlayCookie, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def registerThenSignIn(request: RegisterActionRequestBody, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def register(request: RegisterActionRequestBody, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, RegisterResponseUser]]
@@ -46,8 +46,8 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
       case Right(cookies) => Right(CookieService.signInCookies(cookies, signInRequest.rememberMe)(config))
     }
   }
-  override def authenticate(token: String, iv:String, trackingData: TrackingData)(implicit ec: ExecutionContext) =
-    client.authenticateTokenCookies(token, iv, trackingData).map {
+  override def authenticate(token: String, trackingData: TrackingData)(implicit ec: ExecutionContext) =
+    client.authenticateTokenCookies(token, trackingData).map {
       case Left(errors) =>
         Left(errors.map(SignInServiceAppException.apply))
 

@@ -17,7 +17,7 @@ case class AuthenticateCookiesApiRequest private(
 }
 
 case class AuthenticateCookiesApiRequestBody(email: String, password: String) extends ApiRequestBody
-case class AuthenticateCookiesFromLinkApiRequestBody(token: String, iv:String) extends ApiRequestBody
+case class AuthenticateCookiesFromLinkApiRequestBody(token: String) extends ApiRequestBody
 
 object AuthenticateCookiesApiRequest {
   private val emailRegex = "^.+@.+$".r
@@ -33,14 +33,14 @@ object AuthenticateCookiesApiRequest {
     ApiRequest.apiEndpoint("auth")
 
 
-  def apply(email: Option[String], password: Option[String], rememberMe: Option[Boolean], token: Option[String], iv: Option[String],  trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Either[ClientBadRequestError,
+  def apply(email: Option[String], password: Option[String], rememberMe: Option[Boolean], token: Option[String], trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Either[ClientBadRequestError,
     AuthenticateCookiesApiRequest] =
-      (email, password, rememberMe, token, iv) match {
-        case (Some(e), Some(p), Some(r), _, _) if isValidEmail(e) && isValidPassword(p) => Right {
+      (email, password, rememberMe, token) match {
+        case (Some(e), Some(p), Some(r), _) if isValidEmail(e) && isValidPassword(p) => Right {
           apply(AuthenticateCookiesApiRequestBody(e, p), r, trackingData)
         }
-        case (_, _, _, Some(t), Some(initVec)) => Right {
-          apply(AuthenticateCookiesFromLinkApiRequestBody(t, initVec), false, trackingData)
+        case (_, _, _, Some(t)) => Right {
+          apply(AuthenticateCookiesFromLinkApiRequestBody(t), false, trackingData)
         }
         case _ => Left(ClientInvalidCredentialsError)
       }

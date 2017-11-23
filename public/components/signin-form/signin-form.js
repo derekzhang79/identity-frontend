@@ -25,7 +25,11 @@ class SignInFormModel {
   loadState() {
     this.state = SignInFormState.fromStorage();
     this.smartLockStatus = SmartLockState.fromStorage();
-    this.emailFieldElement.setValue( this.state.email );
+    // If we don't receive an email from the backend model use local storage
+    if(this.emailFieldElement.value().length === 0){
+      this.emailFieldElement.setValue( this.state.email );
+    }
+
   }
 
   saveState() {

@@ -26,11 +26,11 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   // https://github.com/playframework/playframework/issues/2031
   implicit val consentFormat = (
     (__ \ 'actor).format[String] and
-    (__ \ 'consentIdentifier).format[String] and
-    (__ \ 'consentIdentifierVersion).format[Int] and
-    (__ \ 'hasConsented).format[Boolean] and
+    (__ \ 'id).format[String] and
+    (__ \ 'version).format[Int] and
+    (__ \ 'consented).format[Boolean] and
     (__ \ 'timestamp).format[DateTime] and
-    (__ \ 'privacyPolicy).format[Int]
+    (__ \ 'privacyPolicyVersion).format[Int]
   )(Consent.apply, unlift(Consent.unapply _))
 
   implicit val apiErrorResponseErrorReads = Json.format[ApiErrorResponseError]

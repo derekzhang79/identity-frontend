@@ -26,11 +26,12 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, Some(false), None, trackingData)
+      val resultBody = result.right.get.body.get.asInstanceOf[AuthenticateCookiesApiRequestBody]
 
       result.isRight shouldBe true
-      result.right.get.body.get.email should equal (email.get)
-      result.right.get.body.get.password should equal(password.get)
+      resultBody.email should equal (email.get)
+      resultBody.password should equal(password.get)
       result.right.get.parameters should contain("persistent" -> "false")
     }
 
@@ -38,7 +39,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = true, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, Some(true), None, trackingData)
 
       result.isRight shouldBe true
       result.right.get.parameters should contain("persistent" -> "true")
@@ -48,7 +49,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = true, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, Some(true), None, trackingData)
 
       result.isRight shouldBe true
       val params = result.right.get.parameters
@@ -59,7 +60,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("me@")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password,Some(false), None, trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[ClientBadRequestError]
@@ -70,7 +71,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("@blah.com")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, Some(false), None, trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[ClientBadRequestError]
@@ -80,7 +81,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, Some(false), None,trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[ClientBadRequestError]
@@ -90,7 +91,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("me@guardian.co.uk")
       val password = Some("")
 
-      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, Some(false), None, trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[ClientBadRequestError]
@@ -100,7 +101,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, Some(false), None, trackingData)
 
       result shouldBe 'right
       result.right.get.headers should contain("X-Forwarded-For" -> "127.0.0.1")

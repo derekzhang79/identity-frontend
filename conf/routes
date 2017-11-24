@@ -31,7 +31,7 @@ POST       /actions/reset                 com.gu.identity.frontend.controllers.R
 
 POST       /actions/csp/report            com.gu.identity.frontend.controllers.CSPViolationReporter.cspReport
 
-GET        /signinWithToken/:token        com.gu.identity.frontend.controllers.SigninAction.authenticate(token:String)
+GET        /repermission/:token           com.gu.identity.frontend.controllers.SigninAction.peremissionAuth(token:String)
 
 GET        /management/healthcheck        com.gu.identity.frontend.controllers.HealthCheck.healthCheck
 

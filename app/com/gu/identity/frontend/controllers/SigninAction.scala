@@ -90,20 +90,23 @@ class SigninAction(
       RedirectOnError(redirectRoute) andThen
       LogOnErrorAction(logger)
 
-  def authenticate(token:String) ={
+  def peremissionAuth(token:String) = {
     TokenFromLinkServiceAction {
-      authenticateAction(successfulSignInResponse, token)
+      peremissionAuthAction(successfulSignInResponse, token)
     }
   }
 
 
-  def authenticateAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String) = { implicit req: RequestHeader =>
+  def peremissionAuthAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String) = { implicit req: RequestHeader =>
 
-    val trackingData = TrackingData(req, ReturnUrl.default(config).toStringOpt)
+    val permissionRedirectString =  s"${config.identityProfileBaseUrl}/repermission"
+    val returnUrl = ReturnUrl(Some(permissionRedirectString), config)
+
+    val trackingData = TrackingData(req, returnUrl.toStringOpt)
 
     identityService.authenticate(token, trackingData).map {
       case Left(errors) => Left(errors)
-      case Right(cookies) => Right(successResponse(ReturnUrl.default(config), cookies))
+      case Right(cookies) => Right(successResponse(returnUrl, cookies))
     }
   }
 

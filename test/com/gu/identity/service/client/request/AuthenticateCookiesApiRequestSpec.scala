@@ -106,6 +106,13 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       result shouldBe 'right
       result.right.get.headers should contain("X-Forwarded-For" -> "127.0.0.1")
     }
+
+    "Fail when given an incorrectly formatted encrypted token" in {
+      val token = "3t6IXpUjzYazRb%2BKZAjoduO5KPQ8%.2BSgvNDu8p42m5DAon3Z6aswedWBGoLEbXu9PyZbG4Rzf0WAiWo4AF9aJvw%3D%3D.asdkasdk"
+      val result = AuthenticateCookiesApiRequest(None, None, None, Some(token), trackingData)
+      result.isLeft shouldBe true
+      result.left.get shouldBe a[ClientBadRequestError]
+    }
   }
 
 }

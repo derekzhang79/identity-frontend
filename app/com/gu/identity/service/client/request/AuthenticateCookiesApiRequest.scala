@@ -28,6 +28,10 @@ object AuthenticateCookiesApiRequest {
   private def isValidPassword(password: String): Boolean =
     password.nonEmpty
 
+  private def isValidTokenFormat(token: String): Boolean =
+    token.split("\\.").length == 2
+
+
 
   def endpoint(implicit configuration: IdentityClientConfiguration) =
     ApiRequest.apiEndpoint("auth")
@@ -39,7 +43,7 @@ object AuthenticateCookiesApiRequest {
         case (Some(e), Some(p), Some(r), _) if isValidEmail(e) && isValidPassword(p) => Right {
           apply(AuthenticateCookiesApiRequestBody(e, p), r, trackingData)
         }
-        case (_, _, _, Some(t)) => Right {
+        case (_, _, _, Some(t)) if isValidTokenFormat(t) => Right {
           apply(AuthenticateCookiesFromTokenApiRequestBody(t), false, trackingData)
         }
         case _ => Left(ClientInvalidCredentialsError)

@@ -17,7 +17,7 @@ case class AuthenticateCookiesApiRequest private(
 }
 
 case class AuthenticateCookiesApiRequestBody(email: String, password: String) extends ApiRequestBody
-case class AuthenticateCookiesFromLinkApiRequestBody(token: String) extends ApiRequestBody
+case class AuthenticateCookiesFromTokenApiRequestBody(token: String) extends ApiRequestBody
 
 object AuthenticateCookiesApiRequest {
   private val emailRegex = "^.+@.+$".r
@@ -40,7 +40,7 @@ object AuthenticateCookiesApiRequest {
           apply(AuthenticateCookiesApiRequestBody(e, p), r, trackingData)
         }
         case (_, _, _, Some(t)) => Right {
-          apply(AuthenticateCookiesFromLinkApiRequestBody(t), false, trackingData)
+          apply(AuthenticateCookiesFromTokenApiRequestBody(t), false, trackingData)
         }
         case _ => Left(ClientInvalidCredentialsError)
       }

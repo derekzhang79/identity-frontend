@@ -85,13 +85,13 @@ class SigninAction(
     }
   }
 
-  val TokenFromLinkServiceAction: ServiceActionBuilder[Request] =
+  val TokenFromServiceAction: ServiceActionBuilder[Request] =
     ServiceAction andThen
       RedirectOnError(redirectRoute) andThen
       LogOnErrorAction(logger)
 
   def peremissionAuth(token:String) = {
-    TokenFromLinkServiceAction {
+    TokenFromServiceAction {
       peremissionAuthAction(successfulSignInResponse, token)
     }
   }

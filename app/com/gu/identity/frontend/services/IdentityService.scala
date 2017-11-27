@@ -30,6 +30,7 @@ trait IdentityService {
   def sendResetPasswordEmail(data: ResetPasswordActionRequestBody, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse ]]
   def getUser(cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, User]]
   def assignGroupCode(group: String, cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, AssignGroupResponse]]
+  def processConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, Unit]]
 }
 
 
@@ -114,6 +115,15 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
         Left(errors.map(AssignGroupAppException.apply))
 
       case Right(response) => Right(response)
+    }
+  }
+
+  override def processConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, Unit]] = {
+    client.postConsentToken(token) map {
+      case Left(errors) =>
+        Left(ConsentTokenAppException(errors.head))
+      case Right(_) =>
+        Right(logger.debug("Successfully used consent token"))
     }
   }
 }

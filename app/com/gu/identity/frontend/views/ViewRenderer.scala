@@ -4,11 +4,12 @@ import java.net.URI
 
 import com.gu.identity.frontend.configuration._
 import com.gu.identity.frontend.csrf.CSRFToken
-import com.gu.identity.frontend.errors.HttpError
+import com.gu.identity.frontend.errors.{HttpError, NotFoundError, UnexpectedError}
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.mvt.{MultiVariantTest, MultiVariantTestVariant}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
+import org.omg.CosNaming.NamingContextPackage.NotFound
 import play.api.i18n.Messages
 import play.api.mvc.{Result, Results}
 import play.twirl.api.Html

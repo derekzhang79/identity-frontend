@@ -20,6 +20,8 @@ case class RegisterResponse(user: RegisterResponseUser) extends ApiResponse
 case class RegisterResponseUser(userGroups: List[RegisterResponseUserGroups])
 case class RegisterResponseUserGroups(packageCode: String, path: String)
 
+case object ConsentTokenUsed extends ApiResponse
+
 case class SendResetPasswordEmailResponse() extends ApiResponse
 
 case class UserResponse(user: User) extends ApiResponse

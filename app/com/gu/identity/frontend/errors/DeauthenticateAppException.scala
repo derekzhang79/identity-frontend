@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.errors
 
-import com.gu.identity.frontend.errors.ErrorIDs.{DeauthenticateBadRequestErrorID, DeauthenticateGatewayErrorID}
-import com.gu.identity.service.client.{ClientGatewayError, ClientBadRequestError, IdentityClientError}
+import com.gu.identity.frontend.errors.ErrorIDs.{ConsentTokenGatewayErrorID, DeauthenticateBadRequestErrorID, DeauthenticateGatewayErrorID}
+import com.gu.identity.service.client.{ClientBadRequestError, ClientGatewayError, IdentityClientError}
 
 sealed trait DeauthenticateAppException extends AppException
 
@@ -20,6 +20,12 @@ case class DeauthenticateServiceGatewayAppException(
   with DeauthenticateAppException {
 
   val id = DeauthenticateGatewayErrorID
+}
+
+case class ConsentTokenAppException(
+ clientError: IdentityClientError
+) extends ServiceGatewayAppException(clientError) {
+  override val id = ConsentTokenGatewayErrorID
 }
 
 

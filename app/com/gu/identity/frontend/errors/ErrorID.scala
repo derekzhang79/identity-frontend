@@ -98,6 +98,10 @@ object ErrorIDs {
     val key = "deauthenticate-error-gateway"
   }
 
+  case object ConsentTokenGatewayErrorID extends ErrorID {
+    val key = "consent-token-error-gateway"
+  }
+
   case object DeauthenticateBadRequestErrorID extends ErrorID {
     val key = "deauthenticate-error-bad-request"
   }

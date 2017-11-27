@@ -21,6 +21,8 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.filters.gzip.GzipFilter
 import router.Routes
 
+import scala.concurrent.ExecutionContext
+
 class FrontendApplicationLoader extends ApplicationLoader {
   def load(context: Context) = {
     val app = new ApplicationComponents(context).application
@@ -47,6 +49,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val identityCookieDecoder: IdentityCookieDecoder = new IdentityCookieDecoder(IdentityKeys(frontendConfiguration.identityCookiePublicKey))
 
   lazy val applicationController = new Application(frontendConfiguration, messagesApi, csrfConfig)
+  lazy val consentController = new ConsentController(frontendConfiguration, identityService, messagesApi, ExecutionContext.Implicits.global)
   lazy val healthcheckController = new HealthCheck()
   lazy val digitalAssetLinksController = new DigitalAssetLinks(frontendConfiguration)
   lazy val manifestController = new Manifest()
@@ -85,7 +88,9 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   })
 
 
-  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signOutController, thirdPartyTsAndCsController, signinController, registerController, resetPasswordController, cspReporterController, healthcheckController, digitalAssetLinksController, manifestController, assets, redirects)
+  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signOutController,
+    thirdPartyTsAndCsController, consentController,  signinController, registerController, resetPasswordController, cspReporterController,
+    healthcheckController, digitalAssetLinksController, manifestController, assets, redirects)
 
   val sentryLogging = new SentryLogging(frontendConfiguration) // don't make it lazy
 }

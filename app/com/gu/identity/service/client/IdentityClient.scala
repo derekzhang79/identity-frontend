@@ -77,4 +77,8 @@ class IdentityClient extends Logging {
     }
   }
 
+  def postConsentToken(token: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext) = {
+    configuration.requestHandler.handleRequest(UseConsentTokenRequest(token, configuration))
+  }
+
 }

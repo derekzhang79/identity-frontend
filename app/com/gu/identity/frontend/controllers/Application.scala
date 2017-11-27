@@ -5,7 +5,7 @@ import com.gu.identity.frontend.csrf.{CSRFAddToken, CSRFConfig, CSRFToken}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
 import com.gu.identity.frontend.mvt.MultiVariantTestAction
-import com.gu.identity.frontend.views.ViewRenderer.{renderRegister, renderRegisterConfirmation, renderResetPassword, renderResetPasswordEmailSent, renderSignIn}
+import com.gu.identity.frontend.views.ViewRenderer._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 
@@ -51,4 +51,3 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     renderResetPasswordEmailSent(configuration, clientIdOpt)
   }
 }
-

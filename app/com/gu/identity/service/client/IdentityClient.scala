@@ -15,7 +15,7 @@ class IdentityClient extends Logging {
     }
 
   def authenticateTokenCookies(token: String, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
-    AuthenticateCookiesApiRequest(None, None, None,Some(token), trackingData) match {
+    AuthenticateCookiesApiRequest(None, None, None, Some(token), trackingData) match {
       case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(Seq()))
     }

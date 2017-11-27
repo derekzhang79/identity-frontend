@@ -92,12 +92,12 @@ class SigninAction(
 
   def permissionAuth(token:String) = {
     TokenFromServiceAction {
-      peremissionAuthAction(successfulSignInResponse, token)
+      permissionAuthAction(successfulSignInResponse, token)
     }
   }
 
 
-  def peremissionAuthAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String) = { implicit req: RequestHeader =>
+  def permissionAuthAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String) = { implicit req: RequestHeader =>
 
     val permissionRedirectString =  s"${config.identityProfileBaseUrl}/repermission"
     val returnUrl = ReturnUrl(Some(permissionRedirectString), config)

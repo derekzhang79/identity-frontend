@@ -37,10 +37,10 @@ object AuthenticateCookiesApiRequest {
     ApiRequest.apiEndpoint("auth")
 
 
-  def apply(email: Option[String], password: Option[String], rememberMe: Option[Boolean], token: Option[String], trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Either[ClientBadRequestError,
+  def apply(email: Option[String], password: Option[String], rememberMe: Boolean, token: Option[String], trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration): Either[ClientBadRequestError,
     AuthenticateCookiesApiRequest] =
       (email, password, rememberMe, token) match {
-        case (Some(e), Some(p), Some(r), _) if isValidEmail(e) && isValidPassword(p) => Right {
+        case (Some(e), Some(p), r, _) if isValidEmail(e) && isValidPassword(p) => Right {
           apply(AuthenticateCookiesApiRequestBody(e, p), r, trackingData)
         }
         case (_, _, _, Some(t)) if isValidTokenFormat(t) => Right {

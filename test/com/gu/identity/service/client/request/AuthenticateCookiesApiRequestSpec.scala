@@ -26,7 +26,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, Some(false), None, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, None, trackingData)
       val resultBody = result.right.get.body.get.asInstanceOf[AuthenticateCookiesApiRequestBody]
 
       result.isRight shouldBe true
@@ -39,7 +39,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, Some(true), None, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = true, None, trackingData)
 
       result.isRight shouldBe true
       result.right.get.parameters should contain("persistent" -> "true")
@@ -49,7 +49,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, Some(true), None, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = true, None, trackingData)
 
       result.isRight shouldBe true
       val params = result.right.get.parameters
@@ -60,7 +60,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("me@")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password,Some(false), None, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, None, trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[ClientBadRequestError]
@@ -71,7 +71,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("@blah.com")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, Some(false), None, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, None, trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[ClientBadRequestError]
@@ -81,7 +81,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, Some(false), None,trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, None,trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[ClientBadRequestError]
@@ -91,7 +91,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("me@guardian.co.uk")
       val password = Some("")
 
-      val result = AuthenticateCookiesApiRequest(email, password, Some(false), None, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, None, trackingData)
 
       result.isLeft shouldBe true
       result.left.get shouldBe a[ClientBadRequestError]
@@ -101,7 +101,7 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
       val email = Some("test@guardian.co.uk")
       val password = Some("god")
 
-      val result = AuthenticateCookiesApiRequest(email, password, Some(false), None, trackingData)
+      val result = AuthenticateCookiesApiRequest(email, password, rememberMe = false, None, trackingData)
 
       result shouldBe 'right
       result.right.get.headers should contain("X-Forwarded-For" -> "127.0.0.1")
@@ -109,10 +109,24 @@ class AuthenticateCookiesApiRequestSpec extends WordSpec with Matchers with Mock
 
     "Fail when given an incorrectly formatted encrypted token" in {
       val token = "3t6IXpUjzYazRb%2BKZAjoduO5KPQ8%.2BSgvNDu8p42m5DAon3Z6aswedWBGoLEbXu9PyZbG4Rzf0WAiWo4AF9aJvw%3D%3D.asdkasdk"
-      val result = AuthenticateCookiesApiRequest(None, None, None, Some(token), trackingData)
+      val result = AuthenticateCookiesApiRequest(None, None, false, Some(token), trackingData)
       result.isLeft shouldBe true
       result.left.get shouldBe a[ClientBadRequestError]
     }
+
+    "Succeed when given an incorrectly formatted encrypted token" in {
+      val token = "3t6IXpUjzYazRb%2BKZAjoduO5KPQ8%.2BSgvNDu8p42m5DAon3Z6aswedWBGoLEbXu9PyZbG4Rzf0WAiWo4AF9aJvw%3D%3D.asdkasdk"
+      val result = AuthenticateCookiesApiRequest(None, None, false, Some(token), trackingData)
+      result.isLeft shouldBe true
+      result.left.get shouldBe a[ClientBadRequestError]
+    }
+
+    "Parse correctly with a valid formatted token" in {
+      val token = "3t6IXpUjzYazRb%2BKZAjoduO5KPQ8%2BSgvNDu8p42m5DAon3Z6aswedWBGoLEbXu9PyZbG4Rzf0WAiWo4AF9aJvw%3D%3D.asdkasdk"
+      val result = AuthenticateCookiesApiRequest(None, None, false, Some(token), trackingData)
+      result.isRight shouldBe true
+    }
+
   }
 
 }

@@ -90,7 +90,7 @@ class SigninAction(
       RedirectOnError(redirectRoute) andThen
       LogOnErrorAction(logger)
 
-  def peremissionAuth(token:String) = {
+  def permissionAuth(token:String) = {
     TokenFromServiceAction {
       peremissionAuthAction(successfulSignInResponse, token)
     }

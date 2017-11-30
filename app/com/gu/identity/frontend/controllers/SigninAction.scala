@@ -99,7 +99,7 @@ class SigninAction(
 
   def permissionAuthAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String) = { implicit req: RequestHeader =>
 
-    val permissionRedirectString =  s"${config.identityProfileBaseUrl}/repermission"
+    val permissionRedirectString =  s"${config.identityProfileBaseUrl}/consent"
     val returnUrl = ReturnUrl(Some(permissionRedirectString), config)
 
     val trackingData = TrackingData(req, returnUrl.toStringOpt)

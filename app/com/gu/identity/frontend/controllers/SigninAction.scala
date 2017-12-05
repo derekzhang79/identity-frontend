@@ -85,6 +85,31 @@ class SigninAction(
     }
   }
 
+  val TokenFromServiceAction: ServiceActionBuilder[Request] =
+    ServiceAction andThen
+      RedirectOnError(redirectRoute) andThen
+      LogOnErrorAction(logger)
+
+  def permissionAuth(token:String) = {
+    TokenFromServiceAction {
+      permissionAuthAction(successfulSignInResponse, token)
+    }
+  }
+
+
+  def permissionAuthAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String) = { implicit req: RequestHeader =>
+
+    val permissionRedirectString =  s"${config.identityProfileBaseUrl}/consent"
+    val returnUrl = ReturnUrl(Some(permissionRedirectString), config)
+
+    val trackingData = TrackingData(req, returnUrl.toStringOpt)
+
+    identityService.authenticate(token, trackingData).map {
+      case Left(errors) => Left(errors)
+      case Right(cookies) => Right(successResponse(returnUrl, cookies))
+    }
+  }
+
   def successfulSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
     SeeOther(successfulReturnUrl.url)
       .withCookies(cookies: _*)

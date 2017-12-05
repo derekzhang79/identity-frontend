@@ -9,12 +9,18 @@ import scala.concurrent.{ExecutionContext, Future}
 class IdentityClient extends Logging {
 
   def authenticateCookies(email: String, password: String, rememberMe: Boolean, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
-    AuthenticateCookiesApiRequest(Some(email), Some(password), rememberMe, trackingData) match {
+    AuthenticateCookiesApiRequest(Some(email), Some(password), rememberMe, None, trackingData) match {
       case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(Seq(err)))
     }
 
-  def authenticateCookies(request: AuthenticateCookiesApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
+  def authenticateTokenCookies(token: String, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
+    AuthenticateCookiesApiRequest(None, None, false, Some(token), trackingData) match {
+      case Right(request) => authenticateCookies(request)
+      case Left(err) => Future.successful(Left(Seq()))
+    }
+
+  private def authenticateCookies(request: ApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
       case Right(AuthenticationCookiesResponse(cookies)) =>

@@ -5,13 +5,12 @@ import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.errors._
 import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 import com.gu.identity.service.client.models.User
-import com.gu.identity.frontend.request.{ResetPasswordActionRequestBody, RegisterActionRequestBody}
+import com.gu.identity.frontend.request.{RegisterActionRequestBody, ResetPasswordActionRequestBody}
 import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
 import com.gu.identity.service.client._
 import com.gu.identity.service.client.request._
 import org.joda.time.{DateTime, Seconds}
 import play.api.mvc.{Cookie => PlayCookie}
-
 import com.gu.identity.frontend.logging.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -24,6 +23,7 @@ trait IdentityService {
   type PlayCookies = Seq[PlayCookie]
 
   def authenticate(signInRequest: SignInRequestParameters, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
+  def authenticate(token: String, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def deauthenticate(cookie: PlayCookie, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def registerThenSignIn(request: RegisterActionRequestBody, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def register(request: RegisterActionRequestBody, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, RegisterResponseUser]]
@@ -46,6 +46,13 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
       case Right(cookies) => Right(CookieService.signInCookies(cookies, signInRequest.rememberMe)(config))
     }
   }
+  override def authenticate(token: String, trackingData: TrackingData)(implicit ec: ExecutionContext) =
+    client.authenticateTokenCookies(token, trackingData).map {
+      case Left(errors) =>
+        Left(errors.map(SignInServiceAppException.apply))
+
+      case Right(cookies) => Right(CookieService.signInCookies(cookies, false)(config))
+    }
 
   override def deauthenticate(cookie: PlayCookie, trackingData: TrackingData)(implicit ec: ExecutionContext) = {
     val apiRequest = DeauthenticateApiRequest(cookie, trackingData)

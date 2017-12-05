@@ -3,46 +3,48 @@
 # ~~~~
 
 # Home page
-GET        /signin                        com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
+GET        /signin                          com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
 
-GET        /register                      com.gu.identity.frontend.controllers.Application.register(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
+GET        /register                        com.gu.identity.frontend.controllers.Application.register(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
 
-GET        /register/confirm              com.gu.identity.frontend.controllers.Application.confirm(returnUrl: Option[String] ?= None, clientId: Option[String] ?= None)
+GET        /register/confirm                com.gu.identity.frontend.controllers.Application.confirm(returnUrl: Option[String] ?= None, clientId: Option[String] ?= None)
 
-GET        /reset                         com.gu.identity.frontend.controllers.Application.reset(error: Seq[String] ?= Seq.empty, clientId: Option[String] ?= None)
+GET        /reset                           com.gu.identity.frontend.controllers.Application.reset(error: Seq[String] ?= Seq.empty, clientId: Option[String] ?= None)
 
-GET        /reset/email-sent              com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent(clientId: Option[String] ?= None)
+GET        /reset/email-sent                com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent(clientId: Option[String] ?= None)
 
-GET        /signout                       com.gu.identity.frontend.controllers.SignOutAction.signOut(returnUrl: Option[String] ?= None)
+GET        /signout                         com.gu.identity.frontend.controllers.SignOutAction.signOut(returnUrl: Option[String] ?= None)
 
-GET        /agree/:group                  com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.confirmAction(group: String, returnUrl: Option[String] ?= None, clientId: Option[String] ?= None, skipThirdPartyLandingPage: Option[Boolean] ?= None)
+GET        /agree/:group                    com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.confirmAction(group: String, returnUrl: Option[String] ?= None, clientId: Option[String] ?= None, skipThirdPartyLandingPage: Option[Boolean] ?= None)
 
 GET        /accept-consent/:consentToken   com.gu.identity.frontend.controllers.ConsentController.confirmConsents(consentToken: String)
 
 POST       /actions/agree                 com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.addToGroupAction
 
-POST       /actions/signin                com.gu.identity.frontend.controllers.SigninAction.signIn
+POST       /actions/signin                  com.gu.identity.frontend.controllers.SigninAction.signIn
 
-POST       /actions/signin/smartlock      com.gu.identity.frontend.controllers.SigninAction.signInWithSmartLock
+POST       /actions/signin/smartlock        com.gu.identity.frontend.controllers.SigninAction.signInWithSmartLock
 
-POST       /actions/register              com.gu.identity.frontend.controllers.RegisterAction.register
+GET        /actions/signin/consents/:token  com.gu.identity.frontend.controllers.SigninAction.permissionAuth(token:String)
 
-POST       /actions/reset                 com.gu.identity.frontend.controllers.ResetPasswordAction.reset
+POST       /actions/register                com.gu.identity.frontend.controllers.RegisterAction.register
 
-POST       /actions/csp/report            com.gu.identity.frontend.controllers.CSPViolationReporter.cspReport
+POST       /actions/reset                   com.gu.identity.frontend.controllers.ResetPasswordAction.reset
 
-GET        /management/healthcheck        com.gu.identity.frontend.controllers.HealthCheck.healthCheck
+POST       /actions/csp/report              com.gu.identity.frontend.controllers.CSPViolationReporter.cspReport
 
-GET        /.well-known/assetlinks.json    com.gu.identity.frontend.controllers.DigitalAssetLinks.links
+GET        /management/healthcheck          com.gu.identity.frontend.controllers.HealthCheck.healthCheck
 
-GET        /management/manifest           com.gu.identity.frontend.controllers.Manifest.manifest
+GET        /.well-known/assetlinks.json     com.gu.identity.frontend.controllers.DigitalAssetLinks.links
 
-GET        /static/*file                  controllers.Assets.versioned(path="/public", file: Asset)
+GET        /management/manifest             com.gu.identity.frontend.controllers.Manifest.manifest
 
-GET        /robots.txt                    controllers.Assets.at(path="/public", file="robots.txt")
+GET        /static/*file                    controllers.Assets.versioned(path="/public", file: Asset)
+
+GET        /robots.txt                      controllers.Assets.at(path="/public", file="robots.txt")
 
 # Redirects
-GET        /                              com.gu.identity.frontend.controllers.Redirects.indexRedirect
-GET        /signin/                       com.gu.identity.frontend.controllers.Redirects.signInPageTrailingSlash
-GET        /signout/                      com.gu.identity.frontend.controllers.Redirects.signOutPageTrailingSlash
-GET        /register/                     com.gu.identity.frontend.controllers.Redirects.registerPageTrailingSlash
+GET        /                                com.gu.identity.frontend.controllers.Redirects.indexRedirect
+GET        /signin/                         com.gu.identity.frontend.controllers.Redirects.signInPageTrailingSlash
+GET        /signout/                        com.gu.identity.frontend.controllers.Redirects.signOutPageTrailingSlash
+GET        /register/                       com.gu.identity.frontend.controllers.Redirects.registerPageTrailingSlash

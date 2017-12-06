@@ -71,9 +71,9 @@ object RegisterText {
 
 case class ConsentRegisterText(
   `1stPartyConsentIdentifier`: String = FirstParty.id,
-  `1stPartyConsentText`: String = FirstParty.latestWording,
+  `1stPartyConsentText`: String = FirstParty.latestWording.wording,
   `3rdPartyConsentIdentifier`: String = ThirdParty.id,
-  `3rdPartyConsentText`: String = ThirdParty.latestWording
+  `3rdPartyConsentText`: String = ThirdParty.latestWording.wording
 )
 
 

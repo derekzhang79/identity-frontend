@@ -90,16 +90,17 @@ class SigninAction(
       RedirectOnError(redirectRoute) andThen
       LogOnErrorAction(logger)
 
-  def permissionAuth(token:String) = {
+  def permissionAuth(token:String, journey: Option[String]) = {
     TokenFromServiceAction {
-      permissionAuthAction(successfulSignInResponse, token)
+      permissionAuthAction(successfulSignInResponse, token, journey)
     }
   }
 
 
-  def permissionAuthAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String) = { implicit req: RequestHeader =>
+  def permissionAuthAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String, journeyOpt: Option[String]) = { implicit req: RequestHeader =>
 
-    val permissionRedirectString =  s"${config.identityProfileBaseUrl}/consent"
+    val journey = journeyOpt.getOrElse("repermission")
+    val permissionRedirectString =  s"${config.identityProfileBaseUrl}/consent?journey=${journey}"
     val returnUrl = ReturnUrl(Some(permissionRedirectString), config)
 
     val trackingData = TrackingData(req, returnUrl.toStringOpt)

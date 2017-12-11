@@ -62,7 +62,8 @@ object ViewRenderer {
       skipConfirmation: Option[Boolean],
       clientId: Option[ClientID],
       group: Option[GroupCode],
-      email: Option[String])
+      email: Option[String],
+      shouldCollectConsents: Boolean)
       (implicit messages: Messages) = {
 
     val model = RegisterViewModel(
@@ -74,7 +75,8 @@ object ViewRenderer {
       skipConfirmation = skipConfirmation,
       clientId = clientId,
       group = group,
-      email = email)
+      email = email,
+      shouldCollectConsents = shouldCollectConsents)
 
     clientId match {
       case Some(GuardianMembersClientID) => renderViewModel("register-page-membership", model)

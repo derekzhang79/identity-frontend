@@ -96,3 +96,26 @@
     display: none;
   }
 }
+
+.header.is-snow {
+  background: #fff;
+  color: #333;
+  border-bottom: 1px solid color(var(--c-back-link-dark) alpha(10%));
+}
+
+.header.is-snow .header__logo-link {
+  float: right;
+  background-image: inline("../logo/guardian-logo-160-snow.svg");
+  height: height("../logo/guardian-logo-160-snow.svg");
+  width: width("../logo/guardian-logo-160-snow.svg");
+}
+
+.header.is-snow :--header__back-button {
+  content: "";
+  background-image: inline("arrow-back-dark.svg");
+  border: 1px solid color(var(--c-back-link-dark) alpha(30%));
+}
+
+.header.is-snow .header__back-link {
+  color: var(--c-back-link-dark);
+}

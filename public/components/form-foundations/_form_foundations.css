@@ -3,6 +3,8 @@
  *   Partials for shared form definitions.
  */
 
+@import "_colors.css";
+
 /** Form colours **/
 
 :root {
@@ -11,7 +13,7 @@
   --c-form-error: #d61d00;
   --c-form-field-border: #ddd;
   --c-form-field-border--focus: #6e99b3;
-  --c-form-button--submit: #005689;
+  --c-form-button--submit: var(--color-brand);
 }
 
 

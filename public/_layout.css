@@ -2,6 +2,7 @@
 @import "components/_grid.css";
 @import "components/_breakpoints.css";
 @import "components/_typography.css";
+@import "_colors.css";
 
 html {
   height: 100%;
@@ -178,7 +179,7 @@ body > section:last-of-type {
 }
 
 a {
-  color: #005689;
+  color: var(--color-brand);
   cursor: pointer;
   text-decoration: none;
 

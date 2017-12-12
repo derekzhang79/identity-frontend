@@ -13,6 +13,9 @@
 .header__inner {
   @extend %page-block;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .header__logo-link {

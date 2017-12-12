@@ -20,12 +20,21 @@
 /** Form prelude - the "or" text before a form **/
 
 %form__prelude {
-  @extend %font-sub-heading-2;
   color: var(--c-form-prelude);
   font-weight: bold;
   margin: 0;
   padding: 1.2rem 0;
   text-align: center;
+
+  @if $is-snow < 1 {
+    @extend %font-sub-heading-2;
+  }
+
+  @if $is-snow > 0 {
+    @extend %font-sub-heading-1;
+    font-weight: 300;
+    font-style: italic;
+  }
 }
 
 

@@ -91,13 +91,19 @@
 /** Form buttons **/
 %form__button--submit {
   @extend %font-text-sans-2;
-  background: var(--c-form-button--submit) inline("arrow-white-right.svg") center right no-repeat;
+  background: var(--c-form-button--submit);
   border: 0;
   border-radius: 18px;
   color: white;
   display: block;
   text-align: left;
-  padding: 0.8rem 4rem 0.8rem 1.6rem;
+  padding: 0.2rem 1.6rem;
+
+  svg {
+    vertical-align: middle;
+    margin-left: 1rem;
+    margin-right: -0.25rem;
+  }
 
   &:focus,
   &:hover {

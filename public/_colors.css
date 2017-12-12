@@ -2,6 +2,7 @@
   --color-brand: #005689;
   --color-bg: #f4f4f4;
   --color-page-bg: #f1f1f1;
+  --color-card: #f6f6f6;
 
   @if $is-snow > 0 {
     --color-page-bg: #fff;

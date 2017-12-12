@@ -18,10 +18,11 @@
   </section>
 
   <section class="signin__cta-section">
-    <p class="signin__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" class="signin__cta-link--signup" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
+    <div class="global__card">
+      <p class="signin__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" class="signin__cta-link--signup" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
+      {{> components/terms/_terms }}
+    </div>
   </section>
-
-  {{> components/terms/_terms }}
 
 
 {{/partial}}

@@ -244,6 +244,10 @@ a {
   display: flex;
   flex-direction: column;
 
+  > section:last-of-type {
+    flex-grow: 1;
+  }
+
   @if $is-snow > 0 {
     margin-top: 2rem;
     background: var(--color-card);

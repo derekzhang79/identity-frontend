@@ -63,6 +63,10 @@
   color: var(--c-back-link-light);
   line-height: 4.8rem;
 
+  @if var(--is-snow) > 0 {
+    @extend %font-text-sans-0;
+  }
+
   &:hover,
   &:focus {
     text-decoration: none;
@@ -100,9 +104,9 @@
 
 @if $is-snow > 0 {
   .header {
-    background: #f6f6f6;
+    background: var(--color-card);
     color: #333;
-    border-bottom: 1px solid color(var(--c-back-link-dark) alpha(10%));
+    border-bottom: 1px solid color(var(--color-border));
   }
 
   .header__logo-link {

@@ -17,13 +17,14 @@
     {{> components/signin-form/_signin-form }}
   </section>
 
-  <section class="signin__cta-section">
-    <div class="global__card">
-      <p class="signin__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" class="signin__cta-link--signup" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
-      {{> components/terms/_terms }}
-    </div>
-  </section>
+  <section class="page__footer">
 
+    <section class="signin__cta-section">
+        <p class="signin__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" class="signin__cta-link--signup" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
+    </section>
+    {{> components/terms/_terms }}
+
+  </section>
 
 {{/partial}}
 

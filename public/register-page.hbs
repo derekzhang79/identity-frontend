@@ -15,11 +15,11 @@
     {{> components/register-form/_register-form }}
   </section>
 
-  <section class="register__cta-section">
-    <div class="global__card">
+  <section class="page__footer">
+    <section class="register__cta-section">
       <p class="register__cta--sign-in">{{ registerPageText.signInCta }} <a id="sign_in_page_link" class="register__cta-link--sign-in" href="{{ links.signIn }}">{{ registerPageText.signIn }}</a></p>
-      {{> components/terms/_terms }}
-    </div>
+    </section>
+    {{> components/terms/_terms }}
   </section>
 
 {{/ partial }}

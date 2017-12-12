@@ -131,6 +131,10 @@ body > section:last-of-type {
   padding-top: 0.6rem;
   padding-bottom: 2.4rem;
 
+  @if $is-snow > 0 {
+    font-weight: 500;
+  }
+
   @media (--viewport-min-tablet) {
     @extend %font-heading-1;
     padding-bottom: 3.6rem;

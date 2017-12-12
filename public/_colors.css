@@ -1,8 +1,13 @@
 :root {
   --color-brand: #005689;
-  --page-background-content: #f1f1f1;
+  --color-bg: #f4f4f4;
+  --color-page-bg: #f1f1f1;
+  --color-card: #f6f6f6;
+  --color-border: #dfdfdf;
 
   @if $is-snow > 0 {
-    --page-background-content: #fff;
+    --color-page-bg: #fff;
+    --color-bg: #fff;
+    --color-brand: #6600b0;
   }
 }

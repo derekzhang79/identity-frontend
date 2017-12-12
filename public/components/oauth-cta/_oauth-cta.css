@@ -4,7 +4,7 @@
 
 .oauth {
   @extend %content-container;
-  background: #f1f1f1;
+  background: var(--page-background-content);
   padding-top: 2rem;
   padding-bottom: 0.6rem;
 }
@@ -16,7 +16,7 @@
   text-decoration: none;
   padding: 0.8rem 1rem 0.6rem 3.8rem;
   margin: 0 0 1.2rem;
-  border: 1px solid #fff;
+  border: 1px solid #dfdfdf;
   border-radius: 18px;
   background-color: white;
   background-repeat: no-repeat;

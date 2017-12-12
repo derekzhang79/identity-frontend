@@ -111,6 +111,12 @@ body > section:last-of-type {
   }
 }
 
+%content-block {
+  @if $is-snow < 1 {
+    background: #e7e7e7;
+  }
+}
+
 .page-heading {
   @extend %font-heading-0;
   @extend %content-container;
@@ -121,6 +127,16 @@ body > section:last-of-type {
 
   @if $is-snow > 0 {
     font-weight: 500;
+    padding-bottom: 0;
+
+    &::after {
+      content: "";
+      display: block;
+      width: 100%;
+      margin-top: 2.4rem;
+      background-image: repeating-linear-gradient(#dfdfdf, #dfdfdf 0.0625rem, #fff 0.0625rem, #fff 0.25rem);
+      height: 1rem;
+    }
   }
 
   @media (--viewport-min-tablet) {

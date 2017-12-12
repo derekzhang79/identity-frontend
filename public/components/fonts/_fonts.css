@@ -34,7 +34,14 @@
 
 
 /* GuardianEgyptianWeb */
-@mixin guFontFace GuardianEgyptianWeb, ascii, GuardianEgyptianWeb-Regular;
+@if $is-snow > 0 {
+  @import "./v1/GuardianEgyptianWeb.ttf.css";
+  @import "./v1/GuardianEgyptianWeb.woff.css";
+}
+
+@if $is-snow < 1 {
+  @mixin guFontFace GuardianEgyptianWeb, ascii, GuardianEgyptianWeb-Regular;
+}
 
 /* GuardianTextEgyptianWeb */
 @mixin guFontFace GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Regular;

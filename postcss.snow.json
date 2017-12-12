@@ -9,7 +9,6 @@
     "postcss-reporter"
   ],
   "input": "public/main.css",
-  "output": "target/web/build/bundle.css",
   "precss": {
     "import": false,
     "mixins": true,
@@ -34,10 +33,11 @@
   "postcss-reporter": {
     "clearMessages": true
   },
+  "output": "target/web/build/bundle.snow.css",
   "precss": {
     "variables": {
       "variables": {
-        "is-snow": 0
+        "is-snow": 1
       }
     }
   }

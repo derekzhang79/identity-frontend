@@ -1,4 +1,5 @@
 @import "../logo/_logo.css";
+@import "_colors.css";
 
 :root {
   --c-back-link-dark: #333;
@@ -6,12 +7,12 @@
 }
 
 .header {
-  background: #005689;
+  background: var(--color-brand);
 }
 
 .header__inner {
-  @extend %clearfix;
   @extend %page-block;
+  overflow: hidden;
 }
 
 .header__logo-link {
@@ -92,4 +93,36 @@
   @media all and (max-width: 50rem) {
     display: none;
   }
+}
+
+@if $is-snow > 0 {
+  .header {
+    background: #fff;
+    color: #333;
+    border-bottom: 1px solid color(var(--c-back-link-dark) alpha(10%));
+  }
+
+  .header__logo-link {
+    float: right;
+    background-image: inline("../logo/guardian-logo-160-snow.svg");
+    height: height("../logo/guardian-logo-160-snow.svg");
+    width: width("../logo/guardian-logo-160-snow.svg");
+
+    &:hover {
+      background-color: color(var(--c-back-link-dark) alpha(15%));
+    }
+  }
+
+  :--header__back-button {
+    content: "";
+    background-image: inline("arrow-back-dark.svg");
+    background-size: 65%;
+    border: 0;
+    background-color: color(var(--c-back-link-dark) alpha(10%));
+  }
+
+  .header__back-link {
+    color: var(--c-back-link-dark);
+  }
+
 }

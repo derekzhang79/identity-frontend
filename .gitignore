@@ -10,3 +10,4 @@ project/target
 /nginxCerts
 *.crt
 *.key
+.DS_Store

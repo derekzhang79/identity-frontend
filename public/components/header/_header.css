@@ -95,31 +95,34 @@
   }
 }
 
-body.is-snow .header {
-  background: #fff;
-  color: #333;
-  border-bottom: 1px solid color(var(--c-back-link-dark) alpha(10%));
-}
-
-body.is-snow .header__logo-link {
-  float: right;
-  background-image: inline("../logo/guardian-logo-160-snow.svg");
-  height: height("../logo/guardian-logo-160-snow.svg");
-  width: width("../logo/guardian-logo-160-snow.svg");
-
-  &:hover {
-    background-color: color(var(--c-back-link-dark) alpha(15%));
+@if $is-snow > 0 {
+  .header {
+    background: #fff;
+    color: #333;
+    border-bottom: 1px solid color(var(--c-back-link-dark) alpha(10%));
   }
-}
 
-body.is-snow :--header__back-button {
-  content: "";
-  background-image: inline("arrow-back-dark.svg");
-  background-size: 65%;
-  border: 0;
-  background-color: color(var(--c-back-link-dark) alpha(10%));
-}
+  .header__logo-link {
+    float: right;
+    background-image: inline("../logo/guardian-logo-160-snow.svg");
+    height: height("../logo/guardian-logo-160-snow.svg");
+    width: width("../logo/guardian-logo-160-snow.svg");
 
-body.is-snow .header__back-link {
-  color: var(--c-back-link-dark);
+    &:hover {
+      background-color: color(var(--c-back-link-dark) alpha(15%));
+    }
+  }
+
+  :--header__back-button {
+    content: "";
+    background-image: inline("arrow-back-dark.svg");
+    background-size: 65%;
+    border: 0;
+    background-color: color(var(--c-back-link-dark) alpha(10%));
+  }
+
+  .header__back-link {
+    color: var(--c-back-link-dark);
+  }
+
 }

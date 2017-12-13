@@ -115,7 +115,7 @@ object Configuration {
 
     gaUID = "UA-78705427-123123",
 
-    useSnow = true,
+    useSnow = false,
 
     underlying = PlayConfiguration.empty
   )

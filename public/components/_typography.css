@@ -80,7 +80,7 @@ html {
 
 %font-text-sans-0 {
   @extend %font-sans-serif;
-  @mixin font-size 12, 16;
+  @mixin font-size 13, 18;
 }
 
 %font-text-sans-1 {
@@ -91,6 +91,10 @@ html {
 %font-text-sans-2 {
   @extend %font-sans-serif;
   @mixin font-size 14, 20;
+
+  @if $is-snow > 0 {
+    @mixin font-size 13, 18;
+  }
 }
 
 %font-text-sans-3 {

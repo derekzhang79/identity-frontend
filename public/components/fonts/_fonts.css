@@ -35,7 +35,17 @@
 
 /* GuardianEgyptianWeb */
 @if $is-snow > 0 {
-  @mixin guFontFace GuardianEgyptianWeb, ascii, GuardianEgyptianWeb-Regular;
+  @font-face {
+    font-family: GuardianEgyptianWeb;
+    src: local(cdn(">>hJm6XbtSXZmiFJvGXblKYZ2eFJJelJ"));
+    font-weight: 400;
+  }
+
+  @font-face {
+    font-family: GuardianEgyptianWeb;
+    src: local(cdn(">>hJly3cD2T[vmHclGX[J6XZqSndiW4SJelJ"));
+    font-weight: 800;
+  }
 }
 
 @if $is-snow < 1 {

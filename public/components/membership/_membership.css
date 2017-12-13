@@ -56,6 +56,7 @@
 
   .header__inner {
     @extend %membership-header-container;
+    flex-direction: row-reverse;
   }
 
   .header {
@@ -241,5 +242,9 @@
     padding-right: 5.5rem;
     background: var(--c-form-button--submit) inline("arrow-white-right-circle.svg") center right no-repeat;
     background-position: right 0.7rem center;
+
+    svg {
+      display: none;
+    }
   }
 }

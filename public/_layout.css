@@ -147,9 +147,10 @@ body > section:last-of-type {
   }
 
   @if $is-snow > 0 {
-    font-weight: 500;
+    font-weight: 800;
     padding-bottom: 0 !important;
     padding-top: 1rem;
+    color: var(--color-brand);
 
     &::after {
       content: "";

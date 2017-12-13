@@ -35,6 +35,8 @@ case class Configuration(
 
   gaUID: String,
 
+  useSnow: Boolean,
+
   underlying: PlayConfiguration)
 
 
@@ -78,6 +80,8 @@ object Configuration {
 
       gaUID = getString("ga-uid"),
 
+      useSnow = false,
+
       underlying = appConfiguration
     )
   }
@@ -110,6 +114,8 @@ object Configuration {
     sentryDsnScala = "--stubbed-sentry-dsn-scala--",
 
     gaUID = "UA-78705427-123123",
+
+    useSnow = false,
 
     underlying = PlayConfiguration.empty
   )

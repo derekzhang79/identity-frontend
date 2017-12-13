@@ -14,7 +14,6 @@ import com.gu.identity.frontend.configuration.Configuration.Environment
 case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
 
   val resources: Seq[PageResource with Product] = Seq(
-    LocalCSSResource.fromAsset("bundle.css"),
     LocalJavascriptResource.fromAsset("main.bundle.js", isInHead = false)
   )
 
@@ -116,7 +115,9 @@ object LayoutViewModel {
       InlinedJSONResource("id_runtime_params", r.toJSONString)
     }
 
-    val resources: Seq[PageResource with Product] = BaseLayoutViewModel.resources ++ Seq(Some(inlinedJSConfig), inlinedJSRuntimeParams).flatten
+    val cssResources = if (configuration.useSnow && !skin.isDefined) LocalCSSResource.fromAsset("bundle.snow.css") else LocalCSSResource.fromAsset("bundle.css")
+
+    val resources: Seq[PageResource with Product] = BaseLayoutViewModel.resources ++ Seq(Some(inlinedJSConfig), inlinedJSRuntimeParams).flatten ++ Seq(cssResources)
 
     LayoutViewModel(
       text = LayoutText.toMap,

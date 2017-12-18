@@ -8,6 +8,6 @@
   @if $is-snow > 0 {
     --color-page-bg: #fff;
     --color-bg: #fff;
-    --color-brand: #6600b0;
+    --color-brand: #000;
   }
 }

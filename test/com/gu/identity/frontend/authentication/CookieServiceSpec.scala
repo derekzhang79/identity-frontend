@@ -13,7 +13,8 @@ class CookieServiceSpec extends PlaySpec {
   val signInCookiesFromApi = Seq(
     IdentityApiCookie(name = CookieName.GU_U.toString, value = "data for GU_U", isSession = false, expires = expires),
     IdentityApiCookie(name = CookieName.SC_GU_U.toString, value = "data for SC_GU_U", isSession = false, expires = expires),
-    IdentityApiCookie(name = CookieName.SC_GU_LA.toString, value = "data for SC_GU_LA", isSession = true, expires = expires)
+    IdentityApiCookie(name = CookieName.SC_GU_LA.toString, value = "data for SC_GU_LA", isSession = true, expires = expires),
+    IdentityApiCookie(name = CookieName.SC_GU_RP.toString, value = "data for SC_GU_RP", isSession = false, expires = expires)
   )
 
   val signOutCookiesFromApi = Seq(
@@ -37,6 +38,7 @@ class CookieServiceSpec extends PlaySpec {
       cookieResult.filter(c => c.name == CookieName.GU_U.toString).head.value mustEqual "data for GU_U"
       cookieResult.filter(c => c.name == CookieName.SC_GU_U.toString).head.value mustEqual "data for SC_GU_U"
       cookieResult.filter(c => c.name == CookieName.SC_GU_LA.toString).head.value mustEqual "data for SC_GU_LA"
+      cookieResult.filter(c => c.name == CookieName.SC_GU_RP.toString).head.value mustEqual "data for SC_GU_RP"
     }
 
     "make all cookies session cookies if rememberMe is false" in {
@@ -44,6 +46,7 @@ class CookieServiceSpec extends PlaySpec {
       cookieResult.filter(c => c.name == CookieName.GU_U.toString).head.maxAge mustEqual None
       cookieResult.filter(c => c.name == CookieName.SC_GU_U.toString).head.maxAge mustEqual None
       cookieResult.filter(c => c.name == CookieName.SC_GU_LA.toString).head.maxAge mustEqual None
+      cookieResult.filter(c => c.name == CookieName.SC_GU_RP.toString).head.maxAge mustEqual None
     }
 
     "set expiry for SC_GU_U and GU_U if rememberMe is true" in {
@@ -60,7 +63,8 @@ class CookieServiceSpec extends PlaySpec {
       cookieResult.filter(c => c.name == CookieName.SC_GU_U.toString).head.secure mustEqual true
       cookieResult.filter(c => c.name == CookieName.SC_GU_U.toString).head.httpOnly mustEqual true
       cookieResult.filter(c => c.name == CookieName.SC_GU_LA.toString).head.secure mustEqual true
-      cookieResult.filter(c => c.name == CookieName.SC_GU_LA.toString).head.httpOnly mustEqual true
+      cookieResult.filter(c => c.name == CookieName.SC_GU_RP.toString).head.secure mustEqual true
+      cookieResult.filter(c => c.name == CookieName.SC_GU_RP.toString).head.httpOnly mustEqual true
     }
 
     "set correct domain on cookies" in {

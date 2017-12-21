@@ -24,9 +24,7 @@ class IdentityClient extends Logging {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) => Left(error)
       case Right(AuthenticationCookiesResponse(cookies)) =>
-        Right(cookies.values.map { c =>
-          IdentityApiCookie(name = c.key, value = c.value, isSession = c.sessionCookie.getOrElse(false), expires = cookies.expiresAt)
-        })
+        Right(cookies.values.map(IdentityApiCookie(_, cookies.expiresAt)))
       case Right(other) => Left(Seq(ClientGatewayError("Unknown response")))
     }
 
@@ -83,7 +81,7 @@ class IdentityClient extends Logging {
     }
   }
 
-  def postConsentToken(token: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext) = {
+  def postConsentToken(token: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, ApiResponse]] = {
     configuration.requestHandler.handleRequest(UseConsentTokenRequest(token, configuration))
   }
 

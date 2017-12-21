@@ -1,17 +1,16 @@
 package com.gu.identity.frontend.services
 
-import com.gu.identity.frontend.authentication.CookieService
+import com.gu.identity.frontend.authentication.{CookieService, IdentityApiCookie}
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.errors._
-import com.gu.identity.frontend.models.{ClientIp, TrackingData}
-import com.gu.identity.service.client.models.User
-import com.gu.identity.frontend.request.{RegisterActionRequestBody, ResetPasswordActionRequestBody}
-import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
-import com.gu.identity.service.client._
-import com.gu.identity.service.client.request._
-import org.joda.time.{DateTime, Seconds}
-import play.api.mvc.{Cookie => PlayCookie}
 import com.gu.identity.frontend.logging.Logging
+import com.gu.identity.frontend.models.{ClientIp, TrackingData}
+import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
+import com.gu.identity.frontend.request.{RegisterActionRequestBody, ResetPasswordActionRequestBody}
+import com.gu.identity.service.client._
+import com.gu.identity.service.client.models.User
+import com.gu.identity.service.client.request._
+import play.api.mvc.{Cookie => PlayCookie}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,7 +29,7 @@ trait IdentityService {
   def sendResetPasswordEmail(data: ResetPasswordActionRequestBody, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse ]]
   def getUser(cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, User]]
   def assignGroupCode(group: String, cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, AssignGroupResponse]]
-  def processConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, Unit]]
+  def processConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, PlayCookies]]
 }
 
 
@@ -125,12 +124,19 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
     }
   }
 
-  override def processConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, Unit]] = {
+  override def processConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, PlayCookies]] = {
     client.postConsentToken(token) map {
       case Left(errors) =>
         Left(ConsentTokenAppException(errors.head))
-      case Right(_) =>
-        Right(logger.debug("Successfully used consent token"))
+      case Right(AuthenticationCookiesResponse(cookies)) =>
+        val rpCookies = CookieService.signInCookies(
+          cookies.values.map(IdentityApiCookie(_, cookies.expiresAt)),
+          rememberMe = false
+        )(config)
+        Right(rpCookies)
+      case Right(other) =>
+        logger.warn(s"Unexpected API Response for consent-token, $other", new IllegalStateException(s"Illegal Response ${other.getClass}, expected AuthenticationCookiesResponse"))
+        Left(ConsentTokenAppException(ClientGatewayError("An Unexpected Error Occurred")))
     }
   }
 }

@@ -8,6 +8,7 @@ import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import play.api.i18n.MessagesApi
+import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
@@ -22,14 +23,15 @@ class ConsentControllerSpec extends PlaySpec with MockitoSugar {
     lazy val controller = new ConsentController(config, mockIdentityService, messages, ExecutionContext.fromExecutor(MoreExecutors.directExecutor()))
   }
 
-
   "GET /accept-consent/{token}" should {
-    "post the provided token to the ID Api" in new WithControllerMockedDependencies {
-      val returnUrl = Some("/email-prefs?consentsUpdated=true")
-      when(mockIdentityService.processConsentToken(eql("consent-token"))(argAny[ExecutionContext])).thenReturn(Future.successful(Right()))
+    "post the provided token to the ID Api, redirect to the consent journey page with cookies set" in new WithControllerMockedDependencies {
+      val returnUrl = Some("/consents")
+      val cookies = Seq(Cookie("test-cookie", "cookie-value", secure = true))
+      when(mockIdentityService.processConsentToken(eql("consent-token"))(argAny[ExecutionContext])).thenReturn(Future.successful(Right(cookies)))
       val result = call(controller.confirmConsents("consent-token"), FakeRequest("GET", "/accept-consent/consent-token"))
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual returnUrl
+      headers(result) must contain("Set-Cookie" -> "test-cookie=cookie-value; Path=/; Secure; HTTPOnly")
     }
   }
 

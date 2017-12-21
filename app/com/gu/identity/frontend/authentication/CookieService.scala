@@ -1,6 +1,7 @@
 package com.gu.identity.frontend.authentication
 
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.service.client.AuthenticationCookiesResponseCookie
 import org.joda.time.{DateTime, Seconds}
 import play.api.mvc.{Cookie => PlayCookie}
 
@@ -13,6 +14,11 @@ final case class DotComCookie(name: CookieName.Name) extends GuardianCookie
 final case class IdentityCookie(name: CookieName.Name) extends GuardianCookie
 
 final case class IdentityApiCookie(name: String, value: String, isSession: Boolean, expires: DateTime)
+
+object IdentityApiCookie {
+  def apply(c: AuthenticationCookiesResponseCookie, expires: DateTime): IdentityApiCookie =
+    IdentityApiCookie(name = c.key, value = c.value, isSession = c.sessionCookie.getOrElse(false), expires = expires)
+}
 
 object CookieService {
 

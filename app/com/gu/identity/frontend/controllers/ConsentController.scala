@@ -22,8 +22,8 @@ class ConsentController(
 
   def confirmConsents(consentToken: String) = Action.async {
     identityService.processConsentToken(consentToken).map {
-      case Right(_) =>
-        Redirect("/email-prefs", Map("consentsUpdated" -> Seq("true")))
+      case Right(playCookies) =>
+        Redirect("/consents").withCookies(playCookies: _*)
       case Left(_) =>
         renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
     }.recover {

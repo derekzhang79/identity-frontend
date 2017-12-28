@@ -70,6 +70,7 @@
   &:hover,
   &:focus {
     text-decoration: none;
+    background-color: none;
 
     .header__back-link-text {
       opacity: 1;
@@ -114,18 +115,17 @@
     background-image: inline("../logo/guardian-logo-160-snow.svg");
     height: height("../logo/guardian-logo-160-snow.svg");
     width: width("../logo/guardian-logo-160-snow.svg");
-
-    &:hover {
-      background-color: color(var(--c-back-link-dark) alpha(15%));
-    }
   }
 
   :--header__back-button {
     content: "";
     background-image: inline("arrow-back-dark.svg");
     background-size: 65%;
-    border: 0;
-    background-color: color(var(--c-back-link-dark) alpha(10%));
+    border-color: color(var(--c-back-link-dark) alpha(30%));
+  }
+
+  :--header__back-button--active {
+    border-color: color(var(--c-back-link-dark) alpha(60%));
   }
 
   .header__back-link {

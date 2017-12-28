@@ -37,6 +37,8 @@ case class Configuration(
 
   useSnow: Boolean,
 
+  collectSignupConsents: Boolean,
+
   underlying: PlayConfiguration)
 
 
@@ -82,6 +84,8 @@ object Configuration {
 
       useSnow = false,
 
+      collectSignupConsents = true,
+
       underlying = appConfiguration
     )
   }
@@ -116,6 +120,8 @@ object Configuration {
     gaUID = "UA-78705427-123123",
 
     useSnow = false,
+
+    collectSignupConsents = true,
 
     underlying = PlayConfiguration.empty
   )

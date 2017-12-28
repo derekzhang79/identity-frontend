@@ -2,7 +2,6 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFAddToken, CSRFConfig, CSRFToken}
-import com.gu.identity.frontend.experiments.StopConsentCollection
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
 import com.gu.identity.frontend.mvt.MultiVariantTestAction
@@ -29,7 +28,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
     val email : Option[String] = req.getQueryString("email")
-    val shouldCollectConsents = !StopConsentCollection.isActive
+    val shouldCollectConsents = configuration.collectSignupConsents
 
     renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email, shouldCollectConsents)
   }

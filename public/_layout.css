@@ -137,28 +137,22 @@ body > section:last-of-type {
   padding-top: 0.6rem;
   padding-bottom: 2.4rem;
 
-  @if $is-snow > 0 {
-    font-weight: 500;
-  }
-
   @media (--viewport-min-tablet) {
     @extend %font-heading-1;
     padding-bottom: 3.6rem;
   }
 
   @if $is-snow > 0 {
-    font-weight: 800;
+    padding-top: 0.6rem;
     padding-bottom: 0 !important;
-    padding-top: 1rem;
-    color: var(--color-brand);
 
     &::after {
       content: "";
       display: block;
       width: 100%;
       margin-top: 2.4rem;
-      background-image: repeating-linear-gradient(#dfdfdf, #dfdfdf 0.0625rem, #fff 0.0625rem, #fff 0.25rem);
-      height: 1rem;
+      background-color: var(--color-border);
+      height: 1px;
     }
   }
 
@@ -250,9 +244,16 @@ a {
   }
 
   @if $is-snow > 0 {
-    margin-top: 2rem;
-    background: var(--color-card);
+    margin-top: 3rem;
     color: #333;
-    border-top: 1px solid color(var(--color-border));
+    position: relative;
+
+    & > *:first-child::before {
+      content: "";
+      display: block;
+      width: 100%;
+      background-color: var(--color-border);
+      height: 1px;
+    }
   }
 }

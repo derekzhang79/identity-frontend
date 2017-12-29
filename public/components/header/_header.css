@@ -147,9 +147,14 @@
     justify-content: space-between;
   }
 
+  /*
+  TODO: rework this it's horrible
+  */
+
   .header__logo-link {
-    --height: 60;
-    --ratio: calc(strip(height("../logo/guardian-logo-160-snow.svg")) / strip(var(--height)));
+    $height: 60;
+    $ratio: calc(strip(height("../logo/guardian-logo-160-snow.svg")) / $height);
+    $width: calc(strip(width("../logo/guardian-logo-160-snow.svg")) / $ratio);
     margin: 0;
     background-repeat: no-repeat;
     background-size: contain;
@@ -157,8 +162,8 @@
     overflow: hidden;
     float: right;
     background-image: inline("../logo/guardian-logo-160-snow.svg");
-    height: calc(var(--height) * 1px);
-    width: calc(width("../logo/guardian-logo-160-snow.svg") / var(--ratio));
+    height: $(height)px; /* stylelint-disable-line */
+    width: $(width)px; /* stylelint-disable-line */
   }
 
   .header__logo-link-text {

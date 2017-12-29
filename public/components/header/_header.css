@@ -1,6 +1,21 @@
 @import "../logo/_logo.css";
 @import "_colors.css";
 
+@define-mixin header__back-link--dark {
+  .header__back-link {
+    color: var(--c-back-link-dark);
+  }
+
+  :--header__back-button {
+    background-image: inline("arrow-back-dark.svg");
+    border: 1px solid color(var(--c-back-link-dark) alpha(30%));
+  }
+
+  :--header__back-button--active {
+    border-color: var(--c-back-link-dark);
+  }
+}
+
 @define-mixin multiline-height $number {
   $bgsize: calc($number * 4 - 3);
   height: calc($bgsize * 1px);
@@ -19,101 +34,90 @@
   --c-back-link-light: #fff;
 }
 
-.header {
-  background: var(--color-brand);
-}
-
-.header__inner {
-  @extend %page-block;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.header__logo-link {
-  float: right;
-  background-image: inline("../logo/guardian-logo-160.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  border: none;
-  margin: 0.9rem 0;
-  overflow: hidden;
-  height: height("../logo/guardian-logo-160.svg");
-  width: width("../logo/guardian-logo-160.svg");
-}
-
-.header__logo-link-text {
-  display: block;
-  text-indent: -1000rem;
-}
-
-@custom-selector :--header__back-button .header__back-link::before;
-@custom-selector :--header__back-button--active .header__back-link:focus::before, .header__back-link:hover::before;
-
-/**
- * Pseudo-element for the back-button (arrow)
- */
-:--header__back-button {
-  content: "";
-  background: inline("arrow-back-light.svg") center center no-repeat;
-  border: 1px solid color(var(--c-back-link-light) alpha(30%));
-  border-radius: 100%;
-  display: inline-block;
-  height: 3.2rem;
-  width: 3.2rem;
-  margin-right: 0.5rem;
-  vertical-align: middle;
-}
-
-:--header__back-button--active {
-  border-color: var(--c-back-link-light);
-}
-
-
-.header__back-link {
-  @extend %font-text-1;
-  color: var(--c-back-link-light);
-  line-height: 4.8rem;
-
-  @if var(--is-snow) > 0 {
-    @extend %font-text-sans-0;
+@if $is-snow < 1 {
+  .header {
+    background: var(--color-brand);
   }
 
-  &:hover,
-  &:focus {
-    text-decoration: none;
-    background-color: none;
-
-    .header__back-link-text {
-      opacity: 1;
-      text-decoration: underline;
-    }
+  .header__inner {
+    @extend %page-block;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
-}
 
-@define-mixin header__back-link--dark {
-  .header__back-link {
-    color: var(--c-back-link-dark);
+  .header__logo-link {
+    float: right;
+    background-image: inline("../logo/guardian-logo-160.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: none;
+    margin: 0.9rem 0;
+    overflow: hidden;
+    height: height("../logo/guardian-logo-160.svg");
+    width: width("../logo/guardian-logo-160.svg");
   }
+
+  .header__logo-link-text {
+    display: block;
+    text-indent: -1000rem;
+  }
+
+  @custom-selector :--header__back-button .header__back-link::before;
+  @custom-selector :--header__back-button--active .header__back-link:focus::before, .header__back-link:hover::before;
+
+  /**
+   * Pseudo-element for the back-button (arrow)
+   */
 
   :--header__back-button {
-    background-image: inline("arrow-back-dark.svg");
-    border: 1px solid color(var(--c-back-link-dark) alpha(30%));
+    content: "";
+    background: inline("arrow-back-light.svg") center center no-repeat;
+    border: 1px solid color(var(--c-back-link-light) alpha(30%));
+    border-radius: 100%;
+    display: inline-block;
+    height: 3.2rem;
+    width: 3.2rem;
+    margin-right: 0.5rem;
+    vertical-align: middle;
   }
 
   :--header__back-button--active {
-    border-color: var(--c-back-link-dark);
+    border-color: var(--c-back-link-light);
   }
-}
 
-.header__back-link-text {
-  opacity: 0;
-  transition: opacity 0.15s linear;
 
-  @media all and (max-width: 50rem) {
-    display: none;
+  .header__back-link {
+    @extend %font-text-1;
+    color: var(--c-back-link-light);
+    line-height: 4.8rem;
+
+    @if var(--is-snow) > 0 {
+      @extend %font-text-sans-0;
+    }
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      background-color: none;
+
+      .header__back-link-text {
+        opacity: 1;
+        text-decoration: underline;
+      }
+    }
   }
+
+  .header__back-link-text {
+    opacity: 0;
+    transition: opacity 0.15s linear;
+
+    @media all and (max-width: 50rem) {
+      display: none;
+    }
+  }
+
 }
 
 @if $is-snow > 0 {
@@ -135,29 +139,60 @@
     }
   }
 
+  .header__inner {
+    @extend %page-block;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .header__logo-link {
     --height: 60;
     --ratio: calc(strip(height("../logo/guardian-logo-160-snow.svg")) / strip(var(--height)));
     margin: 0;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: none;
+    overflow: hidden;
     float: right;
     background-image: inline("../logo/guardian-logo-160-snow.svg");
     height: calc(var(--height) * 1px);
     width: calc(width("../logo/guardian-logo-160-snow.svg") / var(--ratio));
   }
 
-  :--header__back-button {
-    content: "";
-    background-image: inline("arrow-back-dark.svg");
-    background-size: 65%;
-    border-color: color(var(--c-back-link-dark) alpha(30%));
-  }
-
-  :--header__back-button--active {
-    border-color: color(var(--c-back-link-dark) alpha(60%));
+  .header__logo-link-text {
+    display: block;
+    text-indent: -1000rem;
   }
 
   .header__back-link {
-    color: var(--c-back-link-dark);
+    @extend %font-text-sans-2;
+    color: var(--color-brand-neutral);
+    transition: 0.125s ease-out;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      transform: translateY(-1px) rotate(135deg);
+      border: 1px solid currentColor;
+      border-left: transparent;
+      border-top: transparent;
+      margin-right: 2px;
+      vertical-align: middle;
+      transition: 0.125s ease-out;
+    }
+
+    &:hover {
+      text-decoration: none;
+      color: color(var(--color-brand-neutral) lightness(-25%));
+
+      &::before {
+        transform: translateY(-1px) translateX(-2px) rotate(135deg);
+      }
+    }
   }
 
 }

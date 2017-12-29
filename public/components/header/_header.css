@@ -1,6 +1,19 @@
 @import "../logo/_logo.css";
 @import "_colors.css";
 
+@define-mixin multiline-height $number {
+  $bgsize: calc($number * 4 - 3);
+  height: calc($bgsize * 1px);
+}
+
+@define-mixin multiline $number, $color, $position: bottom {
+  $bgsize: calc($number * 4 - 3);
+  background-image: repeating-linear-gradient(to bottom, $color, $color 1px, transparent 1px, transparent 4px);
+  background-repeat: repeat-x;
+  background-position: $position;
+  background-size: 1px calc($bgsize * 1px);
+}
+
 :root {
   --c-back-link-dark: #333;
   --c-back-link-light: #fff;
@@ -108,13 +121,28 @@
     background: var(--color-card);
     color: #333;
     border-bottom: 1px solid color(var(--color-border));
+    padding: 4px 0;
+
+    &::after {
+      @mixin multiline 4, var(--color-border), top;
+      @mixin multiline-height 4;
+      content: "";
+      background-color: #fff;
+      margin-bottom: calc((4px + 1px) * -1);
+      margin-top: 4px;
+      width: 100%;
+      display: block;
+    }
   }
 
   .header__logo-link {
+    --height: 60;
+    --ratio: calc(strip(height("../logo/guardian-logo-160-snow.svg")) / strip(var(--height)));
+    margin: 0;
     float: right;
     background-image: inline("../logo/guardian-logo-160-snow.svg");
-    height: height("../logo/guardian-logo-160-snow.svg");
-    width: width("../logo/guardian-logo-160-snow.svg");
+    height: calc(var(--height) * 1px);
+    width: calc(width("../logo/guardian-logo-160-snow.svg") / var(--ratio));
   }
 
   :--header__back-button {

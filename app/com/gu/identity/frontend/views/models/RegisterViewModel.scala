@@ -33,6 +33,7 @@ case class RegisterViewModel(
                               email: Option[String],
 
                               shouldCollectConsents: Boolean,
+                              shouldCollectV2Consents: Boolean,
 
                               actions: RegisterActions,
                               links: RegisterLinks,
@@ -58,7 +59,8 @@ object RegisterViewModel {
       clientId: Option[ClientID],
       group: Option[GroupCode],
       email: Option[String],
-      shouldCollectConsents: Boolean)
+      shouldCollectConsents: Boolean,
+      shouldCollectV2Consents: Boolean)
       (implicit messages: Messages): RegisterViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
@@ -88,6 +90,7 @@ object RegisterViewModel {
       email = email,
 
       shouldCollectConsents = shouldCollectConsents,
+      shouldCollectV2Consents = shouldCollectV2Consents,
 
       actions = RegisterActions(),
       links = RegisterLinks(returnUrl, skipConfirmation, clientId),

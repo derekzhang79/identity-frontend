@@ -29,8 +29,9 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val groupCode = GroupCode(group)
     val email : Option[String] = req.getQueryString("email")
     val shouldCollectConsents = configuration.collectSignupConsents
+    val shouldCollectV2Consents = configuration.collectV2Consents
 
-    renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email, shouldCollectConsents)
+    renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email, shouldCollectConsents, shouldCollectV2Consents)
   }
 
   def confirm(returnUrl: Option[String], clientId: Option[String]) = Action {

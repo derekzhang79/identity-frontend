@@ -38,6 +38,7 @@ case class Configuration(
   useSnow: Boolean,
 
   collectSignupConsents: Boolean,
+  collectV2Consents: Boolean,
 
   underlying: PlayConfiguration)
 
@@ -85,6 +86,7 @@ object Configuration {
       useSnow = false,
 
       collectSignupConsents = true,
+      collectV2Consents = false,
 
       underlying = appConfiguration
     )
@@ -122,6 +124,7 @@ object Configuration {
     useSnow = false,
 
     collectSignupConsents = true,
+    collectV2Consents = false,
 
     underlying = PlayConfiguration.empty
   )

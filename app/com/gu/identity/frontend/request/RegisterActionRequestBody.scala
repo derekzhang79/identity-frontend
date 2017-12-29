@@ -22,6 +22,8 @@ case class RegisterActionRequestBody private(
     password: String,
     countryCode: Option[String],
     localNumber: Option[String],
+    receiveGnmMarketing: Boolean,
+    receive3rdPartyMarketing: Boolean,
     consents: List[Consent],
     returnUrl: Option[ReturnUrl],
     skipConfirmation: Option[Boolean],
@@ -96,6 +98,8 @@ object RegisterActionRequestBody {
         "password" -> password,
         "countryCode" -> optional(text),
         "localNumber" -> optional(text),
+        "receiveGnmMarketing" -> boolean,
+        "receive3rdPartyMarketing" -> boolean,
         "consents" -> list(
           mapping(
             "id" -> text,

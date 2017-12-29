@@ -133,6 +133,7 @@
       fill: var(--color-brand);
     }
 
+    &:focus,
     &:hover {
       border-color: var(--color-brand);
       background: transparent;

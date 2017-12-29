@@ -5,6 +5,7 @@
     "postcss-discard-comments",
     "precss",
     "postcss-assets",
+    "postcss-strip-units",
     "postcss-cssnext",
     "cssnano",
     "postcss-reporter"
@@ -13,7 +14,11 @@
   "precss": {
     "import": false,
     "mixins": true,
-    "variables": true,
+    "variables": {
+      "variables": {
+        "is-snow": 1
+      }
+    },
     "media": true,
     "properties": true,
     "minmax": false,
@@ -34,12 +39,5 @@
   "postcss-reporter": {
     "clearMessages": true
   },
-  "output": "target/web/build/bundle.snow.css",
-  "precss": {
-    "variables": {
-      "variables": {
-        "is-snow": 1
-      }
-    }
-  }
+  "output": "target/web/build/bundle.snow.css"
 }

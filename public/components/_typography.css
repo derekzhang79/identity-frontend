@@ -11,6 +11,8 @@ $base-font-size: 10;
 html {
   font-size: calc($base-font-size / 16em);
   text-rendering: optimizeSpeed;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
 
 @define-mixin font-size $size, $line-height {

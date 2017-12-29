@@ -26,6 +26,10 @@ object RegisterApiRequest {
           registrationIp = clientIp.ip,
           telephoneNumber = getPhoneNumber(request)
         ),
+        RegisterRequestBodyStatusFields(
+          receiveGnmMarketing = request.receiveGnmMarketing,
+          receive3rdPartyMarketing = request.receive3rdPartyMarketing
+        ),
         request.consents
       )),
       extraHeaders = ApiRequest.commonApiHeaders(trackingData),
@@ -46,6 +50,7 @@ case class RegisterRequestBody(
     password: String,
     publicFields: RegisterRequestBodyPublicFields,
     privateFields: RegisterRequestBodyPrivateFields,
+    statusFields: RegisterRequestBodyStatusFields,
     consents: List[Consent])
   extends ApiRequestBody
 

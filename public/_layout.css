@@ -257,3 +257,17 @@ a {
     }
   }
 }
+
+@define-mixin multline-size $number {
+  --bgsize: $number * 4 - 3;
+  min-height: var(--bgsize);
+}
+
+@define-mixin multiline $number, $color, $position: bottom {
+  --bgsize: $number * 4 - 3;
+
+  background-image: repeating-linear-gradient(to bottom, $color, $color 1px, transparent 1px, transparent 4px);
+  background-repeat: repeat-x;
+  background-position: $position;
+  background-size: 1px calc(var(--bgsize) * 1px);
+}

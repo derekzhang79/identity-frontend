@@ -35,13 +35,19 @@ html {
 
   @if $is-snow > 0 {
     font-family: "Guardian Egyptian Web", Georgia, serif;
-    font-weight: 400;
   }
 }
 
 %font-heading-0 {
   @extend %font-heading;
-  @mixin font-size 28, 32;
+
+  @if $is-snow < 1 {
+    @mixin font-size 26, 40;
+  }
+
+  @if $is-snow > 0 {
+    @mixin font-size 24, 36;
+  }
 }
 
 %font-heading-1 {

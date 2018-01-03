@@ -1,7 +1,6 @@
 {
   "use": [
     "postcss-import",
-    "postcss-atob",
     "postcss-discard-comments",
     "precss",
     "postcss-assets",

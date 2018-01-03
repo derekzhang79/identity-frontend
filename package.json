@@ -25,7 +25,6 @@
     "postcss-assets": "^3.0.2",
     "postcss-cli": "^2.3.2",
     "postcss-cssnext": "^2.3.0",
-    "postcss-atob": "^1.0.2",
     "postcss-discard-comments": "^2.0.3",
     "postcss-strip-units": "^2.0.1",
     "postcss-import": "^7.1.3",

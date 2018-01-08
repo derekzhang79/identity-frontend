@@ -14,8 +14,9 @@ lazy val root = (project in file(".")).enablePlugins(
 lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 
 resolvers += "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases"
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
-val identityLibrariesVersion = "3.100"
+val identityLibrariesVersion = "3.101-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",

@@ -15,7 +15,7 @@ object ErrorViewModel {
   val errorMessages: Map[ErrorID, String] = Map(
     SignInGatewayErrorID -> "There was a problem signing in; please try again.",
     SignInBadRequestErrorID -> "There was a problem signing in; please try again.",
-    SignInInvalidCredentialsErrorID -> "Incorrect email or password; please try again.",
+    SignInInvalidCredentialsErrorID -> "Incorrect email or password; please try again or reset your password.",
     SignInInvalidCaptchaErrorID -> "Problem with the captcha process; please try again.",
     SignInActionBadRequestErrorID -> "There was a problem with your request; please try again.",
 

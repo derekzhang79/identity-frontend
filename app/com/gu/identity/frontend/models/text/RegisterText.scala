@@ -69,11 +69,10 @@ object RegisterText {
     )
 }
 
+// FIXME: Warning, these are placeholder consents and should be changed or verified before changing the config to display them!
 case class ConsentRegisterText(
-  `1stPartyConsentIdentifier`: String = FirstParty.id,
-  `1stPartyConsentText`: String = FirstParty.latestWording.wording,
-  `3rdPartyConsentIdentifier`: String = ThirdParty.id,
-  `3rdPartyConsentText`: String = ThirdParty.latestWording.wording
+  SupporterConsentIdentifier: String = Supporter.id,
+  SupporterConsentText: String = Supporter.latestWording.wording
 )
 
 

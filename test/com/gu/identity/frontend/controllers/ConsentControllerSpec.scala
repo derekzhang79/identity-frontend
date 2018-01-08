@@ -25,7 +25,7 @@ class ConsentControllerSpec extends PlaySpec with MockitoSugar {
 
   "GET /accept-consent/{token}" should {
     "post the provided token to the ID Api, redirect to the consent journey page with cookies set" in new WithControllerMockedDependencies {
-      val returnUrl = Some("/consents")
+      val returnUrl = Some("/consents/thank-you")
       val cookies = Seq(Cookie("test-cookie", "cookie-value", secure = true))
       when(mockIdentityService.processConsentToken(eql("consent-token"))(argAny[ExecutionContext])).thenReturn(Future.successful(Right(cookies)))
       val result = call(controller.confirmConsents("consent-token"), FakeRequest("GET", "/accept-consent/consent-token"))

@@ -35,7 +35,7 @@ class IdentityServiceRequestHandlerSpec extends WordSpec with Matchers with Mock
       val receiveGnmMarketing = false
       val receive3rdPartyMarketing = false
       val registrationIp = "123.456.789.012"
-      val consents = List(Consent(FirstParty.id, "user", true))
+      val consents = List(Consent(Supporter.id, "user", true))
 
       val requestBodyModel = RegisterRequestBody(
         email,

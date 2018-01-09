@@ -46,6 +46,7 @@ object ViewRenderer {
     )
 
     val view = clientId match {
+      case Some(GuardianMembersClientID) =>  if(configuration.useSnow) "signin-page" else "signin-page-membership"
       case _ => "signin-page"
     }
 
@@ -81,6 +82,7 @@ object ViewRenderer {
     )
 
     clientId match {
+      case Some(GuardianMembersClientID) =>  if(configuration.useSnow) renderViewModel("register-page", model) else renderViewModel("register-page-membership", model)
       case _ => renderViewModel("register-page", model)
     }
   }

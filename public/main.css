@@ -27,11 +27,10 @@
 @import "components/register-confirmation/_register-confirmation";
 
 /** Skins **/
-@if $is-snow < 1 {
 
+@if $is-snow < 1 {
   @import "components/membership/_membership.css";
   @import "components/jobs/_jobs.css";
-
 }
 
 /** Reset password page **/

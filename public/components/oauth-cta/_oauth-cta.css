@@ -22,17 +22,10 @@
   background-repeat: no-repeat;
   background-position: 1rem center;
 
-  @if $is-snow > 0 {
-    color: var(--color-brand);
-  }
-
   &:hover,
   &:focus {
     text-decoration: none;
-
-    @if $is-snow > 0 {
-      border-color: var(--color-brand);
-    }
+    border-color: color(var(--color-border) lightness(- 10%));
   }
 }
 

@@ -4,12 +4,8 @@
 
 .footer {
   @extend %font-sans-serif;
-  background-color: #484848;
+  background-color: #333;
   color: #dcdcdc;
-
-  @if $is-snow > 0 {
-    background-color: #333;
-  }
 }
 
 .footer__inner {

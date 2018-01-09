@@ -190,7 +190,7 @@
 
     &:hover {
       text-decoration: none;
-      color: var(--color-brand);
+      color: var(--color-brand-alt);
 
       &::before {
         transform: translateY(-1px) translateX(-2px) rotate(135deg);

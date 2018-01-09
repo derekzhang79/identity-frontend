@@ -1,6 +1,5 @@
 :root {
   --color-brand: #005689;
-  --color-brand-neutral: #005689;
   --color-bg: #f4f4f4;
   --color-page-bg: #f1f1f1;
   --color-card: #f6f6f6;
@@ -10,6 +9,6 @@
     --color-page-bg: #fff;
     --color-bg: #fff;
     --color-brand: #63717a;
-    --color-brand-neutral: var(--color-brand);
+    --color-card: #e7edef;
   }
 }

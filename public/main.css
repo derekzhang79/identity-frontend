@@ -26,13 +26,13 @@
 
 @import "components/register-confirmation/_register-confirmation";
 
-/** Membership skin A and B **/
+/** Skins **/
+@if $is-snow < 1 {
 
-@import "components/membership/_membership.css";
+  @import "components/membership/_membership.css";
+  @import "components/jobs/_jobs.css";
 
-/** Jobs skin **/
-
-@import "components/jobs/_jobs.css";
+}
 
 /** Reset password page **/
 

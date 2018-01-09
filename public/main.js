@@ -10,7 +10,7 @@ import { init as initRegisterBindings } from './components/register-form/registe
 
 
 if ( isBrowserSupported ) {
-  
+
   logPageView();
 
   initSigninBindings();

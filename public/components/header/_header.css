@@ -148,10 +148,6 @@
     flex-direction: row-reverse;
   }
 
-  /*
-  TODO: rework this it's horrible
-  */
-
   .header__logo-link {
     order: 0;
     margin: 0;

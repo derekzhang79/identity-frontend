@@ -34,7 +34,7 @@ html {
   }
 
   @if $is-snow > 0 {
-    font-family: "Guardian Egyptian Web", Georgia, serif;
+    font-family: GuardianHeadline, Georgia, serif;
   }
 }
 

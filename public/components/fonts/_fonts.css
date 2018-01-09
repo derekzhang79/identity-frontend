@@ -32,7 +32,6 @@
 
 /* GuardianEgyptianWeb */
 @if $is-snow > 0 {
-  @mixin guFontFace GuardianHeadline, ascii, GHGuardianHeadline-Regular;
   @mixin guFontFace GuardianHeadline, ascii, GHGuardianHeadline-Medium;
 }
 

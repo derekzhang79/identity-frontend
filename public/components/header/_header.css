@@ -145,11 +145,10 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    flex-direction: row-reverse;
   }
 
   .header__logo-link {
-    order: 0;
+    order: 99;
     margin: 0;
     background-repeat: no-repeat;
     background-size: contain;
@@ -170,7 +169,6 @@
     @extend %font-text-sans-2;
     color: #000;
     transition: 0.125s ease-out;
-    order: 99;
 
     @media (--viewport-max-phablet) {
       display: none;

@@ -172,8 +172,11 @@ body > section:last-of-type {
 
 .page-heading--with-standfirst {
   @extend .page-heading;
-
   padding-bottom: 0;
+
+  &::after {
+    display: none;
+  }
 }
 
 /**

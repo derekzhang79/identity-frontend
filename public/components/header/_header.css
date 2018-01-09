@@ -175,7 +175,7 @@
 
   .header__back-link {
     @extend %font-text-sans-2;
-    color: var(--color-brand-neutral);
+    color: #000;
     transition: 0.125s ease-out;
     order: 99;
 
@@ -199,7 +199,7 @@
 
     &:hover {
       text-decoration: none;
-      color: color(var(--color-brand-neutral) lightness(-25%));
+      color: var(--color-brand);
 
       &::before {
         transform: translateY(-1px) translateX(-2px) rotate(135deg);

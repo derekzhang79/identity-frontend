@@ -19,15 +19,6 @@ body > section:last-of-type {
   flex-grow: 1;
 }
 
-@if $is-snow > 0 {
-  .global__card {
-    background: var(--color-card);
-    padding: 0.75rem;
-    border-top: var(--color-border);
-    margin: 1rem 0;
-  }
-}
-
 %page-block {
   margin: 0 auto;
   box-sizing: border-box;

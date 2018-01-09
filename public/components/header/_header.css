@@ -124,16 +124,16 @@
   .header {
     background: var(--color-card);
     color: #333;
-    border-bottom: 1px solid color(var(--color-border));
-    padding: 4px 0;
+    border-bottom: 1px solid #aabfc6;
+    padding: 6px 0;
 
     &::after {
-      @mixin multiline 4, var(--color-border), top;
+      @mixin multiline 4, #aabfc6, top;
       @mixin multiline-height 4;
       content: "";
       background-color: #fff;
-      margin-bottom: calc((4px + 1px) * -1);
-      margin-top: 4px;
+      margin-bottom: calc((6px + 1px) * -1);
+      margin-top: 6px;
       width: 100%;
       display: block;
     }
@@ -143,18 +143,12 @@
     @extend %page-block;
     overflow: hidden;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
   }
 
-  /*
-  TODO: rework this it's horrible
-  */
-
   .header__logo-link {
-    $height: 60;
-    $ratio: calc(strip(height("../logo/guardian-logo-160-snow.svg")) / $height);
-    $width: calc(strip(width("../logo/guardian-logo-160-snow.svg")) / $ratio);
+    order: 99;
     margin: 0;
     background-repeat: no-repeat;
     background-size: contain;
@@ -162,8 +156,8 @@
     overflow: hidden;
     float: right;
     background-image: inline("../logo/guardian-logo-160-snow.svg");
-    height: $(height)px; /* stylelint-disable-line */
-    width: $(width)px; /* stylelint-disable-line */
+    height: 60px;
+    width: 183px;
   }
 
   .header__logo-link-text {
@@ -173,8 +167,12 @@
 
   .header__back-link {
     @extend %font-text-sans-2;
-    color: var(--color-brand-neutral);
+    color: #000;
     transition: 0.125s ease-out;
+
+    @media (--viewport-max-phablet) {
+      display: none;
+    }
 
     &::before {
       content: "";
@@ -192,7 +190,7 @@
 
     &:hover {
       text-decoration: none;
-      color: color(var(--color-brand-neutral) lightness(-25%));
+      color: var(--color-brand-alt);
 
       &::before {
         transform: translateY(-1px) translateX(-2px) rotate(135deg);

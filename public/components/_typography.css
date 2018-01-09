@@ -21,7 +21,7 @@ html {
 }
 
 %font-serif {
-  font-family: GuardianEgyptianWeb, Georgia, serif;
+  font-family: GuardianTextEgyptianWeb, Georgia, serif;
 }
 
 %font-sans-serif {
@@ -29,17 +29,37 @@ html {
 }
 
 %font-heading {
-  font-family: GuardianEgyptianWeb, Georgia, serif;
+  @if $is-snow < 1 {
+    font-family: GuardianEgyptianWeb, Georgia, serif;
+  }
+
+  @if $is-snow > 0 {
+    font-family: "Guardian Egyptian Web", Georgia, serif;
+  }
 }
 
 %font-heading-0 {
   @extend %font-heading;
-  @mixin font-size 28, 32;
+
+  @if $is-snow < 1 {
+    @mixin font-size 26, 40;
+  }
+
+  @if $is-snow > 0 {
+    @mixin font-size 24, 36;
+  }
 }
 
 %font-heading-1 {
   @extend %font-heading;
-  @mixin font-size 36, 40;
+
+  @if $is-snow < 1 {
+    @mixin font-size 36, 40;
+  }
+
+  @if $is-snow > 0 {
+    @mixin font-size 32, 36;
+  }
 }
 
 %font-sub-heading-0 {

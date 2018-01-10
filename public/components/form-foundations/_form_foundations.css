@@ -93,18 +93,32 @@
   @extend %font-text-sans-2;
   background: var(--c-form-button--submit);
   border: 0;
-  border-radius: 18px;
+  border-radius: 9999px;
   color: white;
   display: block;
   text-align: left;
   padding: 0.2rem 1.6rem;
   transition: 0.15s;
 
+  @if $is-snow > 0 {
+    @extend %font-text-sans-3;
+    padding: 0 1.8rem;
+    line-height: 3.6rem;
+    height: 3.6rem;
+    display: flex;
+    align-items: center;
+  }
+
   svg {
     vertical-align: middle;
     margin-left: 1rem;
     margin-right: -0.25rem;
     transition: 0.15s;
+
+    @if $is-snow > 0 {
+      margin-left: 2rem;
+      margin-right: -1rem;
+    }
   }
 
   &:focus,
@@ -117,7 +131,7 @@
     }
 
     svg {
-      transform: translateX(4px);
+      transform: translateX(5%);
     }
   }
 

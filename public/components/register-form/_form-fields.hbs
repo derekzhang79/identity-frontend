@@ -78,30 +78,13 @@
 {{#if shouldCollectConsents }}
 
   {{#if shouldCollectV2Consents}}
-    <div class="register-form__control--gnm-marketing">
+    <div class="register-form__control--supporter-consent">
       <input type="hidden" id="consents_0_actor" name="consents[0].actor" value="user">
-      <input type="hidden" id="consents_0_id" name="consents[0].id" value={{ registerPageText.consent.1stPartyConsentIdentifier }}>
-      <input class="register-form__checkbox--gnm-marketing" id="register_field_gnm_marketing" type="checkbox" name="consents[0].consented" value="true"/>
-      <label class="register-form__label--gnm-marketing" for="register_field_gnm_marketing">{{ registerPageText.consent.1stPartyConsentText }}</label>
+      <input type="hidden" id="consents_0_id" name="consents[0].id" value={{ registerPageText.consent.SupporterConsentIdentifier }}>
+      <input class="register-form__checkbox--supporter-consent" id="register_field_supporter_consent" type="checkbox" name="consents[0].consented" value="true"/>
+      <label class="register-form__label--supporter-consent" for="register_field_supporter_consent">{{ registerPageText.consent.SupporterConsentText }}</label>
     </div>
 
-    <div class="register-form__control--3rd-party-marketing">
-      <input type="hidden" id="consents_1_actor" name="consents[1].actor" value="user">
-      <input type="hidden" id="consents_1_id" name="consents[1].id" value={{ registerPageText.consent.3rdPartyConsentIdentifier }}>
-      <input class="register-form__checkbox--3rd-party-marketing" id="register_field_3rd-party_marketing" type="checkbox" name="consents[1].consented" value="true"/>
-      <label class="register-form__label--3rd-party-marketing" for="register_field_3rd-party_marketing">{{ registerPageText.consent.3rdPartyConsentText }}</label>
-    </div>
-
-  {{else}}
-    <div class="register-form__control--gnm-marketing">
-      <input class="register-form__checkbox--gnm-marketing" id="register_field_gnm_marketing" type="checkbox" name="receiveGnmMarketing" value="true"/>
-      <label class="register-form__label--gnm-marketing" for="register_field_gnm_marketing">{{ registerPageText.consent.1stPartyConsentText }}</label>
-    </div>
-
-    <div class="register-form__control--3rd-party-marketing">
-      <input class="register-form__checkbox--3rd-party-marketing" id="register_field_3rd-party_marketing" type="checkbox" name="receive3rdPartyMarketing" value="true"/>
-      <label class="register-form__label--3rd-party-marketing" for="register_field_3rd-party_marketing">{{ registerPageText.consent.3rdPartyConsentText }}</label>
-    </div>
   {{/if}}
 
 {{/if}}

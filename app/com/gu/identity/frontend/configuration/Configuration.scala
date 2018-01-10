@@ -85,7 +85,7 @@ object Configuration {
 
       useSnow = false,
 
-      collectSignupConsents = true,
+      collectSignupConsents = false,
       collectV2Consents = false,
 
       underlying = appConfiguration
@@ -123,7 +123,7 @@ object Configuration {
 
     useSnow = false,
 
-    collectSignupConsents = true,
+    collectSignupConsents = false,
     collectV2Consents = false,
 
     underlying = PlayConfiguration.empty

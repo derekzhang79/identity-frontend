@@ -113,7 +113,7 @@
     outline: none;
 
     @if $is-snow > 0 {
-      background-color: color(var(--c-form-button--submit) lightness(25%));
+      background-color: color(var(--c-form-button--submit) lightness(30%));
     }
 
     svg {

@@ -142,9 +142,6 @@
   .header__inner {
     @extend %page-block;
     overflow: hidden;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
   }
 
   .header__logo-link {
@@ -170,9 +167,10 @@
     @extend %font-text-sans-2;
     color: #000;
     transition: 0.125s ease-out;
+    float: left;
 
     @media (--viewport-max-phablet) {
-      visibility: hidden;
+      display: none;
     }
 
     &::before {

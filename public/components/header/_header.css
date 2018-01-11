@@ -42,9 +42,12 @@
   .header__inner {
     @extend %page-block;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+    @supports (justify-content: space-between) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
   .header__logo-link {
@@ -92,10 +95,7 @@
     @extend %font-text-1;
     color: var(--c-back-link-light);
     line-height: 4.8rem;
-
-    @if var(--is-snow) > 0 {
-      @extend %font-text-sans-0;
-    }
+    float: left;
 
     &:hover,
     &:focus {

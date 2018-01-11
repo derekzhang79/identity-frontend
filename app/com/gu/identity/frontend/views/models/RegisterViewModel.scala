@@ -105,7 +105,7 @@ object RegisterViewModel {
   }
 
   private def showStandfirst(clientId: Option[ClientID]) =
-    clientId.contains(GuardianJobsClientID)
+    clientId.contains(GuardianJobsClientID) || clientId.contains(GuardianMembersClientID)
 
   private def askForPhoneNumber(clientId: Option[ClientID]) =
     clientId.contains(GuardianCommentersClientID)

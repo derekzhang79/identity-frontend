@@ -51,7 +51,10 @@ object RegisterText {
       passwordHelp = messages("register.passwordHelp"),
       signIn = messages("register.signIn"),
       signInCta = messages("register.signInCta"),
-      standfirst = messages("register.standfirst"),
+      standfirst = clientId match {
+        case Some(GuardianMembersClientID) => messages("register.title")
+        case _ => messages("register.standfirst")
+      },
       title = clientId match {
         case Some(GuardianMembersClientID) => messages("register.title.supporter")
         case _ => messages("register.title")

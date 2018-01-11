@@ -158,6 +158,7 @@
     background-image: inline("../logo/guardian-logo-160-snow.svg");
     height: 60px;
     width: 183px;
+    flex: 0 0 auto;
   }
 
   .header__logo-link-text {
@@ -171,7 +172,7 @@
     transition: 0.125s ease-out;
 
     @media (--viewport-max-phablet) {
-      display: none;
+      visibility: hidden;
     }
 
     &::before {

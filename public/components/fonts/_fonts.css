@@ -17,11 +17,8 @@
 
   @font-face {
     font-family: $family;
-    src: resolve("$file-path.eot"); /* IE9 Compat Modes */
-    src: resolve("$file-path.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
-         inline("$file-path.woff") format("woff"), /* Modern Browsers */
-         resolve("$file-path.ttf") format("truetype"), /* Safari, Android, iOS */
-         resolve("$file-path.svg#$family") format("svg"); /* Legacy iOS */
+    src: inline("$file-path.woff") format("woff"), /* Modern Browsers */
+         resolve("$file-path.ttf") format("truetype"); /* Safari, Android, iOS */
 
     font-weight: $font-weight;
     font-style: $font-style;
@@ -34,7 +31,13 @@
 
 
 /* GuardianEgyptianWeb */
-@mixin guFontFace GuardianEgyptianWeb, ascii, GuardianEgyptianWeb-Regular;
+@if $is-snow > 0 {
+  @mixin guFontFace GuardianHeadline, ascii, GHGuardianHeadline-Medium;
+}
+
+@if $is-snow < 1 {
+  @mixin guFontFace GuardianEgyptianWeb, ascii, GuardianEgyptianWeb-Regular;
+}
 
 /* GuardianTextEgyptianWeb */
 @mixin guFontFace GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Regular;

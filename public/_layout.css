@@ -134,7 +134,7 @@ body > section:last-of-type {
   }
 
   @if $is-snow > 0 {
-    padding-top: 1rem;
+    padding-top: 0.5rem;
     padding-bottom: 0 !important;
 
     &::after {

@@ -33,6 +33,10 @@
   @import "components/jobs/_jobs.css";
 }
 
+@if $is-snow > 0 {
+  @import "components/jobs/_jobs.snow.css";
+}
+
 /** Reset password page **/
 
 @import "components/reset-password/_reset-password";

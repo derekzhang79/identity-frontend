@@ -165,7 +165,7 @@
 
   .header__back-link {
     @extend %font-text-sans-2;
-    color: #000;
+    color: var(--color-brand);
     transition: 0.125s ease-out;
     float: left;
 

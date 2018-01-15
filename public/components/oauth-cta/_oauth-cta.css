@@ -7,6 +7,12 @@
   background: var(--color-page-bg);
   padding-top: 2rem;
   padding-bottom: 0.6rem;
+
+  @media (--viewport-min-phablet) {
+    display: grid;
+    grid-column-gap: 2rem;
+    grid-template-columns: 0.5fr 0.5fr;
+  }
 }
 
 %oauth__cta {

@@ -1,7 +1,7 @@
 layout.pagetitle=Identity | The Guardian
 
-signin.title=Sign in to the Guardian
-signin.title.supporter=Support the Guardian
+signin.title=Sign in to The Guardian
+signin.title.supporter=Support The Guardian
 signin.pagetitle=Sign in
 signin.prelude=Creating an account means you can save articles for later, leave comments, enter competitions, become a member and lots more.
 signin.prelude.moreinfo=Want to know more?
@@ -20,7 +20,7 @@ signin.continue=Continue
 # com.gu.identity.frontend.models.text.RegisterText
 register.pageTitle=Register
 register.title=Create your Guardian account
-register.title.supporter=Support the Guardian
+register.title.supporter=Support The Guardian
 register.standfirst=Register today to shortlist and apply for jobs more easily.
 register.divideText=or
 register.name=Name
@@ -48,7 +48,7 @@ register.becausePhone=We use your mobile phone number for account verification p
 register.countryCode=Country code
 
 # com.gu.identity.frontend.models.text.TermsText
-terms.conditions=By proceeding, you agree to the Guardian''s
+terms.conditions=By proceeding, you agree to The Guardian''s
 terms.termsOfService=Terms of Service
 terms.termsOfServiceUrl=https://www.theguardian.com/help/terms-of-service
 terms.privacyPolicy=Privacy Policy
@@ -62,7 +62,7 @@ oauth.register=Sign up with {0}
 oauth.facebook=Facebook
 oauth.google=Google
 
-header.backtext=Back to the Guardian
+header.backtext=Back to The Guardian
 header.logo=The Guardian
 
 footer.help=help
@@ -76,14 +76,14 @@ footer.copyright=© {0} Guardian News and Media Limited or its affiliated compan
 # com.gu.identity.frontend.models.text.RegisterConfirmationText
 registerConfirmation.pageTitle=Register
 registerConfirmation.title=Welcome
-registerConfirmation.titleStandfirst=Thank you for registering with the Guardian.
+registerConfirmation.titleStandfirst=Thank you for registering with The Guardian.
 registerConfirmation.oneMoreStepTitle=One more step
-registerConfirmation.oneMoreStepP1=To access all your account features and join the Guardian community, we need you to validate your email address.
+registerConfirmation.oneMoreStepP1=To access all your account features and join The Guardian community, we need you to validate your email address.
 registerConfirmation.oneMoreStepP2=Please check your email and click on the link we’ve sent you to confirm. Easy.
 registerConfirmation.weValueYourOpinionTitle=We value your opinion and your experience
 registerConfirmation.weValueYourOpinionP1=The Guardian is much more than just a newspaper on the internet. We provide a platform for our audience to debate the news and share your experiences with each other and with us.
 registerConfirmation.weValueYourOpinionP2=The best comments and contributions are seen by our journalists and used in our work. Your feedback and stories help shape our journalism. All of your contributions are attributed to you.
-registerConfirmation.weValueYourOpinionP3=When you’re commenting on the Guardian, please keep it respectful and abide by the community guidelines - and if you spot a comment you think doesn’t follow those, please use the ‘Report’ link next to it to let us know.
+registerConfirmation.weValueYourOpinionP3=When you’re commenting on The Guardian, please keep it respectful and abide by the community guidelines - and if you spot a comment you think doesn’t follow those, please use the ‘Report’ link next to it to let us know.
 registerConfirmation.completeRegistration=Complete registration
 
 # com.gu.identity.frontend.models.text.ResetPasswordText
@@ -92,7 +92,7 @@ resetPassword.title=Forgotten or need to set your password?
 resetPassword.subtitle=We will email you a link to reset it.
 resetPassword.emailAddressField=Email address
 resetPassword.button=Reset Password
-resetPassword.socialNetworksTitle=Unlinked the Guardian from Facebook or Google and want to sign in?
+resetPassword.socialNetworksTitle=Unlinked The Guardian from Facebook or Google and want to sign in?
 resetPassword.socialNetworksContent=Use the email address field to send a reset link to your registered Facebook or Google email. You will then be able to add a password to your account.
 resetPassword.userHelpTitle=Something else?
 resetPassword.userHelpEmail=Email Userhelp

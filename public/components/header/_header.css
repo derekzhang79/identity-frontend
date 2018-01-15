@@ -128,7 +128,7 @@
     padding: 5px 0;
 
     &::after {
-      @mixin multiline 4, #aabfc6, top;
+      @mixin multiline 4, var(--color-border), top;
       @mixin multiline-height 4;
       content: "";
       background-color: #fff;

@@ -83,7 +83,7 @@ object Configuration {
 
       gaUID = getString("ga-uid"),
 
-      useSnow = false,
+      useSnow = true,
 
       collectSignupConsents = false,
       collectV2Consents = false,
@@ -121,7 +121,7 @@ object Configuration {
 
     gaUID = "UA-78705427-123123",
 
-    useSnow = false,
+    useSnow = true,
 
     collectSignupConsents = false,
     collectV2Consents = false,

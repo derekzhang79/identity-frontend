@@ -31,7 +31,8 @@
 
 
 /* GuardianEgyptianWeb */
-@mixin guFontFace GuardianHeadline, ascii, GHGuardianHeadline-Medium;
+@mixin guFontFace GuardianHeadline, ascii, GHGuardianHeadline-Medium, 500;
+@mixin guFontFace GuardianHeadline, ascii, GHGuardianHeadline-Light, 300;
 
 /* GuardianTextEgyptianWeb */
 @mixin guFontFace GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Regular;

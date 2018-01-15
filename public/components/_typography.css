@@ -30,17 +30,20 @@ html {
 
 %font-heading {
   font-family: GuardianHeadline, Georgia, serif;
+  font-weight: 300;
 }
 
 %font-heading-0 {
   @extend %font-heading;
   @mixin font-size 24, 36;
-}
+  font-weight: 500;
+ }
 
 %font-heading-1 {
   @extend %font-heading;
   @mixin font-size 32, 36;
-}
+  font-weight: 500;
+ }
 
 %font-sub-heading-0 {
   @extend %font-heading;
@@ -60,7 +63,6 @@ html {
 %font-sub-heading-3 {
   @extend %font-heading;
   @mixin font-size 21, 25;
-  font-weight: normal;
 }
 
 

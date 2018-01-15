@@ -128,7 +128,7 @@
     padding: 5px 0;
 
     &::after {
-      @mixin multiline 4, #aabfc6, top;
+      @mixin multiline 4, var(--color-border), top;
       @mixin multiline-height 4;
       content: "";
       background-color: #fff;
@@ -136,6 +136,17 @@
       margin-top: 5px;
       width: 100%;
       display: block;
+    }
+  }
+
+  .skin-default .header {
+    @media (--viewport-max-phablet) {
+      padding: 2.5px 0;
+      height: 42px;
+
+      &::after {
+        display: none;
+      }
     }
   }
 
@@ -152,10 +163,18 @@
     border: none;
     overflow: hidden;
     float: right;
+    flex: 0 0 auto;
     background-image: inline("../logo/guardian-logo-160-snow.svg");
     height: 57px;
     width: 175px;
-    flex: 0 0 auto;
+  }
+
+  .skin-default .header__logo-link {
+    @media (--viewport-max-phablet) {
+      background-image: inline("../logo/guardian-roundel.svg");
+      height: 56px;
+      width: 56px;
+    }
   }
 
   .header__logo-link-text {

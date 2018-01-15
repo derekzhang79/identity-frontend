@@ -41,7 +41,7 @@ case class LayoutViewModel private(
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product],
     favicons: Seq[Favicon] = Favicons(),
-    skin: Option[String])
+    skin: String)
   extends ViewModel
   with ViewModelResources
 
@@ -97,6 +97,7 @@ object LayoutViewModel {
     val skin = clientId
       .filter(_.hasSkin)
       .map(c => s"skin-${c.id}")
+      .getOrElse("skin-default")
 
     val config = JavascriptConfig(
       sentryDsn = configuration.sentryDsnJs,

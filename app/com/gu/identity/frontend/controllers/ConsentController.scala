@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.errors.NotFoundError
+import com.gu.identity.frontend.errors.{UnauthorizedError, NotFoundError}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.services.IdentityService
 import com.gu.identity.frontend.views.ViewRenderer._
@@ -24,12 +24,12 @@ class ConsentController(
     identityService.processConsentToken(consentToken).map {
       case Right(playCookies) =>
         Redirect("/consents/thank-you").withCookies(playCookies: _*)
-      case Left(_) =>
-        renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
+      case Left(_) =>{
+        renderErrorPage(configuration, UnauthorizedError("Invalid URL token."), Unauthorized.apply)}
     }.recover {
-      case NonFatal(e) =>
+      case NonFatal(e) => {
         logger.error("Failed to process consent token", e)
-        renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
+        renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)}
     }
   }
 }

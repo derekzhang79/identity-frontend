@@ -123,6 +123,10 @@ errors.unexpected.title=Unexpected error: {0}
 errors.unexpected.description=Sorry - an unexpected error has occurred, please try again later.
 errors.unexpected.details=Error details: {0}
 
+errors.unauthorized.pageTitle=Invalid consent token
+errors.unauthorized.title=Expired link
+errors.unauthorized.description=Sorry the link you have used is expired, please sign up to the newsletter again and follow the email link within a day of signing up
+
 # com.gu.identity.frontend.models.text.ThirdPartyTsAndCsText
 thirdPartyTerms.title=Welcome to Guardian {0}
 thirdPartyTerms.explanation=Click ''continue'' to automatically use your existing Guardian account to sign in with Guardian {0}

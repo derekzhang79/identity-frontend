@@ -6,10 +6,10 @@
 
 html {
   height: 100%;
+  background: var(--color-card);
 }
 
 body {
-  background-color: var(--color-page-bg);
   display: flex;
   flex-direction: column;
   min-height: 100%;

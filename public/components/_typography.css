@@ -37,13 +37,13 @@ html {
   @extend %font-heading;
   @mixin font-size 24, 36;
   font-weight: 500;
- }
+}
 
 %font-heading-1 {
   @extend %font-heading;
   @mixin font-size 32, 36;
   font-weight: 500;
- }
+}
 
 %font-sub-heading-0 {
   @extend %font-heading;

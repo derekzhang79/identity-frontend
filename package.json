@@ -9,7 +9,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "build": "npm run build-css && npm run build-snow-css && npm run build-js",
+    "build": "npm run build-css && npm run build-js",
     "prebuild-css": "npm run lint-css && mkdir -p ./target/web/build",
     "build-css": "postcss -c postcss.json",
     "build-js": "webpack --bail",

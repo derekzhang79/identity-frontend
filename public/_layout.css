@@ -110,8 +110,6 @@ body > section:last-of-type {
   }
 }
 
-%content-block {}
-
 .page-heading {
   @extend %font-heading-0;
   @extend %content-container;

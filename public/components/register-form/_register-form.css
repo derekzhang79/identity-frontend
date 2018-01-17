@@ -1,7 +1,3 @@
-.register__section {
-  @extend %content-block;
-}
-
 .register-form {
   @extend %content-container;
   background: var(--color-page-bg);

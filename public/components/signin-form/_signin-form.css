@@ -13,10 +13,6 @@
 }
 
 
-.signin__section {
-  @extend %content-block;
-}
-
 .signin-form {
   @extend %content-container;
   background: var(--color-page-bg);

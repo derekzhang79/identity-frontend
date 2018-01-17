@@ -35,14 +35,12 @@ object IdentityClientError {
   def apply(statusCode: Int, message: String): IdentityClientError =
     apply(statusCode, message, None, None)
 
-  def apply(statusCode: Int, message: String, description: Option[String], context: Option[String] = None): IdentityClientError = {
-
+  def apply(statusCode: Int, message: String, description: Option[String], context: Option[String] = None): IdentityClientError =
     statusCode match {
       case 403 => IdentityUnauthorizedError
       case status if status >= 400 && statusCode < 500 => ClientBadRequestError(message, description, context)
       case _ => ClientGatewayError(message, description, context)
     }
-  }
 }
 
 case class ClientGatewayError(

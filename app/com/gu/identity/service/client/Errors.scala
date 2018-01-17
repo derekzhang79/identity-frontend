@@ -36,9 +36,12 @@ object IdentityClientError {
     apply(statusCode, message, None, None)
 
   def apply(statusCode: Int, message: String, description: Option[String], context: Option[String] = None): IdentityClientError =
-    if (isBadRequestError(statusCode)) ClientBadRequestError(message, description, context)
+    if (isUnauthorizedError(statusCode)) IdentityUnauthorizedError
+    else if (isBadRequestError(statusCode)) ClientBadRequestError(message, description, context)
     else ClientGatewayError(message, description, context)
 
+
+  private def isUnauthorizedError(statusCode: Int) = statusCode == 403
 
   private def isBadRequestError(statusCode: Int) =
     statusCode >= 400 && statusCode < 500
@@ -68,6 +71,11 @@ case object ClientRegistrationUsernameConflictError
 
   val messageForReservedUser = "Reserved user name"
 }
+
+case object IdentityUnauthorizedError
+  extends AbstractIdentityClientError("Expired Token")
+    with ClientBadRequestError
+    with NoStackTrace
 
 case object ClientRegistrationEmailConflictError
   extends AbstractIdentityClientError("Email in use", context = Some("user.primaryEmailAddress"))

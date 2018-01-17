@@ -15,7 +15,6 @@
 
 .signin-form {
   @extend %content-container;
-  background: var(--color-page-bg);
 }
 
 .signin-form--with-errors {

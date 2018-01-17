@@ -1,6 +1,5 @@
 .register-form {
   @extend %content-container;
-  background: var(--color-page-bg);
 }
 
 .register-form__prelude {
@@ -190,7 +189,6 @@
   padding: 2rem;
   color: #333;
   border: 2px solid #eaeaea;
-  background: #fff;
   max-width: 36rem;
 }
 

@@ -25,12 +25,7 @@
     "lookup": false,
     "extend": true,
     "matches": false,
-    "not": false,
-    "variables": {
-      "variables": {
-        "is-snow": 0
-      }
-    }
+    "not": false
   },
   "postcss-assets": {
     "basePath": "public/",

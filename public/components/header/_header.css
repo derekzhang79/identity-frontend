@@ -1,4 +1,3 @@
-@import "../logo/_logo.css";
 @import "_colors.css";
 
 @define-mixin header__back-link--dark {
@@ -34,186 +33,97 @@
   --c-back-link-light: #fff;
 }
 
-@if $is-snow < 1 {
-  .header {
-    background: var(--color-brand);
-  }
+.header {
+  background: var(--color-card);
+  color: #333;
+  border-bottom: 1px solid #aabfc6;
+  padding: 5px 0;
 
-  .header__inner {
-    @extend %page-block;
-    overflow: hidden;
-
-    @supports (justify-content: space-between) {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-  }
-
-  .header__logo-link {
-    float: right;
-    background-image: inline("../logo/guardian-logo-160.svg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    border: none;
-    margin: 0.9rem 0;
-    overflow: hidden;
-    height: height("../logo/guardian-logo-160.svg");
-    width: width("../logo/guardian-logo-160.svg");
-  }
-
-  .header__logo-link-text {
-    display: block;
-    text-indent: -1000rem;
-  }
-
-  @custom-selector :--header__back-button .header__back-link::before;
-  @custom-selector :--header__back-button--active .header__back-link:focus::before, .header__back-link:hover::before;
-
-  /**
-   * Pseudo-element for the back-button (arrow)
-   */
-
-  :--header__back-button {
+  &::after {
+    @mixin multiline 4, var(--color-border), top;
+    @mixin multiline-height 4;
     content: "";
-    background: inline("arrow-back-light.svg") center center no-repeat;
-    border: 1px solid color(var(--c-back-link-light) alpha(30%));
-    border-radius: 100%;
-    display: inline-block;
-    height: 3.2rem;
-    width: 3.2rem;
-    margin-right: 0.5rem;
-    vertical-align: middle;
+    background-color: #fff;
+    margin-bottom: calc((5px + 1px) * -1);
+    margin-top: 5px;
+    width: 100%;
+    display: block;
   }
-
-  :--header__back-button--active {
-    border-color: var(--c-back-link-light);
-  }
-
-
-  .header__back-link {
-    @extend %font-text-1;
-    color: var(--c-back-link-light);
-    line-height: 4.8rem;
-    float: left;
-
-    &:hover,
-    &:focus {
-      text-decoration: none;
-      background-color: none;
-
-      .header__back-link-text {
-        opacity: 1;
-        text-decoration: underline;
-      }
-    }
-  }
-
-  .header__back-link-text {
-    opacity: 0;
-    transition: opacity 0.15s linear;
-
-    @media all and (max-width: 50rem) {
-      display: none;
-    }
-  }
-
 }
 
-@if $is-snow > 0 {
-  .header {
-    background: var(--color-card);
-    color: #333;
-    border-bottom: 1px solid #aabfc6;
-    padding: 5px 0;
+.skin-default .header {
+  @media (--viewport-max-phablet) {
+    padding: 2.5px 0;
+    height: 42px;
 
     &::after {
-      @mixin multiline 4, var(--color-border), top;
-      @mixin multiline-height 4;
-      content: "";
-      background-color: #fff;
-      margin-bottom: calc((5px + 1px) * -1);
-      margin-top: 5px;
-      width: 100%;
-      display: block;
-    }
-  }
-
-  .skin-default .header {
-    @media (--viewport-max-phablet) {
-      padding: 2.5px 0;
-      height: 42px;
-
-      &::after {
-        display: none;
-      }
-    }
-  }
-
-  .header__inner {
-    @extend %page-block;
-    overflow: hidden;
-  }
-
-  .header__logo-link {
-    order: 99;
-    margin: 0;
-    background-repeat: no-repeat;
-    background-size: contain;
-    border: none;
-    overflow: hidden;
-    float: right;
-    flex: 0 0 auto;
-    background-image: inline("../logo/guardian-logo-160-snow.svg");
-    height: 57px;
-    width: 175px;
-  }
-
-  .skin-default .header__logo-link {
-    @media (--viewport-max-phablet) {
-      background-image: inline("../logo/guardian-roundel.svg");
-      height: 56px;
-      width: 56px;
-    }
-  }
-
-  .header__logo-link-text {
-    display: block;
-    text-indent: -1000rem;
-  }
-
-  .header__back-link {
-    @extend %font-text-sans-2;
-    color: var(--color-brand);
-    transition: 0.125s ease-out;
-    float: left;
-
-    @media (--viewport-max-phablet) {
       display: none;
     }
+  }
+}
 
-    &::before {
-      content: "";
-      display: inline-block;
-      width: 4px;
-      height: 4px;
-      transform: translateY(-1px) rotate(135deg);
-      border: 1px solid currentColor;
-      border-left: transparent;
-      border-top: transparent;
-      margin-right: 2px;
-      vertical-align: middle;
-      transition: 0.125s ease-out;
-    }
+.header__inner {
+  @extend %page-block;
+  overflow: hidden;
+}
 
-    &:hover {
-      text-decoration: none;
-      color: var(--color-brand-alt);
+.header__logo-link {
+  order: 99;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  overflow: hidden;
+  float: right;
+  flex: 0 0 auto;
+  background-image: inline("../logo/guardian-logo.svg");
+  height: 57px;
+  width: 175px;
+}
 
-      &::before {
-        transform: translateY(-1px) translateX(-2px) rotate(135deg);
-      }
-    }
+.skin-default .header__logo-link {
+  @media (--viewport-max-phablet) {
+    background-image: inline("../logo/guardian-roundel.svg");
+    height: 56px;
+    width: 56px;
+  }
+}
+
+.header__logo-link-text {
+  display: block;
+  text-indent: -1000rem;
+}
+
+.header__back-link {
+  @extend %font-text-sans-2;
+  color: var(--color-brand);
+  transition: 0.125s ease-out;
+  float: left;
+
+  @media (--viewport-max-phablet) {
+    display: none;
   }
 
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    transform: translateY(-1px) rotate(135deg);
+    border: 1px solid currentColor;
+    border-left: transparent;
+    border-top: transparent;
+    margin-right: 2px;
+    vertical-align: middle;
+    transition: 0.125s ease-out;
+  }
+
+  &:hover {
+    text-decoration: none;
+    color: var(--color-brand-alt);
+
+    &::before {
+      transform: translateY(-1px) translateX(-2px) rotate(135deg);
+    }
+  }
 }

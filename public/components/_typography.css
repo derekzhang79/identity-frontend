@@ -29,37 +29,17 @@ html {
 }
 
 %font-heading {
-  @if $is-snow < 1 {
-    font-family: GuardianEgyptianWeb, Georgia, serif;
-  }
-
-  @if $is-snow > 0 {
-    font-family: GuardianHeadline, Georgia, serif;
-  }
+  font-family: GuardianHeadline, Georgia, serif;
 }
 
 %font-heading-0 {
   @extend %font-heading;
-
-  @if $is-snow < 1 {
-    @mixin font-size 26, 40;
-  }
-
-  @if $is-snow > 0 {
-    @mixin font-size 24, 36;
-  }
+  @mixin font-size 24, 36;
 }
 
 %font-heading-1 {
   @extend %font-heading;
-
-  @if $is-snow < 1 {
-    @mixin font-size 36, 40;
-  }
-
-  @if $is-snow > 0 {
-    @mixin font-size 32, 36;
-  }
+  @mixin font-size 32, 36;
 }
 
 %font-sub-heading-0 {

@@ -1,13 +1,6 @@
 .skin-jobs {
   .header__logo-link {
     background-image: inline("guardian-jobs-logo.svg");
-    height: height("guardian-jobs-logo.svg");
-    width: width("guardian-jobs-logo.svg");
-  }
-
-  .header {
-    @media (--viewport-max-tablet) {
-      background-position: -1010px top;
-    }
+    width: 262px;
   }
 }

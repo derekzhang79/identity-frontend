@@ -31,13 +31,7 @@
 
 
 /* GuardianEgyptianWeb */
-@if $is-snow > 0 {
-  @mixin guFontFace GuardianHeadline, ascii, GHGuardianHeadline-Medium;
-}
-
-@if $is-snow < 1 {
-  @mixin guFontFace GuardianEgyptianWeb, ascii, GuardianEgyptianWeb-Regular;
-}
+@mixin guFontFace GuardianHeadline, ascii, GHGuardianHeadline-Medium;
 
 /* GuardianTextEgyptianWeb */
 @mixin guFontFace GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Regular;

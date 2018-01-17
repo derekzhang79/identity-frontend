@@ -1,9 +1,0 @@
-$logo-file: ../logo/guardian-logo-160.svg;
-
-%logo-as-background {
-  background-image: inline($logo-file);
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: height($logo-file);
-  width: width($logo-file);
-}

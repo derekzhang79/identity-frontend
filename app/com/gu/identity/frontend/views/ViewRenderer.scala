@@ -46,7 +46,7 @@ object ViewRenderer {
     )
 
     val view = clientId match {
-      case Some(GuardianMembersClientID) =>  if(configuration.useSnow) "signin-page" else "signin-page-membership"
+      case Some(GuardianMembersClientID) => "signin-page"
       case _ => "signin-page"
     }
 
@@ -81,10 +81,7 @@ object ViewRenderer {
       shouldCollectV2Consents = shouldCollectV2Consents
     )
 
-    clientId match {
-      case Some(GuardianMembersClientID) =>  if(configuration.useSnow) renderViewModel("register-page", model) else renderViewModel("register-page-membership", model)
-      case _ => renderViewModel("register-page", model)
-    }
+    renderViewModel("register-page", model)
   }
 
   def renderRegisterConfirmation(configuration: Configuration, returnUrl: ReturnUrl, clientId: Option[ClientID])(implicit messages: Messages) = {

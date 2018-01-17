@@ -38,7 +38,7 @@ object BadRequestErrorPageText {
     )
 }
 
-/** 401 Unauthorized */
+/** 403 Unauthorized Token */
 case class UnauthorizedErrorPageText private(
   pageTitle: String,
   title: String,
@@ -50,7 +50,7 @@ object UnauthorizedErrorPageText {
     UnauthorizedErrorPageText(
       pageTitle = messages("errors.unauthorized.pageTitle"),
       title = messages("errors.unauthorized.title"),
-      description = messages("errors.unauthorized.description")
+      description = messages("errors.unauthorized.description", "https://profile.theguardian.com/email-prefs")
     )
 }
 

@@ -35,16 +35,14 @@ object IdentityClientError {
   def apply(statusCode: Int, message: String): IdentityClientError =
     apply(statusCode, message, None, None)
 
-  def apply(statusCode: Int, message: String, description: Option[String], context: Option[String] = None): IdentityClientError =
-    if (isUnauthorizedError(statusCode)) IdentityUnauthorizedError
-    else if (isBadRequestError(statusCode)) ClientBadRequestError(message, description, context)
-    else ClientGatewayError(message, description, context)
+  def apply(statusCode: Int, message: String, description: Option[String], context: Option[String] = None): IdentityClientError = {
 
-
-  private def isUnauthorizedError(statusCode: Int) = statusCode == 403
-
-  private def isBadRequestError(statusCode: Int) =
-    statusCode >= 400 && statusCode < 500
+    statusCode match {
+      case 403 => IdentityUnauthorizedError
+      case status if status >= 400 && statusCode < 500 => ClientBadRequestError(message, description, context)
+      case _ => ClientGatewayError(message, description, context)
+    }
+  }
 }
 
 case class ClientGatewayError(
@@ -73,7 +71,7 @@ case object ClientRegistrationUsernameConflictError
 }
 
 case object IdentityUnauthorizedError
-  extends AbstractIdentityClientError("Expired Token")
+  extends AbstractIdentityClientError("Unauthorized error")
     with ClientBadRequestError
     with NoStackTrace
 

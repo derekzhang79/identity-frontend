@@ -102,7 +102,7 @@ object ErrorIDs {
     val key = "consent-token-error-gateway"
   }
 
-  case object UnauthorizedConsentTokenGatewayErrorID extends ErrorID {
+  case object UnauthorizedConsentTokenErrorID extends ErrorID {
     val key = "unauthorized-consent-token-error-gateway"
   }
 

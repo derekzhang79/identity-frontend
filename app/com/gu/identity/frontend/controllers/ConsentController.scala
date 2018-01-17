@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.errors.ErrorIDs.UnauthorizedConsentTokenGatewayErrorID
+import com.gu.identity.frontend.errors.ErrorIDs.UnauthorizedConsentTokenErrorID
 import com.gu.identity.frontend.errors.{NotFoundError, UnauthorizedError}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.services.IdentityService
@@ -25,13 +25,8 @@ class ConsentController(
     identityService.processConsentToken(consentToken).map {
       case Right(playCookies) =>
         Redirect("/consents/thank-you").withCookies(playCookies: _*)
-      case Left(err) =>
-        err.id match {
-          case (UnauthorizedConsentTokenGatewayErrorID) =>
-            renderErrorPage(configuration, UnauthorizedError("Invalid token."), Unauthorized.apply)
-          case _ =>
-            renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
-        }
+      case Left(err) if err.id == UnauthorizedConsentTokenErrorID => renderErrorPage(configuration, UnauthorizedError("Invalid token."), Unauthorized.apply)
+      case Left(_) => renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
     }.recover {
       case NonFatal(e) =>
         logger.error("Failed to process consent token", e)

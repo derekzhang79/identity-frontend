@@ -50,7 +50,7 @@ object UnauthorizedErrorPageText {
     UnauthorizedErrorPageText(
       pageTitle = messages("errors.unauthorized.pageTitle"),
       title = messages("errors.unauthorized.title"),
-      description = messages("errors.unauthorized.description", "https://profile.theguardian.com/email-prefs")
+      description = messages("errors.unauthorized.description", "/email-prefs")
     )
 }
 

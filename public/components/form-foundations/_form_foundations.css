@@ -20,21 +20,14 @@
 /** Form prelude - the "or" text before a form **/
 
 %form__prelude {
+  @extend %font-text-1;
   color: var(--c-form-prelude);
   font-weight: bold;
   margin: 0;
   padding: 1.2rem 0;
   text-align: center;
-
-  @if $is-snow < 1 {
-    @extend %font-sub-heading-2;
-  }
-
-  @if $is-snow > 0 {
-    @extend %font-text-1;
-    color: #666;
-    font-weight: 300;
-  }
+  color: #666;
+  font-weight: 300;
 }
 
 
@@ -90,45 +83,31 @@
 
 /** Form buttons **/
 %form__button--submit {
-  @extend %font-text-sans-2;
+ @extend %font-text-sans-3;
   background: var(--c-form-button--submit);
   border: 0;
   border-radius: 9999px;
   color: white;
-  display: block;
   text-align: left;
-  padding: 0.2rem 1.6rem;
   transition: 0.15s;
-
-  @if $is-snow > 0 {
-    @extend %font-text-sans-3;
-    padding: 0 1.8rem;
-    line-height: 3.6rem;
-    height: 3.6rem;
-    display: flex;
-    align-items: center;
-  }
+  padding: 0 1.8rem;
+  line-height: 3.6rem;
+  height: 3.6rem;
+  display: block;
+  display: flex;
+  align-items: center;
 
   svg {
     vertical-align: middle;
-    margin-left: 1rem;
-    margin-right: -0.25rem;
     transition: 0.15s;
-
-    @if $is-snow > 0 {
-      margin-left: 2rem;
-      margin-right: -1rem;
-    }
+    margin-left: 2rem;
+    margin-right: -1rem;
   }
 
   &:focus,
   &:hover {
-    background-color: color(var(--c-form-button--submit) lightness(- 10%));
+    background-color: color(var(--c-form-button--submit) lightness(30%));
     outline: none;
-
-    @if $is-snow > 0 {
-      background-color: color(var(--c-form-button--submit) lightness(30%));
-    }
 
     svg {
       transform: translateX(5%);

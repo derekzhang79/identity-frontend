@@ -28,14 +28,7 @@
 
 /** Skins **/
 
-@if $is-snow < 1 {
-  @import "components/membership/_membership.css";
-  @import "components/jobs/_jobs.css";
-}
-
-@if $is-snow > 0 {
-  @import "components/jobs/_jobs.snow.css";
-}
+@import "components/jobs/_jobs.snow.css";
 
 /** Reset password page **/
 

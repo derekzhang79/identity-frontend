@@ -12,7 +12,6 @@
     "build": "npm run build-css && npm run build-snow-css && npm run build-js",
     "prebuild-css": "npm run lint-css && mkdir -p ./target/web/build",
     "build-css": "postcss -c postcss.json",
-    "build-snow-css": "postcss -c postcss.snow.json",
     "build-js": "webpack --bail",
     "lint-css": "stylelint 'public/**/*.css'"
   },

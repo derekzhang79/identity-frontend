@@ -35,8 +35,6 @@ case class Configuration(
 
   gaUID: String,
 
-  useSnow: Boolean,
-
   collectSignupConsents: Boolean,
   collectV2Consents: Boolean,
 
@@ -83,8 +81,6 @@ object Configuration {
 
       gaUID = getString("ga-uid"),
 
-      useSnow = true,
-
       collectSignupConsents = false,
       collectV2Consents = false,
 
@@ -120,8 +116,6 @@ object Configuration {
     sentryDsnScala = "--stubbed-sentry-dsn-scala--",
 
     gaUID = "UA-78705427-123123",
-
-    useSnow = true,
 
     collectSignupConsents = false,
     collectV2Consents = false,

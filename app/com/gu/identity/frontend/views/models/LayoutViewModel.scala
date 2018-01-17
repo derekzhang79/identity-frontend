@@ -116,7 +116,7 @@ object LayoutViewModel {
       InlinedJSONResource("id_runtime_params", r.toJSONString)
     }
 
-    val cssResources = if (configuration.useSnow) LocalCSSResource.fromAsset("bundle.snow.css") else LocalCSSResource.fromAsset("bundle.css")
+    val cssResources = LocalCSSResource.fromAsset("bundle.css")
 
     val resources: Seq[PageResource with Product] = BaseLayoutViewModel.resources ++ Seq(Some(inlinedJSConfig), inlinedJSRuntimeParams).flatten ++ Seq(cssResources)
 

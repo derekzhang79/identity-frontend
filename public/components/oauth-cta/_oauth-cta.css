@@ -4,30 +4,27 @@
 
 .oauth {
   @extend %content-container;
-  background: var(--color-page-bg);
   padding-top: 2rem;
   padding-bottom: 0.6rem;
 }
 
 %oauth__cta {
   @extend %font-text-sans-3;
-  color: #333;
   display: block;
   text-decoration: none;
-  line-height: 3.4rem;
-  height: 3.4rem;
+  line-height: 4.2rem;
+  height: 4.2rem;
   padding: 0 1.8rem 0 4.8rem;
   margin: 0 0 1.2rem;
   border: 1px solid var(--color-border);
   border-radius: 9999px;
-  background-color: white;
   background-repeat: no-repeat;
   background-position: 1.6rem center;
 
   &:hover,
   &:focus {
     text-decoration: none;
-    border-color: color(var(--color-border) lightness(- 10%));
+    border-color: var(--color-border-hover);
   }
 }
 

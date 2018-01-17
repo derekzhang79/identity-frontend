@@ -65,8 +65,7 @@
 /** Form labels **/
 
 %form__label {
-  @extend %font-text-2;
-  color: #333;
+  @extend %font-text-sans-3;
   display: block;
   font-weight: normal;
   cursor: pointer;
@@ -84,15 +83,15 @@
 /** Form buttons **/
 %form__button--submit {
   @extend %font-text-sans-3;
-  background: var(--c-form-button--submit);
+  background: var(--color-cta);
   border: 0;
   border-radius: 9999px;
-  color: white;
+  color: var(--color-brand);
   text-align: left;
   transition: 0.15s;
   padding: 0 1.8rem;
-  line-height: 3.6rem;
-  height: 3.6rem;
+  line-height: 4.2rem;
+  height: 4.2rem;
   display: block;
   display: flex;
   align-items: center;
@@ -102,11 +101,15 @@
     transition: 0.15s;
     margin-left: 2rem;
     margin-right: -1rem;
+
+    * {
+      fill: currentColor;
+    }
   }
 
   &:focus,
   &:hover {
-    background-color: color(var(--c-form-button--submit) lightness(30%));
+    background-color: color(var(--color-cta) lightness(-2.5%));
     outline: none;
 
     svg {
@@ -115,7 +118,7 @@
   }
 
   &:focus {
-    box-shadow: 0 0 2px 2px color(var(--c-form-button--submit) alpha(50%));
+    box-shadow: 0 0 2px 0 var(--color-border);
   }
 
 }
@@ -128,29 +131,28 @@
   box-sizing: border-box;
   display: block;
   background-color: #fff;
-  border: 1px solid var(--c-form-field-border);
+  border: 1px solid var(--color-border);
   color: #000;
-  padding: 7px 15px;
-  border-radius: 18px;
+  padding: 0 1.8rem;
+  line-height: 4.2rem;
+  height: 4.2rem;
+  border-radius: 99999px;
   margin: 0.2rem 0;
   width: 100%;
 
+  &:hover {
+    border-color: var(--color-border-hover);
+  }
+
   &:focus {
-    box-shadow: 0 0 2px 2px color(var(--c-form-field-border) alpha(50%) lightness(- 10%));
-    border-color: color(var(--c-form-field-border) lightness(- 10%));
+    border-color: color(var(--color-border-hover) lightness(- 10%));
     outline: none;
   }
 
   /* override default invalid field styles, only show on focus */
 
-  &:invalid {
-    border-color: var(--c-form-field-border);
-    box-shadow: none;
-
-    &:focus {
-      border-color: var(--c-form-error);
-      box-shadow: 0 0 2px 2px color(var(--c-form-error) alpha(50%) lightness(+ 20%));
-    }
+  &:invalid:focus {
+    border-color: #e00914;
   }
 }
 

@@ -126,8 +126,8 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
 
   override def processConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, PlayCookies]] = {
     client.postConsentToken(token) map {
-      case Left(errors) =>
-        Left(ConsentTokenAppException(errors.head))
+      case Left(IdentityUnauthorizedError :: _) => Left(ConsentTokenUnauthorizedException(IdentityUnauthorizedError))
+      case Left(error) => Left(ConsentTokenAppException(error.head))
       case Right(AuthenticationCookiesResponse(cookies)) =>
         val rpCookies = CookieService.signInCookies(
           cookies.values.map(IdentityApiCookie(_, cookies.expiresAt)),

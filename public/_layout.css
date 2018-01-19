@@ -168,14 +168,16 @@ body > section:last-of-type {
  * Page standfirst - section and paragraph under the page-heading
  */
 .page-standfirst {
-  @extend %font-sub-heading-0;
+  @extend %font-sub-heading-2;
   @extend %content-container;
-  color: #767676;
   padding-bottom: 2.4rem;
+  padding-top: 0.25rem;
+  color: var(--color-text-light);
 
-  @media (--viewport-min-tablet) {
-    @extend %font-sub-heading-1;
-    padding-bottom: 3.6rem;
+  a {
+    @extend .link;
+    color: var(--color-text);
+    font-weight: 500;
   }
 
   & .page-standfirst__paragraph {

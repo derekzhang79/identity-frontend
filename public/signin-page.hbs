@@ -11,6 +11,10 @@
 
   <h1 class="page-heading">{{ signInPageText.title }}</h1>
 
+  <section class="page-standfirst">
+    <p class="page-standfirst__paragraph">{{signInPageText.noAccount}} <a href="{{registerUrl}}" >{{signInPageText.signUp}}</a>.</p>
+  </section>
+
   <section class="signin__section">
     {{> components/oauth-cta/_oauth-cta }}
 
@@ -19,9 +23,6 @@
 
   <section class="page__footer">
 
-    <section class="signin__cta-section">
-        <p class="signin__cta--signup"> {{signInPageText.noAccount}} <a id="register_cta" class="signin__cta-link--signup" href="{{registerUrl}}" > {{signInPageText.signUp}} </a>.</p>
-    </section>
     {{> components/terms/_terms }}
 
   </section>

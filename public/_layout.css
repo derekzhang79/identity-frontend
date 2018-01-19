@@ -6,7 +6,7 @@
 
 html {
   height: 100%;
-  background: var(--color-card);
+  background: var(--color-bg);
   color: var(--color-text);
 }
 
@@ -147,15 +147,6 @@ body > section:last-of-type {
   margin-top: 0.85rem;
   padding-bottom: 1.71rem;
   padding-top: 0.28rem;
-}
-
-.page-heading--with-standfirst {
-  @extend .page-heading;
-  padding-bottom: 0;
-
-  &::after {
-    display: none;
-  }
 }
 
 /**

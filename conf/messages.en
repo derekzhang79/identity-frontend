@@ -65,12 +65,12 @@ oauth.google=Google
 header.backtext=Back to The Guardian
 header.logo=The Guardian
 
-footer.help=help
-footer.terms=terms & conditions
-footer.contact=contact us
-footer.privacy=privacy policy
-footer.techfeedback=report technical issue
-footer.cookies=cookie policy
+footer.help=Help
+footer.terms=Terms & Conditions
+footer.contact=Contact us
+footer.privacy=Privacy Policy
+footer.techfeedback=Report technical issue
+footer.cookies=Cookie Policy
 footer.copyright=© {0} Guardian News and Media Limited or its affiliated companies. All rights reserved.
 
 # com.gu.identity.frontend.models.text.RegisterConfirmationText

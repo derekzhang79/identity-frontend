@@ -5,7 +5,7 @@
 .footer {
   @extend %font-sans-serif;
   background-color: var(--color-brand);
-  color: #dcdcdc;
+  color: color(var(--color-brand) lightness(100%));
 }
 
 .footer__inner {
@@ -14,11 +14,11 @@
 
 .footer__copyright {
   @extend %font-text-sans-0;
-
-  border-top: 1px solid #666;
+  border-top: 1px solid color(var(--color-brand) lightness(25%));
   clear: both;
   margin: 0;
   padding: 0.6rem 0 2.5rem;
+  opacity: 0.75;
 }
 
 @define-mixin footer-columns $cols: 1, $gap: 0 {
@@ -45,7 +45,6 @@
   a {
     display: inline-block;
     margin: 0 0 0.6rem;
-    text-transform: lowercase;
-    color: #dcdcdc;
+    color: currentColor;
   }
 }

@@ -7,6 +7,7 @@
 html {
   height: 100%;
   background: var(--color-card);
+  color: var(--color-text);
 }
 
 body {
@@ -113,7 +114,6 @@ body > section:last-of-type {
 .page-heading {
   @extend %font-heading-0;
   @extend %content-container;
-  color: #333;
   font-weight: normal;
   padding-top: 0.5rem;
   padding-bottom: 0 !important;
@@ -220,7 +220,6 @@ a {
   display: flex;
   flex-direction: column;
   margin-top: 3rem;
-  color: #333;
   position: relative;
 
   > section:last-of-type {

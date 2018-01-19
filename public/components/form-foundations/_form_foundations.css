@@ -8,7 +8,6 @@
 /** Form colours **/
 
 :root {
-  --c-form-prelude: #333;
   --c-form-fieldset-border: #eee;
   --c-form-error: #d61d00;
   --c-form-field-border: #ddd;
@@ -21,7 +20,7 @@
 
 %form__prelude {
   @extend %font-text-1;
-  color: var(--c-form-prelude);
+  color: var(--color-text-light);
   font-weight: bold;
   margin: 0;
   padding: 1.2rem 0;
@@ -145,7 +144,7 @@
   }
 
   &:focus {
-    border-color: color(var(--color-border-hover) lightness(- 10%));
+    border-color: color(var(--color-border-hover) lightness(-20%));
     outline: none;
   }
 

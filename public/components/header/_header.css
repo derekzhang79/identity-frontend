@@ -35,7 +35,6 @@
 
 .header {
   background: var(--color-card);
-  color: #333;
   border-bottom: 1px solid var(--color-border);
   padding: 5px 0;
 

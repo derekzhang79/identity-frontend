@@ -141,6 +141,7 @@
   border-radius: 99999px;
   margin: 0.2rem 0;
   width: 100%;
+  transition: 0.15s;
 
   &:hover {
     border-color: var(--color-border-hover);

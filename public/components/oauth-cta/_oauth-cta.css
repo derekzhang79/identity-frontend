@@ -20,6 +20,7 @@
   border-radius: 9999px;
   background-repeat: no-repeat;
   background-position: 1.6rem center;
+  transition: 0.15s;
 
   &:hover,
   &:focus {

@@ -116,20 +116,14 @@ body > section:last-of-type {
   @extend %content-container;
   font-weight: normal;
   padding-top: 0.5rem;
-  padding-bottom: 0 !important;
+  padding-bottom: 2rem;
 
-  &::after {
-    content: "";
-    display: block;
-    width: 100%;
-    margin-top: 2.4rem;
-    background-color: var(--color-border);
-    height: 1px;
+  & + .page-standfirst {
+    margin-top: -2rem;
   }
 
   @media (--viewport-min-tablet) {
     @extend %font-heading-1;
-    padding-bottom: 3.6rem;
   }
 
 }
@@ -170,8 +164,8 @@ body > section:last-of-type {
 .page-standfirst {
   @extend %font-sub-heading-2;
   @extend %content-container;
-  padding-bottom: 2.4rem;
-  padding-top: 0.25rem;
+  padding-bottom: 2rem;
+  padding-top: 0.5rem;
   color: var(--color-text-light);
 
   a {

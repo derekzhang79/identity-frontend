@@ -13,7 +13,9 @@
 
   <input id="signin_ga_client_id" type="hidden" name="gaClientId" value="">
 
-  <p class="signin-form__prelude">{{signInPageText.divideText}}</p>
+  <p class="signin-form__prelude">
+    <span>{{signInPageText.divideText}}</span>
+  </p>
 
   {{#each errors }}
     <p id="{{ id }}" class="signin-form__error">{{ message }}</p>

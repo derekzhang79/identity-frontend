@@ -19,14 +19,17 @@
 /** Form prelude - the "or" text before a form **/
 
 %form__prelude {
-  @extend %font-text-1;
-  color: var(--color-text-light);
-  font-weight: bold;
+  @extend %font-text-sans-3;
   margin: 0;
-  padding: 1.2rem 0;
+  padding: 2.5rem 0;
   text-align: center;
-  color: #666;
   font-weight: 300;
+  background: linear-gradient(to bottom, transparent calc(50% - 1px), var(--color-border) calc(50% - 1px), var(--color-border) calc(50%), transparent calc(50%));
+
+  > * {
+    background: var(--color-bg);
+    padding: 0 1rem;
+  }
 }
 
 

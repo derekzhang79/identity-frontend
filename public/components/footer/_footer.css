@@ -32,10 +32,6 @@
     @mixin footer-columns 3;
   }
 
-  @media all and (min-width: 980px) {
-    @mixin footer-columns 4;
-  }
-
   margin: 2.5rem 0 0.6rem;
   padding: 0;
   list-style: none;

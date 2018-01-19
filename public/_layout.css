@@ -26,21 +26,17 @@ body > section:last-of-type {
   padding: 0 1rem;
 
 
-  @media (--viewport-mobile-wide) {
+  @media (--viewport-min-mobile-wide) {
     padding: 0 2rem;
     max-width: 58rem;
   }
 
-  @media (--viewport-tablet) {
+  @media (--viewport-min-tablet) {
     max-width: 74rem;
   }
 
-  @media (--viewport-desktop) {
+  @media (--viewport-min-desktop) {
     max-width: 98rem;
-  }
-
-  @media (--viewport-wide) {
-    max-width: 114rem;
   }
 
 }
@@ -51,23 +47,8 @@ body > section:last-of-type {
 
 %content-container {
   @extend %page-block;
-
   width: 100%;
-
-  @media (--viewport-tablet) {
-    padding-right: 10rem;
-    padding-left: 10rem;
-  }
-
-  @media (--viewport-desktop) {
-    padding-right: 26rem;
-    padding-left: 18rem;
-  }
-
-  @media (--viewport-wide) {
-    padding-right: 34rem;
-    padding-left: 26rem;
-  }
+  max-width: 58rem;
 }
 
 %page-block--low-margin {

@@ -183,14 +183,16 @@ export function init() {
 }
 
 function checkForCredentials() {
-  if (navigator.credentials) {
+  if (navigator.credentials && navigator.credentials.preventSilentAccess) {
     navigator.credentials.get({
-      password: true,
+      password: true
     })
       .then(c => {
         if (c instanceof PasswordCredential) {
           const link = getElementById("sign_in_page_link");
-          window.location.replace(link.elem.href);
+          if(link && link.elem.href) {
+            window.location.replace(link.elem.href);
+          }
         }
       });
   }

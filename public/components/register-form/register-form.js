@@ -185,7 +185,7 @@ export function init() {
 function checkForCredentials() {
   if (navigator.credentials && navigator.credentials.preventSilentAccess) {
     navigator.credentials.get({
-      password: true
+      password: true,
     })
       .then(c => {
         if (c instanceof PasswordCredential) {

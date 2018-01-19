@@ -73,7 +73,7 @@ class SignInFormModel {
 
   smartLockSignIn(c) {
     if (this.smartLockStatus.status) {
-      let form = new FormData(document.querySelector('#signin_form'));
+      const form = new FormData(document.querySelector('#signin_form'));
       form.set('email', c.id);
       form.set('password', c.password);
 

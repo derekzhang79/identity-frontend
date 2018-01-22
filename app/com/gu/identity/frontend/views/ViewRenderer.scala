@@ -113,6 +113,27 @@ object ViewRenderer {
     renderViewModel("reset-password-email-sent-page", model)
   }
 
+  def InvalidConsentToken(configuration: Configuration, token: String, csrfToken: Option[CSRFToken], errorIds: Seq[String])(implicit messages: Messages) = {
+    val model = InvalidConsentTokenViewModel(
+      configuration = configuration,
+      token = token,
+      csrfToken = csrfToken,
+      errors = errorIds.map(ErrorViewModel.apply)
+    )
+    renderViewModel("invalid-consent-token-page", model)
+  }
+
+  def renderResendConsentTokenSent(configuration: Configuration, csrfToken: Option[CSRFToken], errorIds: Seq[String])(implicit messages: Messages) = {
+    val errors = if(errorIds.map(ErrorViewModel.apply).isEmpty) Option.empty else Some(errorIds.map(ErrorViewModel.apply))
+
+    val model = ResendConsentTokenSentViewModel(
+      configuration = configuration,
+      csrfToken = csrfToken,
+      errorIds = errors
+    )
+    renderViewModel("resend-consent-link-sent-page", model)
+  }
+
 
   def renderErrorPage(configuration: Configuration, error: HttpError, resultGenerator: Html => Result)(implicit messages: Messages) =
     renderViewModel("error-page", ErrorPageViewModel(configuration, error), resultGenerator)

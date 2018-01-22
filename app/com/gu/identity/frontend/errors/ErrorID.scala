@@ -102,6 +102,18 @@ object ErrorIDs {
     val key = "consent-token-error-gateway"
   }
 
+  case object ResendConsentEmailGatewayErrorID extends ErrorID {
+    val key = "consent-token-error-gateway"
+  }
+
+  case object ResendConsentEmailBadRequestID extends ErrorID {
+    val key = "consent-token-error-bad-request"
+  }
+
+  case object ResendConsentEmailBadTokenRequestId extends ErrorID {
+    val key = "consent-token-error-bad-token"
+  }
+
   case object UnauthorizedConsentTokenErrorID extends ErrorID {
     val key = "unauthorized-consent-token-error-gateway"
   }

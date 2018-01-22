@@ -25,7 +25,7 @@ class ConsentController(
     identityService.processConsentToken(consentToken).map {
       case Right(playCookies) =>
         Redirect("/consents/thank-you").withCookies(playCookies: _*)
-      case Left(err) if err.id == UnauthorizedConsentTokenErrorID => renderErrorPage(configuration, UnauthorizedError("Invalid token."), Unauthorized.apply)
+      case Left(err) if err.id == UnauthorizedConsentTokenErrorID => Redirect(s"/invalid-token/${consentToken}")
       case Left(_) => renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
     }.recover {
       case NonFatal(e) =>

@@ -42,16 +42,14 @@ object BadRequestErrorPageText {
 case class UnauthorizedErrorPageText private(
   pageTitle: String,
   title: String,
-  description: String
-  ) extends ErrorPageText
+  description: String) extends ErrorPageText
 
 object UnauthorizedErrorPageText {
   def apply()(implicit messages: Messages): UnauthorizedErrorPageText =
     UnauthorizedErrorPageText(
       pageTitle = messages("errors.unauthorized.pageTitle"),
       title = messages("errors.unauthorized.title"),
-      description = messages("errors.unauthorized.description", "/email-prefs")
-    )
+      description = messages("errors.unauthorized.description", "/email-prefs"))
 }
 
 

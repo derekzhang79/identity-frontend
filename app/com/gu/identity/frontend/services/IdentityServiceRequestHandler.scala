@@ -141,6 +141,15 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         Left(Seq(ClientGatewayError("Unexpected response from server")))
       }
 
+    case r: ResendConsentTokenApiRequest =>
+      if (response.status == 200) {
+        Right(ResendConsentTokenResponse())
+      }
+      else {
+        logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
+        Left(Seq(ClientGatewayError("Unexpected response from server")))
+      }
+
     case r: UseConsentTokenRequest =>
       if (response.status == 200) {
         Right(response.json.as[AuthenticationCookiesResponse])

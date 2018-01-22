@@ -8,9 +8,10 @@ const STORAGE_KEY = 'gu_id_signIn_state';
 const SMART_LOCK_STORAGE_KEY = 'gu_id_smartLock_state';
 
 class SignInFormModel {
-  constructor( formElement, emailField, gaClientIdElement ) {
+  constructor( formElement, emailField, passwordField, gaClientIdElement ) {
     this.formElement = formElement;
     this.emailFieldElement = emailField;
+    this.passwordFieldElement = passwordField;
     this.gaClientIdElement = gaClientIdElement;
     this.addBindings();
     this.smartLock();
@@ -41,26 +42,25 @@ class SignInFormModel {
 
   smartLockSetupOnSubmit() {
 
-    if (navigator.credentials) {
-      const formElement = this.formElement.elem;
-
-      const c = new PasswordCredential(formElement);
+    if (navigator.credentials && navigator.credentials.preventSilentAccess) {
+      const c = new PasswordCredential({
+        id: this.emailFieldElement.value(),
+        password: this.passwordFieldElement.value()
+      });
       this.updateSmartLockStatus(true);
       this.smartLockSignIn(c);
     }
   }
 
   smartLock() {
-    if (navigator.credentials) {
+    if (navigator.credentials && navigator.credentials.preventSilentAccess) {
       navigator.credentials.get({
           password: true,
         })
         .then(c => {
           if (c instanceof PasswordCredential) {
-            c.additionalData = new FormData(document.querySelector('#signin_form'));
-            c.idName = "email";
             this.smartLockSignIn(c);
-          };
+          }
         });
     }
   }
@@ -73,22 +73,27 @@ class SignInFormModel {
 
   smartLockSignIn(c) {
     if (this.smartLockStatus.status) {
-        fetch("/actions/signin/smartlock", {credentials: c, method: 'POST'})
-          .then(r => {
-            if (r.status == 200) {
-              this.updateSmartLockStatus(true);
-              customMetric({ name: 'SigninSuccessful', type: 'SmartLockSignin'});
-              this.storeRedirect(c);
-              return;
-            }
-            else {
-             r.json().then(j => {
-               this.updateSmartLockStatus(false);
-               window.location = j.url;
-               return;
-             });
+      const form = new FormData(document.querySelector('#signin_form'));
+      form.set('email', c.id);
+      form.set('password', c.password);
+
+      fetch("/actions/signin/smartlock", {
+        credentials: 'same-origin',
+        method: 'POST',
+        body: form
+      })
+        .then(r => {
+          if (r.status == 200) {
+            this.updateSmartLockStatus(true);
+            customMetric({ name: 'SigninSuccessful', type: 'SmartLockSignin'});
+            this.storeRedirect(c);
+          } else {
+           r.json().then(j => {
+             this.updateSmartLockStatus(false);
+             window.location = j.url;
+           });
           }
-      });
+        });
     }
   }
 
@@ -114,10 +119,11 @@ class SignInFormModel {
   static fromDocument() {
     const form = getElementById( 'signin_form' );
     const emailField = getElementById( 'signin_field_email' );
+    const passwordField = getElementById( 'signin_field_password' );
     const gaClientIdField = getElementById( 'signin_ga_client_id' );
 
     if ( form && emailField ) {
-      return new SignInFormModel( form, emailField, gaClientIdField );
+      return new SignInFormModel( form, emailField, passwordField, gaClientIdField );
     }
   }
 }

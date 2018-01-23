@@ -3,43 +3,43 @@ package com.gu.identity.frontend.errors
 import com.gu.identity.frontend.errors.ErrorIDs._
 import com.gu.identity.service.client.{ClientBadRequestError, ClientGatewayError, IdentityClientError}
 
-sealed trait ResendConsentTokenExeption extends AppException
+sealed trait ResendConsentTokenException extends AppException
 
 object ResendConsentTokenExeption {
-  def apply(clientError: IdentityClientError): ResendConsentTokenExeption =
+  def apply(clientError: IdentityClientError): ResendConsentTokenException =
     clientError match {
-      case err: ClientBadRequestError => ResendConsentTokenBadRequestExeption(clientError)
-      case err: ClientGatewayError => ResendConsentTokenServiceGatewayExeption(clientError)
+      case _: ClientBadRequestError => ResendConsentTokenBadRequestException(clientError)
+      case _: ClientGatewayError => ResendConsentTokenServiceGatewayExeption(clientError)
     }
 }
 
 
 case class ResendConsentTokenServiceGatewayExeption(clientError: IdentityClientError)
   extends ServiceGatewayAppException(clientError)
-    with ResendConsentTokenExeption {
+    with ResendConsentTokenException {
 
   val id = ResendConsentEmailGatewayErrorID
 }
 
-case class ResendConsentTokenBadRequestExeption(clientError: IdentityClientError)
+case class ResendConsentTokenBadRequestException(clientError: IdentityClientError)
   extends BadRequestAppException
-    with ResendConsentTokenExeption {
+    with ResendConsentTokenException {
 
   val id = ResendConsentEmailBadRequestID
 }
 
-case class ResendConsentTokenBadTokenExeption(message: String)
+case class ResendConsentTokenBadTokenException(message: String)
   extends AbstractAppException(message)
     with BadRequestAppException
-    with ResendConsentTokenExeption {
+    with ResendConsentTokenException {
 
   val id = ResendConsentEmailBadTokenRequestId
 }
 
-case class ResendConsentTokenBadAppExeption(message: String)
+case class ResendConsentTokenBadRequestAppException(message: String)
   extends AbstractAppException(message)
     with BadRequestAppException
-    with ResendConsentTokenExeption {
+    with ResendConsentTokenException {
 
   val id = ResendConsentEmailGatewayErrorID
 }

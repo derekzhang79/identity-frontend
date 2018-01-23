@@ -137,8 +137,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         Right(SendResetPasswordEmailResponse())
       }
       else {
-        logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
-        Left(Seq(ClientGatewayError("Unexpected response from server")))
+        handleUnexpectedResponse(response)
       }
 
     case r: ResendConsentTokenApiRequest =>
@@ -146,16 +145,14 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         Right(ResendConsentTokenResponse())
       }
       else {
-        logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
-        Left(Seq(ClientGatewayError("Unexpected response from server")))
+        handleUnexpectedResponse(response)
       }
 
     case r: UseConsentTokenRequest =>
       if (response.status == 200) {
         Right(response.json.as[AuthenticationCookiesResponse])
       } else {
-        logger.warn(s"Unexpected response from server: ${response.status} ${response.statusText} ${response.body}")
-        Left(Seq(ClientGatewayError("Unexpected response from server")))
+        handleUnexpectedResponse(response)
       }
 
     case _ => Left(Seq(ClientGatewayError("Unsupported request")))

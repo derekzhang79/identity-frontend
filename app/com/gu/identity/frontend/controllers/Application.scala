@@ -55,7 +55,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
 
   def invalidConsentToken(errorIds: Seq[String], token: String) = CSRFAddToken(csrfConfig)  { req =>
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
-    InvalidConsentToken(configuration, token, csrfToken, errorIds)
+    renderInvalidConsentToken(configuration, token, csrfToken, errorIds)
   }
 
   def resendConsentTokenSent(error: Seq[String]) = CSRFAddToken(csrfConfig)  { req =>

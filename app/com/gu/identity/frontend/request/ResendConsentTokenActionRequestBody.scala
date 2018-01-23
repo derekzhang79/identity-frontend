@@ -19,9 +19,9 @@ object ResendConsentTokenActionRequestBody {
   lazy val resendConsentTokenForm = Form(FormMapping.resetConsentMapping)
 
   private def handleFormErrors(formError: FormError): AppException = formError match {
-    case FormError("token", messages, _) => ResendConsentTokenBadTokenExeption(messages.headOption.getOrElse("Unknown"))
+    case FormError("token", messages, _) => ResendConsentTokenBadTokenException(messages.headOption.getOrElse("Unknown"))
     case FormError("csrfToken", _, _) => ForgeryTokenAppException("Missing csrfToken on request")
-    case e => ResendConsentTokenBadAppExeption(e.message)
+    case e => ResendConsentTokenBadRequestAppException(e.message)
   }
 
   object FormMapping {

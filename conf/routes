@@ -29,13 +29,11 @@ GET        /actions/signin/consents/:token              com.gu.identity.frontend
 
 POST       /actions/register                            com.gu.identity.frontend.controllers.RegisterAction.register
 
-GET        /invalid-token/:token                        com.gu.identity.frontend.controllers.Application.invalidConsentToken(error: Seq[String] ?= Seq.empty, token: String)
+GET        /accept-consent/invalid-token/:token         com.gu.identity.frontend.controllers.Application.invalidConsentToken(error: Seq[String] ?= Seq.empty, token: String)
 
-POST       /invalid-token/resend-consent                com.gu.identity.frontend.controllers.ResendConsentTokenAction.resend
+POST       /accept-consent/invalid-token/resend-consent  com.gu.identity.frontend.controllers.ResendConsentTokenAction.resend
 
-POST       /actions/consent-email-sent/resend-consent   com.gu.identity.frontend.controllers.ResendConsentTokenAction.resend
-
-GET        /actions/consent-email-sent/           com.gu.identity.frontend.controllers.Application.resendConsentTokenSent(error: Seq[String] ?= Seq.empty)
+GET        /accept-consent/consent-email-sent/          com.gu.identity.frontend.controllers.Application.resendConsentTokenSent(error: Seq[String] ?= Seq.empty)
 
 POST       /actions/reset                               com.gu.identity.frontend.controllers.ResetPasswordAction.reset
 

@@ -95,16 +95,16 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
     }
   }
 
-  override def resendConsentToken(resendConsentTokenData: ResendConsentTokenActionRequestBody)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, ResendConsentTokenResponse ]] = {
+  override def resendConsentToken(resendConsentTokenData: ResendConsentTokenActionRequestBody)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, ResendConsentTokenResponse]] = {
     val apiRequest = ResendConsentTokenApiRequest(resendConsentTokenData)
-    client.ResendConsentToken(apiRequest).map {
+    client.resendConsentToken(apiRequest).map {
       case Left(errors) =>
         Left(errors.map(ResendConsentTokenExeption.apply))
       case Right(okResponse) => Right(okResponse)
     }
   }
 
-  override def sendResetPasswordEmail(resetPasswordData: ResetPasswordActionRequestBody, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse ]] = {
+  override def sendResetPasswordEmail(resetPasswordData: ResetPasswordActionRequestBody, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse]] = {
     val apiRequest = SendResetPasswordEmailApiRequest(resetPasswordData, clientIp)
     client.sendResetPasswordEmail(apiRequest).map {
       case Left(errors) =>

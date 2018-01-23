@@ -68,17 +68,17 @@ class IdentityClient extends Logging {
     }
   }
 
-  def ResendConsentToken(request: ResendConsentTokenApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, ResendConsentTokenResponse ]] = {
+  def resendConsentToken(request: ResendConsentTokenApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, ResendConsentTokenResponse ]] = {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) =>
         logger.error("Failed to resend consent email link")
         Left(error)
 
-      case Right(r: ResendConsentTokenResponse) => {
+      case Right(r: ResendConsentTokenResponse) =>
         logger.info("Successfully resent consent email")
         Right(r)
-      }
-      case Right(_) => Left(Seq(ClientGatewayError("Uknown response")))
+
+      case Right(_) => Left(Seq(ClientGatewayError("Unknown response")))
     }
   }
 

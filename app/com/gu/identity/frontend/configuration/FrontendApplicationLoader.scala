@@ -91,7 +91,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
 
 
   override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signOutController,
-    thirdPartyTsAndCsController, consentController,  signinController, registerController, resendConsentTokenController, resetPasswordController, cspReporterController,
+    thirdPartyTsAndCsController,  signinController, registerController, consentController,resendConsentTokenController, resetPasswordController, cspReporterController,
     healthcheckController, digitalAssetLinksController, manifestController, optInController, assets, redirects)
 
   val sentryLogging = new SentryLogging(frontendConfiguration) // don't make it lazy

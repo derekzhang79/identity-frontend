@@ -9,6 +9,6 @@ case class ResendConsentTokenApiRequest(data: ResendConsentTokenActionRequestBod
   override val headers = Iterable(
     ApiRequest.apiKeyHeader,
     "Content-Type" -> "application/json")
-  override val url = ApiRequest.apiEndpoint(s"consent-resend-email/${data.token}")
+  override val url = ApiRequest.apiEndpoint(s"consent-email/resend/${data.token}")
 }
 

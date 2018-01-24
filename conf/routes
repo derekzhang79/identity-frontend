@@ -17,8 +17,6 @@ GET        /signout                                     com.gu.identity.frontend
 
 GET        /agree/:group                                com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.confirmAction(group: String, returnUrl: Option[String] ?= None, clientId: Option[String] ?= None, skipThirdPartyLandingPage: Option[Boolean] ?= None)
 
-GET        /accept-consent/:consentToken                com.gu.identity.frontend.controllers.ConsentController.confirmConsents(consentToken: String)
-
 POST       /actions/agree                               com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.addToGroupAction
 
 POST       /actions/signin                              com.gu.identity.frontend.controllers.SigninAction.signIn
@@ -29,11 +27,15 @@ GET        /actions/signin/consents/:token              com.gu.identity.frontend
 
 POST       /actions/register                            com.gu.identity.frontend.controllers.RegisterAction.register
 
-GET        /accept-consent/invalid-token/:token         com.gu.identity.frontend.controllers.Application.invalidConsentToken(error: Seq[String] ?= Seq.empty, token: String)
+GET        /accept-consent/:consentToken                com.gu.identity.frontend.controllers.ConsentController.confirmConsents(consentToken: String)
 
-POST       /accept-consent/invalid-token/resend-consent  com.gu.identity.frontend.controllers.ResendConsentTokenAction.resend
+GET        /consent-token/:consentToken/accept          com.gu.identity.frontend.controllers.ConsentController.confirmConsents(consentToken: String)
 
-GET        /accept-consent/consent-email-sent/          com.gu.identity.frontend.controllers.Application.resendConsentTokenSent(error: Seq[String] ?= Seq.empty)
+GET        /consent-token/:consentToken/invalid         com.gu.identity.frontend.controllers.Application.invalidConsentToken(error: Seq[String] ?= Seq.empty, consentToken: String)
+
+POST       /consent-token/resend                        com.gu.identity.frontend.controllers.ResendConsentTokenAction.resend
+
+GET        /consent-token/resent                        com.gu.identity.frontend.controllers.Application.resendConsentTokenSent(error: Seq[String] ?= Seq.empty)
 
 POST       /actions/reset                               com.gu.identity.frontend.controllers.ResetPasswordAction.reset
 

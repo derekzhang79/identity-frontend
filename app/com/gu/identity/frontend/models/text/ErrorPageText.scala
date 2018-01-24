@@ -13,7 +13,6 @@ object ErrorPageText {
   def apply(error: HttpError)(implicit messages: Messages): ErrorPageText = error match {
     case NotFoundError(_) => NotFoundErrorPageText()
     case ForbiddenError(_) => ForbiddenErrorPageText()
-    case UnauthorizedError(_) => UnauthorizedErrorPageText()
     case err: BadRequestError => BadRequestErrorPageText(err)
     case err: UnexpectedError => UnexpectedErrorPageText(err)
   }
@@ -37,23 +36,6 @@ object BadRequestErrorPageText {
       details = messages("errors.unexpected.details", err.message)
     )
 }
-
-/** 403 Unauthorized Token */
-case class UnauthorizedErrorPageText private(
-  pageTitle: String,
-  title: String,
-  description: String
-  ) extends ErrorPageText
-
-object UnauthorizedErrorPageText {
-  def apply()(implicit messages: Messages): UnauthorizedErrorPageText =
-    UnauthorizedErrorPageText(
-      pageTitle = messages("errors.unauthorized.pageTitle"),
-      title = messages("errors.unauthorized.title"),
-      description = messages("errors.unauthorized.description", "/email-prefs")
-    )
-}
-
 
 /** 403 Forbidden text */
 case class ForbiddenErrorPageText private(

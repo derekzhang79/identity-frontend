@@ -23,11 +23,8 @@ case class ResendConsentTokenAction(identityService: IdentityService,
   val bodyParser = ResendConsentTokenActionRequestBody.bodyParser
 
   def resend = ResendConsentTokenServiceAction(bodyParser) { request =>
-    identityService.resendConsentToken(request.body).map {
-      case Left(errors) =>
-        Left(errors)
-
-      case Right(okResponse) => Right {
+    identityService.resendConsentToken(request.body).map { eitherResponse =>
+      eitherResponse.right.map { _ =>
         NoCache(SeeOther(routes.Application.resendConsentTokenSent().url))
       }
     }

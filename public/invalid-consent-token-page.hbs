@@ -11,7 +11,7 @@
       {{else}}
       <p class="resend-consent__text">{{ text.description }}</p>
 
-      <form id="resend-token-form" class="resend-consent-form" action="/consent-token/resend" method="POST">
+      <form id="resend-token-form" class="resend-consent-form" action="/consent-token/resend" method="GET">
         <input type="hidden" name="token" value="{{ token }}">
         <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
 

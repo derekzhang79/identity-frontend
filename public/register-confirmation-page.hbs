@@ -1,0 +1,34 @@
+{{# partial "pageTitle" }}{{ registerConfirmationPageText.pageTitle }}{{/ partial }}
+
+{{# partial "content" }}
+
+    <h1 class="page-heading--with-standfirst">{{ registerConfirmationPageText.title }}</h1>
+    <section class="page-standfirst">
+      <p class="page-standfirst__paragraph">{{ registerConfirmationPageText.titleStandfirst }}</p>
+    </section>
+
+  <section class = "register-confirm__section">
+     <h2 class="page-heading--small">{{ registerConfirmationPageText.oneMoreStepTitle }}</h2>
+     <section class="page-content">
+        <p class = "page-content--confirm">{{ registerConfirmationPageText.oneMoreStepP1 }}</p>
+        <p class = "page-content--confirm">{{ registerConfirmationPageText.oneMoreStepP2 }}</p>
+      </section>
+  </section>
+
+  <section class = "register-confirm__section">
+      <h2 class="page-heading--small">{{ registerConfirmationPageText.weValueYourOpinionTitle }}</h2>
+      <section class="page-content">
+        <p class = "page-content--confirm"> {{ registerConfirmationPageText.weValueYourOpinionP1 }} </p>
+        <p class = "page-content--confirm">{{ registerConfirmationPageText.weValueYourOpinionP2}}</p>
+        <p class = "page-content--confirm">{{ registerConfirmationPageText.weValueYourOpinionP3}}</p>
+      </section>
+  </section>
+
+    <section class="page-content">
+      <a class="register-confirm__complete-registration-button" href="{{returnUrl}}">
+        {{registerConfirmationPageText.completeRegistration}} {{> components/icon/arrow-inline }}
+      </a>
+    </section>
+
+{{/partial}}
+{{> layout}}

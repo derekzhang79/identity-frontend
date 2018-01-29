@@ -85,7 +85,9 @@ object ViewRenderer {
   }
 
   def renderRegisterConfirmation(configuration: Configuration, returnUrl: ReturnUrl, clientId: Option[ClientID])(implicit messages: Messages) = {
-    Results.Redirect("/consents/thank-you")
+    renderViewModel(
+      "register-confirmation-page",
+      RegisterConfirmationViewModel(configuration, returnUrl, clientId))
   }
 
   def renderResetPassword(

@@ -73,6 +73,19 @@ footer.techfeedback=Report technical issue
 footer.cookies=Cookie Policy
 footer.copyright=© {0} Guardian News and Media Limited or its affiliated companies. All rights reserved.
 
+# com.gu.identity.frontend.models.text.RegisterConfirmationText
+registerConfirmation.pageTitle=Register
+registerConfirmation.title=Welcome
+registerConfirmation.titleStandfirst=Thank you for registering with The Guardian.
+registerConfirmation.oneMoreStepTitle=One more step
+registerConfirmation.oneMoreStepP1=To access all your account features and join The Guardian community, we need you to validate your email address.
+registerConfirmation.oneMoreStepP2=Please check your email and click on the link we’ve sent you to confirm. Easy.
+registerConfirmation.weValueYourOpinionTitle=We value your opinion and your experience
+registerConfirmation.weValueYourOpinionP1=The Guardian is much more than just a newspaper on the internet. We provide a platform for our audience to debate the news and share your experiences with each other and with us.
+registerConfirmation.weValueYourOpinionP2=The best comments and contributions are seen by our journalists and used in our work. Your feedback and stories help shape our journalism. All of your contributions are attributed to you.
+registerConfirmation.weValueYourOpinionP3=When you’re commenting on The Guardian, please keep it respectful and abide by the community guidelines - and if you spot a comment you think doesn’t follow those, please use the ‘Report’ link next to it to let us know.
+registerConfirmation.completeRegistration=Complete registration
+
 # com.gu.identity.frontend.models.text.ResetPasswordText
 resetPassword.pageTitle=Reset password
 resetPassword.title=Forgotten or need to set your password?

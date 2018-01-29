@@ -1,11 +1,12 @@
 :root {
-  --color-page-bg: #fff;
-  --color-bg: #fff;
   --color-brand: #121212;
-  --color-brand-alt: #567681;
-  --color-card: #e7edef;
+  --color-cta: #ffe500;
+  --color-card: #f7f6f5;
   --color-border: #dcdcdc;
+  --color-border-hover: #a4a3a5;
 
   --color-text: #121212;
   --color-text-light: #444;
+
+  --color-bg: var(--color-card);
 }

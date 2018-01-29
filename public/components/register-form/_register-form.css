@@ -1,6 +1,5 @@
 .register-form {
   @extend %content-container;
-  background: var(--color-page-bg);
 }
 
 .register-form__prelude {
@@ -188,9 +187,7 @@
   right: 0;
   z-index: 1;
   padding: 2rem;
-  color: #333;
   border: 2px solid #eaeaea;
-  background: #fff;
   max-width: 36rem;
 }
 
@@ -238,7 +235,6 @@
 .register-form__label--gnm-marketing {
   @extend %form__label--checkbox;
   @extend %font-text-sans-1;
-  color: #333;
 }
 
 
@@ -255,7 +251,6 @@
 .register-form__label--3rd-party-marketing {
   @extend %form__label--checkbox;
   @extend %font-text-sans-1;
-  color: #333;
 }
 
 
@@ -278,7 +273,6 @@
 
 .register__cta--sign-in {
   @extend %font-text-sans-1;
-  color: #333;
   margin: 1.2rem 0;
 }
 

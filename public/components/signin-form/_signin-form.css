@@ -2,7 +2,6 @@
 .signin__prelude {
   @extend %font-text-1;
   @extend %content-container;
-  color: #333;
   background-color: #ddd;
   padding: 10px 20px;
   margin-top: 20px;
@@ -15,7 +14,6 @@
 
 .signin-form {
   @extend %content-container;
-  background: var(--color-page-bg);
 }
 
 .signin-form--with-errors {
@@ -83,7 +81,6 @@
 .signin-form__label--remember-me {
   @extend %form__label--checkbox;
   @extend %font-text-sans-1;
-  color: #333;
   float: left;
 }
 
@@ -107,7 +104,6 @@
 
 .signin__cta--signup {
   @extend %font-text-sans-1;
-  color: #333;
   margin: 1.2rem 0;
 }
 
@@ -120,7 +116,6 @@
 
 .signin-form__cta--reset {
   @extend %font-text-sans-1;
-  color: #333;
   position: absolute;
   right: 0;
   margin: 0;

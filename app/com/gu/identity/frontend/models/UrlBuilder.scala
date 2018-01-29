@@ -19,7 +19,9 @@ object UrlBuilder {
           case (key, value) => s"$key=${encode(value)}"
         }.mkString("&")
 
-        s"$baseUrl?$paramString"
+        val initialVariableDivider = if(baseUrl contains "?") "&" else "?"
+
+        s"$baseUrl$initialVariableDivider$paramString"
       }
     }
 

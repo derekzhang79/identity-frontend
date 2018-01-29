@@ -28,9 +28,7 @@ object ReturnUrl {
       .filter { uri =>
         validUris.contains(uri) || validDomain(uri) && validUrlPath(uri, invalidUrlPaths)
       }
-      .map(uri =>
-        ReturnUrl(uri)
-      )
+      .map(uri => ReturnUrl(uri))
 
   def apply(returnUrlParam: Option[String], refererHeader: Option[String], configuration: Configuration, clientId: Option[ClientID], invalidUrlPaths: List[String]): ReturnUrl =
     opt(returnUrlParam, refererHeader, invalidUrlPaths)

@@ -3,11 +3,12 @@ package test.pages
 import test.util.{LoadablePage, Browser, Config}
 
 class RegisterConfirm extends LoadablePage with Browser {
-  val url = s"${Config.baseUrl}/register/confirm?returnUrl=${Config.baseUrl}/register"
+  val url = s"${Config.baseUrl}/register/confirm?returnUrl=${Config.baseUrl}/test-return-test"
 
-  def hasLoaded(): Boolean = pageHasElement(confirmRegistrationButton)
+  def hasLoaded(): Boolean = pageHasUrl("verify-email")
 
-  def confirmRegistration() = clickOn(confirmRegistrationButton)
+  def isSignupFlow(): Boolean = pageHasUrl("isSignupFlow")
 
-  private lazy val confirmRegistrationButton = className("register-confirm__complete-registration-button")
+  def hasPassedReturnUrl(): Boolean = pageHasUrl("test-return-test")
+
 }

@@ -34,13 +34,6 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email, shouldCollectConsents, shouldCollectV2Consents)
   }
 
-  def confirm(returnUrl: Option[String], clientId: Option[String]) = Action {
-    val clientIdOpt = ClientID(clientId)
-    val returnUrlActual = ReturnUrl(returnUrl, refererHeader = None, configuration, clientIdOpt)
-
-    renderRegisterConfirmation(configuration, returnUrlActual, clientIdOpt)
-  }
-
   def reset(error: Seq[String], clientId: Option[String]) = CSRFAddToken(csrfConfig) { req =>
     val clientIdOpt = ClientID(clientId)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)

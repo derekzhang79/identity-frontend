@@ -62,7 +62,8 @@ class RegisterAction(
       clientId: Option[ClientID])(implicit request: Request[RegisterActionRequestBody]) = {
 
     val returnUrl = returnUrlOpt.getOrElse(ReturnUrl.defaultForClient(config, clientId))
-    val registrationConfirmUrl = UrlBuilder(config.identityProfileBaseUrl, routes.Application.confirm())
+    val registrationConfirmUrl = config.identityProfileBaseUrl+"/verify-email?isSignupFlow=true"
+
     (group, skipConfirmation.getOrElse(false)) match {
       case(Some(group), false) => {
         val skipConfirmationReturnUrl = ReturnUrl(Some(UrlBuilder(registrationConfirmUrl, returnUrl, clientId)), config)

@@ -47,6 +47,7 @@ class EmailValidationSpec extends FlatSpec with Matchers with AppendedClues{
       "#@%^%#$@#$@#.com", //Garbage
       "@domain.com", //Missing username
       "Joe Smith <email@domain.com>", //Encoded html within email is invalid
+      "emailwith’smartquote@gmail.com", //Smart quotes are invalid
       "email.domain.com", //Missing @
       "email@domain@domain.com", //Two @ sign
       ".email@domain.com", //Leading dot in address is not allowed

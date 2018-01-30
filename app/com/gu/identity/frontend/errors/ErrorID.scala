@@ -122,6 +122,13 @@ object ErrorIDs {
     val key = "deauthenticate-error-bad-request"
   }
 
+  case object RepermissionTokenGatewayErrorID extends ErrorID {
+    val key = "repermission-token-error-gateway"
+  }
+
+  case object UnauthorizedRepermissionTokenErrorID extends ErrorID {
+    val key = "unauthorized-repermission-token-error-gateway"
+  }
 
   case object GetUserGatewayErrorID extends ErrorID {
     val key = "getuser-error-gateway"

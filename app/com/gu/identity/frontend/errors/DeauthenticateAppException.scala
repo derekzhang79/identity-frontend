@@ -34,6 +34,18 @@ case class ConsentTokenUnauthorizedException(
   override val id = UnauthorizedConsentTokenErrorID
 }
 
+case class RepermissionTokenUnauthorizedException(
+ clientError: IdentityClientError
+ ) extends ServiceGatewayAppException(clientError) {
+  override val id = UnauthorizedRepermissionTokenErrorID
+}
+
+case class RepermissionTokenAppException(
+ clientError: IdentityClientError
+) extends ServiceGatewayAppException(clientError) {
+  override val id = RepermissionTokenGatewayErrorID
+}
+
 
 case class DeauthenticateServiceBadRequestException(
     clientError: IdentityClientError)

@@ -37,6 +37,8 @@ class EmailValidationSpec extends FlatSpec with Matchers with AppendedClues{
       "email@domain.name", //.name is valid Top Level Domain name
       "email@domain.co.jp", //Dot in Top Level Domain name also considered valid (use co.jp as example here)
       "te44st@gmail.com",
+      "f@ggg.fm",
+      "email'withapostrophe@gmail.com",
       "firstname-lastname@domain.com") //Dash in address field is valid
 
     val invalid = List(

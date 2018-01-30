@@ -74,7 +74,9 @@ object RegisterActionRequestBody {
     // This regex is based on the one used by WebKit for html email validation, documented here:
     // https://html.spec.whatwg.org/#valid-e-mail-address
     // But with the additional constraint that the domain must not be dotless
-    val dotlessDomainEmailRegex: Regex = """^([a-zA-Z0-9!#$%&’'*+\/=?^_`{|}~-]|[a-zA-Z0-9!#$%&’'*+\/=?^_`{|}~-][a-zA-Z0-9.!#$%&’'*+\/=?^_`{|}~-]*[a-zA-Z0-9!#$%&’'*+\/=?^_`{|}~-])@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.(?:[a-zA-Z0-9\.](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$""".r
+    // RFC spec here: https://tools.ietf.org/html/rfc2822#section-3.4.1
+    val atext = """a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-"""
+    val dotlessDomainEmailRegex: Regex = s"""^([$atext]|[$atext][.$atext]*[$atext])@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.(?:[a-zA-Z0-9\\.](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$$""".r
 
     def dotlessDomainEmail: Mapping[String] = email.verifying(
       Constraints.pattern(dotlessDomainEmailRegex)

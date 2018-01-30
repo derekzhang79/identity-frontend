@@ -1,5 +1,6 @@
 package com.gu.identity.frontend.request
 
+import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.errors._
 import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
 import com.gu.identity.frontend.request.RequestParameters._
@@ -7,7 +8,8 @@ import play.api.data.Forms._
 import play.api.data.validation._
 import play.api.data.{Form, FormError, Mapping}
 import play.api.http.HeaderNames
-import play.api.mvc.{BodyParser, RequestHeader}
+import play.api.mvc.{BodyParser, BodyParsers, RequestHeader, Result}
+import com.gu.identity.model.{Consent, ConsentUnapply}
 
 import scala.util.matching.Regex
 

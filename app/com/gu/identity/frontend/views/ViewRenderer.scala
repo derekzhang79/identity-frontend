@@ -84,12 +84,6 @@ object ViewRenderer {
     renderViewModel("register-page", model)
   }
 
-  def renderRegisterConfirmation(configuration: Configuration, returnUrl: ReturnUrl, clientId: Option[ClientID])(implicit messages: Messages) = {
-    renderViewModel(
-      "register-confirmation-page",
-      RegisterConfirmationViewModel(configuration, returnUrl, clientId))
-  }
-
   def renderResetPassword(
     configuration: Configuration,
     errorIds: Seq[String],

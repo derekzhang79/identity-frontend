@@ -1,8 +1,8 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.configuration.Configuration
-import com.gu.identity.frontend.errors.ErrorIDs.RepermissionConsentTokenErrorID
-import com.gu.identity.frontend.errors.NotFoundError
+import com.gu.identity.frontend.errors.ErrorIDs.{RepermissionConsentTokenErrorID, UnauthorizedRepermissionTokenErrorID}
+import com.gu.identity.frontend.errors.{NotFoundError, RepermissionTokenUnauthorizedException}
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.services.IdentityService
 import com.gu.identity.frontend.views.ViewRenderer._
@@ -25,7 +25,7 @@ class RepermissionController(
     identityService.processRepermissionToken(repermissionToken).map {
       case Right(playCookies) =>
         Redirect("/consents").withCookies(playCookies: _*)
-      case Left(err) if err.id == RepermissionConsentTokenErrorID => Redirect(routes.Application.resendConsentTokenSent(List("error-unexpected")))
+      case Left(err) if err.id == UnauthorizedRepermissionTokenErrorID => Redirect(routes.Application.invalidRepermissioningToken(List("error-unexpected")))
       case Left(_) => renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
     }.recover {
       case NonFatal(e) =>

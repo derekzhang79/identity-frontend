@@ -37,6 +37,8 @@ GET        /consent-token/resent                        com.gu.identity.frontend
 
 GET        /repermission-token/:repermissionToken/accept com.gu.identity.frontend.controllers.RepermissionController.acceptToken(repermissionToken: String)
 
+GET        /repermission-token/invalid                  com.gu.identity.frontend.controllers.Application.invalidRepermissioningToken(error: Seq[String] ?= Seq.empty)
+
 POST       /actions/reset                               com.gu.identity.frontend.controllers.ResetPasswordAction.reset
 
 POST       /actions/csp/report                          com.gu.identity.frontend.controllers.CSPViolationReporter.cspReport

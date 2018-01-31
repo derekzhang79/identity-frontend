@@ -126,6 +126,10 @@ object ErrorIDs {
     val key = "repermission-token-error-gateway"
   }
 
+  case object RepermissionConsentTokenErrorID extends ErrorID {
+    val key = "unauthorized-consent-token-error-gateway"
+  }
+
   case object UnauthorizedRepermissionTokenErrorID extends ErrorID {
     val key = "unauthorized-repermission-token-error-gateway"
   }

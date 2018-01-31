@@ -9,7 +9,7 @@ case class UserRepermissionTokenRequest private(override val url: String) extend
 
 object UserRepermissionTokenRequest {
   def apply(token: String, config: IdentityClientConfiguration): UserRepermissionTokenRequest = {
-    val pathComponents = Seq("repermission")
+    val pathComponents = Seq("repermission/auth")
     new UserRepermissionTokenRequest(ApiRequest.apiEndpoint(pathComponents: _*)(config)) {
       override val headers = List(ApiRequest.apiKeyHeader(config))
       override val parameters: HttpParameters = List("scopedToken" -> token)

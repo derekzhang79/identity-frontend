@@ -99,4 +99,8 @@ class IdentityClient extends Logging {
     configuration.requestHandler.handleRequest(UseConsentTokenRequest(token, configuration))
   }
 
+  def postRepermissionToken(token: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, ApiResponse]] = {
+    configuration.requestHandler.handleRequest(UserRepermissionTokenRequest(token, configuration))
+  }
+
 }

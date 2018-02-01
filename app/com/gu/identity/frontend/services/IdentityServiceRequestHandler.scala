@@ -155,6 +155,13 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         handleUnexpectedResponse(response)
       }
 
+    case r: UserRepermissionTokenRequest =>
+      if (response.status == 200) {
+        Right(response.json.as[AuthenticationCookiesResponse])
+      } else {
+        handleUnexpectedResponse(response)
+      }
+
     case _ => Left(Seq(ClientGatewayError("Unsupported request")))
   }
 

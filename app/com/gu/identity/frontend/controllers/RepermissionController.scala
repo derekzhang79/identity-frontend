@@ -22,10 +22,10 @@ class RepermissionController(
   with I18nSupport {
 
   def acceptToken(repermissionToken: String) = Action.async {
-    identityService.processRepermissionToken(repermissionToken).map {
+    identityService.authenticateRepermissionToken(repermissionToken).map {
       case Right(playCookies) =>
         Redirect("/consents").withCookies(playCookies: _*)
-      case Left(err) if err.id == UnauthorizedRepermissionTokenErrorID => Redirect(routes.Application.invalidRepermissioningToken(List("error-unexpected")))
+      case Left(RepermissionTokenUnauthorizedException :: _) => Redirect(routes.Application.invalidRepermissioningToken(List("error-unexpected")))
       case Left(_) => renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
     }.recover {
       case NonFatal(e) =>

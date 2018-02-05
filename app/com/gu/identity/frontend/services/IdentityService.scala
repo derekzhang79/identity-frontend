@@ -23,6 +23,8 @@ trait IdentityService {
 
   def authenticate(signInRequest: SignInRequestParameters, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def authenticate(token: String, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
+  def authenticateConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
+  def authenticateRepermissionToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def deauthenticate(cookie: PlayCookie, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def registerThenSignIn(request: RegisterActionRequestBody, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def register(request: RegisterActionRequestBody, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, RegisterResponseUser]]
@@ -30,8 +32,6 @@ trait IdentityService {
   def sendResetPasswordEmail(data: ResetPasswordActionRequestBody, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse ]]
   def getUser(cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, User]]
   def assignGroupCode(group: String, cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, AssignGroupResponse]]
-  def processConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, PlayCookies]]
-  def processRepermissionToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, PlayCookies]]
 }
 
 
@@ -52,8 +52,26 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
       case Left(errors) =>
         Left(errors.map(SignInServiceAppException.apply))
 
-      case Right(cookies) => Right(CookieService.signInCookies(cookies, false)(config))
+      case Right(cookies) => Right(CookieService.signInCookies(cookies, rememberMe = false)(config))
     }
+
+  override def authenticateConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[Seq[ConsentTokenAppException], PlayCookies]] = {
+    client.postConsentToken(token) map {
+      case Left(errors) =>
+        Left(errors.map(ConsentTokenAppException.apply))
+      case Right(cookies) =>
+        Right(CookieService.signInCookies(cookies, rememberMe = false)(config))
+    }
+  }
+
+  override def authenticateRepermissionToken(token: String)(implicit ec: ExecutionContext): Future[Either[Seq[RepermissionTokenAppException], PlayCookies]] = {
+    client.postRepermissionToken(token) map {
+      case Left(errors) =>
+        Left(errors.map(RepermissionTokenAppException.apply))
+      case Right(cookies) =>
+        Right(CookieService.signInCookies(cookies, rememberMe = false)(config))
+    }
+  }
 
   override def deauthenticate(cookie: PlayCookie, trackingData: TrackingData)(implicit ec: ExecutionContext) = {
     val apiRequest = DeauthenticateApiRequest(cookie, trackingData)
@@ -132,38 +150,6 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
         Left(errors.map(AssignGroupAppException.apply))
 
       case Right(response) => Right(response)
-    }
-  }
-
-  override def processConsentToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, PlayCookies]] = {
-    client.postConsentToken(token) map {
-      case Left(IdentityUnauthorizedError :: _) => Left(ConsentTokenUnauthorizedException(IdentityUnauthorizedError))
-      case Left(error) => Left(ConsentTokenAppException(error.head))
-      case Right(AuthenticationCookiesResponse(cookies)) =>
-        val rpCookies = CookieService.signInCookies(
-          cookies.values.map(IdentityApiCookie(_, cookies.expiresAt)),
-          rememberMe = false
-        )(config)
-        Right(rpCookies)
-      case Right(other) =>
-        logger.warn(s"Unexpected API Response for consent-token, $other", new IllegalStateException(s"Illegal Response ${other.getClass}, expected AuthenticationCookiesResponse"))
-        Left(ConsentTokenAppException(ClientGatewayError("An Unexpected Error Occurred")))
-    }
-  }
-
-  override def processRepermissionToken(token: String)(implicit ec: ExecutionContext): Future[Either[ServiceException, PlayCookies]] = {
-    client.postRepermissionToken(token) map {
-      case Left(IdentityUnauthorizedError :: _) => Left(RepermissionTokenUnauthorizedException(IdentityUnauthorizedError))
-      case Left(error) => Left(RepermissionTokenAppException(error.head))
-      case Right(AuthenticationCookiesResponse(cookies)) =>
-        val rpCookies = CookieService.signInCookies(
-          cookies.values.map(IdentityApiCookie(_, cookies.expiresAt)),
-          rememberMe = false
-        )(config)
-        Right(rpCookies)
-      case Right(other) =>
-        logger.warn(s"Unexpected API Response for repermission-token, $other", new IllegalStateException(s"Illegal Response ${other.getClass}, expected AuthenticationCookiesResponse"))
-        Left(ConsentTokenAppException(ClientGatewayError("An Unexpected Error Occurred")))
     }
   }
 }

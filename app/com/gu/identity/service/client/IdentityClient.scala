@@ -4,7 +4,9 @@ import com.gu.identity.frontend.authentication.IdentityApiCookie
 import com.gu.identity.frontend.models.TrackingData
 import com.gu.identity.service.client.request._
 import com.gu.identity.service.client.models.User
+
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Left, Right}
 
 class IdentityClient extends Logging {
 
@@ -19,6 +21,12 @@ class IdentityClient extends Logging {
       case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(Seq()))
     }
+
+  def postConsentToken(token: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
+    authenticateCookies(UserConsentTokenRequest(token, configuration))
+
+  def postRepermissionToken(token: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
+    authenticateCookies(UserRepermissionTokenRequest(token, configuration))
 
   private def authenticateCookies(request: ApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
     configuration.requestHandler.handleRequest(request).map {
@@ -94,13 +102,4 @@ class IdentityClient extends Logging {
       case Right(other) => Left(Seq(ClientGatewayError("Unknown response")))
     }
   }
-
-  def postConsentToken(token: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, ApiResponse]] = {
-    configuration.requestHandler.handleRequest(UseConsentTokenRequest(token, configuration))
-  }
-
-  def postRepermissionToken(token: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, ApiResponse]] = {
-    configuration.requestHandler.handleRequest(UserRepermissionTokenRequest(token, configuration))
-  }
-
 }

@@ -119,6 +119,8 @@ object ClientBadRequestError {
       case ClientRegistrationEmailConflictError.message => ClientRegistrationEmailConflictError
       case ClientRegistrationEmailReservedError.message => ClientRegistrationEmailReservedError
       case ClientRegistrationEmailValidationError.message => ClientRegistrationEmailValidationError
+      case ClientInvalidTokenError.message => ClientInvalidTokenError
+      case ClientTokenExpiredError.message => ClientTokenExpiredError
       case ClientRateLimitError.message => ClientRateLimitError
       case _ => OtherClientBadRequestError(message, description, context)
     }

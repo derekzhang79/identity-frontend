@@ -36,11 +36,11 @@ object IdentityClientError {
     apply(statusCode, message, None, None)
 
   def apply(statusCode: Int, message: String, description: Option[String], context: Option[String] = None): IdentityClientError =
-    statusCode match {
-      case 403 => IdentityUnauthorizedError
-      case status if status >= 400 && statusCode < 500 => ClientBadRequestError(message, description, context)
-      case _ => ClientGatewayError(message, description, context)
-    }
+    if(statusCode >= 400 && statusCode < 500)
+      ClientBadRequestError(message, description, context)
+    else
+      ClientGatewayError(message, description, context)
+
 }
 
 case class ClientGatewayError(
@@ -68,8 +68,13 @@ case object ClientRegistrationUsernameConflictError
   val messageForReservedUser = "Reserved user name"
 }
 
-case object IdentityUnauthorizedError
-  extends AbstractIdentityClientError("Unauthorized error")
+case object ClientInvalidTokenError
+  extends AbstractIdentityClientError("Invalid token")
+    with ClientBadRequestError
+    with NoStackTrace
+
+case object ClientTokenExpiredError
+  extends AbstractIdentityClientError("Token expired")
     with ClientBadRequestError
     with NoStackTrace
 

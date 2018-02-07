@@ -1,0 +1,20 @@
+{{# partial "pageTitle" }}{{ resendLinkEmailSentText.pageTitle }}{{/ partial }}
+
+{{# partial "content" }}
+
+  {{# unless errors}}
+    <h1 class="page-heading">{{ resendLinkEmailSentText.title }}</h1>
+    <section class="page-standfirst">
+      <p class="page-standfirst__paragraph">{{resendLinkEmailSentText.description}}</p>
+    </section>
+  {{/unless}}
+
+  <section class="page-content">
+  {{#each errors}}
+    <p id="{{id}}" class="resend-consent-form__error">{{message}}</p>
+  {{/each}}
+    <p class="resend-consent__details resend-consent__text">{{{ resendLinkEmailSentText.info }}}</p>
+  </section>
+
+{{/partial}}
+{{> layout}}

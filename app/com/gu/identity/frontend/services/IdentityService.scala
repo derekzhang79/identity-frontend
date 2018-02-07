@@ -6,7 +6,7 @@ import com.gu.identity.frontend.errors._
 import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.models.{ClientIp, TrackingData}
 import com.gu.identity.frontend.request.RequestParameters.SignInRequestParameters
-import com.gu.identity.frontend.request.{RegisterActionRequestBody, ResendConsentTokenActionRequestBody, ResetPasswordActionRequestBody}
+import com.gu.identity.frontend.request.{RegisterActionRequestBody, ResendTokenActionRequestBody, ResetPasswordActionRequestBody}
 import com.gu.identity.service.client._
 import com.gu.identity.service.client.models.User
 import com.gu.identity.service.client.request._
@@ -28,7 +28,8 @@ trait IdentityService {
   def deauthenticate(cookie: PlayCookie, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def registerThenSignIn(request: RegisterActionRequestBody, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, PlayCookies]]
   def register(request: RegisterActionRequestBody, clientIp: ClientIp, trackingData: TrackingData)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, RegisterResponseUser]]
-  def resendConsentToken(data: ResendConsentTokenActionRequestBody)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, ResendConsentTokenResponse ]]
+  def resendConsentToken(data: ResendTokenActionRequestBody)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, ResendTokenResponse ]]
+  def resendRepermissionToken(data: ResendTokenActionRequestBody)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, ResendTokenResponse ]]
   def sendResetPasswordEmail(data: ResetPasswordActionRequestBody, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse ]]
   def getUser(cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, User]]
   def assignGroupCode(group: String, cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, AssignGroupResponse]]
@@ -114,11 +115,20 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
     }
   }
 
-  override def resendConsentToken(resendConsentTokenData: ResendConsentTokenActionRequestBody)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, ResendConsentTokenResponse]] = {
+  override def resendConsentToken(resendConsentTokenData: ResendTokenActionRequestBody)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, ResendTokenResponse]] = {
     val apiRequest = ResendConsentTokenApiRequest(resendConsentTokenData)
     client.resendConsentToken(apiRequest).map {
       case Left(errors) =>
-        Left(errors.map(ResendConsentTokenExeption.apply))
+        Left(errors.map(ResendTokenException.apply))
+      case Right(okResponse) => Right(okResponse)
+    }
+  }
+
+  override def resendRepermissionToken(resendRepermissionTokenData: ResendTokenActionRequestBody)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, ResendTokenResponse]] = {
+    val apiRequest = ResendRepermissionTokenApiRequest(resendRepermissionTokenData)
+    client.resendRepermissionToken(apiRequest).map {
+      case Left(errors) =>
+        Left(errors.map(RepermissionTokenAppException.apply))
       case Right(okResponse) => Right(okResponse)
     }
   }

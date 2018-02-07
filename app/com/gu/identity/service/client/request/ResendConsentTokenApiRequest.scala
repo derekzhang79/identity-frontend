@@ -1,9 +1,9 @@
 package com.gu.identity.service.client.request
 
-import com.gu.identity.frontend.request.ResendConsentTokenActionRequestBody
+import com.gu.identity.frontend.request.ResendTokenActionRequestBody
 import com.gu.identity.service.client._
 
-case class ResendConsentTokenApiRequest(data: ResendConsentTokenActionRequestBody)
+case class ResendConsentTokenApiRequest(data: ResendTokenActionRequestBody)
                                            (implicit configuration: IdentityClientConfiguration) extends ApiRequest {
   override val method = POST
   override val headers = Iterable(

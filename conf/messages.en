@@ -115,15 +115,18 @@ errors.unauthorized.title=Expired link
 errors.unauthorized.description=Sorry, the link you have used has expired. You can manage all of your email preferences after signing in or registering <a href="{0}">here</a>.
 errors.unauthorized.resendTokenLink=You can manage all of your email preferences after signing in or registering <a href="{0}">here</a>.
 
-resendConsentTokenSent.pageTitle=Email Sent
-resendConsentTokenSent.title=Email sent
-resendConsentTokenSent.description=We have sent you a new link to confirm your subscriptions
-resendConsentTokenSent.info=You can also manage all of your email preferences after signing in or registering <a href="{0}">here</a>.
+resendTokenSent.pageTitle=Email Sent
+resendTokenSent.title=Email sent
+resendTokenSent.description=We have sent you a new link
+resendTokenSent.info=You can also manage all of your email preferences after signing in or registering <a href="{0}">here</a>.
 
 resendConsentLink.pageTitle=Invalid consent token
 resendConsentLink.title=Expired link
 resendConsentLink.description=This link has expired, please click below to get a new link sent to your inbox
 
+resendRepermissionLink.pageTitle=Invalid repermission token
+resendRepermissionLink.title=Expired link
+resendRepermissionLink.description=This link has expired, please click below to get a new link sent to your inbox
 
 # com.gu.identity.frontend.models.text.ThirdPartyTsAndCsText
 thirdPartyTerms.title=Welcome to Guardian {0}

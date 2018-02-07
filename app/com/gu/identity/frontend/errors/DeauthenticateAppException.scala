@@ -13,7 +13,6 @@ object DeauthenticateAppException {
     }
 }
 
-
 case class DeauthenticateServiceGatewayAppException(
     clientError: IdentityClientError)
   extends ServiceGatewayAppException(clientError)
@@ -21,31 +20,6 @@ case class DeauthenticateServiceGatewayAppException(
 
   val id = DeauthenticateGatewayErrorID
 }
-
-case class ConsentTokenAppException(
- clientError: IdentityClientError
-) extends ServiceGatewayAppException(clientError) {
-  override val id = ConsentTokenGatewayErrorID
-}
-
-case class ConsentTokenUnauthorizedException(
- clientError: IdentityClientError
-) extends ServiceGatewayAppException(clientError) {
-  override val id = UnauthorizedConsentTokenErrorID
-}
-
-case class RepermissionTokenUnauthorizedException(
- clientError: IdentityClientError
- ) extends ServiceGatewayAppException(clientError) {
-  override val id = UnauthorizedRepermissionTokenErrorID
-}
-
-case class RepermissionTokenAppException(
- clientError: IdentityClientError
-) extends ServiceGatewayAppException(clientError) {
-  override val id = RepermissionTokenGatewayErrorID
-}
-
 
 case class DeauthenticateServiceBadRequestException(
     clientError: IdentityClientError)

@@ -148,7 +148,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         handleUnexpectedResponse(response)
       }
 
-    case r: UseConsentTokenRequest =>
+    case r: UserConsentTokenRequest =>
       if (response.status == 200) {
         Right(response.json.as[AuthenticationCookiesResponse])
       } else {

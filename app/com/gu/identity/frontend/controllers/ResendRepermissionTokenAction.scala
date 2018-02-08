@@ -8,7 +8,6 @@ import com.gu.identity.frontend.services.{IdentityService, ServiceAction, Servic
 import play.api.mvc.{Controller, Request}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-
 case class ResendRepermissionTokenAction(
   identityService: IdentityService,
   csrfConfig: CSRFConfig) extends Controller with Logging {
@@ -25,9 +24,11 @@ case class ResendRepermissionTokenAction(
 
   def resend = ResendRepermissionTokenServiceAction(bodyParser) { request =>
 
-    //WILL THIS ALWAYS GO TO tokenSent even if it fails?
-    identityService.resendRepermissionToken(request.body).map { eitherResponse =>
-      eitherResponse.right.map { _ =>
+    identityService.resendRepermissionToken(request.body).map {
+      case Left(errors) =>
+        Left(errors)
+
+      case Right(okResponse) => Right {
         NoCache(SeeOther(routes.Application.resendRepermissionTokenSent().url))
       }
     }

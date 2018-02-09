@@ -7,8 +7,7 @@ import play.api.data.{Form, FormError}
 
 case class ResendTokenActionRequestBody(
   token: String,
-  csrfToken: String
-)
+  csrfToken: String)
   extends CSRFTokenRequestParameter
 
 

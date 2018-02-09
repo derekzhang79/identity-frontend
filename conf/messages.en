@@ -117,7 +117,7 @@ errors.unauthorized.resendTokenLink=You can manage all of your email preferences
 
 resendTokenSent.pageTitle=Email Sent
 resendTokenSent.title=Email sent
-resendTokenSent.description=We have sent you a new link
+resendTokenSent.description=Please go to your inbox and click on the link sent
 resendTokenSent.info=You can also manage all of your email preferences after signing in or registering <a href="{0}">here</a>.
 
 resendConsentLink.pageTitle=Invalid consent token

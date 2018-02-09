@@ -3,13 +3,13 @@
 
 {{# partial "content" }}
   <h1 class="page-heading">{{ text.title }}</h1>
-  <section class="page-content">
+  <section class="page-standfirst">
 
     {{#each errors}}
       <p id="{{id}}" class="reset-password-form__error">{{message}}</p>
 
     {{else}}
-      <p class="resend-consent__text">{{ text.description }}</p>
+      <p class="page-standfirst__paragraph">{{ text.description }}</p>
 
       <form id="resend-token-form" class="resend-consent-form" action="/repermission-token/resend" method="GET">
         <input type="hidden" name="token" value="{{ token }}">

@@ -37,3 +37,9 @@
 .resend-consent-form__submit-button {
   @extend %form__button--submit;
 }
+
+.page-standfirst {
+  & .resend-link-description {
+    margin-top: 15px;
+  }
+}

@@ -117,16 +117,15 @@ errors.unauthorized.resendTokenLink=You can manage all of your email preferences
 
 resendTokenSent.pageTitle=Email Sent
 resendTokenSent.title=Email sent
-resendTokenSent.description=Please go to your inbox and click on the link sent
-resendTokenSent.info=You can also manage all of your email preferences after signing in or registering <a href="{0}">here</a>.
+resendTokenSent.description=Please go to your inbox. If you have not received it please check your spam folder. 
 
 resendConsentLink.pageTitle=Invalid consent token
 resendConsentLink.title=Expired link
 resendConsentLink.description=This link has expired, please click below to get a new link sent to your inbox
 
 resendRepermissionLink.pageTitle=Invalid repermission token
-resendRepermissionLink.title=Expired link
-resendRepermissionLink.description=This link has expired, please click below to get a new link sent to your inbox
+resendRepermissionLink.title=Oops that link was old!
+resendRepermissionLink.description=We need to send you another email with a new link. Please click the button below then check your inbox.
 
 # com.gu.identity.frontend.models.text.ThirdPartyTsAndCsText
 thirdPartyTerms.title=Welcome to Guardian {0}

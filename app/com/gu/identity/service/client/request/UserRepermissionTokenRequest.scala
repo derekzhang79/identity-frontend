@@ -12,7 +12,7 @@ object UserRepermissionTokenRequest {
     val pathComponents = Seq("repermission/auth")
     new UserRepermissionTokenRequest(ApiRequest.apiEndpoint(pathComponents: _*)(config)) {
       override val headers = List(ApiRequest.apiKeyHeader(config))
-      override val parameters: HttpParameters = List("scopedToken" -> token)
+      override val parameters: HttpParameters = List("token" -> token)
     }
   }
 }

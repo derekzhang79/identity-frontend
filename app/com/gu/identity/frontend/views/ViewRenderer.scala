@@ -117,16 +117,26 @@ object ViewRenderer {
     renderViewModel("invalid-consent-token-page", model)
   }
 
-  def renderResendConsentTokenSent(configuration: Configuration, csrfToken: Option[CSRFToken], errorIds: Seq[String])(implicit messages: Messages) = {
+  def renderResendTokenSent(configuration: Configuration, csrfToken: Option[CSRFToken], errorIds: Seq[String])(implicit messages: Messages) = {
     val errors = errorIds.map(ErrorViewModel.apply)
     val maybeErrors = if(errors.isEmpty) None else Some(errors)
 
-    val model = ResendConsentTokenSentViewModel(
+    val model = ResendTokenSentViewModel(
       configuration = configuration,
       csrfToken = csrfToken,
       errorIds = maybeErrors
     )
-    renderViewModel("resend-consent-link-sent-page", model)
+    renderViewModel("resend-link-sent-page", model)
+  }
+
+  def renderInvalidRepermissionToken(configuration: Configuration, token: String, csrfToken: Option[CSRFToken])(implicit messages: Messages) = {
+    val model = InvalidRepermissionTokenViewModel(
+      configuration = configuration,
+      token = token,
+      csrfToken = csrfToken
+    )
+
+    renderViewModel("invalid-repermission-token-page", model)
   }
 
 

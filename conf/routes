@@ -31,13 +31,17 @@ GET        /consent-token/:consentToken/accept          com.gu.identity.frontend
 
 GET        /consent-token/:consentToken/invalid         com.gu.identity.frontend.controllers.Application.invalidConsentToken(error: Seq[String] ?= Seq.empty, consentToken: String)
 
-GET       /consent-token/resend                         com.gu.identity.frontend.controllers.ResendConsentTokenAction.resend
+GET        /consent-token/resend                        com.gu.identity.frontend.controllers.ResendConsentTokenAction.resend
 
 GET        /consent-token/resent                        com.gu.identity.frontend.controllers.Application.resendConsentTokenSent(error: Seq[String] ?= Seq.empty)
 
 GET        /repermission-token/:repermissionToken/accept com.gu.identity.frontend.controllers.RepermissionController.acceptToken(repermissionToken: String)
 
-GET        /repermission-token/invalid                  com.gu.identity.frontend.controllers.Application.invalidRepermissioningToken(error: Seq[String] ?= Seq.empty)
+GET        /repermission-token/:repermissionToken/invalid com.gu.identity.frontend.controllers.Application.invalidRepermissioningToken(repermissionToken: String)
+
+GET        /repermission-token/resend                   com.gu.identity.frontend.controllers.ResendRepermissionTokenAction.resend
+
+GET        /repermission-token/resent                   com.gu.identity.frontend.controllers.Application.resendRepermissionTokenSent(error: Seq[String] ?= Seq.empty)
 
 POST       /actions/reset                               com.gu.identity.frontend.controllers.ResetPasswordAction.reset
 

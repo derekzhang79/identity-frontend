@@ -53,12 +53,17 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
 
   def resendConsentTokenSent(error: Seq[String]) = CSRFAddToken(csrfConfig)  { req =>
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
-    renderResendConsentTokenSent(configuration, csrfToken, error)
+    renderResendTokenSent(configuration, csrfToken, error)
+  }
+
+  def resendRepermissionTokenSent(error: Seq[String]) = CSRFAddToken(csrfConfig)  { req =>
+    val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
+    renderResendTokenSent(configuration, csrfToken, error)
   }
 
   //TODO: This is a placeholder until a generic invalid-token page is made for general token use
-  def invalidRepermissioningToken(error: Seq[String]) = CSRFAddToken(csrfConfig)  { req =>
+  def invalidRepermissioningToken(token: String) = CSRFAddToken(csrfConfig)  { req =>
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
-    renderResendConsentTokenSent(configuration, csrfToken, error)
+    renderInvalidRepermissionToken(configuration, token, csrfToken)
   }
 }

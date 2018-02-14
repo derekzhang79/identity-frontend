@@ -52,6 +52,8 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
 
   implicit val sendResetPasswordEmailRequestBody = Json.format[SendResetPasswordEmailRequestBody]
 
+  implicit val resendRepermissionEmailRequestBody = Json.format[ResendRepermissionFromTokenApiRequestBody]
+
   implicit val registerResponseUserGroupsFormat = Json.format[RegisterResponseUserGroups]
   implicit val registerResponseUserFormat = Json.format[RegisterResponseUser]
   implicit val registerResponseFormat = Json.format[RegisterResponse]
@@ -67,32 +69,34 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
 
   implicit val assignGroupResponseFormat = Json.format[AssignGroupResponse]
 
-  def handleRequest(request: ApiRequest): Future[Either[IdentityClientErrors, ApiResponse]] =
+  def handleRequest(request: ApiRequest): Future[Either[IdentityClientErrors, ApiResponse]] = {
     ws.url(request.url)
       .withHeaders(request.headers.toSeq: _*)
       .withQueryString(request.parameters.toSeq: _*)
       .withRequestTimeout(10000)
       .withBody(request.body.map(handleRequestBody).getOrElse(""))
       .execute(request.method.toString)
-        .map(handleResponse(request))
-        .flatMap {
-          case Left(Seq(ClientRateLimitError)) => Future.failed(ServiceRateLimitedAppException)
-          case other => Future.successful(other)
+      .map(handleResponse(request))
+      .flatMap {
+        case Left(Seq(ClientRateLimitError)) => Future.failed(ServiceRateLimitedAppException)
+        case other => Future.successful(other)
+      }
+      .recoverWith {
+        case NonFatal(err) => Future.failed {
+          ClientGatewayError(
+            "Request Error",
+            Some(s"Error executing ${request.method} request to: ${request.url} - ${err.getMessage}"),
+            cause = Some(err)
+          )
         }
-        .recoverWith {
-          case NonFatal(err) => Future.failed {
-            ClientGatewayError(
-              "Request Error",
-              Some(s"Error executing ${request.method} request to: ${request.url} - ${err.getMessage}"),
-              cause = Some(err)
-            )
-          }
-        }
+      }
+  }
 
   def handleRequestBody(body: ApiRequestBody): String = body match {
     case b: RegisterRequestBody => Json.stringify(Json.toJson(b))
     case AuthenticateCookiesApiRequestBody(email, password) => encodeBody("email" -> email, "password" -> password)
-    case AuthenticateCookiesFromTokenApiRequestBody(token) => encodeBody("scopedToken" -> token)
+    case AuthenticateCookiesFromTokenApiRequestBody(token) => encodeBody("token" -> token)
+    case b: ResendRepermissionFromTokenApiRequestBody => Json.stringify(Json.toJson(b))
     case b: SendResetPasswordEmailRequestBody => Json.stringify(Json.toJson(b))
   }
 
@@ -142,7 +146,15 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
 
     case r: ResendConsentTokenApiRequest =>
       if (response.status == 200) {
-        Right(ResendConsentTokenResponse())
+        Right(ResendTokenResponse())
+      }
+      else {
+        handleUnexpectedResponse(response)
+      }
+
+    case r: ResendRepermissionTokenApiRequest =>
+      if (response.status == 200) {
+        Right(ResendTokenResponse())
       }
       else {
         handleUnexpectedResponse(response)

@@ -38,6 +38,8 @@ object ErrorViewModel {
 
     RateLimitedErrorID -> "This request has been rate limited, please try again shortly",
 
+    UnauthorizedRepermissionTokenErrorID -> "Token is invalid",
+
     ForgeryTokenErrorID -> "Forgery token invalid; please try again.",
     UnexpectedErrorID -> "There was an unexpected problem; please try again."
   )

@@ -1,0 +1,21 @@
+{{# partial "pageTitle" }}{{ text.pageTitle }}{{/ partial }}
+
+
+{{# partial "content" }}
+  <h1 class="page-heading">{{ text.title }}</h1>
+  <section class="page-standfirst">
+      <p class="page-standfirst__paragraph resend-link-description">{{ text.description }}</p>
+
+      <form id="resend-token-form" class="resend-consent-form" action="/repermission-token/resend" method="GET">
+        <input type="hidden" name="token" value="{{ token }}">
+        <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
+
+        <div class="resend-consent-form__control--submit">
+          <button class="resend-consent-form__submit-button" id="resend-consent_submit" type="submit">{{ text.buttonText }} {{> components/icon/arrow-inline }}</button>
+        </div>
+
+      </form>
+
+  </section>
+{{/partial}}
+{{> layout}}

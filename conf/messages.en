@@ -126,6 +126,7 @@ resendConsentLink.description=This link has expired, please click below to get a
 resendRepermissionLink.pageTitle=Invalid repermission token
 resendRepermissionLink.title=Oops that link was old!
 resendRepermissionLink.description=We need to send you another email with a new link. Please click the button below then check your inbox.
+resendRepermissionLink.buttonText=Send me a new one
 
 # com.gu.identity.frontend.models.text.ThirdPartyTsAndCsText
 thirdPartyTerms.title=Welcome to Guardian {0}

@@ -5,7 +5,8 @@ import play.api.i18n.Messages
 case class InvalidRepermissionTokenText private(
                                             pageTitle: String,
                                             title: String,
-                                            description: String
+                                            description: String,
+                                            buttonText: String
                                           )
 
 object InvalidRepermissionTokenText {
@@ -13,6 +14,7 @@ object InvalidRepermissionTokenText {
     InvalidRepermissionTokenText(
       pageTitle = messages("resendRepermissionLink.pageTitle"),
       title = messages("resendRepermissionLink.title"),
-      description = messages("resendRepermissionLink.description")
+      description = messages("resendRepermissionLink.description"),
+      buttonText = messages("resendRepermissionLink.buttonText")
     )
 }

@@ -129,12 +129,11 @@ object ViewRenderer {
     renderViewModel("resend-link-sent-page", model)
   }
 
-  def renderInvalidRepermissionToken(configuration: Configuration, token: String, csrfToken: Option[CSRFToken], errorIds: Seq[String])(implicit messages: Messages) = {
+  def renderInvalidRepermissionToken(configuration: Configuration, token: String, csrfToken: Option[CSRFToken])(implicit messages: Messages) = {
     val model = InvalidRepermissionTokenViewModel(
       configuration = configuration,
       token = token,
-      csrfToken = csrfToken,
-      errors = errorIds.map(ErrorViewModel.apply)
+      csrfToken = csrfToken
     )
 
     renderViewModel("invalid-repermission-token-page", model)

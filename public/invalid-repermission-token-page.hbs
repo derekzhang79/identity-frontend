@@ -4,11 +4,6 @@
 {{# partial "content" }}
   <h1 class="page-heading">{{ text.title }}</h1>
   <section class="page-standfirst">
-
-    {{#each errors}}
-      <p id="{{id}}" class="reset-password-form__error">{{message}}</p>
-
-    {{else}}
       <p class="page-standfirst__paragraph resend-link-description">{{ text.description }}</p>
 
       <form id="resend-token-form" class="resend-consent-form" action="/repermission-token/resend" method="GET">
@@ -20,7 +15,6 @@
         </div>
 
       </form>
-    {{/each}}
 
   </section>
 {{/partial}}

@@ -9,7 +9,6 @@ case class InvalidRepermissionTokenViewModel private(
                                                  layout: LayoutViewModel,
                                                  token: String,
                                                  csrfToken: Option[CSRFToken],
-                                                 errors: Seq[ErrorViewModel],
                                                  text: InvalidRepermissionTokenText,
                                                  resources: Seq[PageResource with Product],
                                                  indirectResources: Seq[PageResource with Product]
@@ -19,14 +18,13 @@ case class InvalidRepermissionTokenViewModel private(
 
 object InvalidRepermissionTokenViewModel {
 
-  def apply(configuration: Configuration, token: String, csrfToken: Option[CSRFToken], errors: Seq[ErrorViewModel])(implicit messages: Messages): InvalidRepermissionTokenViewModel = {
+  def apply(configuration: Configuration, token: String, csrfToken: Option[CSRFToken])(implicit messages: Messages): InvalidRepermissionTokenViewModel = {
     val layout = LayoutViewModel(configuration, token = Some(token))
 
     InvalidRepermissionTokenViewModel(
       layout = layout,
       token = token,
       csrfToken = csrfToken,
-      errors = errors,
       text = InvalidRepermissionTokenText(),
       resources = layout.resources,
       indirectResources = layout.indirectResources

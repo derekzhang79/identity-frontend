@@ -62,8 +62,8 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
   }
 
   //TODO: This is a placeholder until a generic invalid-token page is made for general token use
-  def invalidRepermissioningToken(errorIds: Seq[String], token: String) = CSRFAddToken(csrfConfig)  { req =>
+  def invalidRepermissioningToken(token: String) = CSRFAddToken(csrfConfig)  { req =>
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
-    renderInvalidRepermissionToken(configuration, token, csrfToken, errorIds)
+    renderInvalidRepermissionToken(configuration, token, csrfToken)
   }
 }

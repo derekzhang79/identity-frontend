@@ -25,7 +25,7 @@ class RepermissionController(
     identityService.authenticateRepermissionToken(repermissionToken).map {
       case Right(playCookies) =>
         Redirect("/consents", request.queryString).withCookies(playCookies: _*)
-      case Left(RepermissionTokenUnauthorizedException :: _) => Redirect(routes.Application.invalidRepermissioningToken(repermissionToken = repermissionToken))
+      case Left(RepermissionTokenUnauthorizedException :: _) => Redirect(routes.Application.invalidRepermissioningToken(repermissionToken))
       case Left(_) => renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
     }.recover {
       case NonFatal(e) =>

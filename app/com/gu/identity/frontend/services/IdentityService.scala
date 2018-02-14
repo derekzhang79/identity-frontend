@@ -117,19 +117,17 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
 
   override def resendConsentToken(resendConsentTokenData: ResendTokenActionRequestBody)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, ResendTokenResponse]] = {
     val apiRequest = ResendConsentTokenApiRequest(resendConsentTokenData)
-    client.resendConsentToken(apiRequest).map {
-      case Left(errors) =>
-        Left(errors.map(ResendTokenException.apply))
-      case Right(okResponse) => Right(okResponse)
-    }
+    client.resendConsentToken(apiRequest).map(_.left.map{ errors =>
+      errors.map(ResendTokenException.apply)
+    })
   }
 
   override def resendRepermissionToken(resendRepermissionTokenData: ResendTokenActionRequestBody)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, ResendTokenResponse]] = {
     val apiRequest = ResendRepermissionTokenApiRequest(resendRepermissionTokenData)
     client.resendRepermissionToken(apiRequest).map {
-      case Left(errors) =>
-        Left(errors.map(RepermissionTokenAppException.apply))
-      case Right(okResponse) => Right(okResponse)
+      _.left.map { errors =>
+        errors.map(RepermissionTokenAppException.apply)
+      }
     }
   }
 

@@ -10,6 +10,10 @@
   {{/unless}}
 
   <section class="page-content">
+  {{#if errors}}
+      <h1 class="page-heading">{{ resendLinkEmailSentText.unexpectedTitle }}</h1>
+  {{/if}}
+
   {{#each errors}}
     <p id="{{id}}" class="resend-consent-form__error">{{message}}</p>
   {{/each}}

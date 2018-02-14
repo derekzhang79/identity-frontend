@@ -41,5 +41,5 @@ case class ResendTokenBadRequestAppException(message: String)
     with BadRequestAppException
     with ResendTokenException {
 
-  val id = ResendTokenEmailGatewayErrorID
+  val id = ResendTokenEmailBadRequestID
 }

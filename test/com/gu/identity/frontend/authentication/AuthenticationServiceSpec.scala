@@ -56,6 +56,7 @@ class AuthenticationServiceSpec extends PlaySpec {
       resultCookies.get(CookieName.GU_U).value.value.isEmpty mustBe true
       resultCookies.get(CookieName.SC_GU_U).value.value.isEmpty mustBe true
       resultCookies.get(CookieName.GU_ID_CSRF).value.value.isEmpty mustBe true
+      resultCookies.get(CookieName.SC_GU_RP).value.value.isEmpty mustBe true
     }
 
     "return a response with a GU_SO cookie" in {
@@ -69,6 +70,7 @@ class AuthenticationServiceSpec extends PlaySpec {
       resultCookies.get(CookieName.GU_U).value.value.isEmpty mustBe true
       resultCookies.get(CookieName.SC_GU_U).value.value.isEmpty mustBe true
       resultCookies.get(CookieName.GU_ID_CSRF).value.value.isEmpty mustBe true
+      resultCookies.get(CookieName.SC_GU_RP).value.value.isEmpty mustBe true
       resultCookies.get("GU_SO").value.value mustEqual "test_value"
     }
   }

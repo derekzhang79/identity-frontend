@@ -65,7 +65,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual returnUrl
 
-      resultCookies.size mustEqual 8
+      resultCookies.size mustEqual 9
     }
 
     "redirect to returnUrl when Identity API call fails" in new WithControllerMockedDependencies {
@@ -84,7 +84,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual returnUrl
 
-      resultCookies.size mustEqual 7
+      resultCookies.size mustEqual 8
     }
 
     "redirect to returnUrl despite lack of SC_GU_U cookie" in new WithControllerMockedDependencies {
@@ -96,7 +96,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result) mustEqual returnUrl
 
-      resultCookies.size mustEqual 7
+      resultCookies.size mustEqual 8
     }
 
     "set GU_SO cookie when user has SC_GU_U cookie" in new WithControllerMockedDependencies {
@@ -117,7 +117,7 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
       captor.getValue.name mustEqual secureCookie.name
       captor.getValue.value mustEqual secureCookie.value
 
-      resultCookies.size mustEqual 8
+      resultCookies.size mustEqual 9
       resultCookies.get("GU_SO").get.name == "GU_SO"
       resultCookies.get("GU_SO").get.value == "data_for_GU_SO"
     }
@@ -144,6 +144,6 @@ class SignOutActionSpec extends PlaySpec with MockitoSugar {
     status(result) mustEqual SEE_OTHER
     redirectLocation(result) mustEqual Some(referer)
 
-    resultCookies.size mustEqual 8
+    resultCookies.size mustEqual 9
   }
 }

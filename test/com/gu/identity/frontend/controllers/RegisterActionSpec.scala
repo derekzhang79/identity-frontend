@@ -128,7 +128,7 @@ class RegisterActionSpec extends PlaySpec with MockitoSugar {
       val result = call(controller.register, fakeRegisterRequest(skipConfirmation = skipConfirmation))
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).get must startWith (s"${config.identityProfileBaseUrl}/verify-email?isSignupFlow=true")
+      redirectLocation(result).get must startWith (s"${config.identityProfileBaseUrl}/complete-registration")
     }
 
     "have a sign in cookie when registration is successful skipConfirmation is false and no group code" in new WithControllerMockedDependencies {

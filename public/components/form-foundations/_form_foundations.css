@@ -187,6 +187,7 @@
 
 %form__fancy-checkbox--checked {
   @extend %form__fancy-checkbox;
+  background-color: var(--color-brand);
   background-image: inline("tick.svg");
 }
 
@@ -202,9 +203,9 @@
     pointer-events: none;
   }
 
-  &:focus + $labelClass::before {
-    border-color: color(var(--c-form-field-border) lightness(- 10%));
-    box-shadow: 0 0 2px 2px color(var(--c-form-field-border) alpha(50%) lightness(- 10%));
+  &:focus + $labelClass::before,
+  &:hover + $labelClass::before {
+    border-color: var(--color-border-hover);
   }
 
   &:checked + $labelClass::before {

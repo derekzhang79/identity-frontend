@@ -1,20 +1,5 @@
 @import "_colors.css";
 
-@define-mixin header__back-link--dark {
-  .header__back-link {
-    color: var(--c-back-link-dark);
-  }
-
-  :--header__back-button {
-    background-image: inline("arrow-back-dark.svg");
-    border: 1px solid color(var(--c-back-link-dark) alpha(30%));
-  }
-
-  :--header__back-button--active {
-    border-color: var(--c-back-link-dark);
-  }
-}
-
 @define-mixin multiline-height $number {
   $bgsize: calc($number * 4 - 3);
   height: calc($bgsize * 1px);
@@ -28,37 +13,11 @@
   background-size: 1px calc($bgsize * 1px);
 }
 
-:root {
-  --c-back-link-dark: #333;
-  --c-back-link-light: #fff;
-}
-
 .header {
   background: var(--color-card);
   border-bottom: 1px solid var(--color-border);
-  padding: 5px 0;
-
-  &::after {
-    @mixin multiline 4, var(--color-border), top;
-    @mixin multiline-height 4;
-    content: "";
-    background-color: var(--color-card);
-    margin-bottom: calc((5px + 1px) * -1);
-    margin-top: 5px;
-    width: 100%;
-    display: block;
-  }
-}
-
-.skin-default .header {
-  @media (--viewport-max-phablet) {
-    padding: 2.5px 0;
-    height: 42px;
-
-    &::after {
-      display: none;
-    }
-  }
+  padding: 2.5px 0;
+  height: 42px;
 }
 
 .header__inner {
@@ -75,54 +34,12 @@
   overflow: hidden;
   float: right;
   flex: 0 0 auto;
-  background-image: inline("../logo/guardian-logo.svg");
-  height: 57px;
-  width: 175px;
-}
-
-.skin-default .header__logo-link {
-  @media (--viewport-max-phablet) {
-    background-image: inline("../logo/guardian-roundel.svg");
-    height: 56px;
-    width: 56px;
-  }
+  background-image: inline("../logo/guardian-roundel.svg");
+  height: 56px;
+  width: 56px;
 }
 
 .header__logo-link-text {
   display: block;
   text-indent: -1000rem;
-}
-
-.header__back-link {
-  @extend %font-text-sans-2;
-  color: var(--color-brand);
-  transition: 0.125s ease-out;
-  float: left;
-
-  @media (--viewport-max-phablet) {
-    display: none;
-  }
-
-  &::before {
-    content: "";
-    display: inline-block;
-    width: 4px;
-    height: 4px;
-    transform: translateY(-1px) rotate(135deg);
-    border: 1px solid currentColor;
-    border-left: transparent;
-    border-top: transparent;
-    margin-right: 2px;
-    vertical-align: middle;
-    transition: 0.125s ease-out;
-  }
-
-  &:hover {
-    text-decoration: none;
-    opacity: 0.75;
-
-    &::before {
-      transform: translateY(-1px) translateX(-2px) rotate(135deg);
-    }
-  }
 }

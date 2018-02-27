@@ -53,6 +53,34 @@ object ViewRenderer {
     renderViewModel(view, model)
   }
 
+
+  def renderSignInTwoStep(
+    configuration: Configuration,
+    activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
+    csrfToken: Option[CSRFToken],
+    errorIds: Seq[String],
+    returnUrl: ReturnUrl,
+    skipConfirmation: Option[Boolean],
+    clientId: Option[ClientID],
+    group: Option[GroupCode],
+    email: Option[String])
+    (implicit messages: Messages) = {
+
+    val model = SignInTwoStepViewModel(
+      configuration = configuration,
+      activeTests = activeTests,
+      csrfToken = csrfToken,
+      errors = errorIds.map(ErrorViewModel.apply),
+      returnUrl = returnUrl,
+      skipConfirmation = skipConfirmation,
+      clientId = clientId,
+      group = group,
+      email = email
+    )
+
+    renderViewModel("signin-page", model)
+  }
+
   def renderRegister(
       configuration: Configuration,
       activeTests: Map[MultiVariantTest, MultiVariantTestVariant],

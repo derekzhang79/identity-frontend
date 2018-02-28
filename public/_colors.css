@@ -8,5 +8,7 @@
   --color-text: #121212;
   --color-text-light: #444;
 
+  --color-error: #c70000;
+
   --color-bg: var(--color-card);
 }

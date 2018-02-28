@@ -64,6 +64,15 @@ const setSlideState = ($slide, state) => {
   $slide.dataset.state = state;
 }
 
+const addInputError = ($input, error) => {
+  $input.dataset.error = error;
+  const onChange = () => {
+    $input.dataset.error = "";
+    ['blur'].forEach(_=>$input.removeEventListener(_, onChange))
+  }
+  ['blur','change','keyup'].forEach(_=>$input.addEventListener(_, onChange))
+}
+
 const wire = ($element) => {
   const $slides = [...$element.querySelectorAll('script[type="text/template"]')];
 
@@ -122,6 +131,7 @@ const wire = ($element) => {
               window.location.href = json['redirect-to']
             }
             else {
+              addInputError($pwd, 'Wrong password');
               throw new Error(ERR_MALFORMED_RESPONSE)
             }
           })

@@ -51,6 +51,13 @@
 
 .sts-input {
   @extend %form__text-field;
+  &[data-error] {
+    border-color: var(--color-error);
+    &::after {
+      display: block;
+      content: attr("data-error");
+    }
+  }
 }
 
 

@@ -1,0 +1,53 @@
+<div class="sts-slider">
+  <form class="sts-slider__helpers">
+    <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
+    <input type="hidden" name="returnUrl" value="{{returnUrl}}">
+    <input type="hidden" name="skipConfirmation" value="{{skipConfirmation}}">
+
+    {{# group }}
+      <input type="hidden" name="groupCode" value="{{ group.id }}">
+    {{/ group }}
+    {{# clientId }}
+      <input type="hidden" name="clientId" value="{{ clientId.id }}">
+    {{/ clientId }}
+
+    <input id="signin_ga_client_id" type="hidden" name="gaClientId" value="">
+  </form>
+
+  <form class="sts-slider__slide" data-name="root">
+
+    {{> components/oauth-cta/_oauth-cta-content }}
+
+    <fieldset class="signin-form__fieldset">
+      <div class="signin-form__control--email">
+        <label class="signin-form__label--email">{{signInPageText.email}}</label>
+        <input class="signin-form__field--email" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}" />
+      </div>
+      <div class="signin-form__control--submit">
+        <button class="sts-button" type="submit">Continue {{> components/icon/arrow-inline }}</button>
+      </div>
+    </fieldset>
+  </form>
+
+  <form class="sts-slider__slide" data-name="password" method="post">
+    <fieldset class="signin-form__fieldset">
+      <div class="signin-form__control--email">
+        <label class="signin-form__label--email" for="signin_field_email">Please enter your password</label>
+        <input class="signin-form__field--email" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}" />
+      </div>
+      <div class="signin-form__control--submit">
+        <button class="sts-button" type="submit">Log In {{> components/icon/arrow-inline }}</button>
+      </div>
+    </fieldset>
+    <aside class="sts-slider__slide_section">
+      <div class="sts-field-wrap">
+        <p class="sts-field-wrap__title">If you don't know your password, we can email you a log-in link</p>
+        <button class="sts-button sts-button--secondary sts-field-wrap__field" type="submit">Recover password {{> components/icon/arrow-inline
+        }}</button>
+      </div>
+    </aside>
+    <aside class="sts-slider__slide_section">
+      <button class="sts-button sts-button--secondary" type="submit">Start Over {{> components/icon/arrow-inline }}</button>
+    </aside>
+  </form>
+</div>

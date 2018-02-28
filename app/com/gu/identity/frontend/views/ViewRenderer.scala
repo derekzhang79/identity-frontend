@@ -78,7 +78,7 @@ object ViewRenderer {
       email = email
     )
 
-    renderViewModel("signin-page", model)
+    renderViewModel("signin-two-step-page", model)
   }
 
   def renderRegister(

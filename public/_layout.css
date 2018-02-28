@@ -4,6 +4,11 @@
 @import "components/_typography.css";
 @import "_colors.css";
 
+:root {
+  --size-baseline: 0.425rem;
+  --size-baseline-gutter: calc(var(--size-baseline) * 4);
+}
+
 html {
   height: 100%;
   background: var(--color-bg);
@@ -58,7 +63,7 @@ body > section:last-of-type {
 %content-container {
   @extend %page-block;
   width: 100%;
-  max-width: 44rem;
+  max-width: 48rem;
 }
 
 %page-block--low-margin {

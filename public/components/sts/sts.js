@@ -1,3 +1,5 @@
+import { addError as addInputError } from './sts-input';
+
 const ERR_MALFORMED_HTML = 'Something went wrong';
 const ERR_MALFORMED_RESPONSE = 'Something went wrong';
 const ERR_SLIDE_MISSING = `Couldn't find page`;
@@ -64,15 +66,6 @@ const setSlideState = ($slide, state) => {
   $slide.dataset.state = state;
 }
 
-const addInputError = ($input, error) => {
-  $input.dataset.error = error;
-  const onChange = () => {
-    $input.dataset.error = "";
-    ['blur'].forEach(_=>$input.removeEventListener(_, onChange))
-  }
-  ['blur','change','keyup'].forEach(_=>$input.addEventListener(_, onChange))
-}
-
 const wire = ($element) => {
   const $slides = [...$element.querySelectorAll('script[type="text/template"]')];
 
@@ -96,7 +89,14 @@ const wire = ($element) => {
     goToSlide('root').then($slide => {
       const $passwordField = $slide.querySelector('input[name="password"]');
       const $emailField = $slide.querySelector('input[name="email"]');
+      setTimeout(()=>{
+        $emailField.focus();
+      },500)
       bindSubmit($slide, () => {
+        if($emailField.value.trim().length < 1) {
+          addInputError($emailField, 'Invalid email');
+          return Promise.reject();
+        }
         return submitEmail($emailField.value).then(()=>{
           setSlideState($slide, SLIDE_STATE_READY);
           showPasswordSlide($emailField, $passwordField);
@@ -111,6 +111,9 @@ const wire = ($element) => {
       $email.classList.add('u-h');
       $slide.querySelector('.sts-slider__slide-password-wrap').appendChild($pwd);
       $slide.appendChild($email);
+      setTimeout(()=>{
+        $pwd.focus();
+      },200)
       const formData = getHelperFields($element);
       bindSubmit($slide, () => {
         const ownFormData = new FormData($slide);
@@ -132,6 +135,8 @@ const wire = ($element) => {
             }
             else {
               addInputError($pwd, 'Wrong password');
+              $pwd.focus();
+              document.execCommand("selectall", false, false);
               throw new Error(ERR_MALFORMED_RESPONSE)
             }
           })

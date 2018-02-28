@@ -35,31 +35,39 @@
 }
 
 .sts-field-wrap > * {
-  margin-bottom: 0.875rem;
+  margin-bottom: calc(var(--size-baseline) * 2);
 }
 .sts-field-wrap__title {
   @extend %font-text-sans-2;
   opacity: 0.75;
 }
 .sts-field-wrap__field {
-  @supports(height:calc(2px + 2px)) {
-    margin-left: -1.75rem;
-    margin-right: -1.75rem;
-    width: calc(100% + 3.5rem);
+  @media (--viewport-min-mobile-wide) {
+    @supports(height:calc(2px + 2px)) {
+      margin-left: calc(var(--size-baseline-gutter) * -1);
+      margin-right: calc(var(--size-baseline-gutter) * -1);
+      width: calc(100% + calc(var(--size-baseline-gutter) * 2));
+    }
   }
 }
 
 .sts-input {
   @extend %form__text-field;
-  &[data-error] {
-    border-color: var(--color-error);
-    &::after {
-      display: block;
-      content: attr("data-error");
-    }
+}
+
+.sts-input-wrap {
+  .sts-input-wrap__info {
+    @extend %font-text-sans-2;
+    margin-bottom: var(--size-baseline);
   }
 }
 
+.sts-input-wrap.sts-input-wrap--error {
+  color: var(--color-error);
+  .sts-input {
+    border-color: var(--color-error);
+  }
+}
 
 .sts-slider {
   position: relative;

@@ -1,4 +1,5 @@
 const ERR_MALFORMED_HTML = 'Something went wrong';
+const ERR_MALFORMED_RESPONSE = 'Something went wrong';
 const ERR_SLIDE_MISSING = `Couldn't find page`;
 
 const SLIDE_STATE_READY = 'SLIDE_STATE_READY';
@@ -6,7 +7,7 @@ const SLIDE_STATE_LOADING = 'SLIDE_STATE_LOADING';
 
 const submitEmail = (email) => {
   return new Promise(yay => {
-    setTimeout(yay(),2500+(Math.random()*1000));
+    setTimeout(()=>yay(),500+(Math.random()*1000));
   })
 }
 
@@ -48,9 +49,14 @@ const bindSubmit = ($slide, handler) => {
   $slide.addEventListener('submit', ev => {
     ev.preventDefault();
     setSlideState($slide, SLIDE_STATE_LOADING);
-    handler(ev).then(()=>{
-      setSlideState($slide, SLIDE_STATE_READY);
-    })
+    handler(ev)
+      .catch(err=>{
+        setSlideState($slide, SLIDE_STATE_READY);
+        throw(err);
+      })
+      .then(()=>{
+        setSlideState($slide, SLIDE_STATE_READY);
+      })
   })
 }
 
@@ -80,32 +86,45 @@ const wire = ($element) => {
   const showRootSlide = () => {
     goToSlide('root').then($slide => {
       const $passwordField = $slide.querySelector('input[name="password"]');
+      const $emailField = $slide.querySelector('input[name="email"]');
       bindSubmit($slide, () => {
-        const email = (new FormData($slide)).get('email');
-        return submitEmail(email).then(()=>{
+        return submitEmail($emailField.value).then(()=>{
           setSlideState($slide, SLIDE_STATE_READY);
-          showPasswordSlide(email, $passwordField);
+          showPasswordSlide($emailField, $passwordField);
         })
       })
     })
   };
 
-  const showPasswordSlide = (email, $pwd) => {
+  const showPasswordSlide = ($email, $pwd) => {
     goToSlide('password').then($slide => {
       $pwd.classList.remove('u-h');
+      $email.classList.add('u-h');
       $slide.querySelector('.sts-slider__slide-password-wrap').appendChild($pwd);
+      $slide.appendChild($email);
+      const formData = getHelperFields($element);
       bindSubmit($slide, () => {
-        const formData = getHelperFields($element);
-        formData.set('email', email);
-        formData.set('password', (new FormData($slide)).get('password'));
-        return fetch('/actions/signin', {
+        const ownFormData = new FormData($slide);
+        formData.set('email', ownFormData.get('email'));
+        formData.set('password', ownFormData.get('password'));
+        return fetch('/actions/signin-ajax', {
           method: 'POST',
           credentials: 'include',
           body: new URLSearchParams([...formData.entries()]),
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
           }
-        });
+        })
+          .then(response => response.json())
+          .then(json => {
+            console.log(json);
+            if(json['redirect-to']) {
+              window.location.href = json['redirect-to']
+            }
+            else {
+              throw new Error(ERR_MALFORMED_RESPONSE)
+            }
+          })
       })
     });
   }

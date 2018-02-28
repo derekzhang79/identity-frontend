@@ -5,7 +5,7 @@
 # Home page
 GET        /signin                                      com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
 
-GET        /signin-two-step                             com.gu.identity.frontend.controllers.Application.signIn(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
+GET        /signin-two-step                             com.gu.identity.frontend.controllers.Application.signInTwoStep(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
 
 GET        /register                                    com.gu.identity.frontend.controllers.Application.register(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
 

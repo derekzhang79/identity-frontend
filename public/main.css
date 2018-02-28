@@ -17,6 +17,11 @@
 @import "components/oauth-cta/_oauth-cta.css";
 
 
+/** Sign In Two Step (sts) page **/
+
+@import "components/sts/_sts.css";
+
+
 /** Register page **/
 
 @import "components/register-form/_register-form.css";

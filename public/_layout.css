@@ -16,8 +16,18 @@ body {
   min-height: 100%;
 }
 
+body > section {
+  max-width: 100vw;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 body > section:last-of-type {
   flex-grow: 1;
+}
+
+.u-h {
+  display: none !important;
 }
 
 %page-block {

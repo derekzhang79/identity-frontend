@@ -14,26 +14,28 @@
     <input id="signin_ga_client_id" type="hidden" name="gaClientId" value="">
   </form>
 
-  <form class="sts-slider__slide" data-name="root">
+  <script type="text/template" data-name="root">
 
     {{> components/oauth-cta/_oauth-cta-content }}
 
+    <p class="signin-form__prelude"> <span>or</span> </p>
+
     <fieldset class="signin-form__fieldset">
-      <div class="signin-form__control--email">
-        <label class="signin-form__label--email">{{signInPageText.email}}</label>
-        <input class="signin-form__field--email" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}" />
+      <div class="sts-field-wrap">
+        <label class="sts-field-wrap__title">{{signInPageText.email}}</label>
+        <input class="sts-input" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}" />
+        <input class="sts-input u-h" type="password" name="password" autocomplete="password" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{password}}" />
       </div>
       <div class="signin-form__control--submit">
         <button class="sts-button" type="submit">Continue {{> components/icon/arrow-inline }}</button>
       </div>
     </fieldset>
-  </form>
+  </script>
 
-  <form class="sts-slider__slide" data-name="password" method="post">
+  <script type="text/template" data-name="password" method="post">
     <fieldset class="signin-form__fieldset">
-      <div class="signin-form__control--email">
-        <label class="signin-form__label--email" for="signin_field_email">Please enter your password</label>
-        <input class="signin-form__field--email" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}" />
+      <div class="sts-field-wrap sts-slider__slide-password-wrap">
+        <label class="sts-field-wrap__title" for="signin_field_email">Please enter your password</label>
       </div>
       <div class="signin-form__control--submit">
         <button class="sts-button" type="submit">Log In {{> components/icon/arrow-inline }}</button>
@@ -42,12 +44,12 @@
     <aside class="sts-slider__slide_section">
       <div class="sts-field-wrap">
         <p class="sts-field-wrap__title">If you don't know your password, we can email you a log-in link</p>
-        <button class="sts-button sts-button--secondary sts-field-wrap__field" type="submit">Recover password {{> components/icon/arrow-inline
-        }}</button>
+        <a href="/reset" class="sts-button sts-button--secondary sts-field-wrap__field">Recover password {{> components/icon/arrow-inline
+        }}</a>
       </div>
     </aside>
     <aside class="sts-slider__slide_section">
-      <button class="sts-button sts-button--secondary" type="submit">Start Over {{> components/icon/arrow-inline }}</button>
+      <button class="sts-button sts-button--secondary sts-js-rewind" type="submit">Start Over {{> components/icon/arrow-inline }}</button>
     </aside>
-  </form>
+  </script>
 </div>

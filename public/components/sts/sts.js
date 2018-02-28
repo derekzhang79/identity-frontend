@@ -16,42 +16,50 @@ const getHelperFields = ($element) => {
   return new FormData($helpers);
 }
 
-const wire = ($element) => {
-  const $slides = [...$element.querySelectorAll('.sts-slider__slide')];
-
-  const showSlide = ($slideToShow) => {
-    $slides.forEach($slide => {
-      if($slide.classList.contains('sts-slider__slide--visible')) {
-        const afterAnimation = () => {
-          requestAnimationFrame(()=> {
-            debugger;
-            ['sts-slider__slide--out'].forEach(_ => $slide.classList.remove(_));
-          });
-          $slide.removeEventListener('animationend',afterAnimation)
-        };
-        $slide.addEventListener('animationend', afterAnimation);
-        requestAnimationFrame(()=>{
-          $slide.classList.remove('sts-slider__slide--visible');
-          $slide.classList.add('sts-slider__slide--out');
-        })
-      }
-      else if ($slide.dataset.name === $slideToShow.dataset.name) {
-        const afterAnimation = () => {
-          requestAnimationFrame(()=> {
-            ['sts-slider__slide--in'].forEach(_ => $slide.classList.remove(_));
-          });
-          $slide.removeEventListener('animationend',afterAnimation)
-        };
-        $slide.addEventListener('animationend', afterAnimation);
-        requestAnimationFrame(()=> {
-          ['sts-slider__slide--visible', 'sts-slider__slide--in'].forEach(_ => $slide.classList.add(_))
-        });
-      }
-      else {
-        $slide.classList.remove('sts-slider__slide--visible')
-      }
+const showSlide = ($slideToShow, $element) => {
+  [...$element.querySelectorAll('.sts-slider__slide')].forEach($existingSlide=>{
+    $existingSlide.addEventListener('animationend', () => {
+      $existingSlide.remove();
     });
-  }
+    requestAnimationFrame(()=>{
+      $existingSlide.classList.remove('sts-slider__slide--visible');
+      $existingSlide.classList.add('sts-slider__slide--out');
+    })
+  })
+  const $slide = document.createElement('form');
+  $slide.addEventListener('animationend', () => {
+    [
+      'sts-slider__slide--in',
+      'sts-slider__slide--out',
+      'sts-slider__slide--in-reverse',
+      'sts-slider__slide--out-reverse'
+    ].forEach(_ => $slide.classList.remove(_));
+  });
+  requestAnimationFrame(()=> {
+    ['sts-slider__slide--visible', 'sts-slider__slide--in'].forEach(_ => $slide.classList.add(_))
+  });
+  $slide.classList.add('sts-slider__slide');
+  $slide.innerHTML = $slideToShow.innerText;
+  $element.appendChild($slide);
+  return Promise.resolve($slide);
+}
+
+const bindSubmit = ($slide, handler) => {
+  $slide.addEventListener('submit', ev => {
+    ev.preventDefault();
+    setSlideState($slide, SLIDE_STATE_LOADING);
+    handler(ev).then(()=>{
+      setSlideState($slide, SLIDE_STATE_READY);
+    })
+  })
+}
+
+const setSlideState = ($slide, state) => {
+  $slide.dataset.state = state;
+}
+
+const wire = ($element) => {
+  const $slides = [...$element.querySelectorAll('script[type="text/template"]')];
 
   const getSlide = (name) => {
     const filteredSlides = $slides.filter($slide => $slide.dataset.name === name);
@@ -60,28 +68,49 @@ const wire = ($element) => {
     return filteredSlides[0]
   }
 
-  const setSlideState = ($slide, state) => {
-    $slide.dataset.state = state;
+  const goToSlide = (name) => {
+    return showSlide(getSlide(name), $element).then($slide => {
+      [...$slide.querySelectorAll('.sts-js-rewind')].forEach($rewind=>{
+        $rewind.addEventListener('click',()=>showRootSlide())
+      })
+      return $slide;
+    })
   }
 
-  const $rootSlide = getSlide('root');
-  const $pwdSlide = getSlide('password');
-
-  showSlide($rootSlide);
-
-  $rootSlide.addEventListener('submit',ev=>{
-    setSlideState($rootSlide, SLIDE_STATE_LOADING);
-    submitEmail((new FormData($rootSlide)).get('email')).then(()=>{
-      setSlideState($rootSlide, SLIDE_STATE_READY);
-      showSlide($pwdSlide);
+  const showRootSlide = () => {
+    goToSlide('root').then($slide => {
+      const $passwordField = $slide.querySelector('input[name="password"]');
+      bindSubmit($slide, () => {
+        const email = (new FormData($slide)).get('email');
+        return submitEmail(email).then(()=>{
+          setSlideState($slide, SLIDE_STATE_READY);
+          showPasswordSlide(email, $passwordField);
+        })
+      })
     })
-    ev.preventDefault();
-  })
+  };
 
-  $pwdSlide.addEventListener('submit',ev=>{
-    ev.preventDefault();
-    showSlide($rootSlide);
-  })
+  const showPasswordSlide = (email, $pwd) => {
+    goToSlide('password').then($slide => {
+      $pwd.classList.remove('u-h');
+      $slide.querySelector('.sts-slider__slide-password-wrap').appendChild($pwd);
+      bindSubmit($slide, () => {
+        const formData = getHelperFields($element);
+        formData.set('email', email);
+        formData.set('password', (new FormData($slide)).get('password'));
+        return fetch('/actions/signin', {
+          method: 'POST',
+          credentials: 'include',
+          body: new URLSearchParams([...formData.entries()]),
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+          }
+        });
+      })
+    });
+  }
+
+  showRootSlide();
 
 }
 

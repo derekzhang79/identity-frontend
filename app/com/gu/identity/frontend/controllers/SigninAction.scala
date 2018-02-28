@@ -14,6 +14,10 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._
 import Configuration.Environment._
 import com.gu.tip.Tip
+import play.api.libs.json.{JsObject, JsString}
+import play.api.mvc.Results.BadRequest
+
+import scala.concurrent.Future
 
 /**
  * Form actions controller
@@ -30,6 +34,12 @@ class SigninAction(
     with I18nSupport {
 
   val redirectRoute: String = routes.Application.signIn().url
+
+  val SignInViaAjaxServiceAction =
+    ServiceAction andThen
+      ResultOnError(redirectRoute) andThen
+      LogOnErrorAction(logger) andThen
+      CSRFCheck(csrfConfig)
 
   val SignInServiceAction =
     ServiceAction andThen
@@ -57,6 +67,18 @@ class SigninAction(
 
   def signIn = SignInServiceAction(bodyParser) {
     signInAction(successfulSignInResponse, signInMetricsLogger)
+  }
+
+  def signInViaAjax = SignInViaAjaxServiceAction(bodyParser) {
+    def ajaxReturnable = (returnUrl:ReturnUrl, cookies:Seq[Cookie]) =>
+      NoCache(
+        Ok(
+          JsObject(
+            Seq("redirect-to" -> JsString(returnUrl.uri.toString))
+          )
+        ).withCookies(cookies: _*)
+      )
+    signInAction(ajaxReturnable, signInMetricsLogger)
   }
 
   def signInWithSmartLock = SignInSmartLockServiceAction(bodyParser) {

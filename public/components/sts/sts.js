@@ -7,12 +7,6 @@ const ERR_SLIDE_MISSING = `Couldn't find page`;
 const SLIDE_STATE_READY = 'SLIDE_STATE_READY';
 const SLIDE_STATE_LOADING = 'SLIDE_STATE_LOADING';
 
-const submitEmail = (email) => {
-  return new Promise(yay => {
-    setTimeout(()=>yay(),500+(Math.random()*1000));
-  })
-}
-
 const getHelperFields = ($element) => {
   const $helpers = $element.querySelector('form.sts-slider__helpers');
   if(!$helpers) throw new Error(ERR_MALFORMED_HTML)

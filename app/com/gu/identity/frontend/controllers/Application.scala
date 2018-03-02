@@ -24,7 +24,8 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
 
   def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean],  clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { implicit req =>
     val clientIdActual = ClientID(clientId)
-    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
+    val emailPrefsReturnUrl = Some(s"${configuration.identityProfileBaseUrl}/email-prefs")
+    val returnUrlActual = ReturnUrl(returnUrl.orElse(emailPrefsReturnUrl), req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
     val email : Option[String] = req.getQueryString("email")

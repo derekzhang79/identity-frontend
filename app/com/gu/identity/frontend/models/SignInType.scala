@@ -1,28 +1,12 @@
 package com.gu.identity.frontend.models
 
-sealed trait SignInType {
-  val id: String
-}
+sealed abstract class SignInType(val id: String)
 
 object SignInType {
-  def apply(signInType: String): Option[SignInType] = {
-    signInType match {
-      case "existing" => Some(ExistingUser)
-      case "guest" => Some(GuestUser)
-      case "new" => Some(NewUser)
-      case _ => None
-    }
-  }
+  private val all: Seq[SignInType] = Seq(ExistingUser, GuestUser, NewUser)
+  def apply(signInType: String) = all.find(_.id == signInType)
 }
 
-case object ExistingUser extends SignInType {
-  val id: String = "existing"
-}
-
-case object GuestUser extends SignInType {
-  val id: String = "guest"
-}
-
-case object NewUser extends SignInType {
-  val id: String = "new"
-}
+case object ExistingUser extends SignInType("existing")
+case object GuestUser extends SignInType("guest")
+case object NewUser extends SignInType("new")

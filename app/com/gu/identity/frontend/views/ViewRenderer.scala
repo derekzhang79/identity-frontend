@@ -109,11 +109,11 @@ object ViewRenderer {
       signInType = signInType
     )
 
-    (signInType,email) match {
-      case (Some(_), Some(_)) => renderViewModel("two-step-signin-choices-page", model)
-      case (Some(_), None) => NoCache(SeeOther(routes.Application.twoStepSignIn().url))
-      case (None, _) => renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
-    }
+    if(signInType.isDefined)
+      if (email.isDefined) renderViewModel("two-step-signin-choices-page", model)
+      else NoCache(SeeOther(routes.Application.twoStepSignIn().url))
+    else
+      renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
   }
 
   def renderRegister(

@@ -37,7 +37,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
-    val email : Option[String] = req.getQueryString("email")
+    val email : Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
     val signInTypeActual = SignInType(signInType)
 
     renderPasswordlessSignInStepTwo(configuration, req.activeTests, csrfToken, error, signInTypeActual, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)

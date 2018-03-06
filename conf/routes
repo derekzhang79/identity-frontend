@@ -23,8 +23,6 @@ POST       /actions/agree                               com.gu.identity.frontend
 
 POST       /actions/signin                              com.gu.identity.frontend.controllers.SigninAction.signIn
 
-POST       /actions/signin-ajax                         com.gu.identity.frontend.controllers.SigninAction.signInViaAjax
-
 POST       /actions/signin/smartlock                    com.gu.identity.frontend.controllers.SigninAction.signInWithSmartLock
 
 GET        /actions/signin/consents/:token              com.gu.identity.frontend.controllers.SigninAction.permissionAuth(token:String, journey: Option[String])

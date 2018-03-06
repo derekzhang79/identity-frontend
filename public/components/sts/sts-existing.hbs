@@ -1,8 +1,10 @@
-<form class="sts-form">
+<form class="sts-form" method="POST" action="{{ actions.signIn }}">
     {{> components/sts/_helpers }}
     <fieldset class="sts-field-wrap">
       <div class="sts-form-password-wrap">
+          <input class="u-hd" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}" />
         <label class="sts-field-wrap__title" for="signin_field_email">Please enter your password</label>
+        <input class="sts-input sts-field-wrap__field" type="password" name="password" autocomplete="password" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{password}}" />
       </div>
       <button class="sts-button sts-field-wrap__field" type="submit">Log In {{> components/icon/arrow-inline }}</button>
     </fieldset>

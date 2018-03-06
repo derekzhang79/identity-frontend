@@ -3,6 +3,7 @@ package com.gu.identity.frontend.views
 import java.net.URI
 
 import com.gu.identity.frontend.configuration._
+import com.gu.identity.frontend.controllers.{NoCache, routes}
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.{HttpError, NotFoundError, UnexpectedError}
 import com.gu.identity.frontend.models._
@@ -11,7 +12,7 @@ import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
 import play.api.i18n.Messages
 import play.api.mvc.{Result, Results}
-import play.api.mvc.Results.NotFound
+import play.api.mvc.Results.{NotFound, SeeOther}
 import play.twirl.api.Html
 
 /**
@@ -106,9 +107,10 @@ object ViewRenderer {
       email = email
     )
 
-    signInType match {
-      case Some(_) => renderViewModel("passwordless-signin-step-two", model)
-      case None => renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
+    (signInType,email) match {
+      case (Some(_), Some(_)) => renderViewModel("passwordless-signin-step-two", model)
+      case (Some(_), None) => NoCache(SeeOther(routes.Application.passwordlessSignIn().url))
+      case (None, _) => renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
     }
   }
 

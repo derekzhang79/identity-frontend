@@ -83,9 +83,19 @@ class SigninAction(
 
     val body = request.body
 
+    lazy val returnUrl = body.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, body.clientId))
+
+    val successfulReturnUrl = body.groupCode match {
+      case Some(validGroupCode) =>
+        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, body.skipConfirmation, skipThirdPartyLandingPage = true, body.clientId, validGroupCode, config)
+      case _ => returnUrl
+    }
+
+    val secondStepUrl = s"/signin/existing?returnUrl=${java.net.URLEncoder.encode(successfulReturnUrl.url, "UTF8")}"
+
     metricsLogger(request)
     Future.successful { Right {
-      successResponse("/signin/existing", Seq(
+      successResponse(secondStepUrl, Seq(
         Cookie("GU_SIGNIN_EMAIL", body.email, None)
       ))
     }}

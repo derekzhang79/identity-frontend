@@ -35,10 +35,16 @@ body > section:last-of-type {
   display: none !important;
 }
 
+.u-flexrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 %page-block {
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 0 1rem;
+  padding: 0 2rem;
 
 
   @media (--viewport-min-mobile-wide) {

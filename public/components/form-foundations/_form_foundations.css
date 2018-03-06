@@ -203,6 +203,10 @@
     pointer-events: none;
   }
 
+  $labelClass {
+    color: green;
+  }
+
   &:focus + $labelClass::before,
   &:hover + $labelClass::before {
     border-color: var(--color-border-hover);

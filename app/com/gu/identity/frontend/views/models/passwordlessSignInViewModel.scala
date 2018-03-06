@@ -8,7 +8,7 @@ import com.gu.identity.frontend.models.Text._
 import com.gu.identity.frontend.mvt.ActiveMultiVariantTests
 import play.api.i18n.Messages
 
-case class SignInTwoStepViewModel private(
+case class passwordlessSignInViewModel private(
   layout: LayoutViewModel,
 
   oauth: OAuthSignInViewModel,
@@ -39,7 +39,7 @@ case class SignInTwoStepViewModel private(
     with ViewModelResources
 
 
-object SignInTwoStepViewModel {
+object passwordlessSignInViewModel {
   def apply(
     configuration: Configuration,
     activeTests: ActiveMultiVariantTests,
@@ -49,7 +49,7 @@ object SignInTwoStepViewModel {
     skipConfirmation: Option[Boolean],
     clientId: Option[ClientID],
     group: Option[GroupCode],
-    email: Option[String])(implicit messages: Messages): SignInTwoStepViewModel = {
+    email: Option[String])(implicit messages: Messages): passwordlessSignInViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] = None
@@ -58,7 +58,7 @@ object SignInTwoStepViewModel {
 
     val isMembership = clientId.exists(_ == GuardianMembersClientID)
 
-    SignInTwoStepViewModel(
+    passwordlessSignInViewModel(
       layout = layout,
 
       oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),

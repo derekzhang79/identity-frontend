@@ -54,7 +54,7 @@ object ViewRenderer {
   }
 
 
-  def renderSignInTwoStep(
+  def renderpasswordlessSignIn(
     configuration: Configuration,
     activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
     csrfToken: Option[CSRFToken],
@@ -66,7 +66,7 @@ object ViewRenderer {
     email: Option[String])
     (implicit messages: Messages) = {
 
-    val model = SignInTwoStepViewModel(
+    val model = passwordlessSignInViewModel(
       configuration = configuration,
       activeTests = activeTests,
       csrfToken = csrfToken,

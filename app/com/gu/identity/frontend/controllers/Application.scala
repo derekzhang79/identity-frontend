@@ -32,6 +32,16 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     renderpasswordlessSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
   }
 
+  def passwordlessSignInStepTwo(signInType: String, error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
+    val clientIdActual = ClientID(clientId)
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
+    val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
+    val groupCode = GroupCode(group)
+    val email : Option[String] = req.getQueryString("email")
+
+    renderpasswordlessSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
+  }
+
   def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean],  clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { implicit req =>
     val clientIdActual = ClientID(clientId)
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)

@@ -32,7 +32,11 @@ case class passwordlessSignInViewModel private(
 
   recaptchaModel: Option[Any],
 
-  actions: Map[String, String] = Map("signIn" -> routes.SigninAction.signIn().url),
+  //TODO: use reverse signInWithEmail route
+  actions: Map[String, String] = Map(
+    "signInWithEmailAndPassword" -> routes.SigninAction.signIn().url,
+    "signInWithEmail" -> "/signin/with-email"
+  ),
   resources: Seq[PageResource with Product],
   indirectResources: Seq[PageResource with Product])
   extends ViewModel

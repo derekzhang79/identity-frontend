@@ -2,35 +2,33 @@
 
 {{# partial "content" }}
 
-  {{#showPrelude}}
-    <div class="signin__prelude ">
-      <p>{{twoStepSignInPageText.prelude}}</p>
-      <p> {{twoStepSignInPageText.preludeMoreInfo}} <a href="https://www.theguardian.com/help/identity-faq"> {{twoStepSignInPageText.preludeFaq}} </a>.</p>
-    </div>
-  {{/showPrelude}}
+  <section class="layout-wrap-width">
 
-  <h1 class="page-heading">{{ twoStepSignInPageText.title }}</h1>
+    <a class="layout-header" href="{{signInUrl}}" >
+      <h1 class="layout-header__title">{{ twoStepSignInPageText.welcome }}</h1>
+      <div class="layout-header__title layout-header__title--has-proxy layout-header__title--standfirst">
+        <div>{{email}}</div>
+        <div class="layout-header__title__proxy">{{twoStepSignInPageText.changeEmailLink}}</div>
+      </div>
+    </a>
 
-  <section class="page-standfirst">
-    <p class="page-standfirst__paragraph">{{twoStepSignInPageText.noAccount}} <a href="{{registerUrl}}" >{{twoStepSignInPageText.signUp}}</a>.</p>
+    <section class="two-step-signin-container">
+      {{#signInTypes.isExisting}}
+        {{> components/two-step-signin/two-step-signin-existing }}
+      {{/signInTypes.isExisting}}
+      {{#signInTypes.isNew}}
+        <h1 class="page-heading">Register for The Guardian</h1>
+      {{/signInTypes.isNew}}
+      {{#signInTypes.isGuest}}
+        <h1 class="page-heading">Set a password</h1>
+      {{/signInTypes.isGuest}}
+    </section>
+
+    <section class="layout-section">
+      {{> components/terms/_terms-inline }}
+    </section>
+
   </section>
-
-  <section class="two-step-signin-container">
-    {{#signInTypes.isExisting}}
-      {{> components/two-step-signin/two-step-signin-existing }}
-    {{/signInTypes.isExisting}}
-    {{#signInTypes.isNew}}
-      <h1 class="page-heading">Register for The Guardian</h1>
-    {{/signInTypes.isNew}}
-    {{#signInTypes.isGuest}}
-      <h1 class="page-heading">Set a password</h1>
-    {{/signInTypes.isGuest}}
-  </section>
-
-  <section class="page__footer">
-    {{> components/terms/_terms }}
-  </section>
-
 {{/partial}}
 
 {{> layout}}

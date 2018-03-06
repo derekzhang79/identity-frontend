@@ -1,12 +1,3 @@
 <section class="terms">
-  <p class="terms__text">
-    {{ terms.conditionsText }}
-    <a class="terms__link" href="{{ terms.termsOfServiceUrl }}">{{ terms.termsOfServiceText }}</a> &amp;
-    <a class="terms__link" href="{{ terms.privacyPolicyUrl }}">{{ terms.privacyPolicyText }}</a>
-    {{#if terms.extendedConditionsText}}
-      {{terms.extendedConditionsText}}
-      <a class="terms__link" href="{{ terms.extendedTermsOfServiceUrl }}">{{ terms.termsOfServiceText }}</a> &amp;
-      <a class="terms__link" href="{{ terms.extendedPrivacyPolicyUrl }}">{{ terms.privacyPolicyText }}</a>
-    {{/if}}
-  .</p>
+  {{> components/terms/_terms-inline }}
 </section>

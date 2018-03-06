@@ -17,6 +17,14 @@ signin.noaccount=Don''t have an account?
 signin.signup=Sign up
 signin.continue=Continue
 
+signinTwoStep.welcome=Welcome
+signinTwoStep.changeEmailLink=Change email
+signinTwoStep.signInAction=Sign In
+signinTwoStep.continueAction=Continue
+signinTwoStep.emailFieldTitle=Enter your email
+signinTwoStep.passwordFieldTitle=Please enter your password
+signinTwoStep.dividetext=or
+
 # com.gu.identity.frontend.models.text.RegisterText
 register.pageTitle=Register
 register.title=Create your Guardian account

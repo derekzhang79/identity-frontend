@@ -67,7 +67,7 @@ object passwordlessSignInViewModel {
 
       oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
-      passwordlessSignInPageText = passwordlessSignInPageText.toMap(isMembership),
+      passwordlessSignInPageText = PasswordlessSignInPageText.toMap(isMembership),
       terms = Terms.getTermsModel(group),
 
       hasErrors = errors.nonEmpty,

@@ -69,20 +69,19 @@
   }
 }
 
-.sts-slider {
+.sts-form-ajax-wrap {
   position: relative;
   min-height: 100%;
-}
-
-.sts-form {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  visibility: hidden;
-  display: none;
-  &[data-state=SLIDE_STATE_LOADING] {
-    opacity: 0.5;
+  .sts-form {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+    display: none;
+    &[data-state=SLIDE_STATE_LOADING] {
+      opacity: 0.5;
+    }
   }
 }
 

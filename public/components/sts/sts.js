@@ -8,7 +8,7 @@ const SLIDE_STATE_READY = 'SLIDE_STATE_READY';
 const SLIDE_STATE_LOADING = 'SLIDE_STATE_LOADING';
 
 const getHelperFields = ($element) => {
-  const $helpers = $element.querySelector('form.sts-slider__helpers');
+  const $helpers = $element.querySelector('form.sts-form-ajax-wrap__helpers');
   if(!$helpers) throw new Error(ERR_MALFORMED_HTML)
   return new FormData($helpers);
 }
@@ -143,7 +143,7 @@ const wire = ($element) => {
 }
 
 export const init = () => {
-  [...document.querySelectorAll('.sts-slider')].forEach($slider => {
+  [...document.querySelectorAll('sts-none-yet')].forEach($slider => {
     wire($slider);
   })
 }

@@ -1,5 +1,5 @@
 import { addError as addInputError } from './sts-input';
-import { bindSubmit, setSlideState, SLIDE_STATE_READY} from "./sts-slider";
+import { bindSubmit, setSlideState, SLIDE_STATE_READY} from "./sts-form-ajax-wrap";
 
 const submitEmail = (email) => {
   return new Promise(yay => {

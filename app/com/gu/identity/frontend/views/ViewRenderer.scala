@@ -9,9 +9,9 @@ import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.mvt.{MultiVariantTest, MultiVariantTestVariant}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
-import org.omg.CosNaming.NamingContextPackage.NotFound
 import play.api.i18n.Messages
 import play.api.mvc.{Result, Results}
+import play.api.mvc.Results.NotFound
 import play.twirl.api.Html
 
 /**
@@ -86,6 +86,7 @@ object ViewRenderer {
     activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
     csrfToken: Option[CSRFToken],
     errorIds: Seq[String],
+    signInType: Option[SignInType],
     returnUrl: ReturnUrl,
     skipConfirmation: Option[Boolean],
     clientId: Option[ClientID],
@@ -105,7 +106,10 @@ object ViewRenderer {
       email = email
     )
 
-    renderViewModel("passwordless-signin-step-two", model)
+    signInType match {
+      case Some(_) => renderViewModel("passwordless-signin-step-two", model)
+      case None => renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
+    }
   }
 
   def renderRegister(

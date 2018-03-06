@@ -44,10 +44,10 @@ body > section:last-of-type {
 %page-block {
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 0 2rem;
+  padding: 0 1rem;
 
 
-  @media (--viewport-min-mobile-wide) {
+  @media (--viewport-min-mobile-landscape) {
     padding: 0 2rem;
     max-width: 58rem;
   }

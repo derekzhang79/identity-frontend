@@ -13,7 +13,7 @@ case class passwordlessSignInViewModel private(
 
   oauth: OAuthSignInViewModel,
 
-  signInPageText: Map[String, String],
+  passwordlessSignInPageText: Map[String, String],
   terms: TermsViewModel,
 
   showPrelude: Boolean = false,
@@ -67,7 +67,7 @@ object passwordlessSignInViewModel {
 
       oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
-      signInPageText = SignInPageText.toMap(isMembership),
+      passwordlessSignInPageText = passwordlessSignInPageText.toMap(isMembership),
       terms = Terms.getTermsModel(group),
 
       hasErrors = errors.nonEmpty,

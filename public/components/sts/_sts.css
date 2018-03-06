@@ -1,3 +1,7 @@
+.sts-container {
+  @extend %content-container;
+}
+
 .sts-button {
   @extend %form__button--submit;
   width: 100%;

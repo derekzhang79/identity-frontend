@@ -19,7 +19,7 @@
 
 /** Sign In Two Step (sts) page **/
 
-@import "components/sts/_sts.css";
+@import "components/passwordless-signin/_passwordless-signin.css";
 
 
 /** Register page **/

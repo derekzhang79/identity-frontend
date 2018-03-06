@@ -1,6 +1,5 @@
 .sts-container {
   @extend %content-container;
-  max-width: 48rem;
 }
 
 .sts-button {

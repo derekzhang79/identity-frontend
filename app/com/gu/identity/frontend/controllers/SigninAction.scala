@@ -15,6 +15,8 @@ import play.api.mvc._
 import Configuration.Environment._
 import com.gu.tip.Tip
 
+import scala.concurrent.Future
+
 /**
  * Form actions controller
  */
@@ -43,6 +45,13 @@ class SigninAction(
       LogOnErrorAction(logger) andThen
       CSRFCheck(csrfConfig)
 
+  val SignInEmailServiceAction =
+    ServiceAction andThen
+      ResultOnError(redirectRoute) andThen
+      LogOnErrorAction(logger) andThen
+      CSRFCheck(csrfConfig)
+
+
   val bodyParser = SignInActionRequestBody.bodyParser
 
   def signInMetricsLogger(request: Request[SignInActionRequestBody]) = {
@@ -62,6 +71,25 @@ class SigninAction(
   def signInWithSmartLock = SignInSmartLockServiceAction(bodyParser) {
     signInAction(successfulSmartLockSignInResponse, _ => metricsActor.logSuccessfulSmartLockSignin())
   }
+
+  def signInWithEmail = SignInEmailServiceAction(bodyParser) {
+    emailSignInAction(
+      (url, cookies) => SeeOther(url).withCookies(cookies: _*),
+      _ => metricsActor.logSuccessfulEmailSignin()
+    )
+  }
+
+  def emailSignInAction(successResponse: (String, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] => {
+
+    val body = request.body
+
+    metricsLogger(request)
+    Future.successful { Right {
+      successResponse("/signin/existing", Seq(
+        Cookie("GU_SIGNIN_EMAIL", body.email, None)
+      ))
+    }}
+  }}
 
   def signInAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] =>
     val body = request.body

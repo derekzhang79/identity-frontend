@@ -5,6 +5,7 @@ private sealed trait Message {}
 
 private object SignIn extends Message
 private object SmartLockSignIn extends Message
+private object EmailSignIn extends Message
 private object Register extends Message
 private object Terminate extends Message
 
@@ -20,6 +21,10 @@ class MetricsLoggingActor(metricsActor: ActorRef) {
 
   def logSuccessfulSmartLockSignin() = {
     metricsActor ! SmartLockSignIn
+  }
+
+  def logSuccessfulEmailSignin() = {
+    metricsActor ! EmailSignIn
   }
 
   def terminateActor() = {

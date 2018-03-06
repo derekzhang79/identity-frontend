@@ -29,7 +29,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val groupCode = GroupCode(group)
     val email : Option[String] = req.getQueryString("email")
 
-    renderpasswordlessSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
+    renderPasswordlessSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
   }
 
   def passwordlessSignInStepTwo(signInType: String, error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
@@ -39,7 +39,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val groupCode = GroupCode(group)
     val email : Option[String] = req.getQueryString("email")
 
-    renderpasswordlessSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
+    renderPasswordlessSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
   }
 
   def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean],  clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { implicit req =>

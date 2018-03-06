@@ -14,28 +14,28 @@ const getHelperFields = ($element) => {
 }
 
 const showSlide = ($slideToShow, $element) => {
-  [...$element.querySelectorAll('.sts-slider__slide')].forEach($existingSlide=>{
+  [...$element.querySelectorAll('.sts-form')].forEach($existingSlide=>{
     $existingSlide.addEventListener('animationend', () => {
       $existingSlide.remove();
     });
     requestAnimationFrame(()=>{
-      $existingSlide.classList.remove('sts-slider__slide--visible');
-      $existingSlide.classList.add('sts-slider__slide--out');
+      $existingSlide.classList.remove('sts-form--visible');
+      $existingSlide.classList.add('sts-form--out');
     })
   })
   const $slide = document.createElement('form');
   $slide.addEventListener('animationend', () => {
     [
-      'sts-slider__slide--in',
-      'sts-slider__slide--out',
-      'sts-slider__slide--in-reverse',
-      'sts-slider__slide--out-reverse'
+      'sts-form--in',
+      'sts-form--out',
+      'sts-form--in-reverse',
+      'sts-form--out-reverse'
     ].forEach(_ => $slide.classList.remove(_));
   });
   requestAnimationFrame(()=> {
-    ['sts-slider__slide--visible', 'sts-slider__slide--in'].forEach(_ => $slide.classList.add(_))
+    ['sts-form--visible', 'sts-form--in'].forEach(_ => $slide.classList.add(_))
   });
-  $slide.classList.add('sts-slider__slide');
+  $slide.classList.add('sts-form');
   $slide.innerHTML = $slideToShow.innerText;
   $element.appendChild($slide);
   return Promise.resolve($slide);
@@ -103,7 +103,7 @@ const wire = ($element) => {
     goToSlide('password').then($slide => {
       $pwd.classList.remove('u-h');
       $email.classList.add('u-h');
-      $slide.querySelector('.sts-slider__slide-password-wrap').appendChild($pwd);
+      $slide.querySelector('.sts-form-password-wrap').appendChild($pwd);
       $slide.appendChild($email);
       setTimeout(()=>{
         $pwd.focus();

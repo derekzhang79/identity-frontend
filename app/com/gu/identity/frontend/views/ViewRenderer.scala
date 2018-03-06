@@ -54,7 +54,7 @@ object ViewRenderer {
   }
 
 
-  def renderpasswordlessSignIn(
+  def renderPasswordlessSignIn(
     configuration: Configuration,
     activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
     csrfToken: Option[CSRFToken],
@@ -78,7 +78,34 @@ object ViewRenderer {
       email = email
     )
 
-    renderViewModel("signin-two-step-page", model)
+    renderViewModel("passwordless-signin-email", model)
+  }
+
+  def renderPasswordlessSignInStepTwo(
+    configuration: Configuration,
+    activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
+    csrfToken: Option[CSRFToken],
+    errorIds: Seq[String],
+    returnUrl: ReturnUrl,
+    skipConfirmation: Option[Boolean],
+    clientId: Option[ClientID],
+    group: Option[GroupCode],
+    email: Option[String])
+    (implicit messages: Messages) = {
+
+    val model = passwordlessSignInViewModel(
+      configuration = configuration,
+      activeTests = activeTests,
+      csrfToken = csrfToken,
+      errors = errorIds.map(ErrorViewModel.apply),
+      returnUrl = returnUrl,
+      skipConfirmation = skipConfirmation,
+      clientId = clientId,
+      group = group,
+      email = email
+    )
+
+    renderViewModel("passwordless-signin-step-two", model)
   }
 
   def renderRegister(

@@ -1,7 +1,3 @@
 <div class="oauth">
-  {{#each oauth.all }}
-    <div class="oauth__cta-wrapper">
-      <a class="oauth__cta--{{ id }} oauth__cta--anchor" id="oauth_cta_{{ id }}" href="{{ url }}">{{ text }}</a>
-    </div>
-  {{/each }}
+  {{> components/oauth-cta/_oauth-cta-content }}
 </div>

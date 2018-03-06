@@ -3,15 +3,16 @@ package com.gu.identity.frontend.views
 import java.net.URI
 
 import com.gu.identity.frontend.configuration._
+import com.gu.identity.frontend.controllers.{NoCache, routes}
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.{HttpError, NotFoundError, UnexpectedError}
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.mvt.{MultiVariantTest, MultiVariantTestVariant}
 import com.gu.identity.frontend.views.models._
 import jp.co.bizreach.play2handlebars.HBS
-import org.omg.CosNaming.NamingContextPackage.NotFound
 import play.api.i18n.Messages
 import play.api.mvc.{Result, Results}
+import play.api.mvc.Results.{NotFound, SeeOther}
 import play.twirl.api.Html
 
 /**
@@ -51,6 +52,68 @@ object ViewRenderer {
     }
 
     renderViewModel(view, model)
+  }
+
+
+  def renderTwoStepSignIn(
+    configuration: Configuration,
+    activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
+    csrfToken: Option[CSRFToken],
+    errorIds: Seq[String],
+    returnUrl: ReturnUrl,
+    skipConfirmation: Option[Boolean],
+    clientId: Option[ClientID],
+    group: Option[GroupCode],
+    email: Option[String])
+    (implicit messages: Messages) = {
+
+    val model = TwoStepSignInViewModel(
+      configuration = configuration,
+      activeTests = activeTests,
+      csrfToken = csrfToken,
+      errors = errorIds.map(ErrorViewModel.apply),
+      returnUrl = returnUrl,
+      skipConfirmation = skipConfirmation,
+      clientId = clientId,
+      group = group,
+      email = email,
+      signInType = None
+    )
+
+    renderViewModel("two-step-signin-start-page", model)
+  }
+
+  def renderTwoStepSignInStepTwo(
+    configuration: Configuration,
+    activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
+    csrfToken: Option[CSRFToken],
+    errorIds: Seq[String],
+    signInType: Option[SignInType],
+    returnUrl: ReturnUrl,
+    skipConfirmation: Option[Boolean],
+    clientId: Option[ClientID],
+    group: Option[GroupCode],
+    email: Option[String])
+    (implicit messages: Messages) = {
+
+    val model = TwoStepSignInViewModel(
+      configuration = configuration,
+      activeTests = activeTests,
+      csrfToken = csrfToken,
+      errors = errorIds.map(ErrorViewModel.apply),
+      returnUrl = returnUrl,
+      skipConfirmation = skipConfirmation,
+      clientId = clientId,
+      group = group,
+      email = email,
+      signInType = signInType
+    )
+
+    if(signInType.isDefined)
+      if (email.isDefined) renderViewModel("two-step-signin-choices-page", model)
+      else NoCache(SeeOther(routes.Application.twoStepSignIn().url))
+    else
+      renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
   }
 
   def renderRegister(

@@ -3,7 +3,7 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFAddToken, CSRFConfig, CSRFToken}
 import com.gu.identity.frontend.logging.Logging
-import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
+import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl, SignInType}
 import com.gu.identity.frontend.mvt.MultiVariantTestAction
 import com.gu.identity.frontend.views.ViewRenderer._
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -20,6 +20,27 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val email : Option[String] = req.getQueryString("email")
 
     renderSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
+  }
+
+  def twoStepSignIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
+    val clientIdActual = ClientID(clientId)
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
+    val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
+    val groupCode = GroupCode(group)
+    val email : Option[String] = req.getQueryString("email")
+
+    renderTwoStepSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
+  }
+
+  def twoStepSignInStepTwo(signInType: String, error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
+    val clientIdActual = ClientID(clientId)
+    val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
+    val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
+    val groupCode = GroupCode(group)
+    val email : Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
+    val signInTypeActual = SignInType(signInType)
+
+    renderTwoStepSignInStepTwo(configuration, req.activeTests, csrfToken, error, signInTypeActual, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
   }
 
   def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean],  clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { implicit req =>

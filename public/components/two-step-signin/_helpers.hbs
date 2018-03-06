@@ -1,0 +1,12 @@
+<input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
+<input type="hidden" name="returnUrl" value="{{returnUrl}}">
+<input type="hidden" name="skipConfirmation" value="{{skipConfirmation}}">
+
+{{# group }}
+  <input type="hidden" name="groupCode" value="{{ group.id }}">
+{{/ group }}
+{{# clientId }}
+  <input type="hidden" name="clientId" value="{{ clientId.id }}">
+{{/ clientId }}
+
+<input id="signin_ga_client_id" type="hidden" name="gaClientId" value="">

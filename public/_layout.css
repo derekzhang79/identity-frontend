@@ -4,6 +4,11 @@
 @import "components/_typography.css";
 @import "_colors.css";
 
+:root {
+  --size-baseline: 0.425rem;
+  --size-baseline-gutter: calc(var(--size-baseline) * 4);
+}
+
 html {
   height: 100%;
   background: var(--color-bg);
@@ -16,8 +21,24 @@ body {
   min-height: 100%;
 }
 
+body > section {
+  max-width: 100vw;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 body > section:last-of-type {
   flex-grow: 1;
+}
+
+.u-h {
+  display: none !important;
+}
+
+.u-flexrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 %page-block {
@@ -26,7 +47,7 @@ body > section:last-of-type {
   padding: 0 1rem;
 
 
-  @media (--viewport-min-mobile-wide) {
+  @media (--viewport-min-mobile-landscape) {
     padding: 0 2rem;
     max-width: 58rem;
   }

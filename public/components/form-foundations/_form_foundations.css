@@ -91,7 +91,7 @@
   color: var(--color-brand);
   text-align: left;
   transition: 0.15s;
-  padding: 0 1.8rem;
+  padding: 0 1.75rem;
   line-height: 4.2rem;
   height: 4.2rem;
   display: block;
@@ -135,7 +135,7 @@
   background-color: #fff;
   border: 1px solid var(--color-border);
   color: #000;
-  padding: 0 1.8rem;
+  padding: 0 var(--size-baseline-gutter);
   line-height: 4.2rem;
   height: 4.2rem;
   border-radius: 99999px;
@@ -155,7 +155,7 @@
   /* override default invalid field styles, only show on focus */
 
   &:invalid:focus {
-    border-color: #e00914;
+    border-color: var(--color-error);
   }
 }
 
@@ -201,6 +201,10 @@
     z-index: -100;
     opacity: 0;
     pointer-events: none;
+  }
+
+  $labelClass {
+    color: green;
   }
 
   &:focus + $labelClass::before,

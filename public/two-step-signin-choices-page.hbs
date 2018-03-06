@@ -1,0 +1,36 @@
+{{# partial "pageTitle" }}{{ twoStepSignInPageText.pageTitle }}{{/ partial }}
+
+{{# partial "content" }}
+
+  {{#showPrelude}}
+    <div class="signin__prelude ">
+      <p>{{twoStepSignInPageText.prelude}}</p>
+      <p> {{twoStepSignInPageText.preludeMoreInfo}} <a href="https://www.theguardian.com/help/identity-faq"> {{twoStepSignInPageText.preludeFaq}} </a>.</p>
+    </div>
+  {{/showPrelude}}
+
+  <h1 class="page-heading">{{ twoStepSignInPageText.title }}</h1>
+
+  <section class="page-standfirst">
+    <p class="page-standfirst__paragraph">{{twoStepSignInPageText.noAccount}} <a href="{{registerUrl}}" >{{twoStepSignInPageText.signUp}}</a>.</p>
+  </section>
+
+  <section class="two-step-signin-container">
+    {{#signInTypes.isExisting}}
+      {{> components/two-step-signin/two-step-signin-existing }}
+    {{/signInTypes.isExisting}}
+    {{#signInTypes.isNew}}
+      <h1 class="page-heading">Register for The Guardian</h1>
+    {{/signInTypes.isNew}}
+    {{#signInTypes.isGuest}}
+      <h1 class="page-heading">Set a password</h1>
+    {{/signInTypes.isGuest}}
+  </section>
+
+  <section class="page__footer">
+    {{> components/terms/_terms }}
+  </section>
+
+{{/partial}}
+
+{{> layout}}

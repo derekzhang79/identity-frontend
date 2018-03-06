@@ -63,7 +63,7 @@ body > section:last-of-type {
 %content-container {
   @extend %page-block;
   width: 100%;
-  max-width: 48rem;
+  max-width: 58rem;
 }
 
 %page-block--low-margin {

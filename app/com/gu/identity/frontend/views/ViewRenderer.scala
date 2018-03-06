@@ -55,7 +55,7 @@ object ViewRenderer {
   }
 
 
-  def renderPasswordlessSignIn(
+  def renderTwoStepSignIn(
     configuration: Configuration,
     activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
     csrfToken: Option[CSRFToken],
@@ -67,7 +67,7 @@ object ViewRenderer {
     email: Option[String])
     (implicit messages: Messages) = {
 
-    val model = passwordlessSignInViewModel(
+    val model = TwoStepSignInViewModel(
       configuration = configuration,
       activeTests = activeTests,
       csrfToken = csrfToken,
@@ -80,10 +80,10 @@ object ViewRenderer {
       signInType = None
     )
 
-    renderViewModel("passwordless-signin-email", model)
+    renderViewModel("two-step-signin-start-page", model)
   }
 
-  def renderPasswordlessSignInStepTwo(
+  def renderTwoStepSignInStepTwo(
     configuration: Configuration,
     activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
     csrfToken: Option[CSRFToken],
@@ -96,7 +96,7 @@ object ViewRenderer {
     email: Option[String])
     (implicit messages: Messages) = {
 
-    val model = passwordlessSignInViewModel(
+    val model = TwoStepSignInViewModel(
       configuration = configuration,
       activeTests = activeTests,
       csrfToken = csrfToken,
@@ -110,8 +110,8 @@ object ViewRenderer {
     )
 
     (signInType,email) match {
-      case (Some(_), Some(_)) => renderViewModel("passwordless-signin-step-two", model)
-      case (Some(_), None) => NoCache(SeeOther(routes.Application.passwordlessSignIn().url))
+      case (Some(_), Some(_)) => renderViewModel("two-step-signin-choices-page", model)
+      case (Some(_), None) => NoCache(SeeOther(routes.Application.twoStepSignIn().url))
       case (None, _) => renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
     }
   }

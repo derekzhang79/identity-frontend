@@ -1,13 +1,13 @@
-.passwordless-signin-container {
+.two-step-signin-container {
   @extend %content-container;
 }
 
-.passwordless-signin-button {
+.two-step-signin-button {
   @extend %form__button--submit;
   width: 100%;
   box-sizing: border-box;
   justify-content: space-between;
-  &.passwordless-signin-button--secondary {
+  &.two-step-signin-button--secondary {
     background: transparent;
     border: 1px solid var(--color-border);
     &:hover, &:focus {
@@ -17,17 +17,17 @@
   }
 }
 
-.passwordless-signin-checkbox__input {
-  @mixin formCheckbox .passwordless-signin-checkbox__label;
+.two-step-signin-checkbox__input {
+  @mixin formCheckbox .two-step-signin-checkbox__label;
 }
 
-.passwordless-signin-checkbox__label {
+.two-step-signin-checkbox__label {
   @extend %form__label--checkbox;
   font-size: inherit;
   font-family: inherit;
 }
 
-.passwordless-signin-form_section {
+.two-step-signin-form_section {
   padding: 0.875rem 0 0;
   margin-top: 3rem;
   position: relative;
@@ -42,28 +42,28 @@
   }
 }
 
-.passwordless-signin-field-wrap {
+.two-step-signin-field-wrap {
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-.passwordless-signin-field-wrap + .passwordless-signin-field-wrap {
+.two-step-signin-field-wrap + .two-step-signin-field-wrap {
   margin-top: calc(var(--size-baseline) * 4);
 }
 
-.passwordless-signin-field-wrap > * {
+.two-step-signin-field-wrap > * {
   margin-bottom: calc(var(--size-baseline) * 2);
 }
-.passwordless-signin-field-wrap__title {
+.two-step-signin-field-wrap__title {
   @extend %font-text-sans-2;
 }
 
-.passwordless-signin-field-wrap__footer {
+.two-step-signin-field-wrap__footer {
   @extend %font-text-sans-1;
 }
 
-.passwordless-signin-field-wrap__field {
+.two-step-signin-field-wrap__field {
   @media (--viewport-min-mobile-landscape) {
     @supports(height: calc(2px + 2px)) {
       margin-left: calc(var(--size-baseline-gutter) * -1);
@@ -73,28 +73,28 @@
   }
 }
 
-.passwordless-signin-input {
+.two-step-signin-input {
   @extend %form__text-field;
 }
 
-.passwordless-signin-input-wrap {
-  .passwordless-signin-input-wrap__info {
+.two-step-signin-input-wrap {
+  .two-step-signin-input-wrap__info {
     @extend %font-text-sans-2;
     margin-bottom: var(--size-baseline);
   }
 }
 
-.passwordless-signin-input-wrap.passwordless-signin-input-wrap--error {
+.two-step-signin-input-wrap.two-step-signin-input-wrap--error {
   color: var(--color-error);
-  .passwordless-signin-input {
+  .two-step-signin-input {
     border-color: var(--color-error);
   }
 }
 
-.passwordless-signin-form-ajax-wrap {
+.two-step-signin-form-ajax-wrap {
   position: relative;
   min-height: 100%;
-  .passwordless-signin-form {
+  .two-step-signin-form {
     position: absolute;
     left: 0;
     right: 0;
@@ -107,33 +107,33 @@
   }
 }
 
-.passwordless-signin-form--visible {
+.two-step-signin-form--visible {
   visibility: visible;
   display: block;
 }
 
-.passwordless-signin-form--out {
+.two-step-signin-form--out {
   visibility: visible;
   display: block;
-  animation: passwordless-signin-animation__slide-left 0.2s both;
+  animation: two-step-signin-animation__slide-left 0.2s both;
 }
-.passwordless-signin-form--in {
+.two-step-signin-form--in {
   visibility: visible;
   display: block;
-  animation: passwordless-signin-animation__slide-right reverse 0.2s both;
+  animation: two-step-signin-animation__slide-right reverse 0.2s both;
 }
-.passwordless-signin-form--out-reverse {
+.two-step-signin-form--out-reverse {
   visibility: visible;
   display: block;
-  animation: passwordless-signin-animation__slide-right 0.2s both;
+  animation: two-step-signin-animation__slide-right 0.2s both;
 }
-.passwordless-signin-form--in-reverse {
+.two-step-signin-form--in-reverse {
   visibility: visible;
   display: block;
-  animation: passwordless-signin-animation__slide-left reverse 0.2s both;
+  animation: two-step-signin-animation__slide-left reverse 0.2s both;
 }
 
-@keyframes passwordless-signin-animation__slide-left {
+@keyframes two-step-signin-animation__slide-left {
   0% {
     transform: translateX(0);
     opacity: 1;
@@ -145,7 +145,7 @@
   }
 }
 
-@keyframes passwordless-signin-animation__slide-right {
+@keyframes two-step-signin-animation__slide-right {
   0% {
     transform: translateX(0);
     opacity: 1;

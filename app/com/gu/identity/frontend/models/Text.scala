@@ -28,7 +28,7 @@ object Text {
     }
   }
 
-  object PasswordlessSignInPageText {
+  object TwoStepSignInPageText {
     def toMap(isMembership: Boolean)(implicit messages: Messages): Map[String, String] = {
       Map (
         "title" -> (if(isMembership) messages("signin.title.supporter") else messages("signin.title")),

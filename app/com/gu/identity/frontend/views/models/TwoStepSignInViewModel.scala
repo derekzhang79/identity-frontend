@@ -8,12 +8,12 @@ import com.gu.identity.frontend.models.Text._
 import com.gu.identity.frontend.mvt.ActiveMultiVariantTests
 import play.api.i18n.Messages
 
-case class passwordlessSignInViewModel private(
+case class TwoStepSignInViewModel private(
   layout: LayoutViewModel,
 
   oauth: OAuthSignInViewModel,
 
-  passwordlessSignInPageText: Map[String, String],
+  twoStepSignInPageText: Map[String, String],
   terms: TermsViewModel,
 
   showPrelude: Boolean = false,
@@ -45,7 +45,7 @@ case class passwordlessSignInViewModel private(
     with ViewModelResources
 
 
-object passwordlessSignInViewModel {
+object TwoStepSignInViewModel {
   def apply(
     configuration: Configuration,
     activeTests: ActiveMultiVariantTests,
@@ -56,7 +56,7 @@ object passwordlessSignInViewModel {
     clientId: Option[ClientID],
     group: Option[GroupCode],
     email: Option[String],
-    signInType: Option[SignInType])(implicit messages: Messages): passwordlessSignInViewModel = {
+    signInType: Option[SignInType])(implicit messages: Messages): TwoStepSignInViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] = None
@@ -65,12 +65,12 @@ object passwordlessSignInViewModel {
 
     val isMembership = clientId.exists(_ == GuardianMembersClientID)
 
-    passwordlessSignInViewModel(
+    TwoStepSignInViewModel(
       layout = layout,
 
       oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
-      passwordlessSignInPageText = PasswordlessSignInPageText.toMap(isMembership),
+      twoStepSignInPageText = TwoStepSignInPageText.toMap(isMembership),
       terms = Terms.getTermsModel(group),
 
       hasErrors = errors.nonEmpty,

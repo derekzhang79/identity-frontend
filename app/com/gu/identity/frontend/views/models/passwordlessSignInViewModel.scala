@@ -30,6 +30,8 @@ case class passwordlessSignInViewModel private(
   registerUrl: String = "",
   forgotPasswordUrl: String = "",
 
+  signInTypes: Map[String, Boolean],
+
   recaptchaModel: Option[Any],
 
   //TODO: use reverse signInWithEmail route
@@ -53,7 +55,8 @@ object passwordlessSignInViewModel {
     skipConfirmation: Option[Boolean],
     clientId: Option[ClientID],
     group: Option[GroupCode],
-    email: Option[String])(implicit messages: Messages): passwordlessSignInViewModel = {
+    email: Option[String],
+    signInType: Option[SignInType])(implicit messages: Messages): passwordlessSignInViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] = None
@@ -82,6 +85,12 @@ object passwordlessSignInViewModel {
 
       registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
       forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.id)),
+
+      signInTypes = Map(
+        ("isNew", signInType.contains(NewUser)),
+        ("isExisting", signInType.contains(ExistingUser)),
+        ("isGuest", signInType.contains(GuestUser))
+      ),
 
       recaptchaModel = recaptchaModel,
 

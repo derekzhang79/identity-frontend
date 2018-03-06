@@ -76,7 +76,8 @@ object ViewRenderer {
       skipConfirmation = skipConfirmation,
       clientId = clientId,
       group = group,
-      email = email
+      email = email,
+      signInType = None
     )
 
     renderViewModel("passwordless-signin-email", model)
@@ -104,7 +105,8 @@ object ViewRenderer {
       skipConfirmation = skipConfirmation,
       clientId = clientId,
       group = group,
-      email = email
+      email = email,
+      signInType = signInType
     )
 
     (signInType,email) match {

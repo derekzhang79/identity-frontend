@@ -75,7 +75,7 @@
 }
 
 .signin-form__checkbox--remember-me {
-  @mixin formCheckbox .signin-form__label--remember-me;
+  @include formCheckbox(.signin-form__label--remember-me);
 }
 
 .signin-form__label--remember-me {

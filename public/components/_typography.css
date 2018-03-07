@@ -9,13 +9,13 @@
 $base-font-size: 10;
 
 html {
-  font-size: calc($base-font-size / 16em);
+  font-size: calc($base-font-size * 1px);
   text-rendering: optimizeSpeed;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
 
-@define-mixin font-size $size, $line-height {
+@mixin font-size($size, $line-height) {
   font-size: calc($size / $base-font-size * 1rem);
   line-height: calc($line-height / $base-font-size * 1rem);
 }
@@ -35,69 +35,69 @@ html {
 
 %font-heading-0 {
   @extend %font-heading;
-  @mixin font-size 24, 36;
+  @include font-size(24, 36);
   font-weight: 500;
 }
 
 %font-heading-1 {
   @extend %font-heading;
-  @mixin font-size 32, 36;
+  @include font-size(32, 36);
   font-weight: 500;
 }
 
 %font-sub-heading-0 {
   @extend %font-heading;
-  @mixin font-size 16, 20;
+  @include font-size(16, 20);
 }
 
 %font-sub-heading-1 {
   @extend %font-heading;
-  @mixin font-size 18, 22;
+  @include font-size(18, 22);
 }
 
 %font-sub-heading-2 {
   @extend %font-heading;
-  @mixin font-size 20, 28;
+  @include font-size(20, 28);
 }
 
 %font-sub-heading-3 {
   @extend %font-heading;
-  @mixin font-size 21, 25;
+  @include font-size(21, 25);
 }
 
 
 %font-text-0 {
   @extend %font-serif;
-  @mixin font-size 13, 18;
+  @include font-size(13, 18);
 }
 
 %font-text-1 {
   @extend %font-serif;
-  @mixin font-size 14, 20;
+  @include font-size(14, 20);
 }
 
 %font-text-2 {
   @extend %font-serif;
-  @mixin font-size 16, 24;
+  @include font-size(16, 24);
 }
 
 
 %font-text-sans-0 {
   @extend %font-sans-serif;
-  @mixin font-size 13, 18;
+  @include font-size(13, 18);
 }
 
 %font-text-sans-1 {
   @extend %font-sans-serif;
-  @mixin font-size 13, 18;
+  @include font-size(13, 18);
 }
 
 %font-text-sans-2 {
   @extend %font-sans-serif;
-  @mixin font-size 14, 20;
+  @include font-size(14, 20);
 }
 
 %font-text-sans-3 {
   @extend %font-sans-serif;
-  @mixin font-size 16, 20;
+  @include font-size(16, 20);
 }

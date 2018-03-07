@@ -229,7 +229,7 @@
 }
 
 .register-form__checkbox--gnm-marketing {
-  @mixin formCheckbox .register-form__label--gnm-marketing;
+  @include formCheckbox(.register-form__label--gnm-marketing);
 }
 
 .register-form__label--gnm-marketing {
@@ -245,7 +245,7 @@
 }
 
 .register-form__checkbox--3rd-party-marketing {
-  @mixin formCheckbox .register-form__label--3rd-party-marketing;
+  @include formCheckbox(.register-form__label--3rd-party-marketing);
 }
 
 .register-form__label--3rd-party-marketing {

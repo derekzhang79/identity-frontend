@@ -26,7 +26,9 @@ module.exports = {
     },
     "postcss-strip-units":{},
     "postcss-cssnext":{},
-    "cssnano":{},
+    "cssnano":{
+      autoprefixer: false
+    },
     "postcss-reporter":{
       "clearMessages": true
     }

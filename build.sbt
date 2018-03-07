@@ -9,7 +9,7 @@ scalaVersion := "2.11.7"
 version := "1.0.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(
-  PlayScala, UniversalPlugin, RiffRaffArtifact, BuildInfoPlugin, FrontendBuildPlugin)
+  PlayScala, UniversalPlugin, RiffRaffArtifact, BuildInfoPlugin)
 
 lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 

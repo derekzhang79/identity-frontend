@@ -11,8 +11,8 @@
   "scripts": {
     "install": "npm run build",
     "build": "npm run build-css && npm run build-js",
-    "prebuild-css": "mkdir -p ./target/web/build",
-    "build-css": "postcss public/main.css -o target/web/build/bundle.css",
+    "prebuild-css": "mkdir -p ./target/web/build-npm",
+    "build-css": "postcss public/main.css -o target/web/build-npm/bundle.css",
     "build-js": "webpack --bail --mode production",
     "watch-css": "postcss public/main.css -o target/web/public/main/bundle.css -w -m --verbose",
     "watch-js": "webpack --watch --mode development target/web/public/main/main.bundle.js",

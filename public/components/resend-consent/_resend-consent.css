@@ -10,7 +10,7 @@
   @extend %font-text-1;
 
   a {
-    @extend .link;
+    @extend %link;
   }
 }
 

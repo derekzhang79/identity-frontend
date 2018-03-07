@@ -18,7 +18,7 @@
   color: currentColor;
   text-decoration: none;
   a {
-    @extend .link;
+    @extend %link;
     color: currentColor;
   }
   &.layout-header__title--standfirst {
@@ -44,7 +44,7 @@
 
 .layout-header__title__proxy {
   @extend %font-text-sans-1;
-  @extend .link;
+  @extend %link;
   color: currentColor;
 }
 

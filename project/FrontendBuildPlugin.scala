@@ -27,8 +27,6 @@ object FrontendBuildPlugin extends AutoPlugin {
     )
   }
 
-  override def requires = SbtJsTask
-
   // Default settings for the task
   override lazy val projectSettings = inConfig(Assets) {
     Seq(
@@ -40,9 +38,7 @@ object FrontendBuildPlugin extends AutoPlugin {
       sourceDirectory in build := resourceDirectory.value,
       buildOutputDirectory in build := webTarget.value / "build",
 
-      buildCommands in build := Seq.empty,
-
-      npmNodeModules := npmNodeModules.dependsOn(logNodeModuleInstall).value
+      buildCommands in build := Seq.empty
     )
   }
 

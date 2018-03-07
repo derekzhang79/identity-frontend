@@ -37,12 +37,13 @@ To run the application in development mode use:
 
     ./start-frontend.sh
 
-This command will automatically pull down all dependencies for the Scala app,
-and client-side dependencies with Node.js. Sources will automatically be watched,
-so making changes locally will result in compile being triggered automatically.
+This command will automatically pull down all dependencies for the Scala app.
 
-Client side sources will automatically be compiled using the `npm run build` command.
+To compile the client side resources locally and watch for changes use
 
+    npm install
+    npm run watch
+    
 Test by hitting [https://profile.thegulocal.com/management/healthcheck](https://profile.thegulocal.com/management/healthcheck). 
 
 ## Running against DEV Identity API

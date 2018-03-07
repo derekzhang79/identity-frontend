@@ -3,15 +3,18 @@
 @import "components/_breakpoints.css";
 @import "components/_typography.css";
 @import "_colors.css";
+@import "components/header/_header.css";
+@import "components/footer/_footer.css";
 
 :root {
   --size-baseline: 0.425rem;
   --size-baseline-gutter: calc(var(--size-baseline) * 4);
-  --size-baseline-vertical: calc(var(--size-baseline) * 8);
+  --size-baseline-vertical:  calc(var(--size-baseline) * 8);
 }
 
 html {
   height: 100%;
+  width: 100%;
   background: var(--color-bg);
   color: var(--color-text);
 }
@@ -43,76 +46,76 @@ body > section:last-of-type {
 }
 
 %page-block {
-  margin: 0 auto;
-  box-sizing: border-box;
-  padding: 0 1rem;
+   margin: 0 auto;
+   box-sizing: border-box;
+   padding: 0 1rem;
 
 
-  @media (--viewport-min-mobile-landscape) {
-    padding: 0 2rem;
-    max-width: 58rem;
-  }
+   @media (--viewport-min-mobile-landscape) {
+     padding: 0 2rem;
+     max-width: 58rem;
+   }
 
-  @media (--viewport-min-tablet) {
-    max-width: 74rem;
-  }
+   @media (--viewport-min-tablet) {
+     max-width: 74rem;
+   }
 
-  @media (--viewport-min-desktop) {
-    max-width: 98rem;
-  }
+   @media (--viewport-min-desktop) {
+     max-width: 98rem;
+   }
 
-}
+ }
 
 /**
  * Off horizontally centred container of a content width of 540px
  */
 
 %content-container {
-  @extend %page-block;
-  width: 100%;
-  max-width: 58rem;
-}
+   @extend %page-block;
+   width: 100%;
+   max-width: 58rem;
+ }
 
 %page-block--low-margin {
-  margin: 0 1rem;
-  background-color: #fff;
-  box-sizing: border-box;
+   margin: 0 1rem;
+   background-color: #fff;
+   box-sizing: border-box;
 
-  @media (--viewport-min-mobile-landscape) {
-    margin: 0 auto;
-    max-width: 44rem;
-  }
+   @media (--viewport-min-mobile-landscape) {
+     margin: 0 auto;
+     max-width: 44rem;
+   }
 
-  @media (--viewport-min-tablet) {
-    margin: 0 auto;
-    max-width: 46rem;
-  }
-}
+   @media (--viewport-min-tablet) {
+     margin: 0 auto;
+     max-width: 46rem;
+   }
+ }
 
 %content-container--with-padding {
-  @extend %page-block--low-margin;
-  padding: 0 1rem;
-  width: auto;
+   @extend %page-block--low-margin;
+   padding: 0 1rem;
+   width: auto;
 
-  @media (--viewport-min-mobile-landscape) {
-    padding: 0 0.5rem;
-    width: 100%;
-  }
+   @media (--viewport-min-mobile-landscape) {
+     padding: 0 0.5rem;
+     width: 100%;
+   }
 
-  @media (--viewport-min-tablet) {
-    padding: 0 1rem;
-  }
-}
+   @media (--viewport-min-tablet) {
+     padding: 0 1rem;
+   }
+ }
 
 %content-container--no-padding {
-  @extend %page-block--low-margin;
-  width: auto;
-  padding: 0;
+   @extend %page-block--low-margin;
+   width: auto;
+   padding: 0;
 
-  @media (--viewport-min-mobile-landscape) {
-    width: 100%;
-  }
-}
+   @media (--viewport-min-mobile-landscape) {
+     width: 100%;
+   }
+ }
 
 .page-heading {
   @extend %font-heading-0;
@@ -125,11 +128,14 @@ body > section:last-of-type {
     margin-top: -2rem;
   }
 
-  @media (--viewport-min-tablet) {
+}
+
+@media (--viewport-min-tablet) {
+  .page-heading {
     @extend %font-heading-1;
   }
-
 }
+
 
 /**
  * Smaller heading
@@ -173,36 +179,40 @@ body > section:last-of-type {
   }
 }
 
-@import "components/header/_header.css";
-@import "components/footer/_footer.css";
-
 .page-content {
   @extend %content-container;
 }
 
-a {
-  color: var(--color-brand);
-  cursor: pointer;
-  text-decoration: none;
+%a {
+   color: var(--color-brand);
+   cursor: pointer;
+   text-decoration: none;
 
-  &:hover {
-    text-decoration: underline;
-  }
-}
+   &:hover {
+     text-decoration: underline;
+   }
+ }
 
 /** Global style for links in the body text */
 
-.link {
-  @extend a;
-  border-bottom: 1px solid #dcdcdc;
-  line-height: 1.2;
-  transition: border-color 0.15s ease-out;
+%link {
+   @extend %a;
+   border-bottom: 1px solid #dcdcdc;
+   transition: border-color 0.15s ease-out;
 
-  &:hover,
-  &:focus {
-    text-decoration: none;
-    border-color: var(--color-brand);
-  }
+   &:hover,
+   &:focus {
+     text-decoration: none;
+     border-color: var(--color-brand);
+   }
+ }
+
+.link {
+  @extend %link;
+}
+
+a {
+  @extend %a;
 }
 
 .page__footer {

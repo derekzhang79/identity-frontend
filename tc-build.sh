@@ -11,9 +11,10 @@
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 nvm install
+nvm clear-cache
 
 # Install node dependencies
-npm cache clean
+npm cache clean -f
 npm install
 
 # Build scala and frontend assets, and upload to riffraff

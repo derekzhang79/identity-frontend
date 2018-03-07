@@ -20,16 +20,16 @@
   opacity: 0.75;
 }
 
-@define-mixin footer-columns $cols: 1, $gap: 0 {
+@mixin footer-columns($cols: 1, $gap: 0) {
   column-count: $cols;
   column-gap: $gap;
 }
 
 .colophon__list {
-  @mixin footer-columns 2;
+  @include footer-columns(2);
 
   @media all and (min-width: 600px) {
-    @mixin footer-columns 3;
+    @include footer-columns(3);
   }
 
   margin: 2.5rem 0 0.6rem;

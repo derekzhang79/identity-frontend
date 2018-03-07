@@ -191,7 +191,7 @@
   background-image: inline("tick.svg");
 }
 
-@define-mixin formCheckbox $labelClass {
+@mixin formCheckbox($labelClass) {
 
   /* Only display nicer checkbox when browser supports CSS3 - should fallback nicely */
 

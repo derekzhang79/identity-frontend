@@ -10,7 +10,7 @@
 
 /* stylelint-disable */
 
-@define-mixin guFontFace $family, $fontSet, $filebase, $font-weight: 400, $font-style: normal {
+@mixin guFontFace($family, $fontSet, $filebase, $font-weight: 400, $font-style: normal) {
   $file-path: v0/$fontSet/$family/$filebase;
 
   /* Note: disabled woff2 loading until browser support improves; */
@@ -31,11 +31,11 @@
 
 
 /* GuardianEgyptianWeb */
-@mixin guFontFace GuardianHeadline, ascii, GHGuardianHeadline-Medium, 500;
-@mixin guFontFace GuardianHeadline, ascii, GHGuardianHeadline-Light, 300;
+@include guFontFace(GuardianHeadline, ascii, GHGuardianHeadline-Medium, 500);
+@include guFontFace(GuardianHeadline, ascii, GHGuardianHeadline-Light, 300);
 
 /* GuardianTextEgyptianWeb */
-@mixin guFontFace GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Regular;
+@include guFontFace(GuardianTextEgyptianWeb, ascii, GuardianTextEgyptianWeb-Regular);
 
 /* GuardianTextSansWeb */
-@mixin guFontFace GuardianTextSansWeb, all, GuardianTextSansWeb-Regular;
+@include guFontFace(GuardianTextSansWeb, all, GuardianTextSansWeb-Regular);

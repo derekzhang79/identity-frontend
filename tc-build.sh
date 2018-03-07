@@ -13,6 +13,7 @@ export NVM_DIR="$HOME/.nvm"
 nvm install
 
 # Install node dependencies
+npm cache clean -f
 npm install
 
 # Build scala and frontend assets, and upload to riffraff

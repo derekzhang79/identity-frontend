@@ -15,7 +15,7 @@
     "build-css": "postcss public/main.css -o target/web/build-npm/bundle.css",
     "build-js": "webpack --bail --mode production",
     "watch-css": "postcss public/main.css -o target/web/public/main/bundle.css -w -m --verbose",
-    "watch-js": "webpack --watch --mode development target/web/public/main/main.bundle.js",
+    "watch-js": "webpack --watch --mode development -o ./target/web/public/main/main.bundle.js",
     "lint-css": "stylelint 'public/**/*.css'",
     "watch": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\""
   },

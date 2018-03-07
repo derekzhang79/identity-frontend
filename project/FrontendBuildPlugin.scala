@@ -41,8 +41,6 @@ object FrontendBuildPlugin extends AutoPlugin {
       buildOutputDirectory in build := webTarget.value / "build",
 
       buildCommands in build := Seq.empty,
-
-      npmNodeModules := npmNodeModules.dependsOn(logNodeModuleInstall).value
     )
   }
 

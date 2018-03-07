@@ -32,17 +32,22 @@ Requires:
  - [JDK 8](http://openjdk.java.net)
  - [sbt](http://www.scala-sbt.org)
  - [Node.js](https://nodejs.org) - version is specified by [.nvmrc](.nvmrc), execute [`$ nvm use`](https://github.com/creationix/nvm#nvmrc) to use it
-
-To run the application in development mode use:
-
-    ./start-frontend.sh
-
-This command will automatically pull down all dependencies for the Scala app.
-
-To compile the client side resources locally and watch for changes use
+ 
+If this is the first time using the application you will need to pull down the client side dependencies using
 
     npm install
-    npm run watch
+
+After that, to run the application in development mode and watch for changes you can use
+
+    . watch-frontend.sh
+
+This command will automatically pull down all dependencies for the Scala app, and run the client side asset packing and sbt in parallel in the background.
+
+If you don't need client side assets you can work faster using
+
+    . start-frontend.sh
+    
+This only runs sbt
     
 Test by hitting [https://profile.thegulocal.com/management/healthcheck](https://profile.thegulocal.com/management/healthcheck). 
 

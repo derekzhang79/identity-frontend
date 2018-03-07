@@ -3,10 +3,7 @@
  */
 
 // Configure npm commands to build frontend assets
-buildCommands in build in Assets := Seq(
-  BuildCommand("build-css", "npm run build-css -s", excludeFilter = Some("*.js" | "*.js.map" | "*.hbs")),
-  BuildCommand("build-js", "npm run build-js -s", includeFilter = Some("*.js" | "*.js.map"))
-)
+buildCommands in build in Assets := Seq()
 
 pipelineStages := Seq(digest)
 

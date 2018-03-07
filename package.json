@@ -13,7 +13,9 @@
     "prebuild-css": "npm run lint-css && mkdir -p ./target/web/build",
     "build-css": "postcss -c postcss.json",
     "build-js": "webpack --bail",
-    "lint-css": "stylelint 'public/**/*.css'"
+    "watch-css": "postcss -c postcss.json -w",
+    "watch-js": "webpack --watch",
+    "watch": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\""
   },
   "devDependencies": {
     "babel-core": "^6.2.1",

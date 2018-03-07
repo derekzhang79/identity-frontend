@@ -11,3 +11,4 @@ project/target
 *.crt
 *.key
 .DS_Store
+npm-debug.log

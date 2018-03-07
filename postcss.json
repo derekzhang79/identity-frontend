@@ -10,7 +10,7 @@
     "postcss-reporter"
   ],
   "input": "public/main.css",
-  "output": "target/web/build/bundle.css",
+  "output": "target/web/public/main/bundle.css",
   "precss": {
     "import": false,
     "mixins": true,

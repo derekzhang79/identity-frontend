@@ -32,7 +32,7 @@ object FrontendBuildPlugin extends AutoPlugin {
   // Default settings for the task
   override lazy val projectSettings = inConfig(Assets) {
     Seq(
-      build := Seq(),
+      build := buildAssetsTask.value,
 
       includeFilter in build := "*.*",
       excludeFilter in build := NothingFilter,

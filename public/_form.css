@@ -2,7 +2,7 @@
 checkbox
 */
 .form-checkbox__input {
-  @mixin formCheckbox .form-checkbox__label;
+  @include formCheckbox(.form-checkbox__label);
 }
 
 .form-checkbox__label {

@@ -1,3 +1,6 @@
+import com.typesafe.sbt.SbtNativePackager._
+import NativePackagerHelper._
+
 /**
  * Config for building frontend (client-side) assets
  */
@@ -10,12 +13,16 @@ pipelineStages := Seq(digest)
 // Ensure frontend build task is a source generator task
 sourceGenerators in Assets <+= build in Assets
 
-
 unmanagedResourceDirectories in Compile += (buildOutputDirectory in build in Assets).value
 
 // Include handlebars views in resources for lookup on classpath
 unmanagedResourceDirectories in Compile += (resourceDirectory in Assets).value
 
+JsEngineKeys.npmNodeModules in Assets := Nil
+
+JsEngineKeys.npmNodeModules in TestAssets := Nil
+
+mappings in Assets ++= contentOf(baseDirectory.value / "target/web/build-npm")
 
 // Clean out node_modules directory as part of a `clean` task
 cleanFiles ++= (WebKeys.nodeModuleDirectories in Assets).value

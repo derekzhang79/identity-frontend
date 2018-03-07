@@ -15,7 +15,6 @@ case class ResetPasswordViewModel private(
     actions: Map[String, String] = Map("reset" -> routes.ResetPasswordAction.reset().url),
     errors: Seq[ErrorViewModel] = Seq.empty,
     csrfToken: Option[CSRFToken],
-    email: Option[String],
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product]
   )
@@ -30,7 +29,6 @@ object ResetPasswordViewModel {
     configuration: Configuration,
     errors: Seq[ErrorViewModel],
     csrfToken: Option[CSRFToken],
-    email: Option[String],
     clientId: Option[ClientID])
     (implicit messages: Messages): ResetPasswordViewModel = {
     val layout = LayoutViewModel(configuration, clientId = clientId, returnUrl = None)
@@ -40,7 +38,6 @@ object ResetPasswordViewModel {
       resetPasswordText = ResetPasswordText(),
       errors = errors,
       csrfToken = csrfToken,
-      email = email,
       resources = layout.resources,
       indirectResources = layout.indirectResources
     )

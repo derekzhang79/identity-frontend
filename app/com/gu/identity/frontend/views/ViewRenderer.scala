@@ -151,14 +151,12 @@ object ViewRenderer {
     configuration: Configuration,
     errorIds: Seq[String],
     csrfToken: Option[CSRFToken],
-    email: Option[String],
     clientId: Option[ClientID])
     (implicit messages: Messages) = {
     val model = ResetPasswordViewModel(
       configuration = configuration,
       errors = errorIds.map(ErrorViewModel.apply),
       csrfToken = csrfToken,
-      email = email,
       clientId = clientId
     )
     renderViewModel("reset-password-page", model)

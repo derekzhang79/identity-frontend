@@ -58,8 +58,9 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
   def reset(error: Seq[String], clientId: Option[String]) = CSRFAddToken(csrfConfig) { req =>
     val clientIdOpt = ClientID(clientId)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
+    val email : Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
 
-    renderResetPassword(configuration, error, csrfToken, clientIdOpt)
+    renderResetPassword(configuration, error, csrfToken, email, clientIdOpt)
   }
 
   def resetPasswordEmailSent(clientId: Option[String]) = Action {

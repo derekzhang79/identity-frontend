@@ -11,7 +11,7 @@ pipelineStages := Seq(digest)
 sourceGenerators in Assets <+= build in Assets
 
 
-managedSourceDirectories in Compile += (buildOutputDirectory in build in Assets).value
+unmanagedResourceDirectories in Compile += (buildOutputDirectory in build in Assets).value
 
 // Include handlebars views in resources for lookup on classpath
 unmanagedResourceDirectories in Compile += (resourceDirectory in Assets).value

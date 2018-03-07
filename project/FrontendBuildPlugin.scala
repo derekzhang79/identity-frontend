@@ -27,8 +27,6 @@ object FrontendBuildPlugin extends AutoPlugin {
     )
   }
 
-  override def requires = SbtJsTask
-
   // Default settings for the task
   override lazy val projectSettings = inConfig(Assets) {
     Seq(

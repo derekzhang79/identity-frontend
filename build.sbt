@@ -10,10 +10,10 @@ version := "1.0.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, UniversalPlugin, RiffRaffArtifact, BuildInfoPlugin, FrontendBuildPlugin)
-  .JsEngineKeys.npmNodeModules in Assets := Nil,{
+  .settings(
     JsEngineKeys.npmNodeModules in Assets := Nil,
     JsEngineKeys.npmNodeModules in TestAssets := Nil
-  }
+  )
 
 lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 

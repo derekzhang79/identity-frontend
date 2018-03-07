@@ -9,6 +9,7 @@
 :root {
   --size-baseline: 0.425rem;
   --size-baseline-gutter: calc(var(--size-baseline) * 4);
+  --size-baseline-vertical:  calc(var(--size-baseline) * 8);
 }
 
 html {

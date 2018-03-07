@@ -42,9 +42,8 @@ This command will automatically pull down all dependencies for the Scala app.
 To compile the client side resources locally and watch for changes use
 
     npm install
+    npm run watch
     
-(Or use `npm run watch` to watch for changes and rebuild them)
-
 Test by hitting [https://profile.thegulocal.com/management/healthcheck](https://profile.thegulocal.com/management/healthcheck). 
 
 ## Running against DEV Identity API

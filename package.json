@@ -13,7 +13,7 @@
     "prebuild-css": "mkdir -p ./target/web/build",
     "build-css": "postcss public/main.css -o target/web/public/main/bundle.css",
     "build-js": "webpack --bail --mode production",
-    "watch-css": "postcss -c postcss.json -w",
+    "watch-css": "postcss public/main.css -o target/web/public/main/bundle.css -w",
     "watch-js": "webpack --watch --mode development",
     "lint-css": "stylelint 'public/**/*.css'",
     "watch": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\""
@@ -22,6 +22,7 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "concurrently": "^3.5.1",
     "cssnano": "^3.10.0",
     "normalize.css": "^3.0.3",
     "postcss-assets": "^5.0.0",

@@ -9,11 +9,12 @@
   },
   "license": "Apache-2.0",
   "scripts": {
+    "install": "npm run build",
     "build": "npm run build-css && npm run build-js",
     "prebuild-css": "mkdir -p ./target/web/build",
     "build-css": "postcss public/main.css -o target/web/public/main/bundle.css",
     "build-js": "webpack --bail --mode production",
-    "watch-css": "postcss public/main.css -o target/web/public/main/bundle.css -w",
+    "watch-css": "postcss public/main.css -o target/web/public/main/bundle.css -w -m --verbose",
     "watch-js": "webpack --watch --mode development",
     "lint-css": "stylelint 'public/**/*.css'",
     "watch": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\""

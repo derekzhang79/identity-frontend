@@ -28,9 +28,6 @@ module.exports = {
     "postcss-cssnext":{},
     "cssnano":{
       autoprefixer: false
-    },
-    "postcss-reporter":{
-      "clearMessages": true
     }
   }
 }

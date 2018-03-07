@@ -40,7 +40,7 @@ object FrontendBuildPlugin extends AutoPlugin {
       sourceDirectory in build := resourceDirectory.value,
       buildOutputDirectory in build := webTarget.value / "build",
 
-      buildCommands in build := Seq.empty,
+      buildCommands in build := Seq.empty
     )
   }
 

@@ -12,21 +12,21 @@ module.exports = {
     publicPath: '/static/',
     filename: '[name].bundle.js'
   },
-  devtool: '#source-map',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loaders: [ 'babel?presets[]=es2015' ]
+        use: [{
+          loader: 'babel-loader'
+        }]
       }
     ]
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin( {
-      mangle: false
-    } )
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
   ],
   resolve: {
     alias: {

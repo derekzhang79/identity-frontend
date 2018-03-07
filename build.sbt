@@ -1,4 +1,4 @@
-import com.typesafe.sbt.packager.MappingsHelper.directory
+import com.typesafe.sbt.packager.MappingsHelper.{contentOf, directory}
 
 name := "identity-frontend"
 
@@ -72,3 +72,30 @@ play.PlayImport.PlayKeys.playDefaultPort := 8860
 routesGenerator := InjectedRoutesGenerator
 
 addCommandAlias("devrun", "run")
+
+
+
+
+/**
+  * Config for building frontend (client-side) assets
+  */
+
+// Configure npm commands to build frontend assets
+buildCommands in build in Assets := Seq()
+
+pipelineStages := Seq(digest)
+
+// Ensure frontend build task is a source generator task
+sourceGenerators in Assets <+= build in Assets
+
+unmanagedResourceDirectories in Compile += (buildOutputDirectory in build in Assets).value
+
+// Include handlebars views in resources for lookup on classpath
+unmanagedResourceDirectories in Compile += (resourceDirectory in Assets).value
+
+JsEngineKeys.npmNodeModules in Assets := Nil
+
+JsEngineKeys.npmNodeModules in TestAssets := Nil
+
+mappings in Assets ++= contentOf(baseDirectory.value / "target/web/build-npm")
+

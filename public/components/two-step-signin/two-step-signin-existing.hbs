@@ -2,27 +2,20 @@
 
     {{> components/two-step-signin/_helpers }}
 
-    <div class="two-step-signin-field-wrap">
+    <div class="form-field-wrap">
       <input class="u-h" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}" />
-      <label class="two-step-signin-field-wrap__title" for="signin_field_email">Please enter your password</label>
-      <input class="two-step-signin-input two-step-signin-field-wrap__field" type="password" name="password" autocomplete="password" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{password}}" />
-      <div class="u-flexrow two-step-signin-field-wrap__footer">
-        <label class="two-step-signin-checkbox">
-          <input class="two-step-signin-checkbox__input" type="checkbox" name="rememberMe" checked="checked" value="true"/>
-          <span class="two-step-signin-checkbox__label">{{twoStepSignInPageText.rememberMe}}</span>
+      <label class="form-field-wrap__title" for="signin_field_email">{{twoStepSignInPageText.passwordFieldTitle}}</label>
+      <input class="form-input form-field-wrap__field" type="password" name="password" autocomplete="password" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{password}}" />
+      <div class="u-flexrow form-field-wrap__footer">
+        <label class="form-checkbox">
+          <input class="form-checkbox__input" type="checkbox" name="rememberMe" checked="checked" value="true"/>
+          <span class="form-checkbox__label">{{twoStepSignInPageText.rememberMe}}</span>
         </label>
         <a class="link" href="{{forgotPasswordUrl}}">{{twoStepSignInPageText.forgottenPassword}}</a>
       </div>
     </div>
-    <div class="two-step-signin-field-wrap">
-      <button class="two-step-signin-button two-step-signin-field-wrap__field" type="submit">Sign In {{> components/icon/arrow-inline }}</button>
+    <div class="form-field-wrap">
+      <button class="form-button form-field-wrap__field" type="submit">{{twoStepSignInPageText.signInAction}} {{> components/icon/arrow-inline }}</button>
     </div>
-
-    <aside class="two-step-signin-form_section">
-      <div class="two-step-signin-field-wrap">
-        <p class="two-step-signin-field-wrap__title">You are signing in as {{email}}</p>
-        <a href="/signin" class="two-step-signin-button two-step-signin-button--secondary two-step-signin-field-wrap__field" type>Change email address {{> components/icon/arrow-inline }}</a>
-      </div>
-    </aside>
 
 </form>

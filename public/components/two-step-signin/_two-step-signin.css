@@ -1,34 +1,5 @@
-.two-step-signin-container {
-  @extend %content-container;
-}
-
-.two-step-signin-button {
-  @extend %form__button--submit;
-  width: 100%;
-  box-sizing: border-box;
-  justify-content: space-between;
-  &.two-step-signin-button--secondary {
-    background: transparent;
-    border: 1px solid var(--color-border);
-    &:hover, &:focus {
-      text-decoration: none;
-      border-color: var(--color-border-hover);
-    }
-  }
-}
-
-.two-step-signin-checkbox__input {
-  @mixin formCheckbox .two-step-signin-checkbox__label;
-}
-
-.two-step-signin-checkbox__label {
-  @extend %form__label--checkbox;
-  font-size: inherit;
-  font-family: inherit;
-}
-
 .two-step-signin-form_section {
-  padding: 0.875rem 0 0;
+  padding: calc(var(--size-baseline) * 2) 0 0;
   margin-top: 3rem;
   position: relative;
   &::before {
@@ -39,55 +10,6 @@
     left: -100%;
     right: -100%;
     top: 0;
-  }
-}
-
-.two-step-signin-field-wrap {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.two-step-signin-field-wrap + .two-step-signin-field-wrap {
-  margin-top: calc(var(--size-baseline) * 4);
-}
-
-.two-step-signin-field-wrap > * {
-  margin-bottom: calc(var(--size-baseline) * 2);
-}
-.two-step-signin-field-wrap__title {
-  @extend %font-text-sans-2;
-}
-
-.two-step-signin-field-wrap__footer {
-  @extend %font-text-sans-1;
-}
-
-.two-step-signin-field-wrap__field {
-  @media (--viewport-min-mobile-landscape) {
-    @supports(height: calc(2px + 2px)) {
-      margin-left: calc(var(--size-baseline-gutter) * -1);
-      margin-right: calc(var(--size-baseline-gutter) * -1);
-      width: calc(100% + calc(var(--size-baseline-gutter) * 2));
-    }
-  }
-}
-
-.two-step-signin-input {
-  @extend %form__text-field;
-}
-
-.two-step-signin-input-wrap {
-  .two-step-signin-input-wrap__info {
-    @extend %font-text-sans-2;
-    margin-bottom: var(--size-baseline);
-  }
-}
-
-.two-step-signin-input-wrap.two-step-signin-input-wrap--error {
-  color: var(--color-error);
-  .two-step-signin-input {
-    border-color: var(--color-error);
   }
 }
 

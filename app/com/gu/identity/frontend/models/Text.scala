@@ -38,7 +38,6 @@ object Text {
         "preludeFaq" -> messages("signin.prelude.faq"),
         "email" -> messages("signin.email"),
         "signInWithEmail" -> messages("signin.signInWithEmail"),
-        "divideText" -> messages("signin.dividetext"),
         "password" -> messages("signin.password"),
         "forgottenPassword" -> messages("signin.forgottenpassword"),
         "rememberMe" -> messages("signin.rememberme"),
@@ -48,7 +47,15 @@ object Text {
         "conditions" -> messages("signin.conditions"),
         "continue" -> messages("signin.continue"),
         "termsOfService" -> messages("signin.termsofservice"),
-        "privacyPolicy" -> messages("signin.privacypolicy")
+        "privacyPolicy" -> messages("signin.privacypolicy"),
+
+        "divideText" -> messages("signinTwoStep.dividetext"),
+        "welcome" -> messages("signinTwoStep.welcome"),
+        "changeEmailLink" -> messages("signinTwoStep.changeEmailLink"),
+        "signInAction" -> messages("signinTwoStep.signInAction"),
+        "continueAction" -> messages("signinTwoStep.continueAction"),
+        "emailFieldTitle" -> messages("signinTwoStep.emailFieldTitle"),
+        "passwordFieldTitle" -> messages("signinTwoStep.passwordFieldTitle")
       )
     }
   }

@@ -1,0 +1,86 @@
+/*
+checkbox
+*/
+.form-checkbox__input {
+  @mixin formCheckbox .form-checkbox__label;
+}
+
+.form-checkbox__label {
+  @extend %form__label--checkbox;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+/*
+button
+*/
+.form-button {
+  @extend %form__button--submit;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: space-between;
+  &.form-button--secondary {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    &:hover, &:focus {
+      text-decoration: none;
+      border-color: var(--color-border-hover);
+    }
+  }
+}
+
+/*
+input
+*/
+.form-input {
+  @extend %form__text-field;
+}
+
+/*
+prelude
+*/
+.form-prelude {
+  @extend %form__prelude;
+}
+
+/*
+generic input wrapper
+*/
+.form-field-wrap {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.form-field-wrap + .form-field-wrap {
+  margin-top: calc(var(--size-baseline) * 4);
+}
+
+.form-field-wrap > * {
+  margin-bottom: calc(var(--size-baseline) * 2);
+}
+
+.form-field-wrap__title {
+  @extend %font-text-sans-2;
+}
+
+.form-field-wrap__footer {
+  @extend %font-text-sans-1;
+}
+
+/*
+error display
+*/
+.form-input-wrap {
+  .form-input-wrap__info {
+    @extend %font-text-sans-2;
+    margin-bottom: var(--size-baseline);
+  }
+}
+
+.form-input-wrap.form-input-wrap--error {
+  color: var(--color-error);
+  .form-input {
+    border-color: var(--color-error);
+  }
+}

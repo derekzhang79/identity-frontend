@@ -16,7 +16,6 @@ case class TwoStepSignInViewModel private(
   twoStepSignInPageText: Map[String, String],
   terms: TermsViewModel,
 
-  showPrelude: Boolean = false,
   hasErrors: Boolean = false,
   errors: Seq[ErrorViewModel] = Seq.empty,
 
@@ -28,6 +27,7 @@ case class TwoStepSignInViewModel private(
   email:Option[String],
 
   registerUrl: String = "",
+  signinUrl: String = "",
   forgotPasswordUrl: String = "",
 
   signInTypes: Map[String, Boolean],
@@ -84,6 +84,7 @@ object TwoStepSignInViewModel {
       email = email,
 
       registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
+      signinUrl = UrlBuilder(routes.Application.twoStepSignIn(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
       forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.id)),
 
       signInTypes = Map(

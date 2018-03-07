@@ -2,25 +2,21 @@
 
 {{# partial "content" }}
 
-  {{#showPrelude}}
-    <div class="signin__prelude">
-      <p>{{twoStepSignInPageText.prelude}}</p>
-      <p> {{twoStepSignInPageText.preludeMoreInfo}} <a href="https://www.theguardian.com/help/identity-faq"> {{twoStepSignInPageText.preludeFaq}} </a>.</p>
-    </div>
-  {{/showPrelude}}
+  <section class="layout-wrap-width">
 
-  <h1 class="page-heading">{{ twoStepSignInPageText.title }}</h1>
+    <section class="layout-header">
+      <h1 class="layout-header__title">{{ twoStepSignInPageText.title }}</h1>
+      <p class="layout-header__title layout-header__title--standfirst">{{twoStepSignInPageText.noAccount}} <a href="{{registerUrl}}" >{{twoStepSignInPageText.signUp}}</a>.</p>
+    </section>
 
-  <section class="page-standfirst">
-    <p class="page-standfirst__paragraph">{{twoStepSignInPageText.noAccount}} <a href="{{registerUrl}}" >{{twoStepSignInPageText.signUp}}</a>.</p>
-  </section>
+    <section class="two-step-signin-container">
+      {{> components/two-step-signin/two-step-signin-email }}
+    </section>
 
-  <section class="two-step-signin-container">
-    {{> components/two-step-signin/two-step-signin-email }}
-  </section>
+    <section class="layout-section">
+      {{> components/terms/_terms-inline }}
+    </section>
 
-  <section class="page__footer">
-    {{> components/terms/_terms }}
   </section>
 
 {{/partial}}

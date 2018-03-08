@@ -9,6 +9,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
+    "postinstall": "./tools/sync-githooks.js",
     "install": "npm run build",
     "build": "npm run build-css && npm run build-js",
     "prebuild-css": "mkdir -p ./target/web/build-npm",
@@ -18,16 +19,21 @@
     "watch-js": "webpack --watch --mode development -o ./target/web/public/main/main.bundle.js",
     "lint-css": "stylelint 'public/**/*.css'",
     "watch-assets": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\"",
-    "watch": "node ./scripts/banner.js && concurrently --kill-others \"npm run watch-assets\" \"./start-frontend.sh\"",
-    "prettier": "prettier --write public/**/*.js public/**/*.css"
+    "watch": "node ./tools/banner.js && concurrently --kill-others \"npm run watch-assets\" \"./start-frontend.sh\"",
+    "fix": "prettier --write public/**/*.js public/**/*.css",
+    "lint": "eslint public/**/*.js"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "chalk": "^2.3.2",
     "chalk-rainbow": "^1.0.0",
     "concurrently": "^3.5.1",
     "cssnano": "^3.10.0",
+    "eslint": "^4.18.2",
+    "eslint-plugin-prettier": "^2.6.0",
+    "execa": "^0.9.0",
     "normalize.css": "^3.0.3",
     "postcss-assets": "^5.0.0",
     "postcss-cli": "^5.0.0",

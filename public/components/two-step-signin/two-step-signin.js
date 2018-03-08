@@ -1,8 +1,7 @@
+import {EV_DONE} from 'components/two-step-signin/two-step-signin-form';
+
 const className = 'two-step-signin';
 const slideClassName = 'two-step-signin__slide';
-
-const SLIDE_STATE_READY = 'SLIDE_STATE_READY';
-const SLIDE_STATE_LOADING = 'SLIDE_STATE_LOADING';
 
 const ERR_MALFORMED_FETCH = 'Something went wrong';
 
@@ -43,17 +42,10 @@ const init = ($component) => {
   const $slide = $component.querySelector(`.${slideClassName}`)
   const $form = $component.querySelector('form');
 
-  $form.addEventListener('submit', (ev) => {
-    ev.preventDefault();
-    $form.dataset.state = SLIDE_STATE_LOADING;
-    fetch('/signin/new',{
-      credentials: 'include',
-    })
-      .then(response => response.text())
-      .then(text => {
-        const $new = getSlideFromFetch(text);
-        pushSlide($slide, $new);
-      })
+  $form.addEventListener(EV_DONE, (ev) => {
+    history.pushState({},'',ev.detail.url);
+    const $new = getSlideFromFetch(ev.detail.request);
+    pushSlide($slide, $new);
   })
 
 }

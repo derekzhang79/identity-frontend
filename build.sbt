@@ -1,4 +1,4 @@
-import com.typesafe.sbt.packager.MappingsHelper.directory
+import com.typesafe.sbt.packager.MappingsHelper.{contentOf, directory}
 
 name := "identity-frontend"
 
@@ -8,7 +8,7 @@ scalaVersion := "2.11.7"
 
 version := "1.0.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, UniversalPlugin, RiffRaffArtifact, BuildInfoPlugin, FrontendBuildPlugin)
+lazy val root = (project in file(".")).enablePlugins(PlayScala, UniversalPlugin, RiffRaffArtifact, BuildInfoPlugin)
 
 lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 
@@ -72,3 +72,9 @@ play.PlayImport.PlayKeys.playDefaultPort := 8860
 routesGenerator := InjectedRoutesGenerator
 
 addCommandAlias("devrun", "run")
+
+// Include handlebars views in resources for lookup on classpath
+unmanagedResourceDirectories in Compile += (resourceDirectory in Assets).value
+
+mappings in Assets ++= contentOf(baseDirectory.value / "target/web/build-npm")
+

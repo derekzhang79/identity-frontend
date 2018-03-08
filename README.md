@@ -39,7 +39,7 @@ If this is the first time using the application you will need to pull down the c
 
 After that, to run the application in development mode and watch for changes you can use
 
-    . watch-frontend.sh
+    npm run watch
 
 This command will automatically pull down all dependencies for the Scala app, and run the client side asset packing and sbt in parallel in the background.
 

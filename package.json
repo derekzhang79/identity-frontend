@@ -19,6 +19,7 @@
     "lint-css": "stylelint 'public/**/*.css'",
     "watch-assets": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\"",
     "watch": "node ./scripts/banner.js && concurrently --kill-others \"npm run watch-assets\" \"./start-frontend.sh\""
+    "prettier": "prettier --write public/**/*.js public/**/*.css"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -35,7 +35,8 @@
     "postcss-strip-units": "^2.0.1",
     "precss": "^3.1.2",
     "stylelint": "^4.3.3",
-    "webpack": "^4.1.0"
+    "webpack": "^4.1.0",
+    "webpack-cli": "^2.0.10"
   },
   "dependencies": {
     "cookie-cutter": "^0.1.1",

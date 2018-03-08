@@ -7,12 +7,11 @@
 @import "components/form-foundations/_form_foundations.css";
 
 /** Layout **/
-
 @import "_layout.css";
-@import "_form.css";
 
-/** Error pages **/
+/** Generics **/
 
+@import "components/form/_form.css";
 @import "components/error-page-content/_error-page-content.css";
 
 

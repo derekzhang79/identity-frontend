@@ -48,7 +48,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
-    val email : Option[String] = req.getQueryString("email").orElse(req.cookies.get("GU_SIGNIN_EMAIL").map(_.value))
+    val email : Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
     val shouldCollectConsents = configuration.collectSignupConsents
     val shouldCollectV2Consents = configuration.collectV2Consents
 

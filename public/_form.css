@@ -60,6 +60,10 @@ generic input wrapper
   margin-bottom: calc(var(--size-baseline) * 2);
 }
 
+.form-field-wrap > label {
+  display: block;
+}
+
 .form-field-wrap__title {
   @extend %font-text-sans-2;
 }

@@ -24,6 +24,10 @@ signinTwoStep.continueAction=Continue
 signinTwoStep.emailFieldTitle=Enter your email
 signinTwoStep.passwordFieldTitle=Please enter your password
 signinTwoStep.dividetext=or
+signinTwoStep.unknownEmailTitle=We couldn''t find that email address in our records. Did you type it correctly? If this is your first time signing in to The Guardian you might need to create an account.
+signinTwoStep.registerAction=Create an account
+signinTwoStep.setPasswordTitle=To continue we need to confirm this is you. Click ''Set a password'' and we''ll send you an email to your registered address to confirm your identity.
+signinTwoStep.setPasswordAction=Set a password
 
 # com.gu.identity.frontend.models.text.RegisterText
 register.pageTitle=Register

@@ -49,12 +49,16 @@ object Text {
         "termsOfService" -> messages("signin.termsofservice"),
         "privacyPolicy" -> messages("signin.privacypolicy"),
 
+        "emailFieldTitle" -> messages("signinTwoStep.emailFieldTitle"),
+        "setPasswordTitle" -> messages("signinTwoStep.setPasswordTitle"),
+        "setPasswordAction" -> messages("signinTwoStep.setPasswordAction"),
         "divideText" -> messages("signinTwoStep.dividetext"),
         "welcome" -> messages("signinTwoStep.welcome"),
         "changeEmailLink" -> messages("signinTwoStep.changeEmailLink"),
         "signInAction" -> messages("signinTwoStep.signInAction"),
         "continueAction" -> messages("signinTwoStep.continueAction"),
-        "emailFieldTitle" -> messages("signinTwoStep.emailFieldTitle"),
+        "unknownEmailTitle" -> messages("signinTwoStep.unknownEmailTitle"),
+        "registerAction" -> messages("signinTwoStep.registerAction"),
         "passwordFieldTitle" -> messages("signinTwoStep.passwordFieldTitle")
       )
     }

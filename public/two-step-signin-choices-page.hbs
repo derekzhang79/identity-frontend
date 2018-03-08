@@ -17,10 +17,10 @@
         {{> components/two-step-signin/two-step-signin-existing }}
       {{/signInTypes.isExisting}}
       {{#signInTypes.isNew}}
-        <h1 class="page-heading">Register for The Guardian</h1>
+        {{> components/two-step-signin/two-step-signin-new }}
       {{/signInTypes.isNew}}
       {{#signInTypes.isGuest}}
-        <h1 class="page-heading">Set a password</h1>
+        {{> components/two-step-signin/two-step-signin-guest }}
       {{/signInTypes.isGuest}}
     </section>
 

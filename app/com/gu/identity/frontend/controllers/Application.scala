@@ -48,7 +48,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
-    val email : Option[String] = req.getQueryString("email")
+    val email : Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
     val shouldCollectConsents = configuration.collectSignupConsents
     val shouldCollectV2Consents = configuration.collectV2Consents
 
@@ -58,8 +58,9 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
   def reset(error: Seq[String], clientId: Option[String]) = CSRFAddToken(csrfConfig) { req =>
     val clientIdOpt = ClientID(clientId)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
+    val email : Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
 
-    renderResetPassword(configuration, error, csrfToken, clientIdOpt)
+    renderResetPassword(configuration, error, csrfToken, email, clientIdOpt)
   }
 
   def resetPasswordEmailSent(clientId: Option[String]) = Action {

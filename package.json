@@ -17,12 +17,14 @@
     "watch-css": "postcss public/main.css -o target/web/public/main/bundle.css -w -m --verbose",
     "watch-js": "webpack --watch --mode development -o ./target/web/public/main/main.bundle.js",
     "lint-css": "stylelint 'public/**/*.css'",
-    "watch": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\""
+    "watch-assets": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\"",
+    "watch": "node ./scripts/banner.js && concurrently --kill-others \"npm run watch-assets\" \"./start-frontend.sh\""
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "chalk-rainbow": "^1.0.0",
     "concurrently": "^3.5.1",
     "cssnano": "^3.10.0",
     "normalize.css": "^3.0.3",

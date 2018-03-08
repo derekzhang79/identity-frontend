@@ -30,7 +30,6 @@ const initStepOneForm = ($component, $parent) => {
 };
 
 const init = $component => {
-  console.log(`a[href*="${route("twoStepSignIn")}"]`);
 
   const $form = $component.querySelector("form");
   const $resetLinks = [

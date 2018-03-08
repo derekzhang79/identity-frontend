@@ -35,6 +35,8 @@
 
 %form__error {
   @extend %form-error;
+  @extend %font-text-2;
+  line-height: 2.2rem;
   margin: 0 0 1.8rem 0;
 }
 

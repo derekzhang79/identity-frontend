@@ -9,6 +9,8 @@
       <p class="layout-header__title layout-header__title--standfirst">{{twoStepSignInPageText.noAccount}} <a href="{{registerUrl}}" >{{twoStepSignInPageText.signUp}}</a>.</p>
     </section>
 
+    {{> components/form/form-error-wrap }}
+
     <section class="two-step-signin-container">
       {{> components/two-step-signin/two-step-signin-email }}
     </section>

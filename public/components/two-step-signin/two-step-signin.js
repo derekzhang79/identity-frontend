@@ -40,7 +40,7 @@ const pushSlide = ($old, $new, reverse = false) => {
     $new.addEventListener("animationend", () => {
       [
         "two-step-signin__slide--in",
-        "two-step-signin__slide--out",
+        "two-step-signin__slide--out",cont
         "two-step-signin__slide--in-reverse",
         "two-step-signin__slide--out-reverse"
       ].forEach(_ => $new.classList.remove(_));

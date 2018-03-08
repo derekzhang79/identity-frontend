@@ -1,6 +1,5 @@
 package com.gu.identity.frontend.views.models
 
-import com.gu.identity.frontend.configuration.Configuration.Environment
 import com.gu.identity.frontend.controllers._
 
 object ContentSecurityPolicy {

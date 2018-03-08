@@ -1,3 +1,4 @@
+/* Colours */
 :root {
   --color-brand: #121212;
   --color-cta: #ffe500;
@@ -11,4 +12,11 @@
   --color-error: #c70000;
 
   --color-bg: var(--color-card);
+}
+
+/* Metrics */
+:root {
+  --size-baseline: 0.425rem;
+  --size-baseline-gutter: calc(var(--size-baseline) * 4);
+  --size-baseline-vertical:  calc(var(--size-baseline) * 8);
 }

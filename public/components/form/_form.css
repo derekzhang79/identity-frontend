@@ -73,18 +73,24 @@ generic input wrapper
 }
 
 /*
-error display
+errors
 */
-.form-input-wrap {
-  .form-input-wrap__info {
-    @extend %font-text-sans-2;
-    margin-bottom: var(--size-baseline);
-  }
-}
+%form-error {
+   @extend %font-text-sans-2;
+   color: var(--color-error);
+   background: transparent inline("status-alert.svg") left top no-repeat;
+   padding: 0 0 0 2.8rem;
+ }
 
-.form-input-wrap.form-input-wrap--error {
-  color: var(--color-error);
-  .form-input {
-    border-color: var(--color-error);
+.form-error-wrap {
+  .form-error {
+    @extend %form__error;
+    margin: 0 0 calc(var(--size-baseline-vertical)/2) 0;
+    &:not(:first-child) {
+      background: none;
+    }
+    &:last-child {
+      margin: 0 0 var(--size-baseline-vertical) 0;
+    }
   }
 }

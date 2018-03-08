@@ -16,7 +16,6 @@ case class TwoStepSignInViewModel private(
   twoStepSignInPageText: Map[String, String],
   terms: TermsViewModel,
 
-  hasErrors: Boolean = false,
   errors: Seq[ErrorViewModel] = Seq.empty,
 
   csrfToken: Option[CSRFToken],
@@ -73,7 +72,6 @@ object TwoStepSignInViewModel {
       twoStepSignInPageText = TwoStepSignInPageText.toMap(isMembership),
       terms = Terms.getTermsModel(group),
 
-      hasErrors = errors.nonEmpty,
       errors = errors,
 
       csrfToken = csrfToken,

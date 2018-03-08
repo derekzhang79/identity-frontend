@@ -2,15 +2,8 @@
 @import "components/_grid.css";
 @import "components/_breakpoints.css";
 @import "components/_typography.css";
-@import "_colors.css";
 @import "components/header/_header.css";
 @import "components/footer/_footer.css";
-
-:root {
-  --size-baseline: 0.425rem;
-  --size-baseline-gutter: calc(var(--size-baseline) * 4);
-  --size-baseline-vertical:  calc(var(--size-baseline) * 8);
-}
 
 html {
   height: 100%;

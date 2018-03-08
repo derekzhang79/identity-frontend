@@ -21,7 +21,7 @@
     left: 0;
     right: 0;
     top: 0;
-    &[data-state=SLIDE_STATE_LOADING] {
+    &[data-state="SLIDE_STATE_LOADING"] {
       opacity: 0.5;
     }
   }

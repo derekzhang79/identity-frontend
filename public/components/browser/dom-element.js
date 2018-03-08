@@ -7,35 +7,35 @@
  *
  * @param {Element} elem
  */
-export function domElement( elem ) {
+export function domElement(elem) {
   return Object.freeze({
     elem: elem,
-    select: domElementFunctionProxy.bind( null, elem, 'select' ),
-    on: domElementEventHandler.bind( null, elem ),
-    value: domElementValueExtractor.bind( null, elem, 'value' ),
-    setValue: domElementValueSetter.bind( null, elem, 'value' ),
-    innerHTML: domElementValueExtractor.bind( null, elem, 'innerHTML' )
+    select: domElementFunctionProxy.bind(null, elem, "select"),
+    on: domElementEventHandler.bind(null, elem),
+    value: domElementValueExtractor.bind(null, elem, "value"),
+    setValue: domElementValueSetter.bind(null, elem, "value"),
+    innerHTML: domElementValueExtractor.bind(null, elem, "innerHTML")
   });
 }
 
-function domElementFunctionProxy( elem, functionName ) {
-  if ( typeof elem[ functionName ] === 'function' ) {
-    const args = Array.prototype.slice.call( arguments, 2 );
+function domElementFunctionProxy(elem, functionName) {
+  if (typeof elem[functionName] === "function") {
+    const args = Array.prototype.slice.call(arguments, 2);
 
-    return elem[ functionName ].apply( elem, args );
+    return elem[functionName].apply(elem, args);
   }
 
-  throw new Error( functionName + ' is not a function on ' + elem );
+  throw new Error(functionName + " is not a function on " + elem);
 }
 
-function domElementEventHandler( elem, eventType, listener ) {
-  return elem.addEventListener( eventType, listener );
+function domElementEventHandler(elem, eventType, listener) {
+  return elem.addEventListener(eventType, listener);
 }
 
-function domElementValueExtractor( elem, valueName ) {
-  return elem[ valueName ];
+function domElementValueExtractor(elem, valueName) {
+  return elem[valueName];
 }
 
-function domElementValueSetter( elem, valueName, value ) {
-  elem[ valueName ] = value;
+function domElementValueSetter(elem, valueName, value) {
+  elem[valueName] = value;
 }

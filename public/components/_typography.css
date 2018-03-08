@@ -25,7 +25,8 @@ html {
 }
 
 %font-sans-serif {
-  font-family: GuardianTextSansWeb, "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: GuardianTextSansWeb, "Helvetica Neue", Helvetica, Arial,
+    "Lucida Grande", sans-serif;
 }
 
 %font-heading {
@@ -65,7 +66,6 @@ html {
   @include font-size(21, 25);
 }
 
-
 %font-text-0 {
   @extend %font-serif;
   @include font-size(13, 18);
@@ -80,7 +80,6 @@ html {
   @extend %font-serif;
   @include font-size(16, 24);
 }
-
 
 %font-text-sans-0 {
   @extend %font-sans-serif;

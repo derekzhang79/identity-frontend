@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {},
+  "awesomeTypescriptLoaderOptions" : {
+    "useCache": true,
+    "useBabel": true
+  },
+  "include": [
+    "./public/**/*"
+  ]
+}

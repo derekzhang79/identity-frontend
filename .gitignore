@@ -1,4 +1,5 @@
 .idea
+.awcache
 
 node_modules
 logs*

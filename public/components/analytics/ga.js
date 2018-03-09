@@ -5,7 +5,7 @@ import { configuration } from "../configuration/configuration";
 
 const gaTracker = "IdentityPropertyTracker";
 const events = {
-  metricMap:{
+  metricMap: {
     SmartLockSignin: "metric3"
   }
 };

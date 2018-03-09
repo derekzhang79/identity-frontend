@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+/* eslint-disable no-console */
+
+const execa = require('execa');
+const { npmCmd } = require('./_helpers');
+
+Promise.all([
+    Promise.resolve().then(()=>
+        execa('./node_modules/.bin/flow', ['stop'], {
+            stdio: 'inherit',
+        })
+    ).then(()=>
+        npmCmd('flow')
+    ),
+    npmCmd('lint')
+]).catch((err)=>{
+    console.error(err);
+    process.exit(1);
+}).then(()=>{
+    console.log('ok!');
+    process.exit(0);
+})

@@ -21,11 +21,13 @@
     "watch-assets": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\"",
     "watch": "node ./tools/banner.js && concurrently --kill-others \"npm run watch-assets\" \"./start-frontend.sh\"",
     "fix": "prettier --write public/**/*.js public/**/*.css",
-    "lint": "eslint public/**/*.js"
+    "lint": "eslint public/**/*.js",
+    "flow": "flow"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-env": "^1.6.1",
     "chalk": "^2.3.2",
     "chalk-rainbow": "^1.0.0",
@@ -34,6 +36,7 @@
     "eslint": "^4.18.2",
     "eslint-plugin-prettier": "^2.6.0",
     "execa": "^0.9.0",
+    "flow-bin": "^0.67.1",
     "normalize.css": "^3.0.3",
     "postcss-assets": "^5.0.0",
     "postcss-cli": "^5.0.0",

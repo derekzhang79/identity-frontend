@@ -1,12 +1,12 @@
 /**
  * GA Tracking
  */
-import { configuration } from "../configuration/configuration";
+import { configuration } from '../configuration/configuration';
 
-const gaTracker = "IdentityPropertyTracker";
+const gaTracker = 'IdentityPropertyTracker';
 const events = {
-  metricMap:{
-    SmartLockSignin: "metric3"
+  metricMap: {
+    SmartLockSignin: 'metric3'
   }
 };
 
@@ -16,7 +16,7 @@ export function init() {
 }
 
 export function customMetric(event) {
-  ga(gaTracker + ".send", "event", buildGoogleAnalyticsEvent(event));
+  ga(gaTracker + '.send', 'event', buildGoogleAnalyticsEvent(event));
 }
 
 export function fetchTracker(callback) {
@@ -28,16 +28,16 @@ export function fetchTracker(callback) {
 
 function record(gaUID) {
   loadGA();
-  ga("create", gaUID, "auto", gaTracker);
-  ga(gaTracker + ".send", "pageview");
+  ga('create', gaUID, 'auto', gaTracker);
+  ga(gaTracker + '.send', 'pageview');
 }
 
 function buildGoogleAnalyticsEvent(event) {
   const fieldsObject = {
-    eventCategory: "identity",
+    eventCategory: 'identity',
     eventAction: event.name,
     eventLabel: event.type,
-    dimension3: "profile.theguardian.com",
+    dimension3: 'profile.theguardian.com',
     dimension4: navigator.userAgent,
     dimension5: window.location.href,
     forceSSL: true
@@ -54,7 +54,7 @@ function buildGoogleAnalyticsEvent(event) {
 
 function loadGA() {
   (function(i, s, o, g, r, a, m) {
-    i["GoogleAnalyticsObject"] = r;
+    i['GoogleAnalyticsObject'] = r;
     (i[r] =
       i[r] ||
       function() {
@@ -68,8 +68,8 @@ function loadGA() {
   })(
     window,
     document,
-    "script",
-    "https://www.google-analytics.com/analytics.js",
-    "ga"
+    'script',
+    'https://www.google-analytics.com/analytics.js',
+    'ga'
   );
 }

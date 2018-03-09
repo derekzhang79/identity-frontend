@@ -6,6 +6,6 @@
  * @see https://lodash.com/
  */
 
-import mapValues from "lodash/mapValues";
+import mapValues from 'lodash/mapValues';
 
 export { mapValues };

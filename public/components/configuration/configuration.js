@@ -1,6 +1,6 @@
 /*global console*/
 
-import { getElementById } from "../browser/browser";
+import { getElementById } from '../browser/browser';
 
 class Configuration {
   constructor(sentryDsn, mvtTests, appVersion, gaUID) {
@@ -15,7 +15,7 @@ class Configuration {
   }
 
   static fromDocument() {
-    const configElem = getElementById("id_config");
+    const configElem = getElementById('id_config');
     if (configElem !== undefined) {
       const html = configElem.innerHTML();
       const parsed = parseJSON(html);
@@ -35,7 +35,7 @@ class RuntimeParameters {
   }
 
   static fromDocument() {
-    const configElem = getElementById("id_runtime_params");
+    const configElem = getElementById('id_runtime_params');
     if (configElem !== undefined) {
       const html = configElem.innerHTML();
       const parsed = parseJSON(html);
@@ -50,7 +50,7 @@ function parseJSON(input) {
     return JSON.parse(input);
   } catch (err) {
     if (console) {
-      console.warn("Could not parse Configuration JSON: " + err);
+      console.warn('Could not parse Configuration JSON: ' + err);
     }
 
     return undefined;

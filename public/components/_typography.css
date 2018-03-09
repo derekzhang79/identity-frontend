@@ -4,7 +4,7 @@
  * Reset from estimated browser default font-size of 16px to $base-font-size
  */
 
-@import "fonts/_fonts.css";
+@import 'fonts/_fonts.css';
 
 $base-font-size: 10;
 
@@ -25,8 +25,8 @@ html {
 }
 
 %font-sans-serif {
-  font-family: GuardianTextSansWeb, "Helvetica Neue", Helvetica, Arial,
-    "Lucida Grande", sans-serif;
+  font-family: GuardianTextSansWeb, 'Helvetica Neue', Helvetica, Arial,
+    'Lucida Grande', sans-serif;
 }
 
 %font-heading {

@@ -2,14 +2,14 @@
  * Multi-variant testing.
  */
 
-import { runtimeParameters } from "../configuration/configuration";
+import { runtimeParameters } from '../configuration/configuration';
 
-import cookies from "cookie-cutter";
-import { MultiVariantTest } from "./mvt-model";
+import cookies from 'cookie-cutter';
+import { MultiVariantTest } from './mvt-model';
 
-const MULTIVARIATE_ID_COOKIE = "GU_mvt_id",
-  AB_PREFIX = "ab",
-  AB_TEST_NAMESPACE = "Identity",
+const MULTIVARIATE_ID_COOKIE = 'GU_mvt_id',
+  AB_PREFIX = 'ab',
+  AB_TEST_NAMESPACE = 'Identity',
   allTests = MultiVariantTest.initFromPageConfig();
 
 function getMvtId() {
@@ -27,7 +27,7 @@ function getActiveTestsAndResults() {
 }
 
 function getServerSideActiveTestResults() {
-  if (runtimeParameters && typeof runtimeParameters.activeTests === "object") {
+  if (runtimeParameters && typeof runtimeParameters.activeTests === 'object') {
     return runtimeParameters.activeTests;
   }
   return {};

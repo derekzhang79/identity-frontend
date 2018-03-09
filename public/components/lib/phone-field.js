@@ -1,6 +1,6 @@
 const PLUGIN_OPTIONS = {
-  initialCountry: "gb",
-  preferredCountries: ["gb", "us", "au"]
+  initialCountry: 'gb',
+  preferredCountries: ['gb', 'us', 'au']
 };
 
 export function initPhoneField(
@@ -9,9 +9,9 @@ export function initPhoneField(
   countryIsoName,
   localNumberElement
 ) {
-  require(["jquery", "intl-tel", "intl-tel-utils"], $ => {
+  require(['jquery', 'intl-tel', 'intl-tel-utils'], $ => {
     const tooltipElement = form.formElement.elem.querySelector(
-      ".register-form__tooltip--phone-number"
+      '.register-form__tooltip--phone-number'
     );
     const formElement = form.formElement.elem;
     initializeFields(
@@ -34,46 +34,46 @@ function initializeFields(form, countryCode, countryIsoName, localNumber) {
   localNumber.intlTelInput(PLUGIN_OPTIONS);
   countryCode.parent().hide();
   localNumber
-    .parents(".register-form__control-column--local-number")
-    .removeClass("register-form__control-column--local-number")
-    .addClass("register-form__control-column--local-number--wide");
+    .parents('.register-form__control-column--local-number')
+    .removeClass('register-form__control-column--local-number')
+    .addClass('register-form__control-column--local-number--wide');
 
   // The form is persisted in local storage on submit, but because we're loaded asynchronously
   // persistence is done before synchronization, to account for that, update the fields on change
-  form.on("change", updateHiddenField);
-  form.on("submit", updateHiddenField);
-  localNumber.on("countrychange", updateHiddenField);
+  form.on('change', updateHiddenField);
+  form.on('submit', updateHiddenField);
+  localNumber.on('countrychange', updateHiddenField);
 
   function updateHiddenField() {
     const { iso2, dialCode } = localNumber.intlTelInput(
-      "getSelectedCountryData"
+      'getSelectedCountryData'
     );
     countryCode.val(dialCode);
     localNumber.val(
       localNumber
-        .intlTelInput("getNumber")
-        .replace(new RegExp("^\\+" + dialCode), "")
+        .intlTelInput('getNumber')
+        .replace(new RegExp('^\\+' + dialCode), '')
     );
     countryIsoName.val(iso2);
   }
 }
 
 function initialiseTooltip($, tooltip, formElement) {
-  tooltip.setAttribute("hidden", "");
-  $(tooltip).removeClass("register-form__tooltip--phone-number--nojs");
-  $(".register-form__link--why-phone-number", formElement)
-    .removeAttr("hidden")
-    .on("click", toggleDropdown);
-  $(".register-form__tooltip--phone-number__close", formElement).on(
-    "click",
+  tooltip.setAttribute('hidden', '');
+  $(tooltip).removeClass('register-form__tooltip--phone-number--nojs');
+  $('.register-form__link--why-phone-number', formElement)
+    .removeAttr('hidden')
+    .on('click', toggleDropdown);
+  $('.register-form__tooltip--phone-number__close', formElement).on(
+    'click',
     toggleDropdown
   );
 
   function toggleDropdown() {
-    if (tooltip.hasAttribute("hidden")) {
-      tooltip.removeAttribute("hidden");
+    if (tooltip.hasAttribute('hidden')) {
+      tooltip.removeAttribute('hidden');
     } else {
-      tooltip.setAttribute("hidden", "");
+      tooltip.setAttribute('hidden', '');
     }
   }
 }

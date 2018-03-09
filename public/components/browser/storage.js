@@ -37,7 +37,7 @@ function storage(type) {
       try {
         const value = this.get(key);
 
-        if (typeof value === "string") {
+        if (typeof value === 'string') {
           return JSON.parse(value);
         }
       } catch (err) {
@@ -50,7 +50,7 @@ function storage(type) {
 function isStorageAvailable(storageType) {
   try {
     var storage = window[storageType],
-      x = "__storage_test__";
+      x = '__storage_test__';
     storage.setItem(x, x);
     storage.removeItem(x);
     return true;
@@ -65,4 +65,4 @@ function logWarning(message) {
   }
 }
 
-export const sessionStorage = storage("sessionStorage");
+export const sessionStorage = storage('sessionStorage');

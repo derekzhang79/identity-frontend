@@ -1,14 +1,14 @@
-import { getElementById, sessionStorage } from "../browser/browser";
+import { getElementById, sessionStorage } from '../browser/browser';
 
-import { mapValues as _mapValues } from "../lib/lodash";
+import { mapValues as _mapValues } from '../lib/lodash';
 
-import { initPhoneField } from "../lib/phone-field";
+import { initPhoneField } from '../lib/phone-field';
 
-import { fetchTracker } from "../analytics/ga";
+import { fetchTracker } from '../analytics/ga';
 
-import { init as initOAuthBindings } from "../oauth-cta/_oauth-cta.js";
+import { init as initOAuthBindings } from '../oauth-cta/_oauth-cta.js';
 
-const STORAGE_KEY = "gu_id_register_state";
+const STORAGE_KEY = 'gu_id_register_state';
 
 class RegisterFormFields {
   constructor(
@@ -100,14 +100,14 @@ class RegisterFormModel {
   }
 
   addBindings() {
-    this.formElement.on("submit", this.formSubmitted.bind(this));
-    this.fields.firstName.on("blur", this.updateDisplayName.bind(this));
-    this.fields.lastName.on("blur", this.updateDisplayName.bind(this));
-    this.fields.email.on("invalid", this.validateEmail.bind(event));
+    this.formElement.on('submit', this.formSubmitted.bind(this));
+    this.fields.firstName.on('blur', this.updateDisplayName.bind(this));
+    this.fields.lastName.on('blur', this.updateDisplayName.bind(this));
+    this.fields.email.on('invalid', this.validateEmail.bind(event));
   }
 
   validateEmail(event) {
-    event.target.setCustomValidity("Please enter a valid email address");
+    event.target.setCustomValidity('Please enter a valid email address');
   }
 
   updateDisplayName() {
@@ -116,7 +116,7 @@ class RegisterFormModel {
       this.fields.optionalHideDisplayName.value()
     ) {
       const displayName =
-        this.fields.firstName.value() + " " + this.fields.lastName.value();
+        this.fields.firstName.value() + ' ' + this.fields.lastName.value();
       this.fields.displayName.setValue(displayName);
     }
   }
@@ -135,7 +135,7 @@ class RegisterFormModel {
     fetchTracker(tracker => {
       // Save the GA client id to be passed with the form submission
       if (this.gaClientIdElement) {
-        this.gaClientIdElement.setValue(tracker.get("clientId"));
+        this.gaClientIdElement.setValue(tracker.get('clientId'));
       }
     });
   }
@@ -145,20 +145,20 @@ class RegisterFormModel {
   }
 
   static fromDocument() {
-    const form = getElementById("register_form");
-    const firstNameField = getElementById("register_field_firstname");
-    const lastNameField = getElementById("register_field_lastname");
-    const emailField = getElementById("register_field_email");
-    const displayNameField = getElementById("register_field_displayName");
-    const optionalPhoneNumber = getElementById("register_field_localNumber");
-    const optionalCountryCode = getElementById("register_field_countryCode");
+    const form = getElementById('register_form');
+    const firstNameField = getElementById('register_field_firstname');
+    const lastNameField = getElementById('register_field_lastname');
+    const emailField = getElementById('register_field_email');
+    const displayNameField = getElementById('register_field_displayName');
+    const optionalPhoneNumber = getElementById('register_field_localNumber');
+    const optionalCountryCode = getElementById('register_field_countryCode');
     const optionalCountryIsoName = getElementById(
-      "register_field_countryIsoName"
+      'register_field_countryIsoName'
     );
     const optionalHideUsername = getElementById(
-      "register_field_hideDisplayName"
+      'register_field_hideDisplayName'
     );
-    const gaClientIdElement = getElementById("register_ga_client_id");
+    const gaClientIdElement = getElementById('register_ga_client_id');
 
     if (
       form &&
@@ -186,13 +186,13 @@ class RegisterFormModel {
 
 class RegisterFormState {
   constructor(
-    firstName = "",
-    lastName = "",
-    email = "",
-    displayName = "",
-    optionalCountryCode = "",
-    optionalCountryIsoName = "",
-    optionalPhoneNumber = "",
+    firstName = '',
+    lastName = '',
+    email = '',
+    displayName = '',
+    optionalCountryCode = '',
+    optionalCountryIsoName = '',
+    optionalPhoneNumber = '',
     optionalHideDisplayName = false
   ) {
     this.firstName = firstName;
@@ -280,7 +280,7 @@ function checkForCredentials() {
       })
       .then(c => {
         if (c instanceof PasswordCredential) {
-          const link = getElementById("sign_in_page_link");
+          const link = getElementById('sign_in_page_link');
           if (link && link.elem.href) {
             window.location.replace(link.elem.href);
           }

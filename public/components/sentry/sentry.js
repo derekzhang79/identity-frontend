@@ -4,9 +4,9 @@
 
 /*global console*/
 
-import Raven from "raven-js";
+import Raven from 'raven-js';
 
-import { configuration } from "../configuration/configuration";
+import { configuration } from '../configuration/configuration';
 
 function init() {
   const ravenOptions = {
@@ -14,10 +14,10 @@ function init() {
     release: configuration.appVersion
   };
 
-  if (typeof dsn === "string") {
+  if (typeof dsn === 'string') {
     Raven.config(dsn, ravenOptions).install();
   } else if (console) {
-    console.warn("Sentry configuration not found");
+    console.warn('Sentry configuration not found');
   }
 }
 

@@ -12,4 +12,5 @@ execa('npm', ['run','lint'], {
   console.log(chalk.red('🙅   Oops! you have linting errors. Sort them out by running:'));
   console.log('    '+chalk.bgWhite.bold.black('npm run fix'));
   console.log("\n\n");
+  process.exit(1);
 })

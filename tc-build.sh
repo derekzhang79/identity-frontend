@@ -18,7 +18,7 @@ npm cache clean -f
 npm install
 
 # Test linting
-npm run lint
+./git-hooks/pre-push
 
 # Build scala and frontend assets, and upload to riffraff
 ./sbt "test" "riffRaffUpload"

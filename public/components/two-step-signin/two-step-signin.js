@@ -1,18 +1,22 @@
+// @flow
+
 import {
   EV_DONE,
   EV_START_OVER
 } from "components/two-step-signin/two-step-signin__slide";
 import { loadComponents } from "js/load-components";
-import { route } from "js/config";
 
-const className = "two-step-signin";
-const slideClassName = "two-step-signin__slide";
+const className : string = "two-step-signin";
+const slideClassName : string = "two-step-signin__slide";
 
-const ERR_MALFORMED_FETCH = "Something went wrong";
-const STATE_INITIATOR = "two-step-signin-state-init";
+const ERR_MALFORMED_FETCH : string = "Something went wrong";
+const ERR_MALFORMED_EVENT : string = "Something went wrong";
+const ERR_MALFORMED_HTML : string = "Something went wrong";
 
-const getSlideFromFetch = textHtml => {
-  const $wrapper = document.createElement("div");
+const STATE_INITIATOR : string = "two-step-signin-state-init";
+
+const getSlideFromFetch = (textHtml : string) : HTMLElement => {
+  const $wrapper : HTMLElement = document.createElement("div");
   $wrapper.innerHTML = textHtml;
 
   const $form = $wrapper.querySelector(`.${slideClassName}`);
@@ -20,7 +24,7 @@ const getSlideFromFetch = textHtml => {
   else throw new Error(ERR_MALFORMED_FETCH);
 };
 
-const pushSlide = ($old, $new, reverse = false) => {
+const pushSlide = ($old : HTMLElement, $new : HTMLElement, reverse : boolean = false) : Promise<HTMLElement> => {
   const classNames = reverse
     ? {
         in: "two-step-signin__slide--in-reverse",
@@ -40,7 +44,7 @@ const pushSlide = ($old, $new, reverse = false) => {
     $new.addEventListener("animationend", () => {
       [
         "two-step-signin__slide--in",
-        "two-step-signin__slide--out",cont
+        "two-step-signin__slide--out",
         "two-step-signin__slide--in-reverse",
         "two-step-signin__slide--out-reverse"
       ].forEach(_ => $new.classList.remove(_));
@@ -50,11 +54,18 @@ const pushSlide = ($old, $new, reverse = false) => {
         $new.classList.add(_)
       );
     });
-    $old.parentNode.appendChild($new);
+
+    const $oldParent = $old.parentNode;
+    if($oldParent) {
+      $oldParent.appendChild($new);
+    }
+    else {
+      throw new Error(ERR_MALFORMED_HTML)
+    }
   });
 };
 
-const initOnce = () => {
+const initOnce = (): void => {
   window.addEventListener("popstate", ev => {
     if (
       ev.state &&
@@ -68,22 +79,27 @@ const initOnce = () => {
   });
 };
 
-const init = $component => {
-  $component.addEventListener(EV_DONE, ev => {
-    const $slide = $component.querySelector(`.${slideClassName}`);
+const init = ($component : HTMLElement) : void => {
+  $component.addEventListener(EV_DONE, (ev: mixed) => {
 
-    history.pushState(
-      {
-        initiator: STATE_INITIATOR
-      },
-      "",
-      ev.detail.url
-    );
+    if (ev instanceof CustomEvent) {
+      history.pushState(
+        {
+          initiator: STATE_INITIATOR
+        },
+        "",
+        ev.detail.url
+      );
+      const $slide = $component.querySelector(`.${slideClassName}`);
+      const $new = getSlideFromFetch(ev.detail.responseHtml);
+      pushSlide($slide, $new, ev.detail.reverse).then(() => {
+        loadComponents($new.parentNode);
+      });
+    }
+    else {
+      throw new Error(ERR_MALFORMED_EVENT)
+    }
 
-    const $new = getSlideFromFetch(ev.detail.responseHtml);
-    pushSlide($slide, $new, ev.detail.reverse).then(() => {
-      loadComponents($new.parentNode);
-    });
   });
 };
 

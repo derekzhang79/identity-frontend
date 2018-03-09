@@ -16,6 +16,3 @@ nvm clear-cache
 # Install node dependencies
 npm cache clean -f
 npm install
-
-# Build scala and frontend assets, and upload to riffraff
-./sbt "test" "riffRaffUpload"

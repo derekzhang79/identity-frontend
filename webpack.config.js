@@ -1,8 +1,7 @@
 /*eslint-env node*/
 
-const webpack = require( 'webpack' );
-const path = require( 'path' );
-const { CheckerPlugin } = require('awesome-typescript-loader')
+var webpack = require( 'webpack' );
+var path = require( 'path' );
 
 module.exports = {
   entry: {
@@ -16,25 +15,20 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        use: ['awesome-typescript-loader'],
-      },
-      {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: [{
+          loader: 'babel-loader'
+        }]
       }
     ]
   },
   plugins: [
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    }),
-    new CheckerPlugin(),
+    })
   ],
   resolve: {
-    extensions: ['.ts', '.js', '.json'],
     alias: {
       'intl-tel': 'intl-tel-input/build/js/intlTelInput',
       'intl-tel-utils': 'intl-tel-input/build/js/utils.js'

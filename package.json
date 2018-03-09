@@ -18,7 +18,7 @@
     "watch-css": "postcss public/main.css -o target/web/public/main/bundle.css -w -m --verbose",
     "watch-js": "webpack --watch --mode development --devtool=inline-source-map -o ./target/web/public/main/main.bundle.js",
     "lint-css": "stylelint 'public/**/*.css'",
-    "watch-assets": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\"",
+    "watch-assets": "concurrently --kill-others-on-fail \"npm run watch-css\" \"npm run watch-js\" \"flow stop && flow start\"",
     "watch": "node ./tools/banner.js && concurrently --kill-others \"npm run watch-assets\" \"./start-frontend.sh\"",
     "fix": "prettier --write public/**/*.js public/**/*.css",
     "lint": "eslint public/**/*.js",

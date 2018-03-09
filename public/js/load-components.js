@@ -9,8 +9,6 @@ import {
 } from 'components/two-step-signin/two-step-signin__slide.js';
 
 const components = [
-  [initTwoStepSignin, classNameTwoStepSignin, initOnceTwoStepSignin],
-  [initTwoStepSigninSlide, classNameTwoStepSigninSlide]
 ];
 
 const initOnceList = [];

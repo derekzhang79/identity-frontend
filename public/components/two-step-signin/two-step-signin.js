@@ -92,6 +92,9 @@ const init = ($component : HTMLElement) : void => {
       );
       const $slide = $component.querySelector(`.${slideClassName}`);
       const $new = getSlideFromFetch(ev.detail.responseHtml);
+      if(!$slide || !$new) {
+        throw new Error(ERR_MALFORMED_HTML);
+      }
       pushSlide($slide, $new, ev.detail.reverse).then(() => {
         loadComponents($new.parentNode);
       });

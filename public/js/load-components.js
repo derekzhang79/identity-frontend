@@ -8,8 +8,7 @@ import {
   className as classNameTwoStepSigninSlide
 } from 'components/two-step-signin/two-step-signin__slide.js';
 
-const components = [
-];
+const components = [];
 
 const initOnceList = [];
 

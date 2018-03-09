@@ -17,5 +17,8 @@ nvm clear-cache
 npm cache clean -f
 npm install
 
+# Test linting
+npm run lint
+
 # Build scala and frontend assets, and upload to riffraff
 ./sbt "test" "riffRaffUpload"

@@ -1,9 +1,9 @@
-@import "components/_normalise.css";
-@import "components/_grid.css";
-@import "components/_breakpoints.css";
-@import "components/_typography.css";
-@import "components/header/_header.css";
-@import "components/footer/_footer.css";
+@import 'components/_normalise.css';
+@import 'components/_grid.css';
+@import 'components/_breakpoints.css';
+@import 'components/_typography.css';
+@import 'components/header/_header.css';
+@import 'components/footer/_footer.css';
 
 html {
   height: 100%;
@@ -215,7 +215,7 @@ a {
   }
 
   & > *:first-child::before {
-    content: "";
+    content: '';
     display: block;
     width: 100%;
     background-color: var(--color-border);

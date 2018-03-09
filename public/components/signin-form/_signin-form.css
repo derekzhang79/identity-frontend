@@ -1,4 +1,3 @@
-
 .signin__prelude {
   @extend %font-text-1;
   @extend %content-container;
@@ -11,7 +10,6 @@
   }
 }
 
-
 .signin-form {
   @extend %content-container;
 }
@@ -19,7 +17,6 @@
 .signin-form--with-errors {
   @extend .signin-form;
 }
-
 
 .signin-form__prelude {
   @extend %form__prelude;
@@ -30,11 +27,9 @@
   position: relative;
 }
 
-
 .signin-form__error {
   @extend %form__error;
 }
-
 
 /** Field: Email address **/
 
@@ -51,7 +46,6 @@
   @extend %form__text-field;
 }
 
-
 /** Field: Password **/
 
 .signin-form__control--password {
@@ -66,7 +60,6 @@
 .signin-form__field--password {
   @extend %form__text-field;
 }
-
 
 /** Field (checkbox): Remember me **/
 
@@ -84,7 +77,6 @@
   float: left;
 }
 
-
 /** Button: Submit **/
 
 .signin-form__control--submit {
@@ -94,7 +86,6 @@
 .signin-form__submit-button {
   @extend %form__button--submit;
 }
-
 
 /** CTA: Sign up **/
 
@@ -110,7 +101,6 @@
 .signin__cta-link--signup {
   @extend .link;
 }
-
 
 /** CTA: Reset password **/
 

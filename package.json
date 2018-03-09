@@ -20,12 +20,13 @@
     "lint-css": "stylelint 'public/**/*.css'",
     "watch-assets": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\"",
     "watch": "node ./tools/banner.js && concurrently --kill-others \"npm run watch-assets\" \"./start-frontend.sh\"",
-    "fix": "prettier --write public/**/*.js public/**/*.css",
-    "lint": "eslint public/**/*.js",
+    "fix": "prettier --write 'public/**/*.js' 'public/**/*.css'",
+    "lint": "eslint 'public/**/*.js'",
     "flow": "flow"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.2",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-env": "^1.6.1",

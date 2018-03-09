@@ -57,7 +57,6 @@
   @extend %form__text-field;
 }
 
-
 /** Field: displayName **/
 
 .register-form__control--displayName {
@@ -77,7 +76,6 @@
   @extend %font-text-sans-1;
   color: #767676;
 }
-
 
 /** Field: Email **/
 
@@ -145,15 +143,23 @@
   display: block;
 }
 
-.register-form__control--phone-number .intl-tel-input.allow-dropdown .flag-container:hover .selected-flag {
+.register-form__control--phone-number
+  .intl-tel-input.allow-dropdown
+  .flag-container:hover
+  .selected-flag {
   background-color: inherit;
 }
 
 .intl-tel-input .iti-flag {
-  background-image: inline("../node_modules/intl-tel-input/build/img/flags.png");
+  background-image: inline(
+    '../node_modules/intl-tel-input/build/img/flags.png'
+  );
 
-  @media only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
-    background-image: inline("../node_modules/intl-tel-input/build/img/flags@2x.png");
+  @media only screen and (min-resolution: 192dpi),
+    only screen and (min-resolution: 2dppx) {
+    background-image: inline(
+      '../node_modules/intl-tel-input/build/img/flags@2x.png'
+    );
   }
 }
 
@@ -209,17 +215,17 @@
   clear: both;
 }
 
-.register-form__tooltip--phone-number--nojs .register-form__tooltip--phone-number__close {
+.register-form__tooltip--phone-number--nojs
+  .register-form__tooltip--phone-number__close {
   display: none;
 }
 
 .register-form__icon--close {
-  background-image: inline("../form-foundations/icon-close.svg");
+  background-image: inline('../form-foundations/icon-close.svg');
   width: 3rem;
   height: 3rem;
   display: block;
 }
-
 
 /** Field (checkbox): GNM Marketing **/
 
@@ -237,7 +243,6 @@
   @extend %font-text-sans-1;
 }
 
-
 /** Field (checkbox): 3rd Party Marketing **/
 
 .register-form__control--3rd-party-marketing {
@@ -253,7 +258,6 @@
   @extend %font-text-sans-1;
 }
 
-
 /** Button: Submit **/
 
 .register-form__control--submit {
@@ -263,7 +267,6 @@
 .register-form__submit-button {
   @extend %form__button--submit;
 }
-
 
 /** CTA: Sign in **/
 

@@ -33,6 +33,7 @@ trait IdentityService {
   def sendResetPasswordEmail(data: ResetPasswordActionRequestBody, clientIp: ClientIp)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, SendResetPasswordEmailResponse ]]
   def getUser(cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, User]]
   def assignGroupCode(group: String, cookie: PlayCookie)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, AssignGroupResponse]]
+  def getUserType(signInRequest: SignInRequestParameters)(implicit ec: ExecutionContext): Future[Either[ServiceExceptions, UserTypeResponse]]
 }
 
 
@@ -160,4 +161,16 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
       case Right(response) => Right(response)
     }
   }
+
+  override def getUserType(signInRequest: SignInRequestParameters)(implicit ec: ExecutionContext): Future[Either[Seq[ServiceException], UserTypeResponse]] ={
+    val apiRequest = UserTypeRequest(signInRequest.email)
+    client.getUserType(apiRequest).map {
+      case Left(errors) =>
+        //TODO: write actual getUserType exception
+        Left(errors.map(GetUserAppException.apply))
+      case Right(response) => Right(response)
+    }
+  }
 }
+
+

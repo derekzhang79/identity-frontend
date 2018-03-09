@@ -13,6 +13,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc._
 import Configuration.Environment._
+import com.gu.identity.frontend.authentication.CookieService
 import com.gu.tip.Tip
 
 import scala.concurrent.Future
@@ -73,16 +74,15 @@ class SigninAction(
   }
 
   def signInWithEmail = SignInEmailServiceAction(bodyParser) {
-    emailSignInAction(
-      (url, cookies) => SeeOther(url).withCookies(cookies: _*),
-      _ => metricsActor.logSuccessfulEmailSignin()
-    )
+    emailSignInAction(successfulFirstStepResponse, _ => metricsActor.logSuccessfulEmailSignin())
   }
 
-  def emailSignInAction(successResponse: (String, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] => {
+  def emailSignInAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] => {
+//  def emailSignInAction() = { implicit request: Request[SignInActionRequestBody] => {
 
     val body = request.body
 
+    println(body)
     lazy val returnUrl = body.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, body.clientId))
 
     val successfulReturnUrl = body.groupCode match {
@@ -91,14 +91,18 @@ class SigninAction(
       case _ => returnUrl
     }
 
-    val secondStepUrl = s"/signin/existing?returnUrl=${java.net.URLEncoder.encode(successfulReturnUrl.url, "UTF8")}"
-
-    metricsLogger(request)
-    Future.successful { Right {
-      successResponse(secondStepUrl, Seq(
-        Cookie("GU_SIGNIN_EMAIL", body.email, None)
-      ))
-    }}
+   identityService.getUserType(body).map {
+      case Left(errors) => {
+        Left(errors)
+      }
+      case Right(response) => {
+        val secondStepUrl = s"/signin/${response.userType}?returnUrl=${java.net.URLEncoder.encode(successfulReturnUrl.url, "UTF8")}"
+        //Need to issue a cookie here(need to refactor though)
+        val emailCookie = CookieService.signInEmailCookies(body.email)(config)
+//        successResponse()
+        Right(SeeOther(secondStepUrl).withCookies(emailCookie: _*))
+      }
+    }
   }}
 
   def signInAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] =>
@@ -150,6 +154,10 @@ class SigninAction(
   }
 
   def successfulSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
+    SeeOther(successfulReturnUrl.url)
+      .withCookies(cookies: _*)
+
+  def successfulFirstStepResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
     SeeOther(successfulReturnUrl.url)
       .withCookies(cookies: _*)
 

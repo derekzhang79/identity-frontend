@@ -66,6 +66,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val userResponseCreationDateFormat = Json.format[CreationDate]
   implicit val userResponseUserFormat = Json.format[User]
   implicit val userResponseFormat = Json.format[UserResponse]
+  implicit val userTypeFormat = Json.format[UserTypeResponse]
 
   implicit val assignGroupResponseFormat = Json.format[AssignGroupResponse]
 
@@ -170,6 +171,13 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
     case r: UserRepermissionTokenRequest =>
       if (response.status == 200) {
         Right(response.json.as[AuthenticationCookiesResponse])
+      } else {
+        handleUnexpectedResponse(response)
+      }
+
+    case r: UserTypeRequest =>
+      if (response.status == 200) {
+        Right(response.json.as[UserTypeResponse])
       } else {
         handleUnexpectedResponse(response)
       }

@@ -28,4 +28,6 @@ case class ResendTokenResponse() extends ApiResponse
 
 case class UserResponse(user: User) extends ApiResponse
 
+case class UserTypeResponse(status: String, userType: String) extends ApiResponse
+
 case class AssignGroupResponse(groupCode: String) extends ApiResponse

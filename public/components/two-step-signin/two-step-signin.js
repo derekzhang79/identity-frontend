@@ -1,8 +1,7 @@
 // @flow
 
 import {
-  EV_DONE,
-  EV_START_OVER
+  EV_DONE
 } from "components/two-step-signin/two-step-signin__slide";
 import { loadComponents } from "js/load-components";
 

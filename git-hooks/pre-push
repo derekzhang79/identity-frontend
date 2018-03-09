@@ -1,0 +1,59 @@
+#!/usr/bin/env node
+/* eslint-disable no-console */
+
+const path = require('path');
+const execa = require('execa');
+const chalk = require('chalk');
+const chalkrw = require('chalk-rainbow');
+
+const onMsg = (msg) => {
+    console.log(`\n\n${msg}\n\n`);
+}
+
+const onError = (msg) => onMsg(
+    msg
+    .map((line, index) =>
+        index === 0
+        ? `🙅   `+chalk.red(line)
+        : `    `+line
+    )
+    .join("\n")
+)
+
+const onSuccess = (msg) => onMsg(
+    msg
+    .map((line, index) =>
+        index === 0
+        ? `😻   `+chalk.green(line)
+        : `    `+line
+    )
+    .join("\n")
+)
+
+const npmCmd = (cmd) =>
+    execa('npm', ['run',cmd], {
+        stdio: 'inherit',
+    });
+
+
+Promise.all([
+    npmCmd('lint').catch(error=>{
+        onError([
+            'Oops! you have linting errors. Sort them out by running:',
+            chalk.bgWhite.bold.black('npm run fix')
+        ])
+        throw error;
+    }),
+    npmCmd('flow').catch(error=>{
+        onError([
+            'Oops! you have type errors',
+            chalkrw('good luck')
+        ])
+        throw error;
+    })
+]).catch(()=>{
+    process.exit(1);
+}).then(()=>{
+    onSuccess(['Your JS linting & typing looks great!']);
+    process.exit(0);
+})

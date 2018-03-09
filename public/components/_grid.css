@@ -5,7 +5,7 @@ $gridcolumns: 12;
 
   &::before,
   &::after {
-    content: " ";
+    content: ' ';
     display: table;
   }
 

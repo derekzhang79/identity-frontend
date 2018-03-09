@@ -8,13 +8,10 @@ import { init as initSigninBindings } from './components/signin-form/signin-form
 
 import { init as initRegisterBindings } from './components/register-form/register-form';
 
-
-if ( isBrowserSupported ) {
-
+if (isBrowserSupported) {
   logPageView();
 
   initSigninBindings();
 
   initRegisterBindings();
-
 }

@@ -15,12 +15,11 @@ export const isSupported =
   'sessionStorage' in window &&
   'bind' in Function;
 
+export function getElementById(id) {
+  const elem = document.getElementById(id);
 
-export function getElementById( id ) {
-  const elem = document.getElementById( id );
-
-  if ( elem && elem.nodeType === 1 ) {
-    return domElement( elem );
+  if (elem && elem.nodeType === 1) {
+    return domElement(elem);
   }
 
   return undefined;

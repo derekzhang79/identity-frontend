@@ -3,11 +3,16 @@ const PLUGIN_OPTIONS = {
   preferredCountries: ['gb', 'us', 'au']
 };
 
-export function initPhoneField (form, countryCodeElement, countryIsoName, localNumberElement) {
-
-  require( [ 'jquery', 'intl-tel', 'intl-tel-utils' ], ($) => {
-
-    const tooltipElement = form.formElement.elem.querySelector('.register-form__tooltip--phone-number');
+export function initPhoneField(
+  form,
+  countryCodeElement,
+  countryIsoName,
+  localNumberElement
+) {
+  require(['jquery', 'intl-tel', 'intl-tel-utils'], $ => {
+    const tooltipElement = form.formElement.elem.querySelector(
+      '.register-form__tooltip--phone-number'
+    );
     const formElement = form.formElement.elem;
     initializeFields(
       $(formElement),
@@ -19,7 +24,7 @@ export function initPhoneField (form, countryCodeElement, countryIsoName, localN
   });
 }
 
-function initializeFields (form, countryCode, countryIsoName, localNumber) {
+function initializeFields(form, countryCode, countryIsoName, localNumber) {
   // The core view has a select and an input field. When JS is enabled and running
   // hide the select and replace it with a jQuery phone number plugin
   const selectedCountry = countryIsoName.val();
@@ -28,9 +33,10 @@ function initializeFields (form, countryCode, countryIsoName, localNumber) {
   }
   localNumber.intlTelInput(PLUGIN_OPTIONS);
   countryCode.parent().hide();
-  localNumber.parents('.register-form__control-column--local-number')
+  localNumber
+    .parents('.register-form__control-column--local-number')
     .removeClass('register-form__control-column--local-number')
-    .addClass('register-form__control-column--local-number--wide')
+    .addClass('register-form__control-column--local-number--wide');
 
   // The form is persisted in local storage on submit, but because we're loaded asynchronously
   // persistence is done before synchronization, to account for that, update the fields on change
@@ -38,21 +44,32 @@ function initializeFields (form, countryCode, countryIsoName, localNumber) {
   form.on('submit', updateHiddenField);
   localNumber.on('countrychange', updateHiddenField);
 
-  function updateHiddenField () {
-    const {iso2, dialCode} = localNumber.intlTelInput('getSelectedCountryData');
+  function updateHiddenField() {
+    const { iso2, dialCode } = localNumber.intlTelInput(
+      'getSelectedCountryData'
+    );
     countryCode.val(dialCode);
-    localNumber.val(localNumber.intlTelInput('getNumber').replace(new RegExp('^\\+' + dialCode), ''));
+    localNumber.val(
+      localNumber
+        .intlTelInput('getNumber')
+        .replace(new RegExp('^\\+' + dialCode), '')
+    );
     countryIsoName.val(iso2);
   }
 }
 
-function initialiseTooltip ($, tooltip, formElement) {
+function initialiseTooltip($, tooltip, formElement) {
   tooltip.setAttribute('hidden', '');
   $(tooltip).removeClass('register-form__tooltip--phone-number--nojs');
-  $('.register-form__link--why-phone-number', formElement).removeAttr('hidden').on('click', toggleDropdown);
-  $('.register-form__tooltip--phone-number__close', formElement).on('click', toggleDropdown);
+  $('.register-form__link--why-phone-number', formElement)
+    .removeAttr('hidden')
+    .on('click', toggleDropdown);
+  $('.register-form__tooltip--phone-number__close', formElement).on(
+    'click',
+    toggleDropdown
+  );
 
-  function toggleDropdown () {
+  function toggleDropdown() {
     if (tooltip.hasAttribute('hidden')) {
       tooltip.removeAttribute('hidden');
     } else {

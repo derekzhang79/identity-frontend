@@ -1,7 +1,5 @@
 import { getElementById, sessionStorage } from '../browser/browser';
 
-import { mapValues as _mapValues } from '../lib/lodash';
-
 import { initPhoneField } from '../lib/phone-field';
 
 import { fetchTracker } from '../analytics/ga';
@@ -59,7 +57,11 @@ class RegisterFormFields {
   }
 
   mapValues(callback) {
-    return _mapValues(this, callback);
+    let rt = Object.assign({}, this);
+    for (let k in rt) {
+      rt[k] = callback(rt[k]);
+    }
+    return rt;
   }
 
   toJSON() {

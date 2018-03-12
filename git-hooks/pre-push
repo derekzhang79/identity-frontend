@@ -2,7 +2,12 @@
 /* eslint-disable no-console */
 
 const path = require('path');
-const { onMsg, onError, onSuccess, npmCmd } = require('./_helpers');
+const helpers = require('./_helpers');
+
+const onMsg = helpers.onMsg;
+const onError = helpers.onError;
+const onSuccess = helpers.onSuccess;
+const npmCmd = helpers.npmCmd;
 
 Promise.all([
     npmCmd('lint').catch(error=>{

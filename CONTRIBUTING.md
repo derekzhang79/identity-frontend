@@ -58,6 +58,8 @@ As convention, partial templates and CSS stylesheets are prefixed with an unders
 Javascript source should be written in ES6 in the [Idiomatic JS](https://github.com/rwaldron/idiomatic.js)
 style. This is enforced using [Prettier](https://prettier.io/) when running tests and before push.
 
+We use [Flow](https://flow.org/en/) to type check javascript. This happens at pre-push time but you can also manually test your types by running `npm run flow`. 
+
 ES6 is transpiled with [Babel](https://babeljs.io/) as part of a
 [Webpack](http://webpack.github.io/) build step. The webpack build config
 is defined in [`webpack.config.js`](https://github.com/guardian/identity-frontend/blob/master/webpack.config.js).

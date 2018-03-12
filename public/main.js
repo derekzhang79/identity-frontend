@@ -1,5 +1,7 @@
 import './components/sentry/sentry';
 
+import { loadComponents } from './js/load-components';
+
 import { isSupported as isBrowserSupported } from './components/browser/browser';
 
 import { logPageView } from './components/analytics/analytics';
@@ -14,4 +16,6 @@ if (isBrowserSupported) {
   initSigninBindings();
 
   initRegisterBindings();
+
+  loadComponents(document);
 }

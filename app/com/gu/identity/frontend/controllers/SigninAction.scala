@@ -47,13 +47,6 @@ class SigninAction(
       LogOnErrorAction(logger) andThen
       CSRFCheck(csrfConfig)
 
-  val SignInEmailServiceAction =
-    ServiceAction andThen
-      ResultOnError(redirectRoute) andThen
-      LogOnErrorAction(logger) andThen
-      CSRFCheck(csrfConfig)
-
-
   val bodyParser = SignInActionRequestBody.bodyParser
 
   def signInMetricsLogger(request: Request[SignInActionRequestBody]) = {
@@ -74,7 +67,7 @@ class SigninAction(
     signInAction(successfulSmartLockSignInResponse, _ => metricsActor.logSuccessfulSmartLockSignin())
   }
 
-  def signInWithEmail = SignInEmailServiceAction(bodyParser) {
+  def signInWithEmail = SignInServiceAction(bodyParser) {
     emailSignInAction(successfulFirstStepResponse, _ => metricsActor.logSuccessfulEmailSignin())
   }
 

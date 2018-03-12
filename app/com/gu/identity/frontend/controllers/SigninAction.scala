@@ -94,11 +94,8 @@ class SigninAction(
         Left(errors)
       }
       case Right(response) => {
-//        val secondStepUrl = s"/signin/${response.userType}?returnUrl=${java.net.URLEncoder.encode(successfulReturnUrl.url, "UTF8")}"
-//        //Need to issue a cookie here(need to refactor though)
         val emailCookie = CookieService.signInEmailCookies(body.email)(config)
         Right(successResponse(response.userType, successfulReturnUrl, emailCookie))
-//        Right(SeeOther(secondStepUrl).withCookies(emailCookie: _*))
       }
     }
   }}

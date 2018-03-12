@@ -9,7 +9,19 @@ export function initPhoneField(
   countryIsoName,
   localNumberElement
 ) {
-  require(['jquery', 'intl-tel', 'intl-tel-utils'], $ => {
+  Promise.all([
+    import('jquery'),
+    import('raw-loader!intl-tel-input/build/css/intlTelInput.css'),
+    import('intl-tel'),
+    import('intl-tel-utils')
+  ]).then(([jq,css])=>{
+
+    const $ = jq.default;
+
+    const $style = document.createElement('style');
+    $style.innerText = css.default;
+    document.body.appendChild($style);
+
     const tooltipElement = form.formElement.elem.querySelector(
       '.register-form__tooltip--phone-number'
     );

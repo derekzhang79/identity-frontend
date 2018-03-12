@@ -20,7 +20,8 @@ object ContentSecurityPolicy {
   val CSP_REPORT_URI_PATH = routes.CSPViolationReporter.cspReport.url
 
   val defaultCsp = Map(
-    CSP_DEFAULT_SRC -> Seq(CSP_SELF_DOMAIN)
+    CSP_DEFAULT_SRC -> Seq(CSP_SELF_DOMAIN),
+    CSP_STYLE_SRC -> Seq(CSP_SELF_DOMAIN, CSP_UNSAFE_INLINE)
   )
 
   val violationReportingCsp = Map(

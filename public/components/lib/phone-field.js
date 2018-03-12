@@ -14,8 +14,7 @@ export function initPhoneField(
     import('raw-loader!intl-tel-input/build/css/intlTelInput.css'),
     import('intl-tel'),
     import('intl-tel-utils')
-  ]).then(([jq,css])=>{
-
+  ]).then(([jq, css]) => {
     const $ = jq.default;
 
     const $style = document.createElement('style');

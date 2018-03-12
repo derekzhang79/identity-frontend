@@ -7,10 +7,15 @@ import {
   init as initTwoStepSigninSlide,
   className as classNameTwoStepSigninSlide
 } from 'components/two-step-signin/two-step-signin__slide';
+import {
+  init as initSmartLock,
+  className as classNameSmartLock
+} from 'components/smartlock-trigger/smartlock-trigger';
 
 const components = [
   [initTwoStepSignin, classNameTwoStepSignin, initOnceTwoStepSignin],
-  [initTwoStepSigninSlide, classNameTwoStepSigninSlide]
+  [initTwoStepSigninSlide, classNameTwoStepSigninSlide],
+  [initSmartLock, classNameSmartLock]
 ];
 
 const initOnceList = [];

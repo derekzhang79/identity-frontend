@@ -1,26 +1,24 @@
-import { configuration } from '../configuration/configuration';
-
 /**
  * Use sentry to record Javascript errors
  */
 
 /*global console*/
 
-import('raven-js').then(ravenJs => {
-  const Raven = ravenJs.default;
+import Raven from 'raven-js';
 
-  function init() {
-    const ravenOptions = {
-      whitelistUrls: [/ophan\.co\.uk/],
-      release: configuration.appVersion
-    };
+import { configuration } from '../configuration/configuration';
 
-    if (typeof dsn === 'string') {
-      Raven.config(dsn, ravenOptions).install();
-    } else if (console) {
-      console.warn('Sentry configuration not found');
-    }
+function init() {
+  const ravenOptions = {
+    whitelistUrls: [/ophan\.co\.uk/],
+    release: configuration.appVersion
+  };
+
+  if (typeof dsn === 'string') {
+    Raven.config(dsn, ravenOptions).install();
+  } else if (console) {
+    console.warn('Sentry configuration not found');
   }
+}
 
-  init();
-});
+init();

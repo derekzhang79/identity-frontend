@@ -90,13 +90,12 @@ class SigninAction(
     }
 
    identityService.getUserType(body).map {
-      case Left(errors) => {
+      case Left(errors) =>
         Left(errors)
-      }
-      case Right(response) => {
-        val emailCookie = CookieService.signInEmailCookies(body.email)(config)
-        Right(successResponse(response.userType, successfulReturnUrl, emailCookie))
-      }
+
+      case Right(response) =>
+        val emailLoginCookie = CookieService.signInEmailCookies(body.email)(config)
+        Right(successResponse(response.userType, successfulReturnUrl, emailLoginCookie))
     }
   }}
 

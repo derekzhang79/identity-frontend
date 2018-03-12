@@ -11,8 +11,6 @@
 6. Code will be reviewed and require a :+1: from a team member before it
    will be merged
 7. The merger is required to ensure the change is deployed to production.
-   Each merge is automatically deployed to our CODE environment, where it
-   should be health checked before PROD deploy
 
 If you have any questions, come chat to us or send us an email.
 

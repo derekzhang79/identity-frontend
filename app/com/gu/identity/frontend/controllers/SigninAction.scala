@@ -15,6 +15,7 @@ import play.api.mvc._
 import Configuration.Environment._
 import com.gu.identity.frontend.authentication.CookieService
 import com.gu.tip.Tip
+import java.net.URLEncoder.encode
 
 import scala.concurrent.Future
 
@@ -152,7 +153,7 @@ class SigninAction(
       .withCookies(cookies: _*)
 
   def successfulFirstStepResponse(userType: String, successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
-    SeeOther(s"/signin/${userType}?returnUrl=${java.net.URLEncoder.encode(successfulReturnUrl.url, "UTF8")}")
+    SeeOther(s"/signin/${userType}?returnUrl=${encode(successfulReturnUrl.url, "UTF8")}")
       .withCookies(cookies: _*)
 
   def successfulSmartLockSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =

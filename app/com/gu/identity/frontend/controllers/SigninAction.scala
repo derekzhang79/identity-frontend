@@ -77,12 +77,10 @@ class SigninAction(
     emailSignInAction(successfulFirstStepResponse, _ => metricsActor.logSuccessfulEmailSignin())
   }
 
-  def emailSignInAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] => {
-//  def emailSignInAction() = { implicit request: Request[SignInActionRequestBody] => {
+  def emailSignInAction(successResponse: (String, ReturnUrl, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] => {
 
     val body = request.body
 
-    println(body)
     lazy val returnUrl = body.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, body.clientId))
 
     val successfulReturnUrl = body.groupCode match {
@@ -96,11 +94,11 @@ class SigninAction(
         Left(errors)
       }
       case Right(response) => {
-        val secondStepUrl = s"/signin/${response.userType}?returnUrl=${java.net.URLEncoder.encode(successfulReturnUrl.url, "UTF8")}"
-        //Need to issue a cookie here(need to refactor though)
+//        val secondStepUrl = s"/signin/${response.userType}?returnUrl=${java.net.URLEncoder.encode(successfulReturnUrl.url, "UTF8")}"
+//        //Need to issue a cookie here(need to refactor though)
         val emailCookie = CookieService.signInEmailCookies(body.email)(config)
-//        successResponse()
-        Right(SeeOther(secondStepUrl).withCookies(emailCookie: _*))
+        Right(successResponse(response.userType, successfulReturnUrl, emailCookie))
+//        Right(SeeOther(secondStepUrl).withCookies(emailCookie: _*))
       }
     }
   }}
@@ -157,8 +155,8 @@ class SigninAction(
     SeeOther(successfulReturnUrl.url)
       .withCookies(cookies: _*)
 
-  def successfulFirstStepResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
-    SeeOther(successfulReturnUrl.url)
+  def successfulFirstStepResponse(userType:String, successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
+    SeeOther(s"/signin/${userType}?returnUrl=${java.net.URLEncoder.encode(successfulReturnUrl.url, "UTF8")}")
       .withCookies(cookies: _*)
 
   def successfulSmartLockSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =

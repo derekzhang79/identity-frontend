@@ -30,11 +30,6 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    })
-  ],
   resolve: {
     modules: [
       path.resolve(__dirname, 'public'),

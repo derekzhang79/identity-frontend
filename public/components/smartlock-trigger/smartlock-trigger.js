@@ -10,6 +10,13 @@ const ERR_WRONG_CREDENTIAL = 'Error fetching smart lock credentials';
 const ERR_FAILED_SIGNIN = 'Error signing in with smart lock';
 const ERR_MISSING_PARAMS = 'Missing parameters';
 
+type Credential = {
+  id: string,
+  password: string
+};
+
+type PasswordCredential = Credential;
+
 const smartLockSignIn = (
   credentials: Credential,
   returnUrl: string,
@@ -35,7 +42,6 @@ const smartLockSignIn = (
 };
 
 const init = ($element: HTMLElement): void => {
-
   const [returnUrl, csrfToken] = [
     $element.dataset.returnUrl,
     $element.dataset.csrfToken
@@ -45,23 +51,26 @@ const init = ($element: HTMLElement): void => {
     throw new Error(ERR_MISSING_PARAMS);
   }
 
-  if (navigator && navigator.credentials) {
+  if (navigator && navigator.credentials !== null) {
+    const credentialsContainer = (navigator: any).credentials;
 
-    navigator.credentials.preventSilentAccess();
+    credentialsContainer.preventSilentAccess();
 
-    navigator.credentials
+    credentialsContainer
       .get({
         password: true
       })
       .then(c => {
+        // $FlowFixMe
         if (c instanceof PasswordCredential) {
           smartLockSignIn(c, returnUrl, csrfToken);
         } else {
           throw new Error(ERR_WRONG_CREDENTIAL);
         }
-      }).catch(err => {
+      })
+      .catch(err => {
         throw err;
-    })
+      });
   }
 };
 

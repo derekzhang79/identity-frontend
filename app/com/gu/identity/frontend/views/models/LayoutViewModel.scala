@@ -6,10 +6,11 @@ import com.gu.identity.frontend.models.{ClientID, GuardianJobsClientID, Guardian
 import com.gu.identity.frontend.models.Text.{HeaderText, LayoutText}
 import com.gu.identity.frontend.models.text.FooterText
 import com.gu.identity.frontend.mvt
-import com.gu.identity.frontend.mvt.{ActiveMultiVariantTests, MultiVariantTests, MultiVariantTest}
+import com.gu.identity.frontend.mvt.{ActiveMultiVariantTests, MultiVariantTest, MultiVariantTests}
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import com.gu.identity.frontend.configuration.Configuration.Environment
+import com.gu.identity.frontend.controllers.routes
 
 case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
 
@@ -24,6 +25,7 @@ case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
     IndirectlyLoadedInlinedImageResources,
     IndirectlyLoadedExternalScriptResources("https://j.ophan.co.uk"),
     IndirectlyLoadedExternalScriptResources("https://www.google-analytics.com"),
+    IndirectlyLoadedExternalResources(if (Environment.stage == "DEV") "*.thegulocal.com" else "*.theguardian.com"),
     IndirectlyLoadedExternalResources("https://app.getsentry.com/api/"),
     IndirectlyLoadedExternalImageResources("https://www.google-analytics.com"),
     IndirectlyLoadedExternalImageResources("https://hits-secure.theguardian.com"),
@@ -52,6 +54,7 @@ case class LayoutViewModel private(
 case class JavascriptConfig(
     sentryDsn: String,
     mvtTests: Seq[MultiVariantTest],
+    routes: Map[String, String],
     appVersion: String = BuildInfo.gitCommitId,
     gaUID: String) {
   self =>
@@ -105,6 +108,9 @@ object LayoutViewModel {
     val config = JavascriptConfig(
       sentryDsn = configuration.sentryDsnJs,
       mvtTests = MultiVariantTests.all.toSeq,
+      routes = Map(
+        "twoStepSignIn" -> routes.Application.twoStepSignIn().url
+      ),
       gaUID = configuration.gaUID
     )
 

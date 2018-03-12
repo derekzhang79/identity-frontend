@@ -3,22 +3,24 @@
 {{# partial "content" }}
 
   <section class="layout-wrap-width">
+    <div class="two-step-signin"><div class="two-step-signin__slide">
 
-    <section class="layout-header">
-      <h1 class="layout-header__title">{{ twoStepSignInPageText.title }}</h1>
-      <p class="layout-header__title layout-header__title--standfirst">{{twoStepSignInPageText.noAccount}} <a href="{{registerUrl}}" >{{twoStepSignInPageText.signUp}}</a>.</p>
-    </section>
+      <section class="layout-header">
+        <h1 class="layout-header__title">{{ twoStepSignInPageText.title }}</h1>
+        <p class="layout-header__title layout-header__title--standfirst">{{twoStepSignInPageText.noAccount}} <a href="{{registerUrl}}" >{{twoStepSignInPageText.signUp}}</a>.</p>
+      </section>
 
-    {{> components/form/form-error-wrap }}
+      {{> components/form/form-error-wrap }}
 
-    <section class="two-step-signin-container">
-      {{> components/two-step-signin/two-step-signin-email }}
-    </section>
+      <section class="two-step-signin-container">
+        {{> components/two-step-signin/two-step-signin-email }}
+      </section>
 
-    <section class="layout-section">
-      {{> components/terms/_terms-inline }}
-    </section>
+      <section class="layout-section">
+        {{> components/terms/_terms-inline }}
+      </section>
 
+    </div></div>
   </section>
 
 {{/partial}}

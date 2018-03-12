@@ -3,7 +3,7 @@
   margin-top: 3rem;
   position: relative;
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     background: color(var(--color-border) alpha(50%));
     height: 1px;
@@ -13,43 +13,36 @@
   }
 }
 
-.two-step-signin-form-ajax-wrap {
+.two-step-signin[data-enhanced] {
   position: relative;
   min-height: 100%;
-  .two-step-signin-form {
+  .two-step-signin__slide {
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
-    visibility: hidden;
-    display: none;
-    &[data-state=SLIDE_STATE_LOADING] {
+    &[data-state='SLIDE_STATE_LOADING'] {
       opacity: 0.5;
     }
   }
 }
 
-.two-step-signin-form--visible {
-  visibility: visible;
-  display: block;
-}
-
-.two-step-signin-form--out {
+.two-step-signin__slide--out {
   visibility: visible;
   display: block;
   animation: two-step-signin-animation__slide-left 0.2s both;
 }
-.two-step-signin-form--in {
+.two-step-signin__slide--in {
   visibility: visible;
   display: block;
   animation: two-step-signin-animation__slide-right reverse 0.2s both;
 }
-.two-step-signin-form--out-reverse {
+.two-step-signin__slide--out-reverse {
   visibility: visible;
   display: block;
   animation: two-step-signin-animation__slide-right 0.2s both;
 }
-.two-step-signin-form--in-reverse {
+.two-step-signin__slide--in-reverse {
   visibility: visible;
   display: block;
   animation: two-step-signin-animation__slide-left reverse 0.2s both;

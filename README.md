@@ -31,7 +31,7 @@ Requires:
 
  - [JDK 8](http://openjdk.java.net)
  - [sbt](http://www.scala-sbt.org)
- - [Node.js](https://nodejs.org) - version is specified by [.nvmrc](.nvmrc), execute [`$ nvm use`](https://github.com/creationix/nvm#nvmrc) to use it
+ - [Node.js](https://nodejs.org) - version is specified by [.nvmrc](.nvmrc), run [`$ nvm use`](https://github.com/creationix/nvm#nvmrc) to use it
  
 If this is the first time using the application you will need to pull down the client side dependencies using
 

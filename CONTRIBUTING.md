@@ -12,7 +12,7 @@
    will be merged
 7. The merger is required to ensure the change is deployed to production.
    Each merge is automatically deployed to our CODE environment, where it
-   should be sanity checked before PROD deploy
+   should be health checked before PROD deploy
 
 If you have any questions, come chat to us or send us an email.
 
@@ -20,7 +20,7 @@ If you have any questions, come chat to us or send us an email.
 ## Coding conventions
 
 - 2 space indent, trimmed spaces, lf, utf8, enforced with
-  [editorconfig](http://editorconfig.org/), please install the plugin for your
+  [Prettier](https://prettier.io/), please install the plugin for your
   editor
 - **Commits:** Please don't squash, history is good
 - **Scala:** [Scala style guide](http://docs.scala-lang.org/style/)
@@ -56,22 +56,20 @@ As convention, partial templates and CSS stylesheets are prefixed with an unders
 
 ### Javascript guidelines
 Javascript source should be written in ES6 in the [Idiomatic JS](https://github.com/rwaldron/idiomatic.js)
-style. This is enforced using [eslint](http://eslint.org/) when running tests.
+style. This is enforced using [Prettier](https://prettier.io/) when running tests and before push.
 
 ES6 is transpiled with [Babel](https://babeljs.io/) as part of a
 [Webpack](http://webpack.github.io/) build step. The webpack build config
 is defined in [`webpack.config.js`](https://github.com/guardian/identity-frontend/blob/master/webpack.config.js).
 
-The build is triggered as part of sbt's compile stage. This is configured using
-an `sbt-web` task in [`frontend.sbt`](https://github.com/guardian/identity-frontend/blob/master/frontend.sbt)
-which will run `npm run build` when a frontend asset has changed.
+The build is triggered as part of the npm scripts. This is configured using
+the `watch` script in [`package.json`](https://github.com/guardian/identity-frontend/blob/master/package.json).
 
 ### CSS guidelines
 CSS source should be written using [Idiomatic CSS](https://github.com/necolas/idiomatic-css) style.
-This is enforced using [stylelint](http://stylelint.io/) when running tests.
 
 CSS is processed using [PostCSS](https://github.com/postcss/postcss) configured
-using plugins defined in [postcss.json](https://github.com/guardian/identity-frontend/blob/master/postcss.json).
+using plugins defined in [postcss.config.js](https://github.com/guardian/identity-frontend/blob/master/postcss.config.js).
 
 CSS is structured using [BEM](https://css-tricks.com/bem-101/) (Block-Element-Modifier):
 
@@ -80,22 +78,29 @@ CSS is structured using [BEM](https://css-tricks.com/bem-101/) (Block-Element-Mo
     .[block]--[modifier]
     .[block]__[element]--[modifier]
 
-If possible, CSS should only be applied to classes only. Ideally, only a single
-class should be applied to an element. So when applying modifiers use a single
-class on the element:
-
-```html
-<div class="main-block--highlighted">...</div>
-```
-
-Then in the CSS definition, `@extend` from the core block or element that the
-modifier is applied to:
+Try to keep CSS scoped to an element level and to keep elements as reusable as possible. In practical terms this mostly means setting the placement (margin, position) from a container.
 
 ```css
-.main-block--highlighted {
-  @extend .main-block;
+/* no 😿 */
+.ui-button {
+  display: block;
+  background: var(--color-button);
+  position: absolute;
+  bottom: 0;
+}
+
+/* yes 😻 */
+.ui-button {
+  display: block;
+  background: var(--color-button);
+}
+.ui-dialog .ui-button {
+  position: absolute;
+  bottom: 0;
 }
 ```
+
+Whenever possible try to stick with standard css syntax such as using `var(--color-main)` instead of `$color-main`. At the moment a couple of redundant postcss plugins live within the projects but the aim is to trim them down.
 
 All size units should be expressed in `rem` ("root em") units as much as
 possible.CSS is written to override the default base-font size to a
@@ -107,7 +112,7 @@ Experience purposes, such as `border: 1px` on buttons.
 
 Pixel fallbacks for `rem` units are added with PostCSS automatically via the
 [cssnext](http://cssnext.io/) plugin. Vendor prefixes for "Modern" CSS are
-also automatically added via PostCSS and cssnext with autoprefixer.
+also automatically added via PostCSS and `cssnext` with `autoprefixer`.
 
 
 ### Multi-Variant Tests

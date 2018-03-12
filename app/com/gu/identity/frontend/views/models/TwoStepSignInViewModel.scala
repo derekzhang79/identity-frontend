@@ -36,7 +36,7 @@ case class TwoStepSignInViewModel private(
   //TODO: use reverse signInWithEmail route
   actions: Map[String, String] = Map(
     "signInWithEmailAndPassword" -> routes.SigninAction.signIn().url,
-    "signInWithEmail" -> "/signin/with-email"
+    "signInWithEmail" -> "/actions/signin/with-email"
   ),
   resources: Seq[PageResource with Product],
   indirectResources: Seq[PageResource with Product])

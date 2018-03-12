@@ -31,11 +31,11 @@
 
 .oauth__cta--google {
   @extend %oauth__cta;
-  background-image: inline("icon-google.svg");
+  background-image: inline('icon-google.svg');
   margin-bottom: 0;
 }
 
 .oauth__cta--facebook {
   @extend %oauth__cta;
-  background-image: inline("icon-facebook.svg");
+  background-image: inline('icon-facebook.svg');
 }

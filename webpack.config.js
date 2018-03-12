@@ -29,6 +29,10 @@ module.exports = {
     })
   ],
   resolve: {
+    modules: [
+      path.resolve(__dirname, 'public'),
+      'node_modules'
+    ],
     alias: {
       'intl-tel': 'intl-tel-input/build/js/intlTelInput',
       'intl-tel-utils': 'intl-tel-input/build/js/utils.js'

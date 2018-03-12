@@ -7,13 +7,11 @@
 [include]
 
 [libs]
-./flow-typed
 
 [lints]
 
 [options]
 emoji=true
-
-module.file_ext=.js
+module.name_mapper='^\(.*\)$' -> '<PROJECT_ROOT>/public/\1'
 
 [strict]

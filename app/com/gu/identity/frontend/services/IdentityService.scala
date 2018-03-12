@@ -166,8 +166,7 @@ class IdentityServiceImpl(config: Configuration, adapter: IdentityServiceRequest
     val apiRequest = UserTypeRequest(signInRequest.email)
     client.getUserType(apiRequest).map {
       case Left(errors) =>
-        //TODO: write actual getUserType exception
-        Left(errors.map(GetUserAppException.apply))
+        Left(errors.map(SignInServiceAppException.apply))
       case Right(response) => Right(response)
     }
   }

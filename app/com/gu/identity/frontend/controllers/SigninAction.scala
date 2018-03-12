@@ -88,6 +88,7 @@ class SigninAction(
         Left(errors)
 
       case Right(response) =>
+        metricsLogger(request)
         val emailLoginCookie = CookieService.signInEmailCookies(body.email)(config)
         Right(successResponse(response.userType, successfulReturnUrl, emailLoginCookie))
     }

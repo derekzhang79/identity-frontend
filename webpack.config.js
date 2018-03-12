@@ -30,6 +30,11 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new webpack.optimize.MinChunkSizePlugin({
+      minChunkSize: 99999,
+    })
+  ],
   resolve: {
     modules: [
       path.resolve(__dirname, 'public'),

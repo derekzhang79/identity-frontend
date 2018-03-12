@@ -42,7 +42,6 @@ const smartLockSignIn = (
 };
 
 const init = ($element: HTMLElement): void => {
-
   const [returnUrl, csrfToken] = [
     $element.dataset.returnUrl,
     $element.dataset.csrfToken
@@ -52,23 +51,26 @@ const init = ($element: HTMLElement): void => {
     throw new Error(ERR_MISSING_PARAMS);
   }
 
-  if (navigator && navigator.credentials) {
+  if (navigator && navigator.credentials !== null) {
+    const credentialsContainer = (navigator: any).credentials;
 
-    navigator.credentials.preventSilentAccess();
+    credentialsContainer.preventSilentAccess();
 
-    navigator.credentials
+    credentialsContainer
       .get({
         password: true
       })
       .then(c => {
+        // $FlowFixMe
         if (c instanceof PasswordCredential) {
           smartLockSignIn(c, returnUrl, csrfToken);
         } else {
           throw new Error(ERR_WRONG_CREDENTIAL);
         }
-      }).catch(err => {
+      })
+      .catch(err => {
         throw err;
-    })
+      });
   }
 };
 

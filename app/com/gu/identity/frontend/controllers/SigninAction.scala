@@ -151,7 +151,7 @@ class SigninAction(
     SeeOther(successfulReturnUrl.url)
       .withCookies(cookies: _*)
 
-  def successfulFirstStepResponse(userType:String, successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
+  def successfulFirstStepResponse(userType: String, successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
     SeeOther(s"/signin/${userType}?returnUrl=${java.net.URLEncoder.encode(successfulReturnUrl.url, "UTF8")}")
       .withCookies(cookies: _*)
 

@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint import/prefer-default-export: 0 */
 
 export const withPolyfill = (success: () => void, error: () => void) => {
   if (window.fetch && window.Promise) {

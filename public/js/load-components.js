@@ -1,4 +1,4 @@
-/*@flow*/
+/* @flow */
 
 import Raven from 'raven-js';
 

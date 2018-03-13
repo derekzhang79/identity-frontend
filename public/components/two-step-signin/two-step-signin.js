@@ -86,7 +86,7 @@ const onSlide = ($component: HTMLElement, $slide: HTMLElement): void => {
 const getSlide = ($component: HTMLElement) => {
   const $slide = $component.querySelector(`.${slideClassName}`);
   if ($slide) return $slide;
-  else throw new Error(ERR_MALFORMED_HTML);
+  throw new Error(ERR_MALFORMED_HTML);
 };
 
 const init = ($component: HTMLElement): void => {

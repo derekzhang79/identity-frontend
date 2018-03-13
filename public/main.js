@@ -1,8 +1,7 @@
-import './components/sentry/sentry';
-
-import { loadComponents } from './js/load-components';
-
+import { loadComponents } from 'js/load-components';
 import { withPolyfill } from 'js/utils';
+
+import './components/sentry/sentry';
 
 import { isSupported as isBrowserSupported } from './components/browser/browser';
 

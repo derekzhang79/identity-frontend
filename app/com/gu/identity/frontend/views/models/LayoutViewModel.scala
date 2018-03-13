@@ -110,7 +110,8 @@ object LayoutViewModel {
       sentryDsn = configuration.sentryDsnJs,
       mvtTests = MultiVariantTests.all.toSeq,
       routes = Map(
-        "twoStepSignIn" -> routes.Application.twoStepSignIn().url
+        "twoStepSignIn" -> routes.Application.twoStepSignIn().url,
+        "smartlockSignIn" -> routes.SigninAction.signInWithSmartLock().url
       ),
       gaUID = configuration.gaUID
     )

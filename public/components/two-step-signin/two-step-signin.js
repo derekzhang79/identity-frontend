@@ -79,8 +79,26 @@ const initOnce = (): void => {
   });
 };
 
-const onSlide = ($component: HTMLElement, $slide: HTMLElement): void => {
+const onSlide = ($component: HTMLElement, $slide: HTMLElement, href: String, isInitial: Boolean = false): void => {
   $component.style.minHeight = `${$slide.clientHeight * 1.1}px`;
+  if(isInitial) {
+    window.history.replaceState(
+      {
+        initiator: STATE_INITIATOR
+      },
+      '',
+      href
+    )
+  }
+  else {
+    window.history.pushState(
+      {
+        initiator: STATE_INITIATOR
+      },
+      '',
+      href
+    );
+  }
 };
 
 const getSlide = ($component: HTMLElement) => {
@@ -90,16 +108,11 @@ const getSlide = ($component: HTMLElement) => {
 };
 
 const init = ($component: HTMLElement): void => {
-  onSlide($component, getSlide($component));
+
+  onSlide($component, getSlide($component), window.location.href, true);
+
   $component.addEventListener(EV_DONE, (ev: mixed) => {
     if (ev instanceof CustomEvent) {
-      window.history.pushState(
-        {
-          initiator: STATE_INITIATOR
-        },
-        '',
-        ev.detail.url
-      );
       const $slide = getSlide($component);
       const $new = getSlideFromFetch(ev.detail.responseHtml);
 
@@ -107,7 +120,7 @@ const init = ($component: HTMLElement): void => {
         throw new Error(ERR_MALFORMED_HTML);
       }
       pushSlide($slide, $new, ev.detail.reverse).then(() => {
-        onSlide($component, $new);
+        onSlide($component, $new, ev.detail.url);
         loadComponents((($new.parentElement: any): HTMLElement));
       });
     } else {

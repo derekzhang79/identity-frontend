@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*global window, document*/
 
 import { domElement } from './dom-element';

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*global console*/
 
 import { getElementById } from '../browser/browser';

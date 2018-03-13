@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { configuration } from '../configuration/configuration';
 
 const MAX_ID = 899999;

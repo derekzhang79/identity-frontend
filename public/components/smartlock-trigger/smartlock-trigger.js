@@ -67,9 +67,6 @@ const init = ($element: HTMLElement): void => {
         } else {
           throw new Error(ERR_WRONG_CREDENTIAL);
         }
-      })
-      .catch(err => {
-        throw err;
       });
   }
 };

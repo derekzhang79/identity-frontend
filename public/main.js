@@ -10,7 +10,7 @@ import { init as initSigninBindings } from './components/signin-form/signin-form
 
 import { init as initRegisterBindings } from './components/register-form/register-form';
 
-if (window.location.hash === '#no-js') {
+if (document.location.href.indexOf('&no-js') > -1) {
   console.error('Ran in lite mode');
   document.querySelector('noscript').outerHTML = document
     .querySelector('noscript')

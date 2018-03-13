@@ -23,10 +23,6 @@ class MetricsLoggingActor(metricsActor: ActorRef) {
     metricsActor ! SmartLockSignIn
   }
 
-  def logSuccessfulEmailSignin() = {
-    metricsActor ! EmailSignIn
-  }
-
   def terminateActor() = {
     metricsActor ! PoisonPill
   }

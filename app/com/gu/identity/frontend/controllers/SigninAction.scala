@@ -68,18 +68,18 @@ class SigninAction(
   }
 
   def signInWithEmail = SignInServiceAction(bodyParser) {
-    emailSignInAction(successfulFirstStepResponse, _ => metricsActor.logSuccessfulEmailSignin())
+    emailSignInAction(successfulFirstStepResponse)
   }
 
-  def emailSignInAction(successResponse: (String, ReturnUrl, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] => {
+  def emailSignInAction(successResponse: (String, ReturnUrl, Seq[Cookie]) => Result) = { implicit request: Request[SignInActionRequestBody] => {
 
     val body = request.body
 
     lazy val returnUrl = body.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, body.clientId))
 
     val successfulReturnUrl = body.groupCode match {
-      case Some(validGroupCode) =>
-        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, body.skipConfirmation, skipThirdPartyLandingPage = true, body.clientId, validGroupCode, config)
+      case Some(groupCode) =>
+        UrlBuilder.buildThirdPartyReturnUrl(returnUrl, body.skipConfirmation, skipThirdPartyLandingPage = true, body.clientId, groupCode, config)
       case _ => returnUrl
     }
 
@@ -88,7 +88,6 @@ class SigninAction(
         Left(errors)
 
       case Right(response) =>
-        metricsLogger(request)
         val emailLoginCookie = CookieService.signInEmailCookies(body.email)(config)
         Right(successResponse(response.userType, successfulReturnUrl, emailLoginCookie))
     }
@@ -126,7 +125,6 @@ class SigninAction(
       permissionAuthAction(successfulSignInResponse, token, journey)
     }
   }
-
 
   def permissionAuthAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, token:String, journeyOpt: Option[String]) = { implicit req: RequestHeader =>
 

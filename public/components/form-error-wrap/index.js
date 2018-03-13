@@ -10,13 +10,14 @@ const renderErrors = () => {
   const lightModeUrl = `${document.location.href}?&no-js`;
   const retryError = `If the problem persists, try <a href="${lightModeUrl}">light mode</a>.`;
 
-  [...errors, retryError].forEach(error => {
-    const $div = document.createElement('div');
-    $div.innerHTML = error;
-    $elements.forEach($element => {
+  $elements.forEach($element => {
+    $element.innerHTML = '';
+    [...errors, retryError].forEach(error => {
+      const $div = document.createElement('div');
+      $div.innerHTML = error;
       const childClassName = $element.dataset.appendClassname;
       if (childClassName) $div.className = childClassName;
-      $element.appendChild($div.cloneNode(true));
+      $element.appendChild($div);
     });
   });
 };

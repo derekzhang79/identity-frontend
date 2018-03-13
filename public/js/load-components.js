@@ -1,3 +1,5 @@
+/*@flow*/
+
 import {
   init as initTwoStepSignin,
   className as classNameTwoStepSignin,
@@ -12,7 +14,7 @@ import {
   className as classNameSmartLock
 } from 'components/smartlock-trigger/smartlock-trigger';
 
-const components = [
+const components: any[] = [
   [initTwoStepSignin, classNameTwoStepSignin, initOnceTwoStepSignin],
   [initTwoStepSigninSlide, classNameTwoStepSigninSlide],
   [initSmartLock, classNameSmartLock]
@@ -20,18 +22,40 @@ const components = [
 
 const initOnceList = [];
 
-const loadComponents = $root => {
-  components.forEach(component => {
-    [...$root.querySelectorAll(`.${component[1]}`)]
+class Component {
+  init: HTMLElement => Promise<void>;
+  initOnce: ?() => Promise<void>;
+  className: string;
+
+  constructor(componentArr: any[]) {
+    this.init = componentArr[0];
+    this.className = componentArr[1];
+    if (componentArr[2] && typeof componentArr[2] === 'function') {
+      this.initOnce = componentArr[2];
+    }
+  }
+}
+
+const loadComponent = ($root: HTMLElement, component: Component): void => {
+  try {
+    [...$root.querySelectorAll(`.${component.className}`)]
       .filter($target => !$target.dataset.enhanced)
       .forEach($target => {
-        if (component[2] && !initOnceList.includes(component[1])) {
-          component[2]();
-          initOnceList.push(component[1]);
+        if (component.initOnce && !initOnceList.includes(component.className)) {
+          component.initOnce();
+          initOnceList.push(component.className);
         }
-        $target.dataset.enhanced = true;
-        component[0]($target);
+        $target.dataset.enhanced = 'true';
+        component.init($target);
       });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const loadComponents = ($root: HTMLElement): void => {
+  components.forEach(component => {
+    loadComponent($root, new Component(component));
   });
 };
 

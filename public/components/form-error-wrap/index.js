@@ -11,6 +11,7 @@ const showError = (error: string) => {
     const $div = document.createElement('div');
     $div.innerText = error;
     $elements.forEach($element => {
+      const childClassName = $element.dataset.appendClassname;
       if (childClassName) $div.className = childClassName;
       $element.appendChild($div.cloneNode(true));
     });
@@ -19,7 +20,7 @@ const showError = (error: string) => {
 
 const init = ($element: HTMLElement): Promise<void> => {
   $elements.push($element);
-  return Promise.resolve;
+  return Promise.resolve();
 };
 
 export { className, init, showError };

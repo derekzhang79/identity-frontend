@@ -1,6 +1,6 @@
-import { loadComponents } from 'js/load-components';
-
 import './components/sentry/sentry';
+
+import { loadComponents } from './js/load-components';
 
 import { isSupported as isBrowserSupported } from './components/browser/browser';
 
@@ -10,10 +10,18 @@ import { init as initSigninBindings } from './components/signin-form/signin-form
 
 import { init as initRegisterBindings } from './components/register-form/register-form';
 
-logPageView();
-loadComponents(document);
+if (window.location.hash === '#no-js') {
+  console.error('Ran in lite mode');
+  document.querySelector('noscript').outerHTML = document
+    .querySelector('noscript')
+    .outerHTML.replace(/noscript/g, 'div');
+} else {
 
-if (isBrowserSupported) {
-  initSigninBindings();
-  initRegisterBindings();
+  logPageView();
+  loadComponents(document);
+
+  if (isBrowserSupported) {
+    initSigninBindings();
+    initRegisterBindings();
+  }
 }

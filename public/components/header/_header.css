@@ -5,9 +5,17 @@
   height: 42px;
 }
 
+.header__ns {
+  @extend %font-text-sans-1;
+  height: 42px;
+  line-height: 42px;
+  float: left;
+}
+
 .header__inner {
   @extend %page-block;
   overflow: hidden;
+  opacity: 0.75;
 }
 
 .header__logo-link {

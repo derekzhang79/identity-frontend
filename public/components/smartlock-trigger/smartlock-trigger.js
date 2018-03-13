@@ -29,10 +29,10 @@ const smartLockSignIn = (
     body: qs.stringify({
       email: credentials.id,
       password: credentials.password,
-      csrfToken: csrfToken
+      csrfToken
     })
   }).then(r => {
-    if (r.status == 200) {
+    if (r.status === 200) {
       customMetric({ name: 'SigninSuccessful', type: 'SmartLockSignin' });
       window.location.href = returnUrl;
     } else {

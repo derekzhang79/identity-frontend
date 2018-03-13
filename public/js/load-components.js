@@ -15,6 +15,10 @@ import {
   init as initSmartLock,
   className as classNameSmartLock
 } from 'components/smartlock-trigger/smartlock-trigger';
+import {
+  init as initFormErrorWrap,
+  className as classNameErrorWrap
+} from 'components/form-error-wrap/index';
 
 const ERR_MALFORMED_LOADER = 'Missing loader parts';
 const ERR_COMPONENT_THROW = 'Uncaught component error';
@@ -22,7 +26,8 @@ const ERR_COMPONENT_THROW = 'Uncaught component error';
 const components: any[] = [
   [initTwoStepSignin, classNameTwoStepSignin, initOnceTwoStepSignin],
   [initTwoStepSigninSlide, classNameTwoStepSigninSlide],
-  [initSmartLock, classNameSmartLock]
+  [initSmartLock, classNameSmartLock],
+  [initFormErrorWrap, classNameErrorWrap]
 ];
 
 const initOnceList = [];

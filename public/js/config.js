@@ -1,15 +1,14 @@
 const ERR_MISSING_KEY = 'Missing configuration part';
 
-const config = {};
-
-try {
-  const configElem = document.getElementById('id_config').innerHTML;
-  const parsed = JSON.parse(configElem);
-  Object.assign(config, parsed);
-} catch (err) {
-  console.error(err);
-  throw err;
-}
+const config = (() => {
+  try {
+    const configElem = document.getElementById('id_config').innerHTML;
+    return JSON.parse(configElem);
+  } catch (err) {
+    console.error(err);
+    return {};
+  }
+})();
 
 const get = key => {
   if (config[key]) return config[key];

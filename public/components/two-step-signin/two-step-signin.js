@@ -18,7 +18,7 @@ const getSlideFromFetch = (textHtml: string): HTMLElement => {
 
   const $form = $wrapper.querySelector(`.${slideClassName}`);
   if ($form !== null) return $form;
-  else throw new Error(ERR_MALFORMED_FETCH);
+  throw new Error(ERR_MALFORMED_FETCH);
 };
 
 const pushSlide = (

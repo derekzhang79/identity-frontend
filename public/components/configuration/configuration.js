@@ -1,4 +1,4 @@
-/*global console*/
+/* global console */
 
 import { getElementById } from '../browser/browser';
 
@@ -50,7 +50,7 @@ function parseJSON(input) {
     return JSON.parse(input);
   } catch (err) {
     if (console) {
-      console.warn('Could not parse Configuration JSON: ' + err);
+      console.warn(`Could not parse Configuration JSON: ${err}`);
     }
 
     return undefined;

@@ -1,4 +1,4 @@
-/*global window, document*/
+/* global window, document */
 
 import { domElement } from './dom-element';
 

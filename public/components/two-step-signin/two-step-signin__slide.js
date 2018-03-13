@@ -32,7 +32,7 @@ const initStepOneForm = (
           bubbles: true,
           detail: {
             responseHtml: text,
-            url: url
+            url
           }
         });
         $parent.dispatchEvent(event);
@@ -66,7 +66,7 @@ const init = ($component: HTMLElement): void => {
               bubbles: true,
               detail: {
                 responseHtml: text,
-                url: url,
+                url,
                 reverse: true
               }
             })

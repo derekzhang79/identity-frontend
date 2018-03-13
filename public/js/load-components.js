@@ -14,6 +14,8 @@ import {
   className as classNameSmartLock
 } from 'components/smartlock-trigger/smartlock-trigger';
 
+const ERR_MALFORMED_LOADER = 'Missing loader parts';
+
 const components: any[] = [
   [initTwoStepSignin, classNameTwoStepSignin, initOnceTwoStepSignin],
   [initTwoStepSigninSlide, classNameTwoStepSigninSlide],
@@ -28,6 +30,12 @@ class Component {
   className: string;
 
   constructor(componentArr: any[]) {
+    if (typeof componentArr[0] !== 'function') {
+      throw new Error([ERR_MALFORMED_LOADER, componentArr]);
+    }
+    if (typeof componentArr[1] !== 'string') {
+      throw new Error([ERR_MALFORMED_LOADER, componentArr]);
+    }
     this.init = componentArr[0];
     this.className = componentArr[1];
     if (componentArr[2] && typeof componentArr[2] === 'function') {

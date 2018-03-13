@@ -1,5 +1,7 @@
 /*@flow*/
 
+import Raven from 'raven-js';
+
 import {
   init as initTwoStepSignin,
   className as classNameTwoStepSignin,
@@ -15,6 +17,7 @@ import {
 } from 'components/smartlock-trigger/smartlock-trigger';
 
 const ERR_MALFORMED_LOADER = 'Missing loader parts';
+const ERR_COMPONENT_THROW = 'Uncaught component error';
 
 const components: any[] = [
   [initTwoStepSignin, classNameTwoStepSignin, initOnceTwoStepSignin],
@@ -57,7 +60,8 @@ const loadComponent = ($root: HTMLElement, component: Component): void => {
         component.init($target);
       });
   } catch (err) {
-    console.error(err);
+    Raven.captureException(err, [ERR_COMPONENT_THROW, component.className]);
+    console.error(err, [ERR_COMPONENT_THROW, component.className]);
   }
 };
 

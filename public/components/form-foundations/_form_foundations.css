@@ -11,14 +11,15 @@
   padding: 2.5rem 0;
   text-align: center;
   font-weight: 300;
-  background: linear-gradient(
-    to bottom,
-    transparent calc(50% - 1px),
-    var(--color-border) calc(50% - 1px),
-    var(--color-border) calc(50%),
-    transparent calc(50%)
-  );
-
+  @supports (width: calc(100% + 1px)) {
+    background: linear-gradient(
+      to bottom,
+      transparent calc(50% - 1px),
+      var(--color-border) calc(50% - 1px),
+      var(--color-border) calc(50%),
+      transparent calc(50%)
+    );
+  }
   > * {
     background: var(--color-bg);
     padding: 0 1rem;

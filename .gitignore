@@ -12,3 +12,4 @@ project/target
 *.key
 .DS_Store
 npm-debug.log
+stats.json

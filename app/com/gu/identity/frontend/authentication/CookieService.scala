@@ -63,7 +63,7 @@ object CookieService {
     Seq(PlayCookie(
       name = "GU_SIGNIN_EMAIL",
       value = email,
-      maxAge = Some(120),
+      maxAge = None,
       path = "/",
       domain = Some(config.identityCookieDomain),
       secure = true,

@@ -24,6 +24,7 @@ case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
     IndirectlyLoadedImageResources,
     IndirectlyLoadedInlinedImageResources,
     UnsafeInlineCSSResource,
+    IndirectlyLoadedExternalScriptResources("https://assets.guim.co.uk"),
     IndirectlyLoadedExternalScriptResources("https://j.ophan.co.uk"),
     IndirectlyLoadedExternalScriptResources("https://www.google-analytics.com"),
     IndirectlyLoadedExternalResources(if (Environment.stage == "DEV") "*.thegulocal.com" else "*.theguardian.com"),

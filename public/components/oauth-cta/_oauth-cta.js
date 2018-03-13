@@ -11,7 +11,7 @@ export default class OAuthCtaModel {
       // Save the GA client id to be passed with the form submission
       const clientId = encodeURI(tracker.get('clientId'));
 
-      for (const elem of this.oAuthCtaAnchors) {
+      for (let elem of this.oAuthCtaAnchors) {
         const connector = elem.search.length ? '&' : '?';
         elem.setAttribute(
           'href',

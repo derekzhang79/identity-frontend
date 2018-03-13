@@ -1,4 +1,4 @@
-/* global window, document */
+/*global window, document*/
 
 import { getElementById, sessionStorage } from '../browser/browser';
 import { customMetric, fetchTracker } from '../analytics/ga';
@@ -83,10 +83,7 @@ class SignInFormModel {
       }).then(r => {
         if (r.status == 200) {
           this.updateSmartLockStatus(true);
-          customMetric({
-            name: 'SigninSuccessful',
-            type: 'SmartLockSignin'
-          });
+          customMetric({ name: 'SigninSuccessful', type: 'SmartLockSignin' });
           this.storeRedirect(c);
         } else {
           r.json().then(j => {

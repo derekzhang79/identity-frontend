@@ -2,7 +2,7 @@
  * Use sentry to record Javascript errors
  */
 
-/* global console */
+/*global console*/
 
 import Raven from 'raven-js';
 

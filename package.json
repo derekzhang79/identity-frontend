@@ -20,7 +20,7 @@
     "lint-css": "stylelint 'public/**/*.css'",
     "watch-assets": "concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\"",
     "watch": "node ./tools/banner.js && concurrently --kill-others \"npm run watch-assets\" \"./start-frontend.sh\"",
-    "fix": "eslint 'public/**/*.js' --fix && prettier --write 'public/**/*.js' 'public/**/*.css'",
+    "fix": "prettier --write 'public/**/*.js' 'public/**/*.css'",
     "lint": "eslint 'public/**/*.js'",
     "flow": "flow"
   },
@@ -36,12 +36,7 @@
     "concurrently": "^3.5.1",
     "cssnano": "^3.10.0",
     "eslint": "^4.18.2",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-import-resolver-webpack": "^0.8.4",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.6.0",
-    "eslint-plugin-react": "^7.7.0",
     "execa": "^0.9.0",
     "flow-bin": "^0.67.1",
     "normalize.css": "^3.0.3",
@@ -60,7 +55,6 @@
   "dependencies": {
     "cookie-cutter": "^0.1.1",
     "curl-amd": "^0.8.12",
-    "eslint-plugin-import": "^2.9.0",
     "intl-tel-input": "^9.0.9",
     "jquery": "^3.1.0",
     "raven-js": "3.0.2"

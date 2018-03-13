@@ -2,11 +2,11 @@ import {
   init as initTwoStepSignin,
   className as classNameTwoStepSignin,
   initOnce as initOnceTwoStepSignin
-} from 'components/two-step-signin/two-step-signin';
+} from 'components/two-step-signin/two-step-signin.js';
 import {
   init as initTwoStepSigninSlide,
   className as classNameTwoStepSigninSlide
-} from 'components/two-step-signin/two-step-signin__slide';
+} from 'components/two-step-signin/two-step-signin__slide.js';
 
 const components = [
   [initTwoStepSignin, classNameTwoStepSignin, initOnceTwoStepSignin],

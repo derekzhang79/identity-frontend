@@ -1,4 +1,4 @@
-/* global window, console */
+/*global window, console*/
 
 /**
  * Basic abstraction around browser key/value storage, eg: sessionStorage and localStorage.
@@ -49,7 +49,7 @@ function storage(type) {
 
 function isStorageAvailable(storageType) {
   try {
-    let storage = window[storageType],
+    var storage = window[storageType],
       x = '__storage_test__';
     storage.setItem(x, x);
     storage.removeItem(x);

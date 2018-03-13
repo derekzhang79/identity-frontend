@@ -63,7 +63,7 @@ function initializeFields(form, countryCode, countryIsoName, localNumber) {
     localNumber.val(
       localNumber
         .intlTelInput('getNumber')
-        .replace(new RegExp(`^\\+${dialCode}`), '')
+        .replace(new RegExp('^\\+' + dialCode), '')
     );
     countryIsoName.val(iso2);
   }

@@ -57,8 +57,8 @@ class RegisterFormFields {
   }
 
   mapValues(callback) {
-    const rt = Object.assign({}, this);
-    for (const k in rt) {
+    let rt = Object.assign({}, this);
+    for (let k in rt) {
       rt[k] = callback(rt[k]);
     }
     return rt;
@@ -117,7 +117,8 @@ class RegisterFormModel {
       this.fields.optionalHideDisplayName &&
       this.fields.optionalHideDisplayName.value()
     ) {
-      const displayName = `${this.fields.firstName.value()} ${this.fields.lastName.value()}`;
+      const displayName =
+        this.fields.firstName.value() + ' ' + this.fields.lastName.value();
       this.fields.displayName.setValue(displayName);
     }
   }

@@ -16,11 +16,11 @@ export function init() {
 }
 
 export function customMetric(event) {
-  ga(`${gaTracker}.send`, 'event', buildGoogleAnalyticsEvent(event));
+  ga(gaTracker + '.send', 'event', buildGoogleAnalyticsEvent(event));
 }
 
 export function fetchTracker(callback) {
-  ga(() => {
+  ga(function() {
     const tracker = ga.getByName(gaTracker);
     return callback(tracker);
   });
@@ -29,7 +29,7 @@ export function fetchTracker(callback) {
 function record(gaUID) {
   loadGA();
   ga('create', gaUID, 'auto', gaTracker);
-  ga(`${gaTracker}.send`, 'pageview');
+  ga(gaTracker + '.send', 'pageview');
 }
 
 function buildGoogleAnalyticsEvent(event) {
@@ -54,7 +54,7 @@ function buildGoogleAnalyticsEvent(event) {
 
 function loadGA() {
   (function(i, s, o, g, r, a, m) {
-    i.GoogleAnalyticsObject = r;
+    i['GoogleAnalyticsObject'] = r;
     (i[r] =
       i[r] ||
       function() {

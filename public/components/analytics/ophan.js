@@ -19,11 +19,12 @@ function getOphan(retryCount = 1) {
   return curl(curlOptions, ['ophan/ng']).then(
     ophan => ophan,
     error => {
-      console.log(`here: ${retryCount}${error}`);
+      console.log('here: ' + retryCount + error);
       if (retryCount <= 2) {
         return getOphan(retryCount + 1);
+      } else {
+        throw error;
       }
-      throw error;
     }
   );
 }

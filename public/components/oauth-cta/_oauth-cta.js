@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { fetchTracker } from '../analytics/ga';
 
 export default class OAuthCtaModel {

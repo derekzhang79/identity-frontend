@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const PLUGIN_OPTIONS = {
   initialCountry: 'gb',
   preferredCountries: ['gb', 'us', 'au']

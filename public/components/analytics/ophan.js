@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Adapter for Ophan API
  */

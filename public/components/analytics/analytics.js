@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { init as initOphan } from './ophan';
 import { init as initGA } from './ga';
 

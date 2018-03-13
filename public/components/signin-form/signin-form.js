@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /*global window, document*/
 
 import { getElementById, sessionStorage } from '../browser/browser';

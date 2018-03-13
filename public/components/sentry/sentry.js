@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Use sentry to record Javascript errors
  */

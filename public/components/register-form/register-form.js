@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { getElementById, sessionStorage } from '../browser/browser';
 
 import { initPhoneField } from '../lib/phone-field';

@@ -7,19 +7,19 @@ try {
   const parsed = JSON.parse(configElem);
   Object.assign(config, parsed);
 } catch (err) {
-  console.warn(err);
+  console.error(err);
   throw err;
 }
 
 const get = key => {
   if (config[key]) return config[key];
-  else throw new Error(ERR_MISSING_KEY);
+  throw new Error(ERR_MISSING_KEY);
 };
 
-const route = route => {
-  if (config['routes'] && config['routes'][route])
-    return config['routes'][route];
-  else throw new Error(ERR_MISSING_KEY);
+const route = routeToGet => {
+  if (config.routes && config.routes[routeToGet])
+    return config.routes[routeToGet];
+  throw new Error(ERR_MISSING_KEY);
 };
 
 export { get, route };

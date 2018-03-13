@@ -18,7 +18,7 @@ const getSlideFromFetch = (textHtml: string): HTMLElement => {
 
   const $form = $wrapper.querySelector(`.${slideClassName}`);
   if ($form !== null) return $form;
-  else throw new Error(ERR_MALFORMED_FETCH);
+  throw new Error(ERR_MALFORMED_FETCH);
 };
 
 const pushSlide = (
@@ -33,7 +33,7 @@ const pushSlide = (
       }
     : { in: 'two-step-signin__slide--in', out: 'two-step-signin__slide--out' };
 
-  return new Promise((resolve, error) => {
+  return new Promise(resolve => {
     $old.addEventListener('animationend', () => {
       $old.remove();
       resolve($new);
@@ -82,7 +82,7 @@ const initOnce = (): void => {
 const init = ($component: HTMLElement): void => {
   $component.addEventListener(EV_DONE, (ev: mixed) => {
     if (ev instanceof CustomEvent) {
-      history.pushState(
+      window.history.pushState(
         {
           initiator: STATE_INITIATOR
         },

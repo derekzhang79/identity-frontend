@@ -4,7 +4,6 @@ import { route } from 'js/config';
 
 const className: string = 'two-step-signin__slide';
 
-const SLIDE_STATE_READY: string = 'SLIDE_STATE_READY';
 const SLIDE_STATE_LOADING: string = 'SLIDE_STATE_LOADING';
 
 const EV_DONE: string = 'form-done';
@@ -32,7 +31,7 @@ const initStepOneForm = (
           bubbles: true,
           detail: {
             responseHtml: text,
-            url: url
+            url
           }
         });
         $parent.dispatchEvent(event);
@@ -66,7 +65,7 @@ const init = ($component: HTMLElement): void => {
               bubbles: true,
               detail: {
                 responseHtml: text,
-                url: url,
+                url,
                 reverse: true
               }
             })

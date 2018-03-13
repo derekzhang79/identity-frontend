@@ -20,7 +20,7 @@ const initStepOneForm = (
 
   $component.addEventListener('submit-mock', (ev: Event) => {
     ev.preventDefault();
-    $component.dataset.state = SLIDE_STATE_LOADING;
+    $parent.dataset.state = SLIDE_STATE_LOADING;
 
     fetch('/signin/current', {
       credentials: 'include'

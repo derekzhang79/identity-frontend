@@ -109,12 +109,30 @@ const getSlide = ($component: HTMLElement) => {
 
 const init = ($component: HTMLElement): void => {
 
-  onSlide($component, getSlide($component), window.location.href, true);
-
+  onSlide($component, $new, window.location.href, true);
   $component.addEventListener(EV_DONE, (ev: mixed) => {
     if (ev instanceof CustomEvent) {
-      const $slide = getSlide($component);
+      window.history.pushState(
+        {
+          initiator: STATE_INITIATOR
+        },
+        '',
+        ev.detail.url
+      );
+      const $slide = $component.querySelector(`.${slideClassName}`);
       const $new = getSlideFromFetch(ev.detail.responseHtml);
+
+      if (!$slide || !$new) {
+        throw new Error(ERR_MALFORMED_HTML);
+      }
+
+      /* naively attempt to preserve password */
+      const $passwordOld = $slide.querySelector('input[name=password]');
+      const $passwordNew = $new.querySelector('input[name=password]');
+      if ($passwordOld && $passwordNew && $passwordNew.parentElement) {
+        $passwordOld.className = $passwordNew.className;
+        $passwordNew.parentElement.replaceChild($passwordOld, $passwordNew);
+      }
 
       if (!$slide || !$new) {
         throw new Error(ERR_MALFORMED_HTML);

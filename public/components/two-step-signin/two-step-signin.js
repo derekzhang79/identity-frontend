@@ -6,20 +6,10 @@ import { loadComponents } from 'js/load-components';
 const className: string = 'two-step-signin';
 const slideClassName: string = 'two-step-signin__slide';
 
-const ERR_MALFORMED_FETCH: string = 'Something went wrong';
 const ERR_MALFORMED_EVENT: string = 'Something went wrong';
 const ERR_MALFORMED_HTML: string = 'Something went wrong';
 
 const STATE_INITIATOR: string = 'two-step-signin-state-init';
-
-const getSlideFromFetch = (textHtml: string): HTMLElement => {
-  const $wrapper: HTMLElement = document.createElement('div');
-  $wrapper.innerHTML = textHtml;
-
-  const $form = $wrapper.querySelector(`.${slideClassName}`);
-  if ($form !== null) return $form;
-  throw new Error(ERR_MALFORMED_FETCH);
-};
 
 const pushSlide = (
   $old: HTMLElement,
@@ -79,18 +69,22 @@ const initOnce = (): void => {
   });
 };
 
-const onSlide = ($component: HTMLElement, $slide: HTMLElement, href: String, isInitial: Boolean = false): void => {
+const onSlide = (
+  $component: HTMLElement,
+  $slide: HTMLElement,
+  href: String,
+  isInitial: boolean = false
+): void => {
   $component.style.minHeight = `${$slide.clientHeight * 1.1}px`;
-  if(isInitial) {
+  if (isInitial) {
     window.history.replaceState(
       {
         initiator: STATE_INITIATOR
       },
       '',
       href
-    )
-  }
-  else {
+    );
+  } else {
     window.history.pushState(
       {
         initiator: STATE_INITIATOR
@@ -107,20 +101,20 @@ const getSlide = ($component: HTMLElement) => {
   throw new Error(ERR_MALFORMED_HTML);
 };
 
-const init = ($component: HTMLElement): void => {
+const getSlideFromFetch = (textHtml: string): HTMLElement => {
+  const $wrapper: HTMLElement = document.createElement('div');
+  $wrapper.innerHTML = textHtml;
 
-  onSlide($component, $new, window.location.href, true);
+  return getSlide($wrapper);
+};
+
+const init = ($component: HTMLElement): void => {
+  onSlide($component, getSlide($component), window.location.href, true);
   $component.addEventListener(EV_DONE, (ev: mixed) => {
     if (ev instanceof CustomEvent) {
-      window.history.pushState(
-        {
-          initiator: STATE_INITIATOR
-        },
-        '',
-        ev.detail.url
-      );
-      const $slide = $component.querySelector(`.${slideClassName}`);
+      const $slide = getSlide($component);
       const $new = getSlideFromFetch(ev.detail.responseHtml);
+      const url = ev.detail.url;
 
       if (!$slide || !$new) {
         throw new Error(ERR_MALFORMED_HTML);
@@ -134,11 +128,9 @@ const init = ($component: HTMLElement): void => {
         $passwordNew.parentElement.replaceChild($passwordOld, $passwordNew);
       }
 
-      if (!$slide || !$new) {
-        throw new Error(ERR_MALFORMED_HTML);
-      }
+      /* push the slide */
       pushSlide($slide, $new, ev.detail.reverse).then(() => {
-        onSlide($component, $new, ev.detail.url);
+        onSlide($component, $new, url);
         loadComponents((($new.parentElement: any): HTMLElement));
       });
     } else {

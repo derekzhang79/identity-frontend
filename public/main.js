@@ -16,7 +16,6 @@ if (document.location.href.indexOf('&no-js') > -1) {
     .querySelector('noscript')
     .outerHTML.replace(/noscript/g, 'div');
 } else {
-
   logPageView();
   loadComponents(document);
 

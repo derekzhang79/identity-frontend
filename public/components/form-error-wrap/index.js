@@ -8,7 +8,7 @@ const errors = [];
 
 const renderErrors = () => {
   const lightModeUrl = `${document.location.href}?&no-js`;
-  const retryError = `If the problem persists, try <a href="${lightModeUrl}">light mode</a>.`;
+  const retryError = `If the problem persists, try <a href="${lightModeUrl}">compatibility mode</a>.`;
 
   $elements.forEach($element => {
     $element.innerHTML = '';

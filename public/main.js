@@ -11,7 +11,7 @@ import { init as initSigninBindings } from './components/signin-form/signin-form
 import { init as initRegisterBindings } from './components/register-form/register-form';
 
 if (document.location.href.indexOf('&no-js') > -1) {
-  console.error('Ran in lite mode');
+  console.error('Ran with no javascript');
   document.querySelector('noscript').outerHTML = document
     .querySelector('noscript')
     .outerHTML.replace(/noscript/g, 'div');

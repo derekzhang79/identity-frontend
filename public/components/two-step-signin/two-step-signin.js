@@ -79,7 +79,18 @@ const initOnce = (): void => {
   });
 };
 
+const onSlide = ($component: HTMLElement, $slide: HTMLElement): void => {
+  $component.style.minHeight = `${$slide.clientHeight * 1.1}px`;
+};
+
+const getSlide = ($component: HTMLElement) => {
+  const $slide = $component.querySelector(`.${slideClassName}`);
+  if ($slide) return $slide;
+  throw new Error(ERR_MALFORMED_HTML);
+};
+
 const init = ($component: HTMLElement): void => {
+  onSlide($component, getSlide($component));
   $component.addEventListener(EV_DONE, (ev: mixed) => {
     if (ev instanceof CustomEvent) {
       window.history.pushState(
@@ -89,13 +100,15 @@ const init = ($component: HTMLElement): void => {
         '',
         ev.detail.url
       );
-      const $slide = $component.querySelector(`.${slideClassName}`);
+      const $slide = getSlide($component);
       const $new = getSlideFromFetch(ev.detail.responseHtml);
+
       if (!$slide || !$new) {
         throw new Error(ERR_MALFORMED_HTML);
       }
       pushSlide($slide, $new, ev.detail.reverse).then(() => {
-        loadComponents($new.parentNode);
+        onSlide($component, $new);
+        loadComponents((($new.parentElement: any): HTMLElement));
       });
     } else {
       throw new Error(ERR_MALFORMED_EVENT);

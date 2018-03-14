@@ -76,6 +76,7 @@ oauth.google=Google
 
 header.backtext=Back to The Guardian
 header.logo=The Guardian
+header.compatMode=Compatibility mode
 
 footer.help=Help
 footer.terms=Terms & Conditions

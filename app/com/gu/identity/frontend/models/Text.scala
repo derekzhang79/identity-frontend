@@ -76,7 +76,8 @@ object Text {
     def toMap(implicit messages: Messages): Map[String, String] = {
       Map(
         "back" -> messages("header.backtext"),
-        "logo" -> messages("header.logo")
+        "logo" -> messages("header.logo"),
+        "compatMode" -> messages("header.compatMode")
       )
     }
   }

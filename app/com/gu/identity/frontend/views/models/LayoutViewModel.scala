@@ -15,6 +15,7 @@ import com.gu.identity.frontend.controllers.routes
 case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
 
   val resources: Seq[PageResource with Product] = Seq(
+    JavascriptResource("https://assets.guim.co.uk/polyfill.io/v2/polyfill.min.js?rum=0&features=default,es6,es7,es2017,fetch,promise&flags=gated&unknown=polyfill","https://assets.guim.co.uk/", isInHead = false),
     LocalJavascriptResource.fromAsset("main.bundle.js", isInHead = false)
   )
 
@@ -24,7 +25,6 @@ case object BaseLayoutViewModel extends ViewModel with ViewModelResources {
     IndirectlyLoadedImageResources,
     IndirectlyLoadedInlinedImageResources,
     UnsafeInlineCSSResource,
-    IndirectlyLoadedExternalScriptResources("https://assets.guim.co.uk"),
     IndirectlyLoadedExternalScriptResources("https://j.ophan.co.uk"),
     IndirectlyLoadedExternalScriptResources("https://www.google-analytics.com"),
     IndirectlyLoadedExternalResources(if (Environment.stage == "DEV") "*.thegulocal.com" else "*.theguardian.com"),

@@ -1,5 +1,4 @@
 import { loadComponents } from 'js/load-components';
-import { withPolyfill } from 'js/utils';
 
 import './components/sentry/sentry';
 
@@ -11,10 +10,8 @@ import { init as initSigninBindings } from './components/signin-form/signin-form
 
 import { init as initRegisterBindings } from './components/register-form/register-form';
 
-withPolyfill(() => {
-  logPageView();
-  loadComponents(document);
-});
+logPageView();
+loadComponents(document);
 
 if (isBrowserSupported) {
   initSigninBindings();

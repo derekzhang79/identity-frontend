@@ -68,10 +68,10 @@ class SigninAction(
   }
 
   def signInWithEmail = SignInServiceAction(bodyParser) {
-    emailSignInAction(successfulFirstStepResponse)
+    emailSignInFirstStepAction(successfulFirstStepResponse)
   }
 
-  def emailSignInAction(successResponse: (String, ReturnUrl, Seq[Cookie]) => Result) = { implicit request: Request[SignInActionRequestBody] => {
+  def emailSignInFirstStepAction(successResponse: (String, ReturnUrl, Seq[Cookie]) => Result) = { implicit request: Request[SignInActionRequestBody] => {
 
     val body = request.body
 

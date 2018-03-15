@@ -116,4 +116,18 @@ class IdentityClient extends Logging {
       case Right(other) => Left(Seq(ClientGatewayError("Unknown response")))
     }
   }
+
+  def getUserType(request: UserTypeRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, UserTypeResponse]] = {
+    configuration.requestHandler.handleRequest(request).map {
+      case Left(error) =>
+        logger.error("Failed to get user type")
+        Left(error)
+      case Right(response: UserTypeResponse) =>
+        logger.info("Successfully got user type")
+        Right(response)
+
+      case Right(_) =>Left(Seq(ClientGatewayError("Unknown response")))
+    }
+
+  }
 }

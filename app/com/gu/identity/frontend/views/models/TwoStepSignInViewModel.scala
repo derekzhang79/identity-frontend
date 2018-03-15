@@ -33,10 +33,9 @@ case class TwoStepSignInViewModel private(
 
   recaptchaModel: Option[Any],
 
-  //TODO: use reverse signInWithEmail route
   actions: Map[String, String] = Map(
     "signInWithEmailAndPassword" -> routes.SigninAction.signIn().url,
-    "signInWithEmail" -> "/actions/signin/with-email"
+    "signInWithEmail" -> routes.SigninAction.emailSignInFirstStep().url
   ),
   resources: Seq[PageResource with Product],
   indirectResources: Seq[PageResource with Product])

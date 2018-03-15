@@ -18,11 +18,11 @@ const initStepOneForm = (
     throw new Error(ERR_MALFORMED_HTML);
   }
 
-  $component.addEventListener('submit', (ev: Event) => {
+  $component.addEventListener('submit-mock', (ev: Event) => {
     ev.preventDefault();
     $component.dataset.state = SLIDE_STATE_LOADING;
 
-    fetch('/signin/existing', {
+    fetch('/signin/current', {
       credentials: 'include'
     })
       .then(response => Promise.all([response.text(), response.url]))

@@ -31,7 +31,7 @@ const initStepOneForm = (
       body: new FormData($component)
     })
       .then(response => {
-        if (response.code !== 200) {
+        if (response.status !== 200) {
           throw new Error([ERR_MALFORMED_RESPONSE, response]);
         }
         return Promise.all([response.text(), response.url]);

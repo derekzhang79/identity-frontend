@@ -1,15 +1,19 @@
 // @flow
+import { text } from 'js/config';
 
 const $elements: HTMLElement[] = [];
 
 const className: string = 'form-error-wrap';
 
-const errors = [];
+const errors: string[] = [];
 
-const renderErrors = () => {
+const renderErrors = (): void => {
   const lightModeUrl = `${document.location.href}?&no-js`;
-  const retryError = `If the problem persists, try <a href="${lightModeUrl}">compatibility mode</a>.`;
-
+  // const retryError = `If the problem persists, try .`;
+  const retryError = text(
+    'errors.useCompatMode.description',
+    `<a href="${lightModeUrl}">${text('errors.useCompatMode.cta')}</a>`
+  );
   $elements.forEach($element => {
     $element.innerHTML = '';
     [...errors, retryError].forEach(error => {
@@ -22,7 +26,7 @@ const renderErrors = () => {
   });
 };
 
-const showError = (error: string) => {
+const showError = (error: string): void => {
   if ($elements.length < 1) {
     alert(error); /* eslint-disable-line no-alert */
   } else {
@@ -31,9 +35,13 @@ const showError = (error: string) => {
   }
 };
 
+const showErrorText = (error: string): void => {
+  showError(text(error));
+};
+
 const init = ($element: HTMLElement): Promise<void> => {
   $elements.push($element);
   return Promise.resolve();
 };
 
-export { className, init, showError };
+export { className, init, showError, showErrorText };

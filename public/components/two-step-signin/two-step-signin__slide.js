@@ -1,7 +1,7 @@
 // @flow
 
 import { route } from 'js/config';
-import { showError } from '../form-error-wrap/index';
+import { showErrorText } from '../form-error-wrap/index';
 
 const className: string = 'two-step-signin__slide';
 
@@ -47,7 +47,7 @@ const initStepOneForm = (
         $parent.dispatchEvent(event);
       })
       .catch(() => {
-        showError('Something went wrong! Try again');
+        showErrorText('errors.generic');
         $parent.dataset.state = SLIDE_STATE_DEFAULT;
       });
   });

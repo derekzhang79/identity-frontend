@@ -3,7 +3,7 @@ package com.gu.identity.frontend.views.models
 import buildinfo.BuildInfo
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.models.{ClientID, GuardianJobsClientID, GuardianMembersClientID, ReturnUrl}
-import com.gu.identity.frontend.models.Text.{HeaderText, LayoutText}
+import com.gu.identity.frontend.models.Text.{ClientSideText, HeaderText, LayoutText}
 import com.gu.identity.frontend.models.text.FooterText
 import com.gu.identity.frontend.mvt
 import com.gu.identity.frontend.mvt.{ActiveMultiVariantTests, MultiVariantTest, MultiVariantTests}
@@ -57,6 +57,7 @@ case class JavascriptConfig(
     sentryDsn: String,
     mvtTests: Seq[MultiVariantTest],
     routes: Map[String, String],
+    text: Map[String, String],
     appVersion: String = BuildInfo.gitCommitId,
     gaUID: String) {
   self =>
@@ -114,6 +115,7 @@ object LayoutViewModel {
         "twoStepSignIn" -> routes.Application.twoStepSignIn().url,
         "smartlockSignIn" -> routes.SigninAction.signInWithSmartLock().url
       ),
+      text = ClientSideText.toMap,
       gaUID = configuration.gaUID
     )
 

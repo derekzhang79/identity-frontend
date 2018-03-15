@@ -78,3 +78,7 @@ unmanagedResourceDirectories in Compile += (resourceDirectory in Assets).value
 
 mappings in Assets ++= contentOf(baseDirectory.value / "target/web/build-npm")
 
+// enable asset fingerprinting
+pipelineStages := Seq(digest)
+mappings in Assets ++= contentOf(baseDirectory.value / "target/web/digest")
+

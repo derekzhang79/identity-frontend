@@ -4,7 +4,7 @@ import com.gu.identity.frontend.analytics.AnalyticsEventActor
 import com.gu.identity.frontend.analytics.client.SigninEventRequest
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
-import com.gu.identity.frontend.errors.{RedirectOnError, ResultOnError}
+import com.gu.identity.frontend.errors.{RedirectOnError, ResultOnError, UnexpectedAppException}
 import com.gu.identity.frontend.logging.{LogOnErrorAction, Logging, MetricsLoggingActor}
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.request.SignInActionRequestBody
@@ -71,8 +71,7 @@ class SigninAction(
     emailSignInFirstStepAction(successfulFirstStepResponse)
   }
 
-  def emailSignInFirstStepAction(successResponse: (String, ReturnUrl, Seq[Cookie]) => Result) = { implicit request: Request[SignInActionRequestBody] => {
-
+  def emailSignInFirstStepAction(successResponse: (String, ReturnUrl, Seq[Cookie], Option[Boolean], Option[ClientID], Option[GroupCode]) => Result) = { implicit request: Request[SignInActionRequestBody] =>
     val body = request.body
 
     lazy val returnUrl = body.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, body.clientId))
@@ -89,9 +88,9 @@ class SigninAction(
 
       case Right(response) =>
         val emailLoginCookie = CookieService.signInEmailCookies(body.email)(config)
-        Right(successResponse(response.userType, successfulReturnUrl, emailLoginCookie))
+        Right(successResponse(response.userType, successfulReturnUrl, emailLoginCookie, body.skipConfirmation, body.clientId, body.groupCode))
     }
-  }}
+  }
 
   def signInAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] =>
     val body = request.body
@@ -144,9 +143,11 @@ class SigninAction(
     SeeOther(successfulReturnUrl.url)
       .withCookies(cookies: _*)
 
-  def successfulFirstStepResponse(userType: String, successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
-    SeeOther(s"/signin/${userType}?returnUrl=${encode(successfulReturnUrl.url, "UTF8")}")
+  def successfulFirstStepResponse(userType: String, successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie], skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[GroupCode]): Result ={
+    val secondStepUrl = UrlBuilder(s"${config.identityProfileBaseUrl}/signin/$userType", Some(successfulReturnUrl), skipConfirmation, clientId, group)
+    SeeOther(secondStepUrl)
       .withCookies(cookies: _*)
+  }
 
   def successfulSmartLockSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
     Ok("")

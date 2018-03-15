@@ -257,10 +257,10 @@ class RegisterFormState {
 }
 
 export function init() {
+  checkForCredentials();
   const form = RegisterFormModel.fromDocument();
 
   if (form) {
-    checkForCredentials();
     form.loadState();
 
     if (form.fields.optionalPhoneNumber) {

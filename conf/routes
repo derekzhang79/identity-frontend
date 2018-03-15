@@ -25,7 +25,7 @@ POST       /actions/signin                              com.gu.identity.frontend
 
 POST       /actions/signin/smartlock                    com.gu.identity.frontend.controllers.SigninAction.signInWithSmartLock
 
-POST       /actions/signin/with-email                   com.gu.identity.frontend.controllers.SigninAction.signInWithEmail
+POST       /actions/signin/with-email                   com.gu.identity.frontend.controllers.SigninAction.emailSignInFirstStep
 
 GET        /actions/signin/consents/:token              com.gu.identity.frontend.controllers.SigninAction.permissionAuth(token:String, journey: Option[String])
 

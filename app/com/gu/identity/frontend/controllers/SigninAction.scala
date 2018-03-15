@@ -67,7 +67,7 @@ class SigninAction(
     signInAction(successfulSmartLockSignInResponse, _ => metricsActor.logSuccessfulSmartLockSignin())
   }
 
-  def signInWithEmail = SignInServiceAction(bodyParser) {
+  def emailSignInFirstStep = SignInServiceAction(bodyParser) {
     emailSignInFirstStepAction(successfulFirstStepResponse)
   }
 

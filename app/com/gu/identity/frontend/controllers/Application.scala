@@ -3,9 +3,10 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFAddToken, CSRFConfig, CSRFToken}
 import com.gu.identity.frontend.logging.Logging
-import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl, SignInType}
+import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
 import com.gu.identity.frontend.mvt.MultiVariantTestAction
 import com.gu.identity.frontend.views.ViewRenderer._
+import com.gu.identity.model.{CurrentUser, GuestUser, NewUser}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 
@@ -38,9 +39,9 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
     val email : Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
-    val signInTypeActual = SignInType(signInType)
+    val userType = Seq(CurrentUser, GuestUser, NewUser).find(_.name == signInType)
 
-    renderTwoStepSignInStepTwo(configuration, req.activeTests, csrfToken, error, signInTypeActual, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
+    renderTwoStepSignInStepTwo(configuration, req.activeTests, csrfToken, error, userType, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
   }
 
   def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean],  clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { implicit req =>

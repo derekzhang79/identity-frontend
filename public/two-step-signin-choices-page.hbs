@@ -16,15 +16,15 @@
       {{> components/form/form-error-wrap }}
 
       <section class="two-step-signin-container">
-        {{#signInTypes.isExisting}}
+        {{#userTypes.isExisting}}
           {{> components/two-step-signin/two-step-signin-existing }}
-        {{/signInTypes.isExisting}}
-        {{#signInTypes.isNew}}
+        {{/userTypes.isExisting}}
+        {{#userTypes.isNew}}
           {{> components/two-step-signin/two-step-signin-new }}
-        {{/signInTypes.isNew}}
-        {{#signInTypes.isGuest}}
+        {{/userTypes.isNew}}
+        {{#userTypes.isGuest}}
           {{> components/two-step-signin/two-step-signin-guest }}
-        {{/signInTypes.isGuest}}
+        {{/userTypes.isGuest}}
       </section>
 
       <section class="layout-section">

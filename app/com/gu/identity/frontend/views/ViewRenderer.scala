@@ -9,6 +9,7 @@ import com.gu.identity.frontend.errors.{HttpError, NotFoundError, UnexpectedErro
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.mvt.{MultiVariantTest, MultiVariantTestVariant}
 import com.gu.identity.frontend.views.models._
+import com.gu.identity.model.UserType
 import jp.co.bizreach.play2handlebars.HBS
 import play.api.i18n.Messages
 import play.api.mvc.{Result, Results}
@@ -77,7 +78,7 @@ object ViewRenderer {
       clientId = clientId,
       group = group,
       email = email,
-      signInType = None
+      userType = None
     )
 
     renderViewModel("two-step-signin-start-page", model)
@@ -88,7 +89,7 @@ object ViewRenderer {
     activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
     csrfToken: Option[CSRFToken],
     errorIds: Seq[String],
-    signInType: Option[SignInType],
+    userType: Option[UserType],
     returnUrl: ReturnUrl,
     skipConfirmation: Option[Boolean],
     clientId: Option[ClientID],
@@ -106,10 +107,10 @@ object ViewRenderer {
       clientId = clientId,
       group = group,
       email = email,
-      signInType = signInType
+      userType = userType
     )
 
-    if(signInType.isDefined)
+    if(userType.isDefined)
       if (email.isDefined) renderViewModel("two-step-signin-choices-page", model)
       else NoCache(SeeOther(routes.Application.twoStepSignIn().url))
     else

@@ -6,6 +6,7 @@ import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.models.Text._
 import com.gu.identity.frontend.mvt.ActiveMultiVariantTests
+import com.gu.identity.model.{UserType, NewUser, GuestUser, CurrentUser}
 import play.api.i18n.Messages
 
 case class TwoStepSignInViewModel private(
@@ -29,7 +30,7 @@ case class TwoStepSignInViewModel private(
   signinUrl: String = "",
   forgotPasswordUrl: String = "",
 
-  signInTypes: Map[String, Boolean],
+  userTypes: Map[String, Boolean],
 
   recaptchaModel: Option[Any],
 
@@ -54,7 +55,7 @@ object TwoStepSignInViewModel {
     clientId: Option[ClientID],
     group: Option[GroupCode],
     email: Option[String],
-    signInType: Option[SignInType])(implicit messages: Messages): TwoStepSignInViewModel = {
+    userType: Option[UserType])(implicit messages: Messages): TwoStepSignInViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] = None
@@ -84,10 +85,10 @@ object TwoStepSignInViewModel {
       signinUrl = UrlBuilder(routes.Application.twoStepSignIn(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
       forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.id)),
 
-      signInTypes = Map(
-        ("isNew", signInType.contains(NewUser)),
-        ("isExisting", signInType.contains(ExistingUser)),
-        ("isGuest", signInType.contains(GuestUser))
+      userTypes = Map(
+        ("isNew", userType.contains(NewUser)),
+        ("isExisting", userType.contains(CurrentUser)),
+        ("isGuest", userType.contains(GuestUser))
       ),
 
       recaptchaModel = recaptchaModel,

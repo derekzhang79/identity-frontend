@@ -3,7 +3,7 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFAddToken, CSRFConfig, CSRFToken}
 import com.gu.identity.frontend.logging.Logging
-import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl, SignInType}
+import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl}
 import com.gu.identity.frontend.mvt.MultiVariantTestAction
 import com.gu.identity.frontend.views.ViewRenderer._
 import com.gu.identity.model.{CurrentUser, GuestUser, NewUser}

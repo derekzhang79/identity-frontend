@@ -14,7 +14,7 @@ lazy val functionalTests = Project("functional-tests", file("functional-tests"))
 
 resolvers += "Guardian Github Releases" at "https://guardian.github.io/maven/repo-releases"
 
-val identityLibrariesVersion = "3.101"
+val identityLibrariesVersion = "3.131"
 
 libraryDependencies ++= Seq(
   "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",

@@ -10,7 +10,7 @@
 
   <fieldset class="form-field-wrap">
     <label class="form-field-wrap__title">{{twoStepSignInPageText.emailFieldTitle}}</label>
-    <input class="form-input form-field-wrap__field" required="required" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{email}}" />
+    <input class="form-input form-field-wrap__field" required="required" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" autofocus spellcheck="false" value="{{email}}" />
     <input class="form-input form-field-wrap__field u-h" type="password" name="password" autocomplete="password" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{password}}" />
     <button class="form-button form-field-wrap__field" type="submit">{{twoStepSignInPageText.continueAction}} {{> components/icon/arrow-inline }}</button>
   </fieldset>

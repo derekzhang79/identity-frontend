@@ -34,7 +34,11 @@ button
 input
 */
 .form-input {
-  @extend %form__text-field;
+  @extend %form__text-field-base;
+  &.form-input__display-errors:invalid {
+    border-color: var(--color-error);
+    color: var(--color-error);
+  }
 }
 
 /*

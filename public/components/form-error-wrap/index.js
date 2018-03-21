@@ -8,15 +8,9 @@ const className: string = 'form-error-wrap';
 const errors: string[] = [];
 
 const renderErrors = (): void => {
-  const lightModeUrl = `${document.location.href}?&no-js`;
-  // const retryError = `If the problem persists, try .`;
-  const retryError = text(
-    'errors.useCompatMode.description',
-    `<a href="${lightModeUrl}">${text('errors.useCompatMode.cta')}</a>`
-  );
   $elements.forEach($element => {
     $element.innerHTML = '';
-    [...errors, retryError].forEach(error => {
+    errors.forEach(error => {
       const $div = document.createElement('div');
       $div.innerHTML = error;
       const childClassName = $element.dataset.appendClassname;

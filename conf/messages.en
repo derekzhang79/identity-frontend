@@ -76,7 +76,6 @@ oauth.google=Google
 
 header.backtext=Back to The Guardian
 header.logo=The Guardian
-header.compatMode=Compatibility mode
 
 footer.help=Help
 footer.terms=Terms & Conditions
@@ -127,9 +126,6 @@ errors.unauthorized.pageTitle=Invalid consent token
 errors.unauthorized.title=Expired link
 errors.unauthorized.description=Sorry, the link you have used has expired. You can manage all of your email preferences after signing in or registering <a href="{0}">here</a>.
 errors.unauthorized.resendTokenLink=You can manage all of your email preferences after signing in or registering <a href="{0}">here</a>.
-
-errors.useCompatMode.description=If the problem persists, try {0}.
-errors.useCompatMode.cta=compatibility mode
 
 resendTokenSent.pageTitle=Email Sent
 resendTokenSent.title=Email sent

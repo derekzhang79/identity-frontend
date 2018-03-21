@@ -75,9 +75,7 @@ object Text {
   object ClientSideText {
     def toMap(implicit messages: Messages): Map[String, String] = {
       Map(
-        "errors.generic" -> messages("errors.unexpected.description"),
-        "errors.useCompatMode.description" -> messages("errors.useCompatMode.description"),
-        "errors.useCompatMode.cta" -> messages("errors.useCompatMode.cta")
+        "errors.generic" -> messages("errors.unexpected.description")
       )
     }
   }
@@ -86,8 +84,7 @@ object Text {
     def toMap(implicit messages: Messages): Map[String, String] = {
       Map(
         "back" -> messages("header.backtext"),
-        "logo" -> messages("header.logo"),
-        "compatMode" -> messages("header.compatMode")
+        "logo" -> messages("header.logo")
       )
     }
   }

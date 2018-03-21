@@ -57,6 +57,7 @@ case class JavascriptConfig(
     sentryDsn: String,
     mvtTests: Seq[MultiVariantTest],
     routes: Map[String, String],
+    localisedErrors: Map[String, String],
     appVersion: String = BuildInfo.gitCommitId,
     gaUID: String) {
   self =>
@@ -114,6 +115,7 @@ object LayoutViewModel {
         "twoStepSignIn" -> routes.Application.twoStepSignIn().url,
         "smartlockSignIn" -> routes.SigninAction.signInWithSmartLock().url
       ),
+      localisedErrors = ErrorViewModel.errorMessages.map{t => (t._1.key, t._2)},
       gaUID = configuration.gaUID
     )
 

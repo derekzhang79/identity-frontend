@@ -12,9 +12,6 @@ const checkAndAdd = ($component: HTMLInputElement): void => {
 
 const init = ($component: HTMLInputElement): void => {
   checkAndAdd($component);
-  $component.addEventListener('focus', () => {
-    $component.classList.remove(displayErrorsClassName);
-  });
   $component.addEventListener('blur', () => {
     checkAndAdd($component);
   });

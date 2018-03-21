@@ -79,7 +79,7 @@ object ReturnUrl {
 
   private[models] def validUrlPath(uri: URI, invalidUrlPaths: List[String]): Boolean = {
     val urlPath = uri.getPath
-    !invalidUrlPaths.contains(urlPath)
+    !invalidUrlPaths.exists(urlPath.startsWith(_))
   }
 
 

@@ -16,6 +16,10 @@ import {
   className as classNameSmartLock
 } from 'components/smartlock-trigger/smartlock-trigger';
 import {
+  init as initTwoStepSignInGa,
+  className as classNameTwoStepSignInGa
+} from 'components/two-step-signin/two-step-signin__ga-client-id';
+import {
   init as initFormInput,
   className as classNameFormInput
 } from 'components/form/form-input';
@@ -27,7 +31,8 @@ const components: any[] = [
   [initFormInput, classNameFormInput],
   [initTwoStepSignin, classNameTwoStepSignin, initOnceTwoStepSignin],
   [initTwoStepSigninSlide, classNameTwoStepSigninSlide],
-  [initSmartLock, classNameSmartLock]
+  [initSmartLock, classNameSmartLock],
+  [initTwoStepSignInGa, classNameTwoStepSignInGa]
 ];
 
 const initOnceList = [];

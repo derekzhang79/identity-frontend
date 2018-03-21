@@ -81,6 +81,11 @@ const initOnce = (): void => {
 
 const onSlide = ($component: HTMLElement, $slide: HTMLElement): void => {
   $component.style.minHeight = `${$slide.clientHeight * 1.1}px`;
+
+  const $focusable = $slide.querySelector('[autofocus]');
+  if ($focusable) {
+    $focusable.focus();
+  }
 };
 
 const getSlide = ($component: HTMLElement) => {

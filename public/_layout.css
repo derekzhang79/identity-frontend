@@ -29,14 +29,19 @@
   }
   &.layout-header__title--has-proxy {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
+    flex-direction: column;
+    @media (--viewport-min-mobile-landscape) {
+      align-items: baseline;
+      justify-content: space-between;
+      flex-direction: row;
+    }
     > div:nth-child(1) {
       overflow: hidden;
       word-wrap: break-word;
     }
     > .layout-header__title__proxy {
       flex: 0 0 auto;
+      align-self: flex-end;
       margin-left: var(--size-baseline);
     }
   }

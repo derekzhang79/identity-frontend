@@ -52,4 +52,8 @@
   margin-top: var(--size-baseline-vertical);
   border-top: 1px solid var(--color-border);
   padding-top: var(--size-baseline);
+  &.layout-section--no-border {
+    padding-top: 0;
+    border-top: 0;
+  }
 }

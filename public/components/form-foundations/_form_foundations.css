@@ -79,8 +79,7 @@
   text-align: left;
   transition: 0.15s;
   padding: 0 1.75rem;
-  line-height: 4.2rem;
-  height: 4.2rem;
+  min-height: 4.2rem;
   display: block;
   display: flex;
   align-items: center;

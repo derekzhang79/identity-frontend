@@ -6,8 +6,9 @@ import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models._
 import com.gu.identity.frontend.models.Text._
 import com.gu.identity.frontend.mvt.ActiveMultiVariantTests
-import com.gu.identity.model.{UserType, NewUser, GuestUser, CurrentUser}
+import com.gu.identity.model.{CurrentUser, GuestUser, NewUser, UserType}
 import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
 
 case class TwoStepSignInViewModel private(
   layout: LayoutViewModel,
@@ -79,7 +80,7 @@ object TwoStepSignInViewModel {
       skipConfirmation = skipConfirmation.getOrElse(false),
       clientId = clientId,
       group = group,
-      email = email,
+      email = email.map(breakEmailWords),
 
       registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
       signinUrl = UrlBuilder(routes.Application.twoStepSignIn(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
@@ -96,6 +97,15 @@ object TwoStepSignInViewModel {
       resources = resources,
       indirectResources = layout.indirectResources
     )
+  }
+
+  private def breakEmailWords(email: String) = {
+    HtmlFormat.escape(email).toString.flatMap {
+      case '@' => s"<wbr>@"
+      case '+' => s"<wbr>+"
+      case '.' => s"<wbr>."
+      case c   => s"$c"
+    }
   }
 
   private def getResources(layout: LayoutViewModel, recaptchaViewModel: Option[GoogleRecaptchaViewModel]): Seq[PageResource with Product] ={

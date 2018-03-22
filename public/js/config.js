@@ -15,18 +15,18 @@ const config = (() => {
   }
 })();
 
-const get = (key: string) => {
+const get = (key: string): any => {
   if (config[key]) return config[key];
   throw new Error(ERR_MISSING_KEY);
 };
 
-const route = (routeToGet: string) => {
+const route = (routeToGet: string): string => {
   if (config.routes && config.routes[routeToGet])
     return config.routes[routeToGet];
   throw new Error(ERR_MISSING_KEY);
 };
 
-const localisedError = (localisedErrorToGet: string) => {
+const localisedError = (localisedErrorToGet: string): string => {
   if (config.localisedErrors && config.localisedErrors[localisedErrorToGet])
     return config.localisedErrors[localisedErrorToGet];
   throw new Error(ERR_MISSING_KEY);

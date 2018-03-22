@@ -23,6 +23,7 @@
   }
   &.layout-header__title--standfirst {
     @extend %font-heading-0;
+    line-height: 1.2;
     font-weight: 300;
     color: var(--color-text-light);
   }
@@ -36,8 +37,7 @@
     }
     > div:nth-child(1) {
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      word-wrap: break-word;
     }
     > .layout-header__title__proxy {
       flex: 0 0 auto;

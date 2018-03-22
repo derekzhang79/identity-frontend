@@ -9,7 +9,6 @@
 
       <section class="layout-header">
         <h1 class="layout-header__title">{{ twoStepSignInPageText.title }}</h1>
-        <p class="layout-header__title layout-header__title--standfirst">{{twoStepSignInPageText.noAccount}} <a href="{{registerUrl}}" >{{twoStepSignInPageText.signUp}}</a>.</p>
       </section>
 
       {{> components/form/form-error-wrap }}
@@ -20,6 +19,10 @@
 
       <section class="layout-section">
         {{> components/terms/_terms-inline }}
+        <p class="terms__text">
+          {{twoStepSignInPageText.noAccount}}
+          <a clas="terms__link" href="{{registerUrl}}" >{{twoStepSignInPageText.signUp}}</a>.
+        </p>
       </section>
 
     </div></div>

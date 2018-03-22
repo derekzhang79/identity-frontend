@@ -1,6 +1,7 @@
 // @flow
 
 import { route } from 'js/config';
+import { showErrorText } from '../form-error-wrap/index';
 
 const selector: string = '.two-step-signin__slide';
 
@@ -81,7 +82,7 @@ const initStepOneForm = (
         dispatchDone($parent, { responseHtml, url });
       })
       .catch(() => {
-        console.error('errors.generic');
+        showErrorText('errors.generic');
       });
   });
 };

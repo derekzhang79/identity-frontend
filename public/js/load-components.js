@@ -19,15 +19,25 @@ import {
   init as initFormErrorWrap,
   className as classNameErrorWrap
 } from 'components/form-error-wrap/index';
+import {
+  init as initTwoStepSignInGa,
+  className as classNameTwoStepSignInGa
+} from 'components/two-step-signin/two-step-signin__ga-client-id';
+import {
+  init as initFormInput,
+  className as classNameFormInput
+} from 'components/form/form-input';
 
 const ERR_MALFORMED_LOADER = 'Missing loader parts';
 const ERR_COMPONENT_THROW = 'Uncaught component error';
 
 const components: any[] = [
+  [initFormInput, classNameFormInput],
   [initTwoStepSignin, classNameTwoStepSignin, initOnceTwoStepSignin],
   [initTwoStepSigninSlide, classNameTwoStepSigninSlide],
   [initSmartLock, classNameSmartLock],
-  [initFormErrorWrap, classNameErrorWrap]
+  [initFormErrorWrap, classNameErrorWrap],
+  [initTwoStepSignInGa, classNameTwoStepSignInGa]
 ];
 
 const initOnceList = [];

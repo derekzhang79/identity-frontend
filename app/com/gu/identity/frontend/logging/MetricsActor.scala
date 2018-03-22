@@ -4,6 +4,7 @@ import akka.actor._
 private sealed trait Message {}
 
 private object SignIn extends Message
+private object SignInFirstStep extends Message
 private object SmartLockSignIn extends Message
 private object EmailSignIn extends Message
 private object Register extends Message
@@ -19,6 +20,10 @@ class MetricsLoggingActor(metricsActor: ActorRef) {
     metricsActor ! SignIn
   }
 
+  def logSuccessfulSigninFirstStep() = {
+    metricsActor ! SignInFirstStep
+  }
+
   def logSuccessfulSmartLockSignin() = {
     metricsActor ! SmartLockSignIn
   }
@@ -32,6 +37,7 @@ class MetricsActor extends Actor with Logging {
 
   override def receive: Receive = {
     case SignIn => SuccessfulActionCloudwatchLogging.putSignIn()
+    case SignInFirstStep => SuccessfulActionCloudwatchLogging.putSignInFirstStep()
     case SmartLockSignIn => SuccessfulActionCloudwatchLogging.putSmartLockSignIn()
     case Register => SuccessfulActionCloudwatchLogging.putRegister()
     case _ =>  logger.info("Unexpected Message received by metrics actor.")

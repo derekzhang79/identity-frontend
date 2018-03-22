@@ -36,4 +36,10 @@ const text = (textKey: string, ...replacers: string[]) => {
   throw new Error([ERR_MISSING_KEY, textKey]);
 };
 
-export { get, route, text };
+const localisedError = (localisedErrorToGet: string) => {
+  if (config.localisedErrors && config.localisedErrors[localisedErrorToGet])
+    return config.localisedErrors[localisedErrorToGet];
+  throw new Error(ERR_MISSING_KEY);
+};
+
+export { get, route, localisedError, text };

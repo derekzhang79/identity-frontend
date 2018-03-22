@@ -45,7 +45,7 @@ class ReturnUrlSpec extends FlatSpec with Matchers {
     validUrlPath(new URI("http://theguardian.com/signin"), defaultInvalidUrlPaths) should be(false)
     validUrlPath(new URI("http://theguardian.com/register"), defaultInvalidUrlPaths) should be(false)
     validUrlPath(new URI("http://theguardian.com/register"), List("/signin")) should be(true)
-    validUrlPath(new URI("http://theguardian.com/register/confirm"), defaultInvalidUrlPaths) should be(true)
+    validUrlPath(new URI("http://theguardian.com/register/sub-route"), defaultInvalidUrlPaths) should be(false)
     validUrlPath(new URI("http://theguardian.com"), defaultInvalidUrlPaths) should be(true)
     validUrlPath(new URI("http://theguardian.com/politics"), defaultInvalidUrlPaths) should be(true)
   }

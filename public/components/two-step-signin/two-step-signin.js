@@ -93,6 +93,10 @@ const onSlide = (
       href
     );
   }
+  const $focusable = $slide.querySelector('[autofocus]');
+  if ($focusable) {
+    $focusable.focus();
+  }
 };
 
 const getSlide = ($component: HTMLElement) => {

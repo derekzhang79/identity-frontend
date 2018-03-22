@@ -58,6 +58,7 @@ case class JavascriptConfig(
     mvtTests: Seq[MultiVariantTest],
     routes: Map[String, String],
     text: Map[String, String],
+    localisedErrors: Map[String, String],
     appVersion: String = BuildInfo.gitCommitId,
     gaUID: String) {
   self =>
@@ -116,6 +117,7 @@ object LayoutViewModel {
         "smartlockSignIn" -> routes.SigninAction.signInWithSmartLock().url
       ),
       text = ClientSideText.toMap,
+      localisedErrors = ErrorViewModel.errorMessages.map{case (errId, errMsg) => (errId.key, errMsg)},
       gaUID = configuration.gaUID
     )
 

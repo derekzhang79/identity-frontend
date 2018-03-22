@@ -19,6 +19,9 @@ button
   width: 100%;
   box-sizing: border-box;
   justify-content: space-between;
+  &:hover, &:focus {
+    text-decoration: none;
+  }
   &.form-button--secondary {
     background: transparent;
     border: 1px solid var(--color-border);
@@ -34,7 +37,11 @@ button
 input
 */
 .form-input {
-  @extend %form__text-field;
+  @extend %form__text-field-base;
+  &.form-input__display-errors:invalid {
+    border-color: var(--color-error);
+    color: var(--color-error);
+  }
 }
 
 /*

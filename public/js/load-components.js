@@ -16,6 +16,10 @@ import {
   selector as selectorSmartLock
 } from 'components/smartlock-trigger/smartlock-trigger';
 import {
+  init as initFormErrorWrap,
+  selector as selectorErrorWrap
+} from 'components/form-error-wrap/index';
+import {
   init as initTwoStepSignInGa,
   selector as selectorTwoStepSignInGa
 } from 'components/two-step-signin/two-step-signin__ga-client-id';
@@ -37,6 +41,7 @@ const components: any[] = [
   [initTwoStepSigninSlide, selectorTwoStepSigninSlide],
   [initSmartLock, selectorSmartLock],
   [initInPageClick, selectorInPageClick],
+  [initFormErrorWrap, selectorErrorWrap],
   [initTwoStepSignInGa, selectorTwoStepSignInGa]
 ];
 

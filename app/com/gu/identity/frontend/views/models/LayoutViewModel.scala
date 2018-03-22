@@ -115,7 +115,7 @@ object LayoutViewModel {
         "twoStepSignIn" -> routes.Application.twoStepSignIn().url,
         "smartlockSignIn" -> routes.SigninAction.signInWithSmartLock().url
       ),
-      localisedErrors = ErrorViewModel.errorMessages.map{t => (t._1.key, t._2)},
+      localisedErrors = ErrorViewModel.errorMessages.map{case (errId, errMsg) => (errId.key, errMsg)},
       gaUID = configuration.gaUID
     )
 

@@ -1,6 +1,6 @@
-import './components/sentry/sentry';
+import 'components/sentry/sentry';
 
-import { loadComponents } from './js/load-components';
+import { loadComponents } from 'js/load-components';
 
 import { isSupported as isBrowserSupported } from './components/browser/browser';
 

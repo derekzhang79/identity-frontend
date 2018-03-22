@@ -6,7 +6,7 @@ import play.api.libs.ws.WSClient
 
 class MeasurementProtocolClient(ws: WSClient) extends Logging {
   def sendSuccessfulSigninEvent(signinEventRequest: SigninEventRequest) = makeRequest(signinEventRequest)
-
+  def sendSuccessfulSigninFirstStepEvent(signinFirstStepEventRequest: SigninFirstStepEventRequest) = makeRequest(signinFirstStepEventRequest)
   def sendSuccessfulRegisterEvent(registerEventRequest: RegisterEventRequest) = makeRequest(registerEventRequest)
 
   private def makeRequest(request: MeasurementProtocolRequest) =

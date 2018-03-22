@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.analytics.AnalyticsEventActor
-import com.gu.identity.frontend.analytics.client.SigninEventRequest
+import com.gu.identity.frontend.analytics.client.{SigninEventRequest, SigninFirstStepEventRequest}
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
 import com.gu.identity.frontend.errors.{RedirectOnError, ResultOnError, UnexpectedAppException}
@@ -59,6 +59,16 @@ class SigninAction(
     }
   }
 
+  def signInFirstStepMetricsLogger(request: Request[SignInActionRequestBody]) = {
+    metricsActor.logSuccessfulSigninFirstStep()
+
+    if(request.body.gaClientId.isDefined) {
+      eventActor.sendSuccessfulSigninFirstStep(SigninFirstStepEventRequest(request, config.gaUID))
+    } else {
+      logger.warn("No GA Client ID passed for sign in request")
+    }
+  }
+
   def signIn = SignInServiceAction(bodyParser) {
     signInAction(successfulSignInResponse, signInMetricsLogger)
   }
@@ -68,10 +78,10 @@ class SigninAction(
   }
 
   def emailSignInFirstStep = SignInServiceAction(bodyParser) {
-    emailSignInFirstStepAction(successfulFirstStepResponse)
+    emailSignInFirstStepAction(successfulFirstStepResponse, signInFirstStepMetricsLogger)
   }
 
-  def emailSignInFirstStepAction(successResponse: (String, ReturnUrl, Seq[Cookie], Option[Boolean], Option[ClientID], Option[GroupCode]) => Result) = { implicit request: Request[SignInActionRequestBody] =>
+  def emailSignInFirstStepAction(successResponse: (String, ReturnUrl, Seq[Cookie], Option[Boolean], Option[ClientID], Option[GroupCode]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] =>
     val body = request.body
 
     lazy val returnUrl = body.returnUrl.getOrElse(ReturnUrl.defaultForClient(config, body.clientId))
@@ -87,6 +97,7 @@ class SigninAction(
         Left(errors)
 
       case Right(response) =>
+        metricsLogger(request)
         val emailLoginCookie = CookieService.signInEmailCookies(body.email)(config)
         Right(successResponse(response.userType, successfulReturnUrl, emailLoginCookie, body.skipConfirmation, body.clientId, body.groupCode))
     }

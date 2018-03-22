@@ -69,6 +69,18 @@ case class SigninEventRequest(request: Request[SignInActionRequestBody], gaUID: 
   override val body = SigninEventRequestBody(request, gaUID)
 }
 
+private object SigninFirstStepEventRequestBody extends MeasurementProtocolRequestBody[SignInActionRequestBody] {
+  override val extraBodyParams = Seq(
+    "ea" -> "SigninFirstStepSuccessful",
+    "el" -> "RegularSignin",
+    "cm2" -> "1"
+  )
+}
+
+case class SigninFirstStepEventRequest(request: Request[SignInActionRequestBody], gaUID: String) extends MeasurementProtocolRequest {
+  override val body = SigninFirstStepEventRequestBody(request, gaUID)
+}
+
 private object RegisterEventRequestBody extends MeasurementProtocolRequestBody[RegisterActionRequestBody] {
   override val extraBodyParams = Seq(
     "ea" -> "RegisterSuccessful",

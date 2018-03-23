@@ -62,7 +62,7 @@ const initStepOneForm = (
   $parent: HTMLElement
 ): void => {
   if (!$component || !$parent) {
-    throw new Error(ERR_MALFORMED_HTML);
+    throw new Error([ERR_MALFORMED_HTML, $component, $parent]);
   }
 
   $component.addEventListener('submit', (ev: Event) => {

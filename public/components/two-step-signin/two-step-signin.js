@@ -23,35 +23,44 @@ const pushSlide = (
       }
     : { in: 'two-step-signin__slide--in', out: 'two-step-signin__slide--out' };
 
-  return new Promise(resolve => {
-    $old.addEventListener('animationend', () => {
-      $old.remove();
-      resolve($new);
-    });
-    requestAnimationFrame(() => {
-      $old.classList.remove('two-step-signin__slide--visible');
-      $old.classList.add(classNames.out);
-    });
-    $new.addEventListener('animationend', () => {
-      [
-        'two-step-signin__slide--in',
-        'two-step-signin__slide--out',
-        'two-step-signin__slide--in-reverse',
-        'two-step-signin__slide--out-reverse'
-      ].forEach(_ => $new.classList.remove(_));
-    });
-    requestAnimationFrame(() => {
-      ['two-step-signin__slide--visible', classNames.in].forEach(_ =>
-        $new.classList.add(_)
-      );
+  const animateOut = () =>
+    new Promise(resolve => {
+      if ('AnimationEvent' in window) {
+        $old.addEventListener('animationend', () => {
+          $old.remove();
+          resolve($new);
+        });
+        requestAnimationFrame(() => {
+          $old.classList.remove('two-step-signin__slide--visible');
+          $old.classList.add(classNames.out);
+        });
+        $new.addEventListener('animationend', () => {
+          [
+            'two-step-signin__slide--in',
+            'two-step-signin__slide--out',
+            'two-step-signin__slide--in-reverse',
+            'two-step-signin__slide--out-reverse'
+          ].forEach(_ => $new.classList.remove(_));
+        });
+        requestAnimationFrame(() => {
+          ['two-step-signin__slide--visible', classNames.in].forEach(_ =>
+            $new.classList.add(_)
+          );
+        });
+      } else {
+        $old.remove();
+        resolve($new);
+      }
     });
 
+  return Promise.resolve().then(() => {
     const $oldParent = $old.parentNode;
     if ($oldParent) {
       $oldParent.appendChild($new);
     } else {
       throw new Error(ERR_MALFORMED_HTML);
     }
+    return animateOut();
   });
 };
 
@@ -102,7 +111,10 @@ const onSlide = (
 const getSlide = ($component: HTMLElement) => {
   const $slide = $component.querySelector(`.${slideClassName}`);
   if ($slide) return $slide;
-  throw new Error(ERR_MALFORMED_HTML);
+  throw new Error([
+    ERR_MALFORMED_HTML,
+    $component.querySelector(`.${slideClassName}`)
+  ]);
 };
 
 const getSlideFromFetch = (textHtml: string): HTMLElement => {

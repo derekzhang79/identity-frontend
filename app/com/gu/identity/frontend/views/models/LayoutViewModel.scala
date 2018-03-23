@@ -113,6 +113,7 @@ object LayoutViewModel {
       mvtTests = MultiVariantTests.all.toSeq,
       routes = Map(
         "twoStepSignIn" -> routes.Application.twoStepSignIn().url,
+        "twoStepSignInAction" -> routes.SigninAction.emailSignInFirstStep().url,
         "smartlockSignIn" -> routes.SigninAction.signInWithSmartLock().url
       ),
       localisedErrors = ErrorViewModel.errorMessages.map{case (errId, errMsg) => (errId.key, errMsg)},

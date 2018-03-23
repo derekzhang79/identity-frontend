@@ -16,7 +16,11 @@ const validAjaxFormRoutes = [route('twoStepSignInAction')];
 
 const dispatchDone = (
   $parent,
-  { responseHtml, url, reverse = false }
+  {
+    responseHtml,
+    url,
+    reverse = false
+  }: { responseHtml: string, url: string, reverse?: boolean }
 ): boolean => {
   const event = new CustomEvent(EV_DONE, {
     bubbles: true,
@@ -35,9 +39,10 @@ const fetchSlide = (action, $stateable, fetchProps) =>
       $stateable.dataset.state = SLIDE_STATE_LOADING;
     })
     .then(() =>
-      fetch(
+      window.fetch(
         action,
         Object.assign(
+          {},
           {
             credentials: 'include',
             method: 'POST'

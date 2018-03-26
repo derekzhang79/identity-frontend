@@ -44,8 +44,7 @@ body > section:last-of-type {
   padding: 0 1rem;
 
   @media (--viewport-min-mobile-landscape) {
-    padding: 0 2rem;
-    max-width: 58rem;
+    max-width: 56rem;
   }
 
   @media (--viewport-min-tablet) {
@@ -168,16 +167,19 @@ body > section:last-of-type {
   }
 
   &.page-standfirst--register-promo {
+    position: relative;
+    margin-top: 0;
     .page-standfirst__paragraph {
       @extend %font-text-sans-3;
       color: var(--color-text);
     }
-
     @media (--viewport-min-tablet) {
       display: flex;
       align-items: center;
+      .form-button {
+        width: auto;
+      }
       .page-standfirst__paragraph {
-        flex: 1 1 auto;
         white-space: nowrap;
         margin-right: 1em;
       }

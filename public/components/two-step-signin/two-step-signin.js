@@ -21,38 +21,48 @@ const pushSlide = (
         in: 'two-step-signin__slide--in-reverse',
         out: 'two-step-signin__slide--out-reverse'
       }
-    : { in: 'two-step-signin__slide--in', out: 'two-step-signin__slide--out' };
+    : {
+        in: 'two-step-signin__slide--in',
+        out: 'two-step-signin__slide--out'
+      };
 
-  return new Promise(resolve => {
-    $old.addEventListener('animationend', () => {
-      $old.remove();
-      resolve($new);
-    });
-    requestAnimationFrame(() => {
-      $old.classList.remove('two-step-signin__slide--visible');
-      $old.classList.add(classNames.out);
-    });
-    $new.addEventListener('animationend', () => {
-      [
-        'two-step-signin__slide--in',
-        'two-step-signin__slide--out',
-        'two-step-signin__slide--in-reverse',
-        'two-step-signin__slide--out-reverse'
-      ].forEach(_ => $new.classList.remove(_));
-    });
-    requestAnimationFrame(() => {
-      ['two-step-signin__slide--visible', classNames.in].forEach(_ =>
-        $new.classList.add(_)
-      );
+  const animateOut = () =>
+    new Promise(resolve => {
+      if ('AnimationEvent' in window) {
+        $old.addEventListener('animationend', () => {
+          $old.remove();
+          resolve($new);
+        });
+        requestAnimationFrame(() => {
+          $old.classList.remove('two-step-signin__slide--visible');
+          $old.classList.add(classNames.out);
+        });
+        $new.addEventListener('animationend', () => {
+          [
+            'two-step-signin__slide--in',
+            'two-step-signin__slide--out',
+            'two-step-signin__slide--in-reverse',
+            'two-step-signin__slide--out-reverse'
+          ].forEach(_ => $new.classList.remove(_));
+        });
+        requestAnimationFrame(() => {
+          ['two-step-signin__slide--visible', classNames.in].forEach(_ =>
+            $new.classList.add(_)
+          );
+        });
+      } else {
+        $old.remove();
+        resolve($new);
+      }
     });
 
-    const $oldParent = $old.parentNode;
-    if ($oldParent) {
-      $oldParent.appendChild($new);
-    } else {
-      throw new Error(ERR_MALFORMED_HTML);
-    }
-  });
+  const $oldParent = $old.parentNode;
+  if ($oldParent) {
+    $oldParent.appendChild($new);
+  } else {
+    throw new Error(ERR_MALFORMED_HTML);
+  }
+  return animateOut();
 };
 
 const initOnce = (): void => {
@@ -75,7 +85,7 @@ const onSlide = (
   href: String,
   isInitial: boolean = false
 ): void => {
-  $component.style.minHeight = `${$slide.clientHeight * 1.1}px`;
+  /* push state */
   if (isInitial) {
     window.history.replaceState(
       {
@@ -93,6 +103,11 @@ const onSlide = (
       href
     );
   }
+
+  /* make sure the container looks ok during transitions */
+  $component.style.minHeight = `${$slide.clientHeight * 1.1}px`;
+
+  /* autofocus inputs after push */
   const $focusable = $slide.querySelector('[autofocus]');
   if ($focusable) {
     $focusable.focus();
@@ -102,7 +117,10 @@ const onSlide = (
 const getSlide = ($component: HTMLElement) => {
   const $slide = $component.querySelector(`.${slideClassName}`);
   if ($slide) return $slide;
-  throw new Error(ERR_MALFORMED_HTML);
+  throw new Error([
+    ERR_MALFORMED_HTML,
+    $component.querySelector(`.${slideClassName}`)
+  ]);
 };
 
 const getSlideFromFetch = (textHtml: string): HTMLElement => {
@@ -110,6 +128,18 @@ const getSlideFromFetch = (textHtml: string): HTMLElement => {
   $wrapper.innerHTML = textHtml;
 
   return getSlide($wrapper);
+};
+
+const preservePasswordField = (
+  $oldSlide: HTMLElement,
+  $newSlide: HTMLElement
+) => {
+  const $passwordOld = $oldSlide.querySelector('input[name=password]');
+  const $passwordNew = $newSlide.querySelector('input[name=password]');
+  if ($passwordOld && $passwordNew && $passwordNew.parentElement) {
+    $passwordOld.className = $passwordNew.className;
+    $passwordNew.parentElement.replaceChild($passwordOld, $passwordNew);
+  }
 };
 
 const init = ($component: HTMLElement): void => {
@@ -125,12 +155,7 @@ const init = ($component: HTMLElement): void => {
       }
 
       /* naively attempt to preserve password */
-      const $passwordOld = $slide.querySelector('input[name=password]');
-      const $passwordNew = $new.querySelector('input[name=password]');
-      if ($passwordOld && $passwordNew && $passwordNew.parentElement) {
-        $passwordOld.className = $passwordNew.className;
-        $passwordNew.parentElement.replaceChild($passwordOld, $passwordNew);
-      }
+      preservePasswordField($slide, $new);
 
       /* push the slide */
       pushSlide($slide, $new, ev.detail.reverse).then(() => {

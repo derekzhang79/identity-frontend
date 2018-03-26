@@ -17,7 +17,6 @@
   position: relative;
   min-height: 100%;
   .two-step-signin__slide {
-    position: absolute;
     left: 0;
     right: 0;
     top: 0;
@@ -30,21 +29,25 @@
 .two-step-signin__slide--out {
   visibility: visible;
   display: block;
+  position: absolute;
   animation: two-step-signin-animation__slide-left 0.2s both;
 }
 .two-step-signin__slide--in {
   visibility: visible;
   display: block;
+  position: absolute;
   animation: two-step-signin-animation__slide-right reverse 0.2s both;
 }
 .two-step-signin__slide--out-reverse {
   visibility: visible;
   display: block;
+  position: absolute;
   animation: two-step-signin-animation__slide-right 0.2s both;
 }
 .two-step-signin__slide--in-reverse {
   visibility: visible;
   display: block;
+  position: absolute;
   animation: two-step-signin-animation__slide-left reverse 0.2s both;
 }
 

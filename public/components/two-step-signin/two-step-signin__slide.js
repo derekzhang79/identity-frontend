@@ -12,42 +12,76 @@ const EV_DONE: string = 'form-done';
 const ERR_MALFORMED_HTML: string = 'Something went wrong';
 const ERR_MALFORMED_RESPONSE: string = 'Something went wrong';
 
+const validAjaxFormRoutes = [route('twoStepSignInAction')];
+
+const dispatchDone = (
+  $parent,
+  {
+    responseHtml,
+    url,
+    reverse = false
+  }: { responseHtml: string, url: string, reverse?: boolean }
+): boolean => {
+  const event = new CustomEvent(EV_DONE, {
+    bubbles: true,
+    detail: {
+      responseHtml,
+      url,
+      reverse
+    }
+  });
+  return $parent.dispatchEvent(event);
+};
+
+const fetchSlide = (action, $stateable, fetchProps) =>
+  Promise.resolve()
+    .then(() => {
+      $stateable.dataset.state = SLIDE_STATE_LOADING;
+    })
+    .then(() =>
+      window.fetch(
+        action,
+        Object.assign(
+          {},
+          {
+            credentials: 'include',
+            method: 'POST'
+          },
+          fetchProps
+        )
+      )
+    )
+    .then(response => {
+      if (response.status !== 200) {
+        throw new Error([ERR_MALFORMED_RESPONSE, response]);
+      }
+      return Promise.all([response.text(), response.url]);
+    })
+    .catch(err => {
+      $stateable.dataset.state = SLIDE_STATE_DEFAULT;
+      throw err;
+    });
+
 const initStepOneForm = (
   $component: HTMLFormElement,
   $parent: HTMLElement
 ): void => {
   if (!$component || !$parent) {
-    throw new Error(ERR_MALFORMED_HTML);
+    throw new Error([ERR_MALFORMED_HTML, $component, $parent]);
   }
 
   $component.addEventListener('submit', (ev: Event) => {
     ev.preventDefault();
     $parent.dataset.state = SLIDE_STATE_LOADING;
 
-    fetch($component.action, {
-      credentials: 'include',
-      method: 'POST',
+    fetchSlide($component.action, $parent, {
       body: new FormData($component)
     })
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error([ERR_MALFORMED_RESPONSE, response]);
-        }
-        return Promise.all([response.text(), response.url]);
-      })
-      .then(([text, url]) => {
-        const event = new CustomEvent(EV_DONE, {
-          bubbles: true,
-          detail: {
-            responseHtml: text,
-            url
-          }
-        });
-        $parent.dispatchEvent(event);
+      .then(([responseHtml, url]) => {
+        dispatchDone($parent, { responseHtml, url });
       })
       .catch(() => {
         console.error('errors.generic');
-        $parent.dataset.state = SLIDE_STATE_DEFAULT;
       });
   });
 };
@@ -60,30 +94,18 @@ const init = ($component: HTMLElement): void => {
     ...$component.querySelectorAll(`a[href*="${route('twoStepSignIn')}"]`)
   ];
 
-  if (new URL($form.action).pathname === '/actions/signin/with-email') {
+  if (validAjaxFormRoutes.includes(new URL($form.action).pathname)) {
     initStepOneForm($form, $component);
   }
 
   $resetLinks.forEach(($resetLink: HTMLElement) => {
     $resetLink.addEventListener('click', (ev: Event) => {
       ev.preventDefault();
-
-      fetch(route('twoStepSignIn'), {
-        credentials: 'include'
-      })
-        .then(response => Promise.all([response.text(), response.url]))
-        .then(([text, url]) =>
-          $component.dispatchEvent(
-            new CustomEvent(EV_DONE, {
-              bubbles: true,
-              detail: {
-                responseHtml: text,
-                url,
-                reverse: true
-              }
-            })
-          )
-        );
+      fetchSlide(route('twoStepSignIn'), $component, {
+        method: 'GET'
+      }).then(([responseHtml, url]) =>
+        dispatchDone($component, { responseHtml, url, reverse: true })
+      );
     });
   });
 };

@@ -114,9 +114,10 @@
 }
 
 %form__button--submit--icon-left {
-  svg, .form-button__icon {
-    margin-right: .75rem;
-    margin-left: -.5rem;
+  svg,
+  .form-button__icon {
+    margin-right: 0.75rem;
+    margin-left: -0.5rem;
   }
   &:hover svg {
     transform: translateX(-5%);
@@ -124,9 +125,10 @@
 }
 
 %form__button--submit--icon-right {
-  svg, .form-button__icon {
-    margin-right: -.75rem;
-    margin-left: .5rem;
+  svg,
+  .form-button__icon {
+    margin-right: -0.75rem;
+    margin-left: 0.5rem;
   }
   &:hover svg {
     transform: translateX(5%);

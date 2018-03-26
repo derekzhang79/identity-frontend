@@ -72,6 +72,7 @@
 /** Form buttons **/
 %form__button--submit {
   @extend %font-text-sans-3;
+  @extend %form__button--submit--icon-right;
   background: var(--color-cta);
   border: 0;
   border-radius: 9999px;
@@ -80,15 +81,21 @@
   transition: 0.15s;
   padding: 0 1.75rem;
   min-height: 4.2rem;
+  line-height: 4.2rem;
   display: block;
   display: flex;
   align-items: center;
 
-  svg {
+  svg,
+  .form-button__icon {
     vertical-align: middle;
     transition: 0.15s;
-    margin-left: 2rem;
-    margin-right: -1rem;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
 
     * {
       fill: currentColor;
@@ -99,14 +106,30 @@
   &:hover {
     background-color: color(var(--color-cta) lightness(-2.5%));
     outline: none;
-
-    svg {
-      transform: translateX(5%);
-    }
   }
 
   &:focus {
     box-shadow: 0 0 2px 0 var(--color-border);
+  }
+}
+
+%form__button--submit--icon-left {
+  svg, .form-button__icon {
+    margin-right: .75rem;
+    margin-left: -.5rem;
+  }
+  &:hover svg {
+    transform: translateX(-5%);
+  }
+}
+
+%form__button--submit--icon-right {
+  svg, .form-button__icon {
+    margin-right: -.75rem;
+    margin-left: .5rem;
+  }
+  &:hover svg {
+    transform: translateX(5%);
   }
 }
 

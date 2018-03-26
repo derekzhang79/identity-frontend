@@ -1,9 +1,7 @@
 <form class="two-step-signin-form" action="{{ actions.signInWithEmail }}" method="POST">
   {{> components/two-step-signin/_helpers }}
   <fieldset class="form-field-wrap">
-    <div class="form-field-wrap__field">
-      {{> components/oauth-cta/_oauth-cta-content }}
-    </div>
+    {{> components/oauth-cta/_oauth-cta-content }}
   </fieldset>
 
   <p class="form-prelude"> <span>{{twoStepSignInPageText.divideText}}</span> </p>

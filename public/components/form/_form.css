@@ -23,6 +23,10 @@ button
   &:focus {
     text-decoration: none;
   }
+  &.form-button--reverse {
+    @extend %form__button--submit--icon-left;
+    justify-content: flex-start;
+  }
   &.form-button--secondary {
     background: transparent;
     border: 1px solid var(--color-border);
@@ -32,6 +36,15 @@ button
       border-color: var(--color-border-hover);
     }
   }
+}
+
+.form-button .form-button__icon--facebook {
+  background-image: inline('components/icon/icon-facebook.svg');
+  background-size: 75%;
+}
+.form-button .form-button__icon--google {
+  background-image: inline('components/icon/icon-google.svg');
+  background-size: 75%;
 }
 
 /*

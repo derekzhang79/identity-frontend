@@ -53,15 +53,13 @@ const pushSlide = (
       }
     });
 
-  return Promise.resolve().then(() => {
-    const $oldParent = $old.parentNode;
-    if ($oldParent) {
-      $oldParent.appendChild($new);
-    } else {
-      throw new Error(ERR_MALFORMED_HTML);
-    }
-    return animateOut();
-  });
+  const $oldParent = $old.parentNode;
+  if ($oldParent) {
+    $oldParent.appendChild($new);
+  } else {
+    throw new Error(ERR_MALFORMED_HTML);
+  }
+  return animateOut();
 };
 
 const initOnce = (): void => {

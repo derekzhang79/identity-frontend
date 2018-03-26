@@ -157,7 +157,7 @@ body > section:last-of-type {
   padding-top: 0.5rem;
   color: var(--color-text-light);
 
-  a {
+  a:not(.form-button) {
     @extend .link;
     color: var(--color-text);
     font-weight: 500;
@@ -165,6 +165,23 @@ body > section:last-of-type {
 
   & .page-standfirst__paragraph {
     margin: 0;
+  }
+
+  &.page-standfirst--register-promo {
+    .page-standfirst__paragraph {
+      @extend %font-text-sans-3;
+      color: var(--color-text);
+    }
+
+    @media (--viewport-min-tablet) {
+      display: flex;
+      align-items: center;
+      .page-standfirst__paragraph {
+        flex: 1 1 auto;
+        white-space: nowrap;
+        margin-right: 1em;
+      }
+    }
   }
 }
 

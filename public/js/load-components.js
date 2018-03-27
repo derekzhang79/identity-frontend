@@ -23,6 +23,10 @@ import {
   init as initFormInput,
   selector as selectorFormInput
 } from 'components/form/form-input';
+import {
+  init as initInPageClick,
+  selector as selectorInPageClick
+} from 'components/analytics/analytics-in-page-click';
 
 const ERR_MALFORMED_LOADER = 'Missing loader parts';
 const ERR_COMPONENT_THROW = 'Uncaught component error';
@@ -32,6 +36,7 @@ const components: any[] = [
   [initTwoStepSignin, selectorTwoStepSignin, initOnceTwoStepSignin],
   [initTwoStepSigninSlide, selectorTwoStepSigninSlide],
   [initSmartLock, selectorSmartLock],
+  [initInPageClick, selectorInPageClick],
   [initTwoStepSignInGa, selectorTwoStepSignInGa]
 ];
 
@@ -59,7 +64,7 @@ class Component {
 
 const loadComponent = ($root: HTMLElement, component: Component): void => {
   try {
-    [...$root.querySelectorAll(`.${component.selector}`)]
+    [...$root.querySelectorAll(component.selector)]
       .forEach($target => {
         if (component.initOnce && !initOnceList.includes(component.selector)) {
           component.initOnce();

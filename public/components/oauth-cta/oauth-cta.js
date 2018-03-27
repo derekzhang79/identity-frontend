@@ -6,9 +6,10 @@ const className: string = 'oauth-cta';
 
 const init = ($component: HTMLAnchorElement): void => {
   fetchTracker(tracker => {
-    const clientId = encodeURI(tracker.get('clientId'));
-
-    const connector = $component.search.length ? '&' : '?';
+    const [clientId, connector] = [
+      encodeURI(tracker.get('clientId')),
+      $component.search.length ? '&' : '?'
+    ];
     $component.href = `${$component.href}${connector}gaClientId=${clientId}`;
   });
 };

@@ -65,7 +65,8 @@
      left: calc(var(--size-baseline-gutter) * .75);
      right: auto;
    }
-   &:hover svg {
+   &:not(.form-button--no-arrow):hover svg,
+   &:not(.form-button--no-arrow):hover .form-button__icon {
      transform: translateX(-5%);
    }
 }
@@ -76,7 +77,8 @@
   .form-button__icon {
     right: calc(var(--size-baseline-gutter) * .75);
   }
-  &:hover svg {
+   &:not(.form-button--no-arrow):hover svg,
+   &:not(.form-button--no-arrow):hover .form-button__icon {
     transform: translateX(5%);
   }
 }

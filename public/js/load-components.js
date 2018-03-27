@@ -64,15 +64,14 @@ class Component {
 
 const loadComponent = ($root: HTMLElement, component: Component): void => {
   try {
-    [...$root.querySelectorAll(component.selector)]
-      .forEach($target => {
-        if (component.initOnce && !initOnceList.includes(component.selector)) {
-          component.initOnce();
-          initOnceList.push(component.selector);
-        }
-        $target.dataset.enhanced = 'true';
-        component.init($target);
-      });
+    [...$root.querySelectorAll(component.selector)].forEach($target => {
+      if (component.initOnce && !initOnceList.includes(component.selector)) {
+        component.initOnce();
+        initOnceList.push(component.selector);
+      }
+      $target.dataset.enhanced = 'true';
+      component.init($target);
+    });
   } catch (err) {
     Raven.captureException(err, [ERR_COMPONENT_THROW, component.selector]);
     console.error(err, [ERR_COMPONENT_THROW, component.selector]);

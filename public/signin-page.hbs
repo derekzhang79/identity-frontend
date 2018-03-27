@@ -11,8 +11,11 @@
 
   <h1 class="page-heading">{{ signInPageText.title }}</h1>
 
-  <section class="page-standfirst">
-    <p class="page-standfirst__paragraph">{{signInPageText.noAccount}} <a href="{{registerUrl}}" >{{signInPageText.signUp}}</a>.</p>
+  <section class="page-standfirst page-standfirst--register-promo">
+    <p class="page-standfirst__paragraph">
+      {{signInPageText.noAccount}}
+    </p>
+    <a href="{{registerUrl}}" class="form-button form-button--black">{{signInPageText.signUp}}  {{> components/icon/arrow-inline }}</a>
   </section>
 
   <section class="signin__section">

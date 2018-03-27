@@ -2,7 +2,7 @@
 
 import { route } from 'js/config';
 
-const className: string = 'two-step-signin__slide';
+const selector: string = '.two-step-signin__slide';
 
 const SLIDE_STATE_LOADING: string = 'SLIDE_STATE_LOADING';
 const SLIDE_STATE_DEFAULT: string = 'SLIDE_STATE_DEFAULT';
@@ -110,4 +110,4 @@ const init = ($component: HTMLElement): void => {
   });
 };
 
-export { init, className, EV_DONE };
+export { init, selector, EV_DONE };

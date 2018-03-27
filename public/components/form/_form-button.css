@@ -18,7 +18,7 @@
   box-sizing: content-box;
   @extend %form-button--icon-right;
 
-   svg,
+  svg,
   .form-button__icon {
     vertical-align: middle;
     transition: 0.15s;
@@ -31,7 +31,7 @@
     position: absolute;
     margin: auto;
     top: 0;
-    bottom: .1rem;
+    bottom: 0.1rem;
 
     * {
       fill: currentColor;
@@ -59,30 +59,33 @@
 }
 
 %form-button--icon-left {
-   padding-left: calc((var(--form-button-icon-size) * 1.25) + var(--size-baseline-gutter));
-   svg,
-   .form-button__icon {
-     left: calc(var(--size-baseline-gutter) * .75);
-     right: auto;
-   }
-   &:not(.form-button--no-arrow):hover svg,
-   &:not(.form-button--no-arrow):hover .form-button__icon {
-     transform: translateX(-5%);
-   }
+  padding-left: calc(
+    (var(--form-button-icon-size) * 1.25) + var(--size-baseline-gutter)
+  );
+  svg,
+  .form-button__icon {
+    left: calc(var(--size-baseline-gutter) * 0.75);
+    right: auto;
+  }
+  &:not(.form-button--no-arrow):hover svg,
+  &:not(.form-button--no-arrow):hover .form-button__icon {
+    transform: translateX(-5%);
+  }
 }
 
 %form-button--icon-right {
-  padding-right: calc((var(--form-button-icon-size) * 1.25) + var(--size-baseline-gutter));
+  padding-right: calc(
+    (var(--form-button-icon-size) * 1.25) + var(--size-baseline-gutter)
+  );
   svg,
   .form-button__icon {
-    right: calc(var(--size-baseline-gutter) * .75);
+    right: calc(var(--size-baseline-gutter) * 0.75);
   }
-   &:not(.form-button--no-arrow):hover svg,
-   &:not(.form-button--no-arrow):hover .form-button__icon {
+  &:not(.form-button--no-arrow):hover svg,
+  &:not(.form-button--no-arrow):hover .form-button__icon {
     transform: translateX(5%);
   }
 }
-
 
 .form-button {
   @extend %form-button;

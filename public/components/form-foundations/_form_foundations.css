@@ -71,8 +71,8 @@
 
 /** Form buttons **/
 %form__button--submit {
-   @extend %form-button;
-   @extend %form-button--main;
+  @extend %form-button;
+  @extend %form-button--main;
 }
 
 /** Form fields **/

@@ -2,6 +2,7 @@
 
 import { EV_DONE } from 'components/two-step-signin/two-step-signin__slide';
 import { loadComponents } from 'js/load-components';
+import { pageView } from '../analytics/ga';
 
 const className: string = 'two-step-signin';
 const slideClassName: string = 'two-step-signin__slide';
@@ -102,6 +103,11 @@ const onSlide = (
       '',
       href
     );
+  }
+
+  /* tell GA about it */
+  if (!isInitial) {
+    pageView();
   }
 
   /* make sure the container looks ok during transitions */

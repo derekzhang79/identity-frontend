@@ -1,0 +1,112 @@
+:root {
+  --form-button-icon-size: 3rem;
+}
+
+%form-button {
+  @extend %font-text-sans-3;
+  border: 0;
+  border-radius: 9999px;
+  text-align: left;
+  transition: 0.15s;
+  padding: 1rem var(--size-baseline-gutter);
+  min-height: 2rem;
+  line-height: 2.1rem;
+  text-overflow: ellipsis;
+  display: block;
+  align-items: center;
+  position: relative;
+  box-sizing: content-box;
+  @extend %form-button--icon-right;
+
+   svg,
+  .form-button__icon {
+    vertical-align: middle;
+    transition: 0.15s;
+    width: var(--form-button-icon-size);
+    height: var(--form-button-icon-size);
+    display: inline-block;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: .1rem;
+
+    * {
+      fill: currentColor;
+    }
+  }
+
+  &:focus,
+  &:hover {
+    outline: none;
+    text-decoration: none;
+  }
+
+  &:focus {
+    box-shadow: 0 0 2px 0 var(--color-border);
+  }
+}
+
+%form-button--main {
+  color: var(--color-brand);
+  background: var(--color-cta);
+  &:focus,
+  &:hover {
+    background-color: color(var(--color-cta) lightness(-2.5%));
+  }
+}
+
+%form-button--icon-left {
+   padding-left: calc((var(--form-button-icon-size) * 1.25) + var(--size-baseline-gutter));
+   svg,
+   .form-button__icon {
+     left: calc(var(--size-baseline-gutter) * .75);
+     right: auto;
+   }
+   &:hover svg {
+     transform: translateX(-5%);
+   }
+}
+
+%form-button--icon-right {
+  padding-right: calc((var(--form-button-icon-size) * 1.25) + var(--size-baseline-gutter));
+  svg,
+  .form-button__icon {
+    right: calc(var(--size-baseline-gutter) * .75);
+  }
+  &:hover svg {
+    transform: translateX(5%);
+  }
+}
+
+
+.form-button {
+  @extend %form-button;
+  &.form-button--reverse {
+    @extend %form-button--icon-left;
+    justify-content: flex-start;
+  }
+  &.form-button--main {
+    @extend %form-button--main;
+  }
+  &.form-button--secondary {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      border-color: var(--color-border-hover);
+    }
+  }
+}
+
+.form-button .form-button__icon--facebook {
+  background-image: inline('components/icon/icon-facebook.svg');
+  background-size: 75%;
+}
+.form-button .form-button__icon--google {
+  background-image: inline('components/icon/icon-google.svg');
+  background-size: 75%;
+}

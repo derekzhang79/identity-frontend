@@ -1,3 +1,5 @@
+@import "./_form-button.css";
+
 /*
 checkbox
 */
@@ -9,42 +11,6 @@ checkbox
   @extend %form__label--checkbox;
   font-size: inherit;
   font-family: inherit;
-}
-
-/*
-button
-*/
-.form-button {
-  @extend %form__button--submit;
-  width: 100%;
-  box-sizing: border-box;
-  justify-content: space-between;
-  &:hover,
-  &:focus {
-    text-decoration: none;
-  }
-  &.form-button--reverse {
-    @extend %form__button--submit--icon-left;
-    justify-content: flex-start;
-  }
-  &.form-button--secondary {
-    background: transparent;
-    border: 1px solid var(--color-border);
-    &:hover,
-    &:focus {
-      text-decoration: none;
-      border-color: var(--color-border-hover);
-    }
-  }
-}
-
-.form-button .form-button__icon--facebook {
-  background-image: inline('components/icon/icon-facebook.svg');
-  background-size: 75%;
-}
-.form-button .form-button__icon--google {
-  background-image: inline('components/icon/icon-google.svg');
-  background-size: 75%;
 }
 
 /*

@@ -25,7 +25,9 @@ case class TwoStepSignInViewModel private(
   skipConfirmation: Boolean = false,
   clientId: Option[ClientID],
   group: Option[GroupCode],
+
   email:Option[String],
+  emailForDisplay:Option[String],
 
   registerUrl: String = "",
   signinUrl: String = "",
@@ -80,7 +82,8 @@ object TwoStepSignInViewModel {
       skipConfirmation = skipConfirmation.getOrElse(false),
       clientId = clientId,
       group = group,
-      email = email.map(breakEmailWords),
+      email = email,
+      emailForDisplay = email.map(breakEmailWords),
 
       registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
       signinUrl = UrlBuilder(routes.Application.twoStepSignIn(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
@@ -103,7 +106,6 @@ object TwoStepSignInViewModel {
     HtmlFormat.escape(email).toString.flatMap {
       case '@' => s"<wbr>@"
       case '+' => s"<wbr>+"
-      case '.' => s"<wbr>."
       case c   => s"$c"
     }
   }

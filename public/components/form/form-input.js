@@ -2,7 +2,7 @@
 
 const displayErrorsClassName: string = 'form-input__display-errors';
 
-const selector: string = '..form-input';
+const selector: string = '.form-input';
 
 const checkAndAdd = ($component: HTMLInputElement): void => {
   if ($component.value.trim().length > 0) {

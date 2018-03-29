@@ -2,7 +2,7 @@
 
 import { fetchTracker } from '../analytics/ga';
 
-const className: string = 'two-step-signin__ga-client-id';
+const selector: string = '.two-step-signin__ga-client-id';
 
 const init = ($component: HTMLInputElement): void => {
   fetchTracker(tracker => {
@@ -10,4 +10,4 @@ const init = ($component: HTMLInputElement): void => {
   });
 };
 
-export { init, className };
+export { init, selector };

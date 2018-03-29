@@ -26,10 +26,20 @@ const route = (routeToGet: string): string => {
   throw new Error(ERR_MISSING_KEY);
 };
 
+const text = (textKey: string, ...replacers: string[]): string => {
+  if (config.text && config.text[textKey])
+    return replacers.reduce(
+      (returnableText, replacer, key) =>
+        returnableText.replace(`{${key}}`, replacer),
+      config.text[textKey]
+    );
+  throw new Error([ERR_MISSING_KEY, textKey]);
+};
+
 const localisedError = (localisedErrorToGet: string): string => {
   if (config.localisedErrors && config.localisedErrors[localisedErrorToGet])
     return config.localisedErrors[localisedErrorToGet];
   throw new Error(ERR_MISSING_KEY);
 };
 
-export { get, route, localisedError };
+export { get, route, localisedError, text };

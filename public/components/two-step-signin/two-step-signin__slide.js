@@ -1,6 +1,7 @@
 // @flow
 
 import { route } from 'js/config';
+import { showErrorText } from '../form-error-wrap/index';
 
 const selector: string = '.two-step-signin__slide';
 
@@ -14,23 +15,36 @@ const ERR_MALFORMED_RESPONSE: string = 'Something went wrong';
 
 const validAjaxFormRoutes = [route('twoStepSignInAction')];
 
+const getSlide = ($component: HTMLElement) => {
+  const $slide = $component.querySelector(selector);
+  if ($slide) return $slide;
+  throw new Error([ERR_MALFORMED_HTML, $component]);
+};
+
+const getSlideFromFetch = (textHtml: string): HTMLElement => {
+  const $wrapper: HTMLElement = document.createElement('div');
+  $wrapper.innerHTML = textHtml;
+
+  return getSlide($wrapper);
+};
+
 const dispatchDone = (
   $parent,
   {
-    responseHtml,
+    $slide,
     url,
     reverse = false
-  }: { responseHtml: string, url: string, reverse?: boolean }
-): boolean => {
+  }: { $slide: HTMLElement, url: string, reverse?: boolean }
+): void => {
   const event = new CustomEvent(EV_DONE, {
     bubbles: true,
     detail: {
-      responseHtml,
+      $slide,
       url,
       reverse
     }
   });
-  return $parent.dispatchEvent(event);
+  $parent.dispatchEvent(event);
 };
 
 const fetchSlide = (action, $stateable, fetchProps) =>
@@ -56,11 +70,13 @@ const fetchSlide = (action, $stateable, fetchProps) =>
         throw new Error([ERR_MALFORMED_RESPONSE, response]);
       }
       return Promise.all([response.text(), response.url]);
-    })
-    .catch(err => {
-      $stateable.dataset.state = SLIDE_STATE_DEFAULT;
-      throw err;
     });
+
+const catchSlide = ($stateable, err) => {
+  $stateable.dataset.state = SLIDE_STATE_DEFAULT;
+  showErrorText('error-unexpected');
+  console.error(err);
+};
 
 const initStepOneForm = (
   $component: HTMLFormElement,
@@ -72,17 +88,13 @@ const initStepOneForm = (
 
   $component.addEventListener('submit', (ev: Event) => {
     ev.preventDefault();
-    $parent.dataset.state = SLIDE_STATE_LOADING;
-
     fetchSlide($component.action, $parent, {
       body: new FormData($component)
     })
       .then(([responseHtml, url]) => {
-        dispatchDone($parent, { responseHtml, url });
+        dispatchDone($parent, { $slide: getSlideFromFetch(responseHtml), url });
       })
-      .catch(() => {
-        console.error('errors.generic');
-      });
+      .catch(err => catchSlide($parent, err));
   });
 };
 
@@ -103,11 +115,17 @@ const init = ($component: HTMLElement): void => {
       ev.preventDefault();
       fetchSlide(route('twoStepSignIn'), $component, {
         method: 'GET'
-      }).then(([responseHtml, url]) =>
-        dispatchDone($component, { responseHtml, url, reverse: true })
-      );
+      })
+        .then(([responseHtml, url]) =>
+          dispatchDone($component, {
+            $slide: getSlideFromFetch(responseHtml),
+            url,
+            reverse: true
+          })
+        )
+        .catch(err => catchSlide($component, err));
     });
   });
 };
 
-export { init, selector, EV_DONE };
+export { init, selector, EV_DONE, getSlide, getSlideFromFetch };

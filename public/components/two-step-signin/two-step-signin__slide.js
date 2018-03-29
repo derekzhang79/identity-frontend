@@ -82,7 +82,7 @@ const initStepOneForm = (
         dispatchDone($parent, { responseHtml, url });
       })
       .catch(() => {
-        showErrorText('errors.generic');
+        showErrorText('error-unexpected');
       });
   });
 };

@@ -1,5 +1,5 @@
 // @flow
-import { text } from 'js/config';
+import { localisedError } from 'js/config';
 
 const $elements: HTMLElement[] = [];
 
@@ -30,7 +30,7 @@ const showError = (error: string): void => {
 };
 
 const showErrorText = (error: string): void => {
-  showError(text(error));
+  showError(localisedError(error));
 };
 
 const init = ($element: HTMLElement): Promise<void> => {

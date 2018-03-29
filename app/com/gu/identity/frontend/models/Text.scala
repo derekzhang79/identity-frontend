@@ -74,9 +74,7 @@ object Text {
 
   object ClientSideText {
     def toMap(implicit messages: Messages): Map[String, String] = {
-      Map(
-        "errors.generic" -> messages("errors.unexpected.description")
-      )
+      Map()
     }
   }
 

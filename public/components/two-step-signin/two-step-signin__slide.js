@@ -17,7 +17,7 @@ const ERR_BACKEND_ERROR: string = 'Something went wrong out there';
 
 const validAjaxFormRoutes = [
   route('twoStepSignInAction'),
-  route('signInAction')
+  route('signInSecondStepAction')
 ];
 
 const getSlide = ($component: HTMLElement) => {

@@ -1,10 +1,13 @@
 // @flow
 
-import { EV_DONE } from 'components/two-step-signin/two-step-signin__slide';
+import {
+  EV_DONE,
+  getSlide
+} from 'components/two-step-signin/two-step-signin__slide';
 import { loadComponents } from 'js/load-components';
+import { pageView } from '../analytics/ga';
 
-const className: string = 'two-step-signin';
-const slideClassName: string = 'two-step-signin__slide';
+const selector: string = '.two-step-signin';
 
 const ERR_MALFORMED_EVENT: string = 'Something went wrong';
 const ERR_MALFORMED_HTML: string = 'Something went wrong';
@@ -104,6 +107,11 @@ const onSlide = (
     );
   }
 
+  /* tell GA about it */
+  if (!isInitial) {
+    pageView();
+  }
+
   /* make sure the container looks ok during transitions */
   $component.style.minHeight = `${$slide.clientHeight * 1.1}px`;
 
@@ -112,22 +120,6 @@ const onSlide = (
   if ($focusable) {
     $focusable.focus();
   }
-};
-
-const getSlide = ($component: HTMLElement) => {
-  const $slide = $component.querySelector(`.${slideClassName}`);
-  if ($slide) return $slide;
-  throw new Error([
-    ERR_MALFORMED_HTML,
-    $component.querySelector(`.${slideClassName}`)
-  ]);
-};
-
-const getSlideFromFetch = (textHtml: string): HTMLElement => {
-  const $wrapper: HTMLElement = document.createElement('div');
-  $wrapper.innerHTML = textHtml;
-
-  return getSlide($wrapper);
 };
 
 const preservePasswordField = (
@@ -147,7 +139,7 @@ const init = ($component: HTMLElement): void => {
   $component.addEventListener(EV_DONE, (ev: mixed) => {
     if (ev instanceof CustomEvent) {
       const $slide = getSlide($component);
-      const $new = getSlideFromFetch(ev.detail.responseHtml);
+      const $new = ev.detail.$slide;
       const url = ev.detail.url;
 
       if (!$slide || !$new) {
@@ -168,4 +160,4 @@ const init = ($component: HTMLElement): void => {
   });
 };
 
-export { init, className, initOnce };
+export { init, selector, initOnce };

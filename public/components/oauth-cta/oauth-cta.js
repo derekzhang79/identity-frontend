@@ -2,7 +2,7 @@
 
 import { fetchTracker } from '../analytics/ga';
 
-const className: string = 'oauth-cta';
+const selector: string = '.oauth-cta';
 
 const init = ($component: HTMLAnchorElement): void => {
   fetchTracker(tracker => {
@@ -14,4 +14,4 @@ const init = ($component: HTMLAnchorElement): void => {
   });
 };
 
-export { init, className };
+export { init, selector };

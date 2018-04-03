@@ -173,7 +173,7 @@ body > section:last-of-type {
       @extend %font-text-sans-3;
       color: var(--color-text);
     }
-    @media (--viewport-min-tablet) {
+    @media (--viewport-min-mobile-landscape) {
       display: flex;
       align-items: center;
       .form-button {

@@ -28,6 +28,10 @@ export function fetchTracker(callback) {
   });
 }
 
+export function pageView(path = location.pathname) {
+  ga(gaTracker + '.send', 'pageview', location.pathname);
+}
+
 function record(gaUID) {
   loadGA();
   ga('create', gaUID, 'auto', gaTracker);

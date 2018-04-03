@@ -4,7 +4,7 @@ import qs from 'qs';
 import { route } from 'js/config';
 import { customMetric } from 'components/analytics/ga';
 
-const className: string = 'smartlock-trigger';
+const selector: string = '.smartlock-trigger';
 
 const ERR_WRONG_CREDENTIAL = 'Error fetching smart lock credentials';
 const ERR_FAILED_SIGNIN = 'Error signing in with smart lock';
@@ -71,4 +71,4 @@ const init = ($element: HTMLElement): void => {
   }
 };
 
-export { className, init };
+export { selector, init };

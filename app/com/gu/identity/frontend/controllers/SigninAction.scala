@@ -80,7 +80,7 @@ class SigninAction(
   }
 
   def signInSecondStepCurrent = signInSecondStepCurrentServiceAction(bodyParser) {
-    signInAction(successfulSignInResponse, signInMetricsLogger)
+    signInAction(successfulSignInResponse, successfulAjaxSignInResponse, signInMetricsLogger)
   }
 
   def signIn = SignInServiceAction(bodyParser) {

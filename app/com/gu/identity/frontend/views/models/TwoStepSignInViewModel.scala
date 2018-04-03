@@ -40,7 +40,8 @@ case class TwoStepSignInViewModel private(
   actions: Map[String, String] = Map(
     "signInWithEmailAndPassword" -> routes.SigninAction.signIn().url,
     "resetPassword" -> routes.ResetPasswordAction.reset().url,
-    "signInWithEmail" -> routes.SigninAction.emailSignInFirstStep().url
+    "signInWithEmail" -> routes.SigninAction.emailSignInFirstStep().url,
+    "signInSecondStepCurrent" -> routes.SigninAction.signInSecondStepCurrent().url
   ),
   resources: Seq[PageResource with Product],
   indirectResources: Seq[PageResource with Product])

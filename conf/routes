@@ -23,6 +23,8 @@ POST       /actions/agree                               com.gu.identity.frontend
 
 POST       /actions/signin                              com.gu.identity.frontend.controllers.SigninAction.signIn
 
+POST       /actions/signInSecondStepCurrent             com.gu.identity.frontend.controllers.SigninAction.signInSecondStepCurrent
+
 POST       /actions/signin/smartlock                    com.gu.identity.frontend.controllers.SigninAction.signInWithSmartLock
 
 POST       /actions/signin/with-email                   com.gu.identity.frontend.controllers.SigninAction.emailSignInFirstStep

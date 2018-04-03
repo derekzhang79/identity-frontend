@@ -28,6 +28,10 @@ import {
   selector as selectorFormInput
 } from 'components/form/form-input';
 import {
+  init as initOauthCta,
+  selector as selectorOauthCta
+} from 'components/oauth-cta/oauth-cta';
+import {
   init as initInPageClick,
   selector as selectorInPageClick
 } from 'components/analytics/analytics-in-page-click';
@@ -42,6 +46,7 @@ const components: any[] = [
   [initSmartLock, selectorSmartLock],
   [initInPageClick, selectorInPageClick],
   [initFormErrorWrap, selectorErrorWrap],
+  [initOauthCta, selectorOauthCta],
   [initTwoStepSignInGa, selectorTwoStepSignInGa]
 ];
 

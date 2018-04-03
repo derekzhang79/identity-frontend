@@ -6,8 +6,6 @@ import { initPhoneField } from '../lib/phone-field';
 
 import { fetchTracker } from '../analytics/ga';
 
-import { init as initOAuthBindings } from '../oauth-cta/_oauth-cta.js';
-
 const STORAGE_KEY = 'gu_id_register_state';
 
 class RegisterFormFields {
@@ -100,7 +98,6 @@ class RegisterFormModel {
 
     this.addBindings();
     this.saveClientId();
-    initOAuthBindings();
   }
 
   addBindings() {

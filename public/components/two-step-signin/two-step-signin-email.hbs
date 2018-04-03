@@ -1,9 +1,7 @@
 <form class="two-step-signin-form" action="{{ actions.signInWithEmail }}" method="POST">
   {{> components/two-step-signin/_helpers }}
   <fieldset class="form-field-wrap">
-    <div class="form-field-wrap__field">
-      {{> components/oauth-cta/_oauth-cta-content }}
-    </div>
+    {{> components/oauth-cta/_oauth-cta-content }}
   </fieldset>
 
   <p class="form-prelude"> <span>{{twoStepSignInPageText.divideText}}</span> </p>
@@ -12,6 +10,6 @@
     <label class="form-field-wrap__title">{{twoStepSignInPageText.emailFieldTitle}}</label>
     <input class="form-input form-field-wrap__field" required="required" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" autofocus spellcheck="false" value="{{email}}" />
     <input class="form-input form-field-wrap__field u-h" type="password" name="password" autocomplete="password" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{password}}" />
-    <button class="form-button form-field-wrap__field" type="submit">{{twoStepSignInPageText.continueAction}} {{> components/icon/arrow-inline }}</button>
+    <button class="form-button form-button--main form-field-wrap__field" type="submit">{{twoStepSignInPageText.continueAction}} {{> components/icon/arrow-inline }}</button>
   </fieldset>
 </form>

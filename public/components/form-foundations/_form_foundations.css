@@ -71,43 +71,8 @@
 
 /** Form buttons **/
 %form__button--submit {
-  @extend %font-text-sans-3;
-  background: var(--color-cta);
-  border: 0;
-  border-radius: 9999px;
-  color: var(--color-brand);
-  text-align: left;
-  transition: 0.15s;
-  padding: 0 1.75rem;
-  min-height: 4.2rem;
-  display: block;
-  display: flex;
-  align-items: center;
-
-  svg {
-    vertical-align: middle;
-    transition: 0.15s;
-    margin-left: 2rem;
-    margin-right: -1rem;
-
-    * {
-      fill: currentColor;
-    }
-  }
-
-  &:focus,
-  &:hover {
-    background-color: color(var(--color-cta) lightness(-2.5%));
-    outline: none;
-
-    svg {
-      transform: translateX(5%);
-    }
-  }
-
-  &:focus {
-    box-shadow: 0 0 2px 0 var(--color-border);
-  }
+  @extend %form-button;
+  @extend %form-button--main;
 }
 
 /** Form fields **/

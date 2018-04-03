@@ -17,6 +17,8 @@ import com.gu.identity.frontend.authentication.CookieService
 import com.gu.tip.Tip
 import java.net.URLEncoder.encode
 
+import com.gu.identity.model.CurrentUser
+
 import scala.concurrent.Future
 
 /**
@@ -35,7 +37,7 @@ class SigninAction(
 
   val redirectRoute: String = routes.Application.signIn().url
 
-  val signInSecondStepCurrentRedirectRoute: String = routes.Application.twoStepSignInStepTwo("current").url
+  val signInSecondStepCurrentRedirectRoute: String = routes.Application.twoStepSignInStepTwo(CurrentUser.name).url
 
   val SignInServiceAction =
     ServiceAction andThen

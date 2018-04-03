@@ -17,6 +17,8 @@ import com.gu.identity.frontend.authentication.CookieService
 import com.gu.tip.Tip
 import java.net.URLEncoder.encode
 
+import com.gu.identity.model.CurrentUser
+
 import scala.concurrent.Future
 
 /**
@@ -35,11 +37,19 @@ class SigninAction(
 
   val redirectRoute: String = routes.Application.signIn().url
 
+  val signInSecondStepCurrentRedirectRoute: String = routes.Application.twoStepSignInStepTwo(CurrentUser.name).url
+
   val SignInServiceAction =
     ServiceAction andThen
     RedirectOnError(redirectRoute) andThen
     LogOnErrorAction(logger) andThen
     CSRFCheck(csrfConfig)
+
+  val signInSecondStepCurrentServiceAction =
+      ServiceAction andThen
+      RedirectOnError(signInSecondStepCurrentRedirectRoute) andThen
+      LogOnErrorAction(logger) andThen
+      CSRFCheck(csrfConfig)
 
   val SignInSmartLockServiceAction =
     ServiceAction andThen
@@ -67,6 +77,10 @@ class SigninAction(
     } else {
       logger.warn("No GA Client ID passed for sign in request")
     }
+  }
+
+  def signInSecondStepCurrent = signInSecondStepCurrentServiceAction(bodyParser) {
+    signInAction(successfulSignInResponse, signInMetricsLogger)
   }
 
   def signIn = SignInServiceAction(bodyParser) {

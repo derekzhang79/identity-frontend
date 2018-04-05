@@ -11,7 +11,9 @@ import play.api.i18n.Messages
 case class SendSignInLinkViewModel private(
     layout: LayoutViewModel,
     sendSignInLinkText: SendSignInLinkText,
-    actions: Map[String, String] = Map.empty,
+    actions: Map[String, String] = Map(
+      "submit" -> routes.Application.sendSignInLinkSent().url
+    ),
     errors: Seq[ErrorViewModel] = Seq.empty,
     csrfToken: Option[CSRFToken],
     resources: Seq[PageResource with Product],

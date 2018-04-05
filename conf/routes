@@ -15,6 +15,11 @@ GET        /reset                                       com.gu.identity.frontend
 
 GET        /reset/email-sent                            com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent(clientId: Option[String] ?= None)
 
+GET        /token                                       com.gu.identity.frontend.controllers.Application.sendSignInLink(error: Seq[String] ?= Seq.empty)
+
+GET        /token/email-sent                            com.gu.identity.frontend.controllers.Application.sendSignInLinkSent
+
+
 GET        /signout                                     com.gu.identity.frontend.controllers.SignOutAction.signOut(returnUrl: Option[String] ?= None)
 
 GET        /agree/:group                                com.gu.identity.frontend.controllers.ThirdPartyTsAndCs.confirmAction(group: String, returnUrl: Option[String] ?= None, clientId: Option[String] ?= None, skipThirdPartyLandingPage: Option[Boolean] ?= None)

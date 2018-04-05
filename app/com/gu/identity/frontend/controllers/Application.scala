@@ -56,6 +56,15 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email, shouldCollectConsents, shouldCollectV2Consents)
   }
 
+  def sendSignInLink(error: Seq[String]) = CSRFAddToken(csrfConfig) { req =>
+    val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
+    renderResetPassword(configuration, error, csrfToken, None, None)
+  }
+
+  def sendSignInLinkSent() = {
+    renderResetPasswordEmailSent(configuration, None)
+  }
+
   def reset(error: Seq[String], clientId: Option[String]) = CSRFAddToken(csrfConfig) { req =>
     val clientIdOpt = ClientID(clientId)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)

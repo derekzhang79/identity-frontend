@@ -58,11 +58,11 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
 
   def sendSignInLink(error: Seq[String]) = CSRFAddToken(csrfConfig) { req =>
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
-    renderResetPassword(configuration, error, csrfToken, None, None)
+    renderSendSignInLink(configuration, error, csrfToken)
   }
 
-  def sendSignInLinkSent() = {
-    renderResetPasswordEmailSent(configuration, None)
+  def sendSignInLinkSent() = Action {
+    renderSendSignInLinkSent(configuration)
   }
 
   def reset(error: Seq[String], clientId: Option[String]) = CSRFAddToken(csrfConfig) { req =>

@@ -112,7 +112,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
       handleErrorResponse(response)
     }
 
-    case r: AuthenticateCookiesApiRequest =>
+    case _: AuthenticateCookiesApiRequest | _: SigninTokenRequest  =>
       response.json.asOpt[AuthenticationCookiesResponse]
         .map(Right.apply)
         .getOrElse(handleUnexpectedResponse(response))

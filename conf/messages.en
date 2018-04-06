@@ -116,6 +116,9 @@ errors.notFound.pageTitle=Page not found
 errors.notFound.title=Page not found
 errors.notFound.description=Sorry - we have not been able to find the page you asked for.
 
+errors.signinLink.pageTitle=Sign in Failed
+errors.signinLink.title=Sign In Failed
+errors.signinLink.description=Sorry - that sign in link is expired or invalid. Please request a new one.
 
 errors.unexpected.pageTitle=Unexpected error
 errors.unexpected.title=Unexpected error: {0}

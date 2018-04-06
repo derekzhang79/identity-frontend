@@ -67,5 +67,3 @@ case class RegisterRequestBodyStatusFields(
     receive3rdPartyMarketing: Boolean)
 
 case class RegisterRequestTelephoneNumber(countryCode: String, localNumber: String)
-
-

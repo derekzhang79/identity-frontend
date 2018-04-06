@@ -68,6 +68,8 @@ GET        /static/*file                                controllers.Assets.versi
 
 GET        /robots.txt                                  controllers.Assets.at(path="/public", file="robots.txt")
 
+GET        /signin/token/:signinToken                    com.gu.identity.frontend.controllers.SigninTokenController.signinWithToken(signinToken: String, returnUrl: Option[String] ?= None)
+
 # Redirects
 GET        /                                            com.gu.identity.frontend.controllers.Redirects.indexRedirect
 GET        /signin/                                     com.gu.identity.frontend.controllers.Redirects.signInPageTrailingSlash

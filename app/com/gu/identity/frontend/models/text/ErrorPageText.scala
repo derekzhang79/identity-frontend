@@ -13,6 +13,7 @@ object ErrorPageText {
   def apply(error: HttpError)(implicit messages: Messages): ErrorPageText = error match {
     case NotFoundError(_) => NotFoundErrorPageText()
     case ForbiddenError(_) => ForbiddenErrorPageText()
+    case SigninTokenRejected(_) => SigninLinkFailedText()
     case err: BadRequestError => BadRequestErrorPageText(err)
     case err: UnexpectedError => UnexpectedErrorPageText(err)
   }
@@ -67,6 +68,21 @@ object NotFoundErrorPageText {
       pageTitle = messages("errors.notFound.pageTitle"),
       title = messages("errors.notFound.title"),
       description = messages("errors.notFound.description")
+    )
+}
+
+case class SigninLinkFailedText private(
+                                            pageTitle: String,
+                                            title: String,
+                                            description: String)
+  extends ErrorPageText
+
+object SigninLinkFailedText {
+  def apply()(implicit messages: Messages): SigninLinkFailedText =
+    SigninLinkFailedText(
+      pageTitle = messages("errors.signinLink.pageTitle"),
+      title = messages("errors.signinLink.title"),
+      description = messages("errors.signinLink.description")
     )
 }
 

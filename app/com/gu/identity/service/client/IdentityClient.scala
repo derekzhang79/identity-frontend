@@ -2,8 +2,8 @@ package com.gu.identity.service.client
 
 import com.gu.identity.frontend.authentication.IdentityApiCookie
 import com.gu.identity.frontend.models.TrackingData
-import com.gu.identity.service.client.request._
 import com.gu.identity.service.client.models.User
+import com.gu.identity.service.client.request._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Left, Right}
@@ -15,6 +15,15 @@ class IdentityClient extends Logging {
       case Right(request) => authenticateCookies(request)
       case Left(err) => Future.successful(Left(Seq(err)))
     }
+
+  def authenticateSigninToken(signinToken: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] = {
+    configuration.requestHandler.handleRequest(SigninTokenRequest(signinToken, configuration)).map {
+      case Left(error) => Left(error)
+      case Right(AuthenticationCookiesResponse(cookies)) =>
+        Right(cookies.values.map(IdentityApiCookie(_, cookies.expiresAt)))
+      case Right(other) => Left(Seq(ClientGatewayError("Unknown response")))
+    }
+  }
 
   def authenticateTokenCookies(token: String, trackingData: TrackingData)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] =
     AuthenticateCookiesApiRequest(None, None, false, Some(token), trackingData) match {

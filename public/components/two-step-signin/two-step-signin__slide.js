@@ -2,6 +2,7 @@
 
 import { route } from 'js/config';
 import { showErrorText } from '../form-error-wrap/index';
+import { getUrlErrors } from '../../js/get-url-errors';
 
 const selector: string = '.two-step-signin__slide';
 
@@ -10,10 +11,14 @@ const SLIDE_STATE_DEFAULT: string = 'SLIDE_STATE_DEFAULT';
 
 const EV_DONE: string = 'form-done';
 
-const ERR_MALFORMED_HTML: string = 'Something went wrong';
-const ERR_MALFORMED_RESPONSE: string = 'Something went wrong';
+const ERR_MALFORMED_HTML: string = 'ERR_MALFORMED_HTML';
+const ERR_MALFORMED_RESPONSE: string = 'ERR_MALFORMED_RESPONSE';
+const ERR_BACKEND_ERROR: string = 'ERR_BACKEND_ERROR';
 
-const validAjaxFormRoutes = [route('twoStepSignInAction')];
+const validAjaxFormRoutes = [
+  route('twoStepSignInAction'),
+  route('signInSecondStepCurrentAction')
+];
 
 const getSlide = ($component: HTMLElement) => {
   const $slide = $component.querySelector(selector);
@@ -59,6 +64,10 @@ const fetchSlide = (action, $stateable, fetchProps) =>
           {},
           {
             credentials: 'include',
+            headers: {
+              'x-gu-browser-rq': 'true'
+            },
+            redirect: 'follow',
             method: 'POST'
           },
           fetchProps
@@ -66,15 +75,37 @@ const fetchSlide = (action, $stateable, fetchProps) =>
       )
     )
     .then(response => {
+      const errors = getUrlErrors(response.url);
       if (response.status !== 200) {
         throw new Error([ERR_MALFORMED_RESPONSE, response]);
       }
-      return Promise.all([response.text(), response.url]);
+      if (errors.length) {
+        throw new Error([ERR_BACKEND_ERROR, ...errors]);
+      }
+      return response.text().then(text => {
+        try {
+          const json = JSON.parse(text);
+          if (json.returnUrl) {
+            window.location.href = json.returnUrl;
+            return new Promise(() => {});
+          }
+          throw new Error([ERR_MALFORMED_RESPONSE, response]);
+        } catch (e) {
+          return [text, response.url];
+        }
+      });
     });
 
 const catchSlide = ($stateable, err) => {
   $stateable.dataset.state = SLIDE_STATE_DEFAULT;
-  showErrorText('error-unexpected');
+  if (err.message.split(',')[0] === ERR_BACKEND_ERROR) {
+    err.message
+      .split(',')
+      .splice(1)
+      .forEach(showErrorText);
+  } else {
+    showErrorText('error-unexpected');
+  }
   console.error(err);
 };
 

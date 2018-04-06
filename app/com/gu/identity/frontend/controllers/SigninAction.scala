@@ -80,15 +80,15 @@ class SigninAction(
   }
 
   def signInSecondStepCurrent = signInSecondStepCurrentServiceAction(bodyParser) {
-    signInAction(successfulSignInResponse, signInMetricsLogger)
+    signInAction(successfulSignInResponse, successfulAjaxSignInResponse, signInMetricsLogger)
   }
 
   def signIn = SignInServiceAction(bodyParser) {
-    signInAction(successfulSignInResponse, signInMetricsLogger)
+    signInAction(successfulSignInResponse, successfulAjaxSignInResponse, signInMetricsLogger)
   }
 
   def signInWithSmartLock = SignInSmartLockServiceAction(bodyParser) {
-    signInAction(successfulSmartLockSignInResponse, _ => metricsActor.logSuccessfulSmartLockSignin())
+    signInAction(successfulSmartLockSignInResponse, successfulAjaxSignInResponse, _ => metricsActor.logSuccessfulSmartLockSignin())
   }
 
   def emailSignInFirstStep = SignInServiceAction(bodyParser) {
@@ -117,7 +117,7 @@ class SigninAction(
     }
   }
 
-  def signInAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] =>
+  def signInAction(successResponse: (ReturnUrl, Seq[Cookie]) => Result, successAjaxResponse: (ReturnUrl, Seq[Cookie]) => Result, metricsLogger: (Request[SignInActionRequestBody]) => Unit) = { implicit request: Request[SignInActionRequestBody] =>
     val body = request.body
 
     val trackingData = TrackingData(request, body.returnUrl.flatMap(_.toStringOpt))
@@ -134,7 +134,12 @@ class SigninAction(
       case Right(cookies) => Right {
         if (stage == "PROD") Tip.verify("Account Signin")
         metricsLogger(request)
-        successResponse(successfulReturnUrl, cookies)
+        if(request.headers.toSimpleMap.contains("x-gu-browser-rq")){
+          successAjaxResponse(successfulReturnUrl, cookies)
+        }
+        else {
+          successResponse(successfulReturnUrl, cookies)
+        }
       }
     }
   }
@@ -167,6 +172,12 @@ class SigninAction(
   def successfulSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
     SeeOther(successfulReturnUrl.url)
       .withCookies(cookies: _*)
+
+
+  def successfulAjaxSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
+    Ok("{\"status\": true, \"returnUrl\": \"" + successfulReturnUrl.url + "\"}")
+      .withCookies(cookies: _*)
+
 
   def successfulFirstStepResponse(userType: String, successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie], skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[GroupCode]): Result ={
     val secondStepUrl = UrlBuilder(s"${config.identityProfileBaseUrl}/signin/$userType", Some(successfulReturnUrl), skipConfirmation, clientId, group)

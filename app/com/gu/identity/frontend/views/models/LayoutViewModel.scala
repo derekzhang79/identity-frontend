@@ -115,6 +115,7 @@ object LayoutViewModel {
       routes = Map(
         "twoStepSignIn" -> routes.Application.twoStepSignIn().url,
         "twoStepSignInAction" -> routes.SigninAction.emailSignInFirstStep().url,
+        "signInSecondStepCurrentAction" -> routes.SigninAction.signInSecondStepCurrent().url,
         "smartlockSignIn" -> routes.SigninAction.signInWithSmartLock().url
       ),
       text = ClientSideText.toMap,

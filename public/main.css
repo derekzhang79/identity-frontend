@@ -15,20 +15,38 @@
 /** Generic blocks **/
 
 @import 'components/form/_form.css';
-@import 'components/ajax-form/_ajax-form.css';
 @import 'components/error-page-content/_error-page-content.css';
-@import 'components/oauth-cta/_oauth-cta.css';
+@import 'components/ajax-form/_ajax-form.css';
+
+/** Terms and conditions **/
+
 @import 'components/terms/_terms.css';
 
-/** Pages **/
+/** Sign in page **/
 
 @import 'components/signin-form/_signin-form.css';
+@import 'components/oauth-cta/_oauth-cta.css';
+
+/** Register page **/
+
 @import 'components/register-form/_register-form.css';
+
+/** Register Confirmation page **/
+
 @import 'components/register-confirmation/_register-confirmation';
-@import 'components/reset-password/_reset-password';
-@import 'components/resend-consent/_resend-consent.css';
-@import 'components/third-party-ts-and-cs/_third-party-ts-and-cs.css';
 
 /** Skins **/
 
 @import 'components/jobs/_jobs.css';
+
+/** Reset password page **/
+
+@import 'components/reset-password/_reset-password';
+
+/** Resend Consent page **/
+
+@import 'components/resend-consent/_resend-consent.css';
+
+/** Third Party Ts and Cs page **/
+
+@import 'components/third-party-ts-and-cs/_third-party-ts-and-cs.css';

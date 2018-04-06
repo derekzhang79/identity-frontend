@@ -87,14 +87,14 @@ footer.copyright=© {0} Guardian News and Media Limited or its affiliated compan
 
 
 # com.gu.identity.frontend.models.text.SendSignInLinkText
-sendSiLink.pageTitle=Send me a sign-in link
-sendSiLink.title=Send me a sign-in link
-sendSiLink.emailInput=Your email
-sendSiLink.submitAction=Submit
+sendSignInLink.pageTitle=Send me a sign-in link
+sendSignInLink.title=Send me a sign-in link
+sendSignInLink.emailInput=Your email
+sendSignInLink.submitAction=Submit
 
 # com.gu.identity.frontend.models.text.SendSignInLinkSentText
-sendSiLinkSent.pageTitle=Check your email
-sendSiLinkSent.title=Now check your email
+sendSignInLinkSent.pageTitle=Check your email
+sendSignInLinkSent.title=Now check your email
 
 
 # com.gu.identity.frontend.models.text.ResetPasswordText

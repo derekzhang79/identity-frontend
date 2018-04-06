@@ -10,7 +10,7 @@ case class SendSignInLinkSentText private(
 object SendSignInLinkSentText  {
   def apply()(implicit messages: Messages): SendSignInLinkSentText =
     SendSignInLinkSentText(
-      pageTitle = messages("sendSiLinkSent.pageTitle"),
-      title = messages("sendSiLinkSent.title")
+      pageTitle = messages("sendSignInLinkSent.pageTitle"),
+      title = messages("sendSignInLinkSent.title")
     )
 }

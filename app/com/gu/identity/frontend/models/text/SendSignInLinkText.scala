@@ -12,9 +12,9 @@ case class SendSignInLinkText private(
 object SendSignInLinkText {
   def apply()(implicit messages: Messages): SendSignInLinkText =
     SendSignInLinkText(
-      pageTitle = messages("sendSiLink.pageTitle"),
-      title = messages("sendSiLink.title"),
-      emailInput = messages("sendSiLink.emailInput"),
-      submitAction = messages("sendSiLink.submitAction")
+      pageTitle = messages("sendSignInLink.pageTitle"),
+      title = messages("sendSignInLink.title"),
+      emailInput = messages("sendSignInLink.emailInput"),
+      submitAction = messages("sendSignInLink.submitAction")
     )
 }

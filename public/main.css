@@ -1,52 +1,39 @@
 /* Globals */
+
 @import '_vars.css';
 @import '_mixins.css';
 
+
 /* Base */
+
 @import '_html.css';
 @import 'components/form-foundations/_form_foundations.css';
 
+
 /** Layout **/
+
 @import '_layout.css';
 
-/** Generics **/
+
+/** Generic blocks **/
 
 @import 'components/form/_form.css';
+@import 'components/ajax-form/_ajax-form.css';
 @import 'components/error-page-content/_error-page-content.css';
-
-/** Terms and conditions **/
-
+@import 'components/oauth-cta/_oauth-cta.css';
 @import 'components/terms/_terms.css';
 
-/** Sign in page **/
+
+/** Pages **/
 
 @import 'components/signin-form/_signin-form.css';
-@import 'components/oauth-cta/_oauth-cta.css';
-
-/** Sign In Two Step (sts) page **/
-
-@import 'components/two-step-signin/_two-step-signin.css';
-
-/** Register page **/
-
 @import 'components/register-form/_register-form.css';
-
-/** Register Confirmation page **/
-
 @import 'components/register-confirmation/_register-confirmation';
+@import 'components/reset-password/_reset-password';
+@import 'components/resend-consent/_resend-consent.css';
+@import 'components/third-party-ts-and-cs/_third-party-ts-and-cs.css';
+
 
 /** Skins **/
 
 @import 'components/jobs/_jobs.css';
-
-/** Reset password page **/
-
-@import 'components/reset-password/_reset-password';
-
-/** Resend Consent page **/
-
-@import 'components/resend-consent/_resend-consent.css';
-
-/** Third Party Ts and Cs page **/
-
-@import 'components/third-party-ts-and-cs/_third-party-ts-and-cs.css';

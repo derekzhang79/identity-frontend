@@ -5,7 +5,7 @@
   <section class="layout-wrap-width">
     <div class="smartlock-trigger" data-csrf-token="{{ csrfToken.value }}" data-return-url="{{ returnUrl }}"></div>
 
-    <div class="two-step-signin"><div class="two-step-signin__slide">
+    <div class="ajax-form"><div class="ajax-form__slide">
 
       <section class="layout-header">
         <h1 class="layout-header__title">{{ twoStepSignInPageText.title }}</h1>
@@ -13,7 +13,7 @@
 
       {{> components/form/form-error-wrap }}
 
-      <section class="two-step-signin-container">
+      <section>
         {{> components/two-step-signin/two-step-signin-email }}
       </section>
 

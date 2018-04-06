@@ -3,16 +3,16 @@
 import {
   EV_DONE,
   getSlide
-} from 'components/two-step-signin/two-step-signin__slide';
+} from 'components/ajax-form/ajax-form__slide';
 import { loadComponents } from 'js/load-components';
 import { pageView } from '../analytics/ga';
 
-const selector: string = '.two-step-signin';
+const selector: string = '.ajax-form';
 
 const ERR_MALFORMED_EVENT: string = 'Something went wrong';
 const ERR_MALFORMED_HTML: string = 'Something went wrong';
 
-const STATE_INITIATOR: string = 'two-step-signin-state-init';
+const STATE_INITIATOR: string = 'ajax-form-state-init';
 
 const pushSlide = (
   $old: HTMLElement,
@@ -21,12 +21,12 @@ const pushSlide = (
 ): Promise<HTMLElement> => {
   const classNames = reverse
     ? {
-        in: 'two-step-signin__slide--in-reverse',
-        out: 'two-step-signin__slide--out-reverse'
+        in: 'ajax-form__slide--in-reverse',
+        out: 'ajax-form__slide--out-reverse'
       }
     : {
-        in: 'two-step-signin__slide--in',
-        out: 'two-step-signin__slide--out'
+        in: 'ajax-form__slide--in',
+        out: 'ajax-form__slide--out'
       };
 
   const animateOut = () =>
@@ -37,19 +37,19 @@ const pushSlide = (
           resolve($new);
         });
         requestAnimationFrame(() => {
-          $old.classList.remove('two-step-signin__slide--visible');
+          $old.classList.remove('ajax-form__slide--visible');
           $old.classList.add(classNames.out);
         });
         $new.addEventListener('animationend', () => {
           [
-            'two-step-signin__slide--in',
-            'two-step-signin__slide--out',
-            'two-step-signin__slide--in-reverse',
-            'two-step-signin__slide--out-reverse'
+            'ajax-form__slide--in',
+            'ajax-form__slide--out',
+            'ajax-form__slide--in-reverse',
+            'ajax-form__slide--out-reverse'
           ].forEach(_ => $new.classList.remove(_));
         });
         requestAnimationFrame(() => {
-          ['two-step-signin__slide--visible', classNames.in].forEach(_ =>
+          ['ajax-form__slide--visible', classNames.in].forEach(_ =>
             $new.classList.add(_)
           );
         });

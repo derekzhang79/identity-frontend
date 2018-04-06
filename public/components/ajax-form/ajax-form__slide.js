@@ -4,7 +4,7 @@ import { route } from 'js/config';
 import { showErrorText } from '../form-error-wrap/index';
 import { getUrlErrors } from '../../js/get-url-errors';
 
-const selector: string = '.two-step-signin__slide';
+const selector: string = '.ajax-form__slide';
 
 const SLIDE_STATE_LOADING: string = 'SLIDE_STATE_LOADING';
 const SLIDE_STATE_DEFAULT: string = 'SLIDE_STATE_DEFAULT';
@@ -18,6 +18,10 @@ const ERR_BACKEND_ERROR: string = 'ERR_BACKEND_ERROR';
 const validAjaxFormRoutes = [
   route('twoStepSignInAction'),
   route('signInSecondStepCurrentAction')
+];
+
+const validAjaxLinkRoutes = [
+  route('twoStepSignIn'),
 ];
 
 const getSlide = ($component: HTMLElement) => {
@@ -133,15 +137,15 @@ const init = ($component: HTMLElement): void => {
   const $form: HTMLFormElement = (($component.querySelector(
     'form'
   ): any): HTMLFormElement);
-  const $resetLinks: HTMLElement[] = [
-    ...$component.querySelectorAll(`a[href*="${route('twoStepSignIn')}"]`)
-  ];
+  const $links: HTMLElement[] = [].concat.apply([], validAjaxLinkRoutes.map(_ => [
+    ...$component.querySelectorAll(`a.ajax-form__link[href*="${_}"]`)
+  ]));
 
   if (validAjaxFormRoutes.includes(new URL($form.action).pathname)) {
     initStepOneForm($form, $component);
   }
 
-  $resetLinks.forEach(($resetLink: HTMLElement) => {
+  $links.forEach(($resetLink: HTMLElement) => {
     $resetLink.addEventListener('click', (ev: Event) => {
       ev.preventDefault();
       fetchSlide(route('twoStepSignIn'), $component, {
@@ -151,7 +155,7 @@ const init = ($component: HTMLElement): void => {
           dispatchDone($component, {
             $slide: getSlideFromFetch(responseHtml),
             url,
-            reverse: true
+            reverse: $resetLink.dataset.isReverse !== null
           })
         )
         .catch(err => catchSlide($component, err));

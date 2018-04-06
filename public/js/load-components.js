@@ -3,14 +3,14 @@
 import Raven from 'raven-js';
 
 import {
-  init as initTwoStepSignin,
-  selector as selectorTwoStepSignin,
-  initOnce as initOnceTwoStepSignin
-} from 'components/two-step-signin/two-step-signin';
+  init as initAjaxForm,
+  selector as selectorAjaxForm,
+  initOnce as initOnceAjaxForm
+} from 'components/ajax-form/ajax-form';
 import {
-  init as initTwoStepSigninSlide,
-  selector as selectorTwoStepSigninSlide
-} from 'components/two-step-signin/two-step-signin__slide';
+  init as initAjaxFormSlide,
+  selector as selectorAjaxFormSlide
+} from 'components/ajax-form/ajax-form__slide';
 import {
   init as initSmartLock,
   selector as selectorSmartLock
@@ -20,8 +20,8 @@ import {
   selector as selectorErrorWrap
 } from 'components/form-error-wrap/index';
 import {
-  init as initTwoStepSignInGa,
-  selector as selectorTwoStepSignInGa
+  init as initTwoStepSigninGa,
+  selector as selectorTwoStepSigninGa
 } from 'components/two-step-signin/two-step-signin__ga-client-id';
 import {
   init as initFormInput,
@@ -41,13 +41,13 @@ const ERR_COMPONENT_THROW = 'Uncaught component error';
 
 const components: any[] = [
   [initFormInput, selectorFormInput],
-  [initTwoStepSignin, selectorTwoStepSignin, initOnceTwoStepSignin],
-  [initTwoStepSigninSlide, selectorTwoStepSigninSlide],
+  [initAjaxForm, selectorAjaxForm, initOnceAjaxForm],
+  [initAjaxFormSlide, selectorAjaxFormSlide],
   [initSmartLock, selectorSmartLock],
   [initInPageClick, selectorInPageClick],
   [initFormErrorWrap, selectorErrorWrap],
   [initOauthCta, selectorOauthCta],
-  [initTwoStepSignInGa, selectorTwoStepSignInGa]
+  [initTwoStepSigninGa, selectorTwoStepSigninGa]
 ];
 
 const initOnceList = [];

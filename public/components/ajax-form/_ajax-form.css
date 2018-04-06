@@ -1,0 +1,61 @@
+.ajax-form[data-enhanced] {
+  position: relative;
+  min-height: 100%;
+  .ajax-form__slide {
+    left: 0;
+    right: 0;
+    top: 0;
+    &[data-state='SLIDE_STATE_LOADING'] {
+      opacity: 0.5;
+    }
+  }
+}
+
+.ajax-form__slide--out {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  animation: ajax-form-animation__slide-left 0.2s both;
+}
+.ajax-form__slide--in {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  animation: ajax-form-animation__slide-right reverse 0.2s both;
+}
+.ajax-form__slide--out-reverse {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  animation: ajax-form-animation__slide-right 0.2s both;
+}
+.ajax-form__slide--in-reverse {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  animation: ajax-form-animation__slide-left reverse 0.2s both;
+}
+
+@keyframes ajax-form-animation__slide-left {
+  0% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(-4em);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes ajax-form-animation__slide-right {
+  0% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(4em);
+    opacity: 0;
+    visibility: hidden;
+  }
+}

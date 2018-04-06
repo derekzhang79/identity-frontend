@@ -135,27 +135,28 @@ const init = ($component: HTMLElement): void => {
   const $form: HTMLFormElement = (($component.querySelector(
     'form'
   ): any): HTMLFormElement);
-  const $links: HTMLElement[] = validAjaxLinkRoutes
+  const $links: HTMLAnchorElement[] = validAjaxLinkRoutes
     .map(_ => [
-      ...$component.querySelectorAll(`a.ajax-form__link[href*="${_}"]`)
+      ...($component.querySelectorAll(`a.ajax-form__link[href*="${_}"]`): any)
     ])
-    .reduce((acc, _) => [...acc, ..._], []);
+    .reduce((acc, _) => [...acc, ..._], [])
+    .filter(_ => _ instanceof HTMLAnchorElement);
 
   if (validAjaxFormRoutes.includes(new URL($form.action).pathname)) {
     initStepOneForm($form, $component);
   }
 
-  $links.forEach(($resetLink: HTMLElement) => {
-    $resetLink.addEventListener('click', (ev: Event) => {
+  $links.forEach(($link: HTMLAnchorElement) => {
+    $link.addEventListener('click', (ev: Event) => {
       ev.preventDefault();
-      fetchSlide(route('twoStepSignIn'), $component, {
+      fetchSlide($link.href, $component, {
         method: 'GET'
       })
         .then(([responseHtml, url]) =>
           dispatchDone($component, {
             $slide: getSlideFromFetch(responseHtml),
             url,
-            reverse: $resetLink.dataset.isReverse !== null
+            reverse: $link.dataset.isReverse !== null
           })
         )
         .catch(err => catchSlide($component, err));

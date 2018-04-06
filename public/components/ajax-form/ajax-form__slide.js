@@ -20,9 +20,7 @@ const validAjaxFormRoutes = [
   route('signInSecondStepCurrentAction')
 ];
 
-const validAjaxLinkRoutes = [
-  route('twoStepSignIn'),
-];
+const validAjaxLinkRoutes = [route('twoStepSignIn')];
 
 const getSlide = ($component: HTMLElement) => {
   const $slide = $component.querySelector(selector);
@@ -137,9 +135,11 @@ const init = ($component: HTMLElement): void => {
   const $form: HTMLFormElement = (($component.querySelector(
     'form'
   ): any): HTMLFormElement);
-  const $links: HTMLElement[] = [].concat.apply([], validAjaxLinkRoutes.map(_ => [
-    ...$component.querySelectorAll(`a.ajax-form__link[href*="${_}"]`)
-  ]));
+  const $links: HTMLElement[] = validAjaxLinkRoutes
+    .map(_ => [
+      ...$component.querySelectorAll(`a.ajax-form__link[href*="${_}"]`)
+    ])
+    .reduce((acc, _) => [...acc, ..._], []);
 
   if (validAjaxFormRoutes.includes(new URL($form.action).pathname)) {
     initStepOneForm($form, $component);

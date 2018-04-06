@@ -3,17 +3,14 @@
 @import '_vars.css';
 @import '_mixins.css';
 
-
 /* Base */
 
 @import '_html.css';
 @import 'components/form-foundations/_form_foundations.css';
 
-
 /** Layout **/
 
 @import '_layout.css';
-
 
 /** Generic blocks **/
 
@@ -23,7 +20,6 @@
 @import 'components/oauth-cta/_oauth-cta.css';
 @import 'components/terms/_terms.css';
 
-
 /** Pages **/
 
 @import 'components/signin-form/_signin-form.css';
@@ -32,7 +28,6 @@
 @import 'components/reset-password/_reset-password';
 @import 'components/resend-consent/_resend-consent.css';
 @import 'components/third-party-ts-and-cs/_third-party-ts-and-cs.css';
-
 
 /** Skins **/
 

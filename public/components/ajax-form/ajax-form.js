@@ -1,9 +1,6 @@
 // @flow
 
-import {
-  EV_DONE,
-  getSlide
-} from 'components/ajax-form/ajax-form__slide';
+import { EV_DONE, getSlide } from 'components/ajax-form/ajax-form__slide';
 import { loadComponents } from 'js/load-components';
 import { pageView } from '../analytics/ga';
 

@@ -52,6 +52,13 @@ generic input wrapper
   display: block;
 }
 
+.form-field-wrap > .form-button {
+  @supports (box-sizing: border-box) {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
 .form-field-wrap__title {
   @extend %font-text-sans-2;
 }

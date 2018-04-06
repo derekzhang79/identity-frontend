@@ -20,8 +20,8 @@ import {
   selector as selectorErrorWrap
 } from 'components/form-error-wrap/index';
 import {
-  init as initTwoStepSigninGa,
-  selector as selectorTwoStepSigninGa
+  init as initTwoStepSignInGa,
+  selector as selectorTwoStepSignInGa
 } from 'components/two-step-signin/two-step-signin__ga-client-id';
 import {
   init as initFormInput,
@@ -47,7 +47,7 @@ const components: any[] = [
   [initInPageClick, selectorInPageClick],
   [initFormErrorWrap, selectorErrorWrap],
   [initOauthCta, selectorOauthCta],
-  [initTwoStepSigninGa, selectorTwoStepSigninGa]
+  [initTwoStepSignInGa, selectorTwoStepSignInGa]
 ];
 
 const initOnceList = [];

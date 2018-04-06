@@ -11,9 +11,9 @@ const SLIDE_STATE_DEFAULT: string = 'SLIDE_STATE_DEFAULT';
 
 const EV_DONE: string = 'form-done';
 
-const ERR_MALFORMED_HTML: string = 'Something went wrong (html)';
-const ERR_MALFORMED_RESPONSE: string = 'Something went wrong (response)';
-const ERR_BACKEND_ERROR: string = 'Something went wrong (remote)';
+const ERR_MALFORMED_HTML: string = 'ERR_MALFORMED_HTML';
+const ERR_MALFORMED_RESPONSE: string = 'ERR_MALFORMED_RESPONSE';
+const ERR_BACKEND_ERROR: string = 'ERR_BACKEND_ERROR';
 
 const validAjaxFormRoutes = [
   route('twoStepSignInAction'),

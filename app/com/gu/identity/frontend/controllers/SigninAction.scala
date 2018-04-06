@@ -18,6 +18,7 @@ import com.gu.tip.Tip
 import java.net.URLEncoder.encode
 
 import com.gu.identity.model.CurrentUser
+import play.api.libs.json.Json
 
 import scala.concurrent.Future
 
@@ -174,7 +175,10 @@ class SigninAction(
 
 
   def successfulAjaxSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
-    Ok(s"""{"status": true, "returnUrl": "${successfulReturnUrl.url}"}""")
+    Ok(Json.obj(
+      "status" -> true,
+      "returnUrl" -> successfulReturnUrl.url.toString
+    ))
       .withCookies(cookies: _*)
 
 

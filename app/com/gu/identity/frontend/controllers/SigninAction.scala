@@ -136,8 +136,7 @@ class SigninAction(
         metricsLogger(request)
         if(request.headers.toSimpleMap.contains("x-gu-browser-rq")){
           successAjaxResponse(successfulReturnUrl, cookies)
-        }
-        else {
+        } else {
           successResponse(successfulReturnUrl, cookies)
         }
       }
@@ -175,7 +174,7 @@ class SigninAction(
 
 
   def successfulAjaxSignInResponse(successfulReturnUrl: ReturnUrl, cookies: Seq[Cookie]): Result =
-    Ok("{\"status\": true, \"returnUrl\": \"" + successfulReturnUrl.url + "\"}")
+    Ok(s"""{"status": true, "returnUrl": "${successfulReturnUrl.url}"}""")
       .withCookies(cookies: _*)
 
 

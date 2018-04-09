@@ -19,7 +19,7 @@ GET        /signin-token                                com.gu.identity.frontend
 
 GET        /signin-token/email-sent                     com.gu.identity.frontend.controllers.Application.sendSignInLinkSent
 
-POST       /signin-token/email                          com.gu.identity.frontend.controllers.SigninAction.sendSignInLink()
+POST       /actions/signin-token/email                  com.gu.identity.frontend.controllers.SigninAction.sendSignInLink()
 
 GET        /signout                                     com.gu.identity.frontend.controllers.SignOutAction.signOut(returnUrl: Option[String] ?= None)
 

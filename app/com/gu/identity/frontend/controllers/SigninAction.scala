@@ -172,8 +172,8 @@ class SigninAction(
     identityService.sendSignInTokenEmail(req, ClientIp(_req)).map {
       case Right(_) =>
         SeeOther(routes.Application.sendSignInLinkSent().url)
-      case Left(_) =>
-        renderErrorPage(config, BadRequestError("Unable to send SignIn link."), Results.BadRequest.apply)
+      case Left(errors) =>
+        SeeOther(routes.Application.sendSignInLink(error = errors.map(_.getMessage)).url)
     }
   }
 

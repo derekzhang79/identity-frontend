@@ -99,6 +99,21 @@ class IdentityClient extends Logging {
     }
   }
 
+  def sendEmailSignInToken(apiRequest: SendSiginInTokenEmailApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, SendSignInTokenEmailResponse]] = {
+    configuration.requestHandler.handleRequest(apiRequest).map {
+      case Left(error) =>
+        logger.error("Failed to send email sign in link")
+        Left(error)
+
+      case Right(r: SendSignInTokenEmailResponse) =>
+        logger.info("Successfully sent email signin link")
+        Right(r)
+
+      case Right(_) => Left(Seq(ClientGatewayError("Unknown response")))
+    }
+
+  }
+
   def resendRepermissionToken(request: ResendRepermissionTokenApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, ResendTokenResponse ]] = {
     configuration.requestHandler.handleRequest(request).map {
       case Left(error) =>

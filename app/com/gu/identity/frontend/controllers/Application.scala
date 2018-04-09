@@ -11,7 +11,11 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 
 
-class Application (configuration: Configuration, val messagesApi: MessagesApi, csrfConfig: CSRFConfig) extends Controller with Logging with I18nSupport {
+class Application(
+  configuration: Configuration,
+  val messagesApi: MessagesApi,
+  csrfConfig: CSRFConfig
+) extends Controller with Logging with I18nSupport {
 
   def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
     val clientIdActual = ClientID(clientId)

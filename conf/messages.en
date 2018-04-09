@@ -85,6 +85,18 @@ footer.techfeedback=Report technical issue
 footer.cookies=Cookie Policy
 footer.copyright=© {0} Guardian News and Media Limited or its affiliated companies. All rights reserved.
 
+
+# com.gu.identity.frontend.models.text.SendSignInLinkText
+sendSignInLink.pageTitle=Send me a sign-in link
+sendSignInLink.title=Send me a sign-in link
+sendSignInLink.emailInput=Your email
+sendSignInLink.submitAction=Submit
+
+# com.gu.identity.frontend.models.text.SendSignInLinkSentText
+sendSignInLinkSent.pageTitle=Check your email
+sendSignInLinkSent.title=Now check your email
+
+
 # com.gu.identity.frontend.models.text.ResetPasswordText
 resetPassword.pageTitle=Reset password
 resetPassword.title=Forgotten or need to set your password?

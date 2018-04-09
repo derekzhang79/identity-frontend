@@ -171,7 +171,7 @@ class SigninAction(
     val req = _req.body
     identityService.sendSignInTokenEmail(req, ClientIp(_req)).map {
       case Right(_) =>
-        renderSendSignInLinkSent(config)
+        SeeOther(routes.Application.sendSignInLinkSent().url)
       case Left(_) =>
         renderErrorPage(config, BadRequestError("Unable to send SignIn link."), Results.BadRequest.apply)
     }

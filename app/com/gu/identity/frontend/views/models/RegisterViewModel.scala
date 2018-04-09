@@ -59,6 +59,7 @@ object RegisterViewModel {
       clientId: Option[ClientID],
       group: Option[GroupCode],
       email: Option[String],
+      referrer: Option[Referrer],
       shouldCollectConsents: Boolean,
       shouldCollectV2Consents: Boolean)
       (implicit messages: Messages): RegisterViewModel = {
@@ -93,7 +94,7 @@ object RegisterViewModel {
       shouldCollectV2Consents = shouldCollectV2Consents,
 
       actions = RegisterActions(),
-      links = RegisterLinks(returnUrl, skipConfirmation, clientId),
+      links = RegisterLinks(returnUrl, skipConfirmation, clientId, referrer),
 
       resources = layout.resources,
       indirectResources = layout.indirectResources,
@@ -134,8 +135,11 @@ case class RegisterLinks private(
     signIn: String)
 
 object RegisterLinks {
-  def apply(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID]): RegisterLinks =
+  def apply(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], referrer: Option[Referrer]): RegisterLinks =
     RegisterLinks(
-      signIn = UrlBuilder(routes.Application.signIn().url, returnUrl, skipConfirmation, clientId, group = None)
+      signIn = referrer match {
+        case Some(SignInTwoStepReferrer) => UrlBuilder(routes.Application.twoStepSignIn().url, returnUrl, skipConfirmation, clientId, group = None)
+        case _ => UrlBuilder(routes.Application.signIn().url, returnUrl, skipConfirmation, clientId, group = None)
+      }
     )
 }

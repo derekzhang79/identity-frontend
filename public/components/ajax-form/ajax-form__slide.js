@@ -4,6 +4,8 @@ import { route } from 'js/config';
 import { showErrorText } from '../form-error-wrap/index';
 import { getUrlErrors } from '../../js/get-url-errors';
 
+type ValidRouteList = string[];
+
 const selector: string = '.ajax-form__slide';
 
 const SLIDE_STATE_LOADING: string = 'SLIDE_STATE_LOADING';
@@ -15,14 +17,14 @@ const ERR_MALFORMED_HTML: string = 'ERR_MALFORMED_HTML';
 const ERR_MALFORMED_RESPONSE: string = 'ERR_MALFORMED_RESPONSE';
 const ERR_BACKEND_ERROR: string = 'ERR_BACKEND_ERROR';
 
-const validAjaxFormRoutes = [
+const validAjaxFormRoutes: ValidRouteList = [
   route('twoStepSignInAction'),
   route('signInSecondStepCurrentAction')
 ];
 
-const validAjaxLinkRoutes = [route('twoStepSignIn')];
+const validAjaxLinkRoutes: ValidRouteList = [route('twoStepSignIn')];
 
-const getSlide = ($component: HTMLElement) => {
+const getSlide = ($component: HTMLElement): HTMLElement => {
   const $slide = $component.querySelector(selector);
   if ($slide) return $slide;
   throw new Error([ERR_MALFORMED_HTML, $component]);
@@ -54,7 +56,11 @@ const dispatchDone = (
   $parent.dispatchEvent(event);
 };
 
-const fetchSlide = (action, $stateable, fetchProps) =>
+const fetchSlide = (
+  action: string,
+  $stateable: HTMLElement,
+  fetchProps: {}
+): Promise<string[]> =>
   Promise.resolve()
     .then(() => {
       $stateable.dataset.state = SLIDE_STATE_LOADING;
@@ -98,7 +104,7 @@ const fetchSlide = (action, $stateable, fetchProps) =>
       });
     });
 
-const catchSlide = ($stateable, err) => {
+const catchSlide = ($stateable: HTMLElement, err: Error): void => {
   $stateable.dataset.state = SLIDE_STATE_DEFAULT;
   if (err.message.split(',')[0] === ERR_BACKEND_ERROR) {
     err.message
@@ -111,55 +117,62 @@ const catchSlide = ($stateable, err) => {
   console.error(err);
 };
 
-const initStepOneForm = (
-  $component: HTMLFormElement,
-  $parent: HTMLElement
-): void => {
-  if (!$component || !$parent) {
-    throw new Error([ERR_MALFORMED_HTML, $component, $parent]);
-  }
-
-  $component.addEventListener('submit', (ev: Event) => {
-    ev.preventDefault();
-    fetchSlide($component.action, $parent, {
-      body: new FormData($component)
-    })
-      .then(([responseHtml, url]) => {
-        dispatchDone($parent, { $slide: getSlideFromFetch(responseHtml), url });
+const fetchAndDispatchSlide = (
+  action: string,
+  $stateable: HTMLElement,
+  fetchProps: {},
+  props: { reverse: boolean } = { reverse: false }
+): Promise<void> =>
+  fetchSlide(action, $stateable, fetchProps)
+    .then(([responseHtml, url]) =>
+      dispatchDone($stateable, {
+        $slide: getSlideFromFetch(responseHtml),
+        url,
+        reverse: props.reverse
       })
-      .catch(err => catchSlide($parent, err));
-  });
-};
+    )
+    .catch(err => catchSlide($stateable, err));
 
 const init = ($component: HTMLElement): void => {
-  const $form: HTMLFormElement = (($component.querySelector(
-    'form'
-  ): any): HTMLFormElement);
-  const $links: HTMLAnchorElement[] = validAjaxLinkRoutes
-    .map(_ => [
-      ...($component.querySelectorAll(`a.ajax-form__link[href*="${_}"]`): any)
-    ])
-    .reduce((acc, _) => [...acc, ..._], [])
-    .filter(_ => _ instanceof HTMLAnchorElement);
+  const $links: HTMLAnchorElement[] = [
+    ...($component.querySelectorAll(`a.ajax-form__link`): any)
+  ]
+    .filter(_ => _ instanceof HTMLAnchorElement)
+    .filter(_ =>
+      validAjaxLinkRoutes.map(r => _.href.contains(r)).some(c => c === true)
+    );
 
-  if (validAjaxFormRoutes.includes(new URL($form.action).pathname)) {
-    initStepOneForm($form, $component);
-  }
+  const $forms: HTMLFormElement[] = [
+    ...($component.querySelectorAll(`form`): any)
+  ]
+    .filter(_ => _ instanceof HTMLFormElement)
+    .filter(_ =>
+      validAjaxFormRoutes.map(r => _.action.contains(r)).some(c => c === true)
+    );
+
+  $forms.forEach(($form: HTMLFormElement) => {
+    $form.addEventListener('submit', (ev: Event) => {
+      ev.preventDefault();
+      fetchAndDispatchSlide($form.action, $component, {
+        method: 'post',
+        body: new FormData($form)
+      });
+    });
+  });
 
   $links.forEach(($link: HTMLAnchorElement) => {
     $link.addEventListener('click', (ev: Event) => {
       ev.preventDefault();
-      fetchSlide($link.href, $component, {
-        method: 'GET'
-      })
-        .then(([responseHtml, url]) =>
-          dispatchDone($component, {
-            $slide: getSlideFromFetch(responseHtml),
-            url,
-            reverse: $link.dataset.isReverse !== null
-          })
-        )
-        .catch(err => catchSlide($component, err));
+      fetchAndDispatchSlide(
+        $link.href,
+        $component,
+        {
+          method: 'get'
+        },
+        {
+          reverse: $link.dataset.isReverse !== null
+        }
+      );
     });
   });
 };

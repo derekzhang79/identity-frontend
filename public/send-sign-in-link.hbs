@@ -8,7 +8,9 @@
       <h1 class="layout-header__title">{{ sendSignInLinkText.title }}</h1>
     </section>
 
-    <form method="GET" action="{{ actions.submit }}">
+    <form method="POST" action="{{ actions.submit }}">
+
+      <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
 
       <div class="form-field-wrap">
         <label class="form-field-wrap__title" for="signin_field_email">{{sendSignInLinkText.emailInput}}</label>

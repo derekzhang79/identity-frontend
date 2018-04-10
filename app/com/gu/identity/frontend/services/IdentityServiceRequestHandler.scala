@@ -68,6 +68,8 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val userResponseFormat = Json.format[UserResponse]
   implicit val userTypeFormat = Json.format[UserTypeResponse]
 
+  implicit val signinTokenEmailRequestBodyFormat = Json.format[SendSiginInTokenEmailApiRequestBody]
+
   implicit val assignGroupResponseFormat = Json.format[AssignGroupResponse]
 
   def handleRequest(request: ApiRequest): Future[Either[IdentityClientErrors, ApiResponse]] = {
@@ -99,6 +101,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
     case AuthenticateCookiesFromTokenApiRequestBody(token) => encodeBody("token" -> token)
     case b: ResendRepermissionFromTokenApiRequestBody => Json.stringify(Json.toJson(b))
     case b: SendResetPasswordEmailRequestBody => Json.stringify(Json.toJson(b))
+    case b: SendSiginInTokenEmailApiRequestBody => Json.stringify(Json.toJson(b))
   }
 
   private def encodeBody(params: (String, String)*) = {
@@ -112,7 +115,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
       handleErrorResponse(response)
     }
 
-    case r: AuthenticateCookiesApiRequest =>
+    case _: AuthenticateCookiesApiRequest | _: SigninTokenRequest  =>
       response.json.asOpt[AuthenticationCookiesResponse]
         .map(Right.apply)
         .getOrElse(handleUnexpectedResponse(response))
@@ -153,6 +156,11 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         handleUnexpectedResponse(response)
       }
 
+    case _: SendSiginInTokenEmailApiRequest =>
+      if (response.status == 200)
+        Right(SendSignInTokenEmailResponse())
+      else
+        handleUnexpectedResponse(response)
     case r: ResendRepermissionTokenApiRequest =>
       if (response.status == 200) {
         Right(ResendTokenResponse())

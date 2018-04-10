@@ -7,7 +7,7 @@ import com.gu.identity.frontend.logging.Logging
 import com.gu.identity.frontend.services.IdentityService
 import com.gu.identity.frontend.views.ViewRenderer._
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{Action, AnyContent, Controller}
 
 import scala.concurrent.ExecutionContext
 import scala.util.control.NonFatal
@@ -21,7 +21,7 @@ class RepermissionController(
   with Logging
   with I18nSupport {
 
-  def acceptToken(repermissionToken: String) = Action.async { implicit request =>
+  def acceptToken(repermissionToken: String): Action[AnyContent] = Action.async { implicit request =>
     identityService.authenticateRepermissionToken(repermissionToken).map {
       case Right(playCookies) =>
         Redirect("/consents/staywithus", request.queryString).withCookies(playCookies: _*)

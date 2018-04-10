@@ -64,6 +64,7 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   lazy val resendConsentTokenController = new ResendConsentTokenAction(identityService, csrfConfig)
   lazy val resendRepermissionTokenController = new ResendRepermissionTokenAction(identityService, csrfConfig)
   lazy val repermissionController = new RepermissionController(frontendConfiguration, identityService, messagesApi, ExecutionContext.Implicits.global)
+  lazy val signinTokenController = new SigninTokenController(frontendConfiguration, identityService, messagesApi, ExecutionContext.Implicits.global)
   lazy val optInController = new OptInController()
   lazy val assets = new controllers.Assets(httpErrorHandler)
   lazy val redirects = new Redirects
@@ -92,9 +93,9 @@ class ApplicationComponents(context: Context) extends BuiltInComponentsFromConte
   })
 
 
-  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signOutController,
-    thirdPartyTsAndCsController,  signinController, registerController, consentController,resendConsentTokenController, repermissionController, resendRepermissionTokenController, resetPasswordController, cspReporterController,
-    healthcheckController, digitalAssetLinksController, manifestController, optInController, assets, redirects)
+  override lazy val router: Router = new Routes(httpErrorHandler, applicationController, signinController, signOutController,
+    thirdPartyTsAndCsController, registerController, consentController,resendConsentTokenController, repermissionController, resendRepermissionTokenController, resetPasswordController, cspReporterController,
+    healthcheckController, digitalAssetLinksController, manifestController, optInController, assets, signinTokenController, redirects)
 
   val sentryLogging = new SentryLogging(frontendConfiguration) // don't make it lazy
 }

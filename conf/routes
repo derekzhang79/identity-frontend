@@ -19,6 +19,7 @@ GET        /signin-token                                com.gu.identity.frontend
 
 GET        /signin-token/email-sent                     com.gu.identity.frontend.controllers.Application.sendSignInLinkSent
 
+POST       /actions/signin-token/email                  com.gu.identity.frontend.controllers.SigninAction.sendSignInLink()
 
 GET        /signout                                     com.gu.identity.frontend.controllers.SignOutAction.signOut(returnUrl: Option[String] ?= None)
 
@@ -72,6 +73,8 @@ GET        /opt/reset                                   com.gu.identity.frontend
 GET        /static/*file                                controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /robots.txt                                  controllers.Assets.at(path="/public", file="robots.txt")
+
+GET        /signin/token/:signinToken                    com.gu.identity.frontend.controllers.SigninTokenController.signinWithToken(signinToken: String, returnUrl: Option[String] ?= None)
 
 # Redirects
 GET        /                                            com.gu.identity.frontend.controllers.Redirects.indexRedirect

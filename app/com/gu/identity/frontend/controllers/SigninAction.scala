@@ -2,25 +2,22 @@ package com.gu.identity.frontend.controllers
 
 import com.gu.identity.frontend.analytics.AnalyticsEventActor
 import com.gu.identity.frontend.analytics.client.{SigninEventRequest, SigninFirstStepEventRequest}
+import com.gu.identity.frontend.authentication.CookieService
 import com.gu.identity.frontend.configuration.Configuration
+import com.gu.identity.frontend.configuration.Configuration.Environment._
 import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
-import com.gu.identity.frontend.errors.{RedirectOnError, ResultOnError, UnexpectedAppException}
+import com.gu.identity.frontend.errors._
 import com.gu.identity.frontend.logging.{LogOnErrorAction, Logging, MetricsLoggingActor}
 import com.gu.identity.frontend.models._
-import com.gu.identity.frontend.request.SignInActionRequestBody
+import com.gu.identity.frontend.request.{EmailSignInRequest, EmailSignInRequests, SignInActionRequestBody}
 import com.gu.identity.frontend.services._
+import com.gu.identity.frontend.views.ViewRenderer.{renderErrorPage, renderSendSignInLinkSent}
+import com.gu.identity.model.CurrentUser
+import com.gu.tip.Tip
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.mvc._
-import Configuration.Environment._
-import com.gu.identity.frontend.authentication.CookieService
-import com.gu.tip.Tip
-import java.net.URLEncoder.encode
-
-import com.gu.identity.model.CurrentUser
 import play.api.libs.json.Json
-
-import scala.concurrent.Future
+import play.api.mvc._
 
 /**
  * Form actions controller
@@ -34,7 +31,8 @@ class SigninAction(
     val config: Configuration)
   extends Controller
     with Logging
-    with I18nSupport {
+    with I18nSupport
+    with EmailSignInRequests {
 
   val redirectRoute: String = routes.Application.signIn().url
 
@@ -166,6 +164,16 @@ class SigninAction(
     identityService.authenticate(token, trackingData).map {
       case Left(errors) => Left(errors)
       case Right(cookies) => Right(successResponse(returnUrl, cookies))
+    }
+  }
+
+  def sendSignInLink(): Action[EmailSignInRequest] = Action.async(emailSigninFormParser) { _req =>
+    val req = _req.body
+    identityService.sendSignInTokenEmail(req, ClientIp(_req)).map {
+      case Right(_) =>
+        SeeOther(routes.Application.sendSignInLinkSent().url)
+      case Left(errors) =>
+        SeeOther(routes.Application.sendSignInLink(error = errors.map(_.getMessage)).url)
     }
   }
 

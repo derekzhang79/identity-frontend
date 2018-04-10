@@ -1,0 +1,5 @@
+.oauth-email {
+  > div {
+    padding-top: var(--size-baseline-vertical);
+  }
+}

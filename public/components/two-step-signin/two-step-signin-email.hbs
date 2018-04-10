@@ -2,14 +2,14 @@
   {{> components/two-step-signin/_helpers }}
   <fieldset class="form-field-wrap">
     {{> components/oauth-cta/_oauth-cta-content }}
-  </fieldset>
-
-  <p class="form-prelude"> <span>{{twoStepSignInPageText.divideText}}</span> </p>
-
-  <fieldset class="form-field-wrap">
-    <label class="form-field-wrap__title">{{twoStepSignInPageText.emailFieldTitle}}</label>
-    <input class="form-input form-field-wrap__field" required="required" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" autofocus spellcheck="false" value="{{email}}" />
-    <input class="form-input form-field-wrap__field u-h" type="password" name="password" autocomplete="password" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{password}}" />
-    <button class="form-button form-button--main form-field-wrap__field" type="submit">{{twoStepSignInPageText.continueAction}} {{> components/icon/arrow-inline }}</button>
+    <div class="outh-email-expand">
+      <button class="form-button form-button--secondary form-button--no-arrow form-button--reverse" type="submit">{{> components/icon/envelope }} Sign in with Email</button>
+      <div class="form-field-wrap">
+        <label class="form-field-wrap__title">{{twoStepSignInPageText.emailFieldTitle}}</label>
+        <input class="form-input form-field-wrap__field" required="required" type="email" name="email" autocomplete="username" autocapitalize="off" autocorrect="off" autofocus spellcheck="false" value="{{email}}" />
+        <input class="form-input form-field-wrap__field u-h" type="password" name="password" autocomplete="password" autocapitalize="off" autocorrect="off" spellcheck="false" value="{{password}}" />
+        <button class="form-button form-button--main form-field-wrap__field" type="submit">{{twoStepSignInPageText.continueAction}} {{> components/icon/arrow-inline }}</button>
+      </div>
+    </div>
   </fieldset>
 </form>

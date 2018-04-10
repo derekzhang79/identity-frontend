@@ -13,6 +13,7 @@ import com.gu.identity.frontend.request.{EmailSignInRequest, EmailSignInRequests
 import com.gu.identity.frontend.services._
 import com.gu.identity.frontend.views.ViewRenderer.{renderErrorPage, renderSendSignInLinkSent}
 import com.gu.identity.model.CurrentUser
+import com.gu.identity.service.client.ClientGatewayError
 import com.gu.tip.Tip
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -174,6 +175,9 @@ class SigninAction(
         SeeOther(routes.Application.sendSignInLinkSent().url)
       case Left(errors) =>
         SeeOther(routes.Application.sendSignInLink(error = errors.map(_.getMessage)).url)
+    }.recover {
+      case e: ClientGatewayError =>
+        SeeOther(routes.Application.sendSignInLink(error = List(e.message)).url)
     }
   }
 

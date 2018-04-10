@@ -8,6 +8,8 @@
       <h1 class="layout-header__title">{{ sendSignInLinkText.title }}</h1>
     </section>
 
+    {{> components/form/form-error-wrap }}
+
     <form method="POST" action="{{ actions.submit }}">
 
       <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">

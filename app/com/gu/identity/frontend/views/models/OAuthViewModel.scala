@@ -24,17 +24,18 @@ object OAuthProviderViewModel {
       finalReturnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
       clientId: Option[ClientID],
+      skipConsentJourney: Option[Boolean],
       groupCode: Option[GroupCode])
       (implicit messages: Messages): OAuthProviderViewModel = {
 
     val baseUrl = configuration.identityFederationApiHost + provider.authPath
 
     val returnUrl = groupCode match{
-      case Some(code) => UrlBuilder.buildOauthReturnUrl(baseUrl, finalReturnUrl, skipConfirmation, clientId, code, configuration)
+      case Some(code) => UrlBuilder.buildOauthReturnUrl(baseUrl, finalReturnUrl, skipConfirmation, clientId, code, configuration, skipConsentJourney)
       case None => UrlBuilder(baseUrl, finalReturnUrl, skipConfirmation, clientId, group = None)
     }
 
-
+    println(returnUrl)
 
     provider match {
       case GoogleOAuth =>
@@ -73,12 +74,14 @@ case class OAuthSignInViewModel private(
 
 object OAuthSignInViewModel {
 
-  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], groupCode: Option[GroupCode], activeTests: ActiveMultiVariantTests)(implicit messages: Messages): OAuthSignInViewModel = {
+  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], groupCode: Option[GroupCode], activeTests: ActiveMultiVariantTests, skipConsentJourney:Option[Boolean])(implicit
+                                                                                                                                                                                                                               messages: Messages)
+  : OAuthSignInViewModel = {
 
     val text = OAuthSignInText()
 
     OAuthSignInViewModel(
-      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation, clientId, groupCode))
+      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation, clientId, skipConsentJourney, groupCode))
     )
   }
 }
@@ -89,11 +92,12 @@ case class OAuthRegistrationViewModel(
 
 object OAuthRegistrationViewModel {
 
-  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], groupCode: Option[GroupCode], activeTests: ActiveMultiVariantTests)(implicit messages: Messages): OAuthRegistrationViewModel = {
+  def apply(configuration: Configuration, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], groupCode: Option[GroupCode], activeTests: ActiveMultiVariantTests, skipConsentJourney: Option[Boolean])(implicit
+                                                                                                                                                                                                                               messages: Messages): OAuthRegistrationViewModel = {
     val text = OAuthRegistrationText()
 
     OAuthRegistrationViewModel(
-      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation, clientId, groupCode))
+      SupportedOAuthProvider.all.map(OAuthProviderViewModel(_, configuration, text, returnUrl, skipConfirmation, clientId, skipConsentJourney, groupCode))
     )
   }
 }

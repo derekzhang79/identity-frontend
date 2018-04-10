@@ -56,6 +56,7 @@ object RegisterViewModel {
       csrfToken: Option[CSRFToken],
       returnUrl: ReturnUrl,
       skipConfirmation: Option[Boolean],
+      skipConsentJourney: Option[Boolean],
       clientId: Option[ClientID],
       group: Option[GroupCode],
       email: Option[String],
@@ -70,7 +71,7 @@ object RegisterViewModel {
     RegisterViewModel(
       layout = layout,
 
-      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
+      oauth = OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests, skipConsentJourney),
 
       registerPageText = RegisterText.loadText(clientId),
       terms = Terms.getTermsModel(group),

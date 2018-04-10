@@ -26,16 +26,16 @@ object UrlBuilder {
     }
 
   def apply(baseUrl: String, returnUrl: ReturnUrl): String =
-    apply(baseUrl, returnUrl, skipConfirmation = None, clientId = None, group = None, skipThirdPartyLandingPage = None)
+    apply(baseUrl, returnUrl, skipConfirmation = None, clientId = None, group = None, skipThirdPartyLandingPage = None, skipConsentJourney = None)
 
   def apply(baseUrl: String, returnUrl: ReturnUrl, clientId: Option[ClientID]): String =
-    apply(baseUrl, returnUrl, skipConfirmation = None, clientId, group = None, skipThirdPartyLandingPage = None)
+    apply(baseUrl, returnUrl, skipConfirmation = None, clientId, group = None, skipThirdPartyLandingPage = None, skipConsentJourney = None)
 
   def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
     apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, group))
 
-  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String], skipThirdPartyLandingPage: Option[Boolean]): String =
-    apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, group, skipThirdPartyLandingPage))
+  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String], skipThirdPartyLandingPage: Option[Boolean], skipConsentJourney:Option[Boolean]): String =
+    apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, group, skipThirdPartyLandingPage, skipConsentJourney))
 
   def apply(baseUrl: String, returnUrl: Option[ReturnUrl], skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[GroupCode], error: AppException): String =
     apply(baseUrl, buildParams(returnUrl, skipConfirmation, clientId, group.map(_.id), error = Some(error)))
@@ -51,7 +51,7 @@ object UrlBuilder {
 
 
   def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
-    apply(call.url, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None)
+    apply(call.url, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None, skipConsentJourney = None)
 
   def apply(baseUrl: String, call: Call): String = s"$baseUrl${call.url}"
 
@@ -64,7 +64,7 @@ object UrlBuilder {
       configuration: Configuration): ReturnUrl = {
 
     val baseThirdPartyReturnUrl = configuration.identityProfileBaseUrl + "/agree/" + group.id
-    val thirdPartyReturnUrl = apply(baseThirdPartyReturnUrl, returnUrl, skipConfirmation, clientId, group = None, Some(skipThirdPartyLandingPage))
+    val thirdPartyReturnUrl = apply(baseThirdPartyReturnUrl, returnUrl, skipConfirmation, clientId, group = None, Some(skipThirdPartyLandingPage), skipConsentJourney = None)
     ReturnUrl(Some(thirdPartyReturnUrl), configuration)
   }
 
@@ -74,10 +74,11 @@ object UrlBuilder {
       skipConfirmation: Option[Boolean],
       clientId: Option[ClientID],
       group: GroupCode,
-      configuration: Configuration): String = {
+      configuration: Configuration,
+      skipConsentJourney: Option[Boolean]): String = {
 
     val thirdPartyReturnUrl = buildThirdPartyReturnUrl(returnUrl, skipConfirmation, skipThirdPartyLandingPage = true, clientId, group, configuration)
-    apply(baseUrl, thirdPartyReturnUrl, skipConfirmation, clientId, Some(group.id), skipThirdPartyLandingPage = None)
+    apply(baseUrl, thirdPartyReturnUrl, skipConfirmation, clientId, Some(group.id), skipThirdPartyLandingPage = None, skipConsentJourney = None)
   }
 
   private def buildParams(
@@ -86,13 +87,15 @@ object UrlBuilder {
       clientId: Option[ClientID] = None,
       group: Option[String] = None,
       skipThirdPartyLandingPage: Option[Boolean] = None,
+      skipConsentJourney: Option[Boolean] = None,
       error: Option[AppException] = None): UrlParameters =
     Seq(
       returnUrl.flatMap(_.toStringOpt).map("returnUrl" -> _),
       skipConfirmation.map("skipConfirmation" -> _.toString),
       clientId.map("clientId" -> _.id),
       group.map("group" -> _),
-      skipThirdPartyLandingPage.map("skipThirdPartyLandingPage" -> _.toString)
+      skipThirdPartyLandingPage.map("skipThirdPartyLandingPage" -> _.toString),
+      skipConsentJourney.map("skipConsentJourney" -> _.toString)
     ).flatten ++ error.map(errorToUrlParameters).getOrElse(Seq.empty)
 
 

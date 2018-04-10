@@ -32,7 +32,8 @@ object ViewRenderer {
       skipConfirmation: Option[Boolean],
       clientId: Option[ClientID],
       group: Option[GroupCode],
-      email: Option[String])
+      email: Option[String],
+      skipConsentJourney: Option[Boolean])
       (implicit messages: Messages) = {
 
     val model = SignInViewModel(
@@ -44,7 +45,8 @@ object ViewRenderer {
       skipConfirmation = skipConfirmation,
       clientId = clientId,
       group = group,
-      email = email
+      email = email,
+      skipConsentJourney = skipConsentJourney
     )
 
     val view = clientId match {
@@ -63,6 +65,7 @@ object ViewRenderer {
     errorIds: Seq[String],
     returnUrl: ReturnUrl,
     skipConfirmation: Option[Boolean],
+    skipConsentJourney: Option[Boolean],
     clientId: Option[ClientID],
     group: Option[GroupCode],
     email: Option[String])
@@ -75,6 +78,7 @@ object ViewRenderer {
       errors = errorIds.map(ErrorViewModel.apply),
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation,
+      skipConsentJourney = skipConsentJourney,
       clientId = clientId,
       group = group,
       email = email,
@@ -92,6 +96,7 @@ object ViewRenderer {
     userType: Option[UserType],
     returnUrl: ReturnUrl,
     skipConfirmation: Option[Boolean],
+    skipConsentJourney: Option[Boolean],
     clientId: Option[ClientID],
     group: Option[GroupCode],
     email: Option[String])
@@ -104,6 +109,7 @@ object ViewRenderer {
       errors = errorIds.map(ErrorViewModel.apply),
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation,
+      skipConsentJourney = skipConsentJourney,
       clientId = clientId,
       group = group,
       email = email,
@@ -128,7 +134,8 @@ object ViewRenderer {
       group: Option[GroupCode],
       email: Option[String],
       shouldCollectConsents: Boolean,
-      shouldCollectV2Consents: Boolean)
+      shouldCollectV2Consents: Boolean,
+      skipConsentJourney: Option[Boolean])
       (implicit messages: Messages) = {
 
     val model = RegisterViewModel(
@@ -138,6 +145,7 @@ object ViewRenderer {
       csrfToken = csrfToken,
       returnUrl = returnUrl,
       skipConfirmation = skipConfirmation,
+      skipConsentJourney = skipConsentJourney,
       clientId = clientId,
       group = group,
       email = email,

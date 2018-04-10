@@ -49,7 +49,8 @@ object SignInViewModel {
    skipConfirmation: Option[Boolean],
    clientId: Option[ClientID],
    group: Option[GroupCode],
-   email: Option[String])(implicit messages: Messages): SignInViewModel = {
+   email: Option[String],
+   skipConsentJourney: Option[Boolean])(implicit messages: Messages): SignInViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] =
@@ -62,7 +63,7 @@ object SignInViewModel {
     SignInViewModel(
       layout = layout,
 
-      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
+      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests, skipConsentJourney),
 
       signInPageText = SignInPageText.toMap(isMembership),
       terms = Terms.getTermsModel(group),

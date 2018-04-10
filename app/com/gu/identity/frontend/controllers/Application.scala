@@ -13,27 +13,29 @@ import play.api.mvc._
 
 class Application (configuration: Configuration, val messagesApi: MessagesApi, csrfConfig: CSRFConfig) extends Controller with Logging with I18nSupport {
 
-  def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
+  def signIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], skipConsentJourney: Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
     val clientIdActual = ClientID(clientId)
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
     val email : Option[String] = req.getQueryString("email")
 
-    renderSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
+    renderSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email, skipConsentJourney)
   }
 
-  def twoStepSignIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
+  def twoStepSignIn(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], skipConsentJourney:Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) {
+    req =>
     val clientIdActual = ClientID(clientId)
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
     val groupCode = GroupCode(group)
     val email : Option[String] = req.getQueryString("email")
 
-    renderTwoStepSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
+    renderTwoStepSignIn(configuration, req.activeTests, csrfToken, error, returnUrlActual, skipConfirmation, skipConsentJourney, clientIdActual, groupCode, email)
   }
 
-  def twoStepSignInStepTwo(signInType: String, error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { req =>
+  def twoStepSignInStepTwo(signInType: String, error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], skipConsentJourney:Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig)
+    andThen MultiVariantTestAction) { req =>
     val clientIdActual = ClientID(clientId)
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
@@ -41,10 +43,11 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val email : Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
     val userType = Seq(CurrentUser, GuestUser, NewUser).find(_.name == signInType)
 
-    renderTwoStepSignInStepTwo(configuration, req.activeTests, csrfToken, error, userType, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email)
+    renderTwoStepSignInStepTwo(configuration, req.activeTests, csrfToken, error, userType, returnUrlActual, skipConfirmation, skipConsentJourney, clientIdActual, groupCode, email)
   }
 
-  def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean],  clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) { implicit req =>
+  def register(error: Seq[String], returnUrl: Option[String], skipConfirmation: Option[Boolean], skipConsentJourney:Option[Boolean], clientId: Option[String], group: Option[String]) = (CSRFAddToken(csrfConfig) andThen MultiVariantTestAction) {
+    implicit req =>
     val clientIdActual = ClientID(clientId)
     val returnUrlActual = ReturnUrl(returnUrl, req.headers.get("Referer"), configuration, clientIdActual)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
@@ -53,7 +56,7 @@ class Application (configuration: Configuration, val messagesApi: MessagesApi, c
     val shouldCollectConsents = configuration.collectSignupConsents
     val shouldCollectV2Consents = configuration.collectV2Consents
 
-    renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email, shouldCollectConsents, shouldCollectV2Consents)
+    renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email, shouldCollectConsents, shouldCollectV2Consents, skipConsentJourney)
   }
 
   def sendSignInLink(error: Seq[String]) = CSRFAddToken(csrfConfig) { req =>

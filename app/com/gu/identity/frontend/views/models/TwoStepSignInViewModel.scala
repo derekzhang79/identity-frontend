@@ -57,6 +57,7 @@ object TwoStepSignInViewModel {
     errors: Seq[ErrorViewModel],
     returnUrl: ReturnUrl,
     skipConfirmation: Option[Boolean],
+    skipConsentJourney: Option[Boolean],
     clientId: Option[ClientID],
     group: Option[GroupCode],
     email: Option[String],
@@ -72,7 +73,7 @@ object TwoStepSignInViewModel {
     TwoStepSignInViewModel(
       layout = layout,
 
-      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
+      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests, skipConsentJourney),
 
       twoStepSignInPageText = TwoStepSignInPageText.toMap(isMembership),
       terms = Terms.getTermsModel(group),

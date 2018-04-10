@@ -23,6 +23,7 @@ object UserAuthenticatedActionBuilder extends Logging{
 
       val returnUrl = request.getQueryString("returnUrl")
       val skipConfirmation = request.getQueryString("skipConfirmation").map(_.toBoolean)
+      val skipConsentJourney = request.getQueryString("skipConsentJourney").map(_.toBoolean)
       val clientId = ClientID(request.getQueryString("clientId"))
       val groupCode = getGroupCode(request.uri)
 
@@ -32,11 +33,11 @@ object UserAuthenticatedActionBuilder extends Logging{
             case Some(cookie) => Right(new UserAuthenticatedRequest[A](cookie, request))
             case _ => {
               logger.error("Cookie not found on successfully authenticated request.")
-              Left(SeeOther(routes.Application.signIn(Seq.empty, returnUrl, skipConfirmation, clientId.map(_.id), groupCode.map(_.id)).url))
+              Left(SeeOther(routes.Application.signIn(Seq.empty, returnUrl, skipConfirmation, skipConsentJourney, clientId.map(_.id), groupCode.map(_.id)).url))
             }
           }
         }
-        case _ => Left(SeeOther(routes.Application.signIn(Seq.empty, returnUrl, skipConfirmation, clientId.map(_.id), groupCode.map(_.id)).url))
+        case _ => Left(SeeOther(routes.Application.signIn(Seq.empty, returnUrl, skipConfirmation, skipConsentJourney, clientId.map(_.id), groupCode.map(_.id)).url))
       }
     }
   }

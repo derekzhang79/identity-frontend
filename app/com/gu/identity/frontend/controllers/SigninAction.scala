@@ -6,6 +6,7 @@ import com.gu.identity.frontend.authentication.CookieService
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.configuration.Configuration.Environment._
 import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
+import com.gu.identity.frontend.errors.ErrorIDs.SignInGatewayErrorID
 import com.gu.identity.frontend.errors._
 import com.gu.identity.frontend.logging.{LogOnErrorAction, Logging, MetricsLoggingActor}
 import com.gu.identity.frontend.models._
@@ -174,10 +175,10 @@ class SigninAction(
       case Right(_) =>
         SeeOther(routes.Application.sendSignInLinkSent().url)
       case Left(errors) =>
-        SeeOther(routes.Application.sendSignInLink(error = errors.map(_.getMessage)).url)
+        SeeOther(routes.Application.sendSignInLink(error = errors.map(_.id.toString)).url)
     }.recover {
       case e: ClientGatewayError =>
-        SeeOther(routes.Application.sendSignInLink(error = List(e.message)).url)
+        SeeOther(routes.Application.sendSignInLink(error = List(SignInGatewayErrorID.toString)).url)
     }
   }
 

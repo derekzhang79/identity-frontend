@@ -1,0 +1,11 @@
+.oauth-email__wrap {
+  padding-top: var(--size-baseline-vertical);
+}
+*[data-enhanced] .oauth-email__wrap {
+  display: none;
+}
+
+.oauth-email__cta {
+  width: 100%;
+  box-sizing: border-box;
+}

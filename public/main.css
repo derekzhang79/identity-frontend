@@ -12,6 +12,7 @@
 /** Generics **/
 
 @import 'components/form/_form.css';
+@import 'components/oauth-email/_oauth-email.css';
 @import 'components/error-page-content/_error-page-content.css';
 
 /** Terms and conditions **/

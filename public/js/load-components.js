@@ -32,9 +32,9 @@ import {
   selector as selectorOauthCta
 } from 'components/oauth-cta/oauth-cta';
 import {
-  init as initOauthEmail,
-  selector as selectorOauthEmail
-} from 'components/oauth-email/oauth-email';
+  init as initCtaEmail,
+  selector as selectorCtaEmail
+} from 'components/cta-email-sign-in/cta-email-sign-in';
 import {
   init as initInPageClick,
   selector as selectorInPageClick
@@ -51,7 +51,7 @@ const components: any[] = [
   [initInPageClick, selectorInPageClick],
   [initFormErrorWrap, selectorErrorWrap],
   [initOauthCta, selectorOauthCta],
-  [initOauthEmail, selectorOauthEmail],
+  [initCtaEmail, selectorCtaEmail],
   [initTwoStepSignInGa, selectorTwoStepSignInGa]
 ];
 

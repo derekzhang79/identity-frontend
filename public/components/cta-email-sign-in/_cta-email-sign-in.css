@@ -1,11 +1,11 @@
-.oauth-email__wrap {
+.cta-email-sign-in__wrap {
   padding-top: var(--size-baseline-vertical);
 }
-*[data-enhanced] .oauth-email__wrap {
+*[data-enhanced] .cta-email-sign-in__wrap {
   display: none;
 }
 
-.oauth-email__cta {
+.cta-email-sign-in__cta {
   width: 100%;
   box-sizing: border-box;
 }

@@ -12,7 +12,7 @@ case class SendSignInLinkViewModel private(
     layout: LayoutViewModel,
     sendSignInLinkText: SendSignInLinkText,
     actions: Map[String, String] = Map(
-      "submit" -> routes.SigninAction.sendSignInLink()
+      "submit" -> routes.SigninAction.sendSignInLinkAction().url
     ),
     errors: Seq[ErrorViewModel] = Seq.empty,
     csrfToken: Option[CSRFToken],

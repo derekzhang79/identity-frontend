@@ -167,7 +167,7 @@ class SigninAction(
     }
   }
 
-  def sendSignInLink(): Action[EmailSignInRequest] = Action.async(emailSigninFormParser) { _req =>
+  def sendSignInLinkAction(): Action[EmailSignInRequest] = Action.async(emailSigninFormParser) { _req =>
     val req = _req.body
     identityService.sendSignInTokenEmail(req, ClientIp(_req)).map {
       case Right(_) =>

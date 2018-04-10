@@ -1,6 +1,13 @@
 .cta-email-sign-in__wrap {
   padding-top: var(--size-baseline-vertical);
 }
+
+/*
+this is a minor ux detail,
+it prevents the form from showing up in the back
+animation for ajax-form while keeping it shown for
+users with no js at all
+*/
 *[data-enhanced] .cta-email-sign-in__wrap {
   display: none;
 }

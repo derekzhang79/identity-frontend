@@ -127,7 +127,7 @@ object ViewRenderer {
       clientId: Option[ClientID],
       group: Option[GroupCode],
       email: Option[String],
-      referrer: Option[Referrer],
+      signInType: Option[SignInType],
       shouldCollectConsents: Boolean,
       shouldCollectV2Consents: Boolean)
       (implicit messages: Messages) = {
@@ -142,7 +142,7 @@ object ViewRenderer {
       clientId = clientId,
       group = group,
       email = email,
-      referrer = referrer,
+      signInType = signInType,
       shouldCollectConsents = shouldCollectConsents,
       shouldCollectV2Consents = shouldCollectV2Consents
     )

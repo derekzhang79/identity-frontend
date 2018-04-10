@@ -77,7 +77,7 @@ object SignInViewModel {
       group = group,
       email = email,
 
-      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.id), Some(SignInClassicReferrer)),
+      registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.id), Some(ClassicSignInType)),
       forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.id)),
 
       recaptchaModel = recaptchaModel,

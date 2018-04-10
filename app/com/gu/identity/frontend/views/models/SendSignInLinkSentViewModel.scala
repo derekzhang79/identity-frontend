@@ -25,6 +25,9 @@ object SendSignInLinkSentViewModel {
     SendSignInLinkSentViewModel(
       layout = layout,
       sendSignInLinkSentText = SendSignInLinkSentText(),
+      actions = Map(
+        "returnUrl" -> configuration.dotcomBaseUrl
+      ),
       resources = layout.resources,
       indirectResources = layout.indirectResources
     )

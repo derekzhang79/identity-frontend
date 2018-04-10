@@ -37,6 +37,9 @@ object UrlBuilder {
   def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String], skipThirdPartyLandingPage: Option[Boolean]): String =
     apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, group, skipThirdPartyLandingPage))
 
+  def apply(baseUrl: String, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String], skipThirdPartyLandingPage: Option[Boolean], SignInType: Option[SignInType]): String =
+    apply(baseUrl, buildParams(Some(returnUrl), skipConfirmation, clientId, group, None, SignInType))
+
   def apply(baseUrl: String, returnUrl: Option[ReturnUrl], skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[GroupCode], error: AppException): String =
     apply(baseUrl, buildParams(returnUrl, skipConfirmation, clientId, group.map(_.id), error = Some(error)))
 
@@ -52,6 +55,9 @@ object UrlBuilder {
 
   def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
     apply(call.url, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None)
+
+  def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String], SignInType: Option[SignInType]): String =
+    apply(call.url, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None, SignInType = SignInType)
 
   def apply(baseUrl: String, call: Call): String = s"$baseUrl${call.url}"
 
@@ -86,10 +92,12 @@ object UrlBuilder {
       clientId: Option[ClientID] = None,
       group: Option[String] = None,
       skipThirdPartyLandingPage: Option[Boolean] = None,
+      SignInType: Option[SignInType] = None,
       error: Option[AppException] = None): UrlParameters =
     Seq(
       returnUrl.flatMap(_.toStringOpt).map("returnUrl" -> _),
       skipConfirmation.map("skipConfirmation" -> _.toString),
+      SignInType.map("signInType" -> _.id.toString),
       clientId.map("clientId" -> _.id),
       group.map("group" -> _),
       skipThirdPartyLandingPage.map("skipThirdPartyLandingPage" -> _.toString)

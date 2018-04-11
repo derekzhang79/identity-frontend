@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
-    <title>Info</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Info" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <circle id="Oval-2" stroke="#C70000" cx="13" cy="13" r="12.5"></circle>
-        <g id="i" transform="translate(10.750000, 6.000000)" fill="#C70000" fill-rule="nonzero">
-            <path d="M0.20987,13 L4.7859,13 L4.7859,11.944 L3.80988,11.688 L3.80988,4.152 L3.56988,4.024 L0.11388,4.424 L0.11388,5.528 L1.20187,5.8 L1.20187,11.688 L0.20987,11.944 L0.20987,13 Z M2.45087996,3.2259999 C3.25144173,3.2259999 3.8758699,2.66282627 3.8758699,1.79246702 C3.8758699,0.956239502 3.25144173,0.376 2.45087996,0.376 C1.66631942,0.376 1.02587,0.956239502 1.02587,1.79246702 C1.02587,2.66282627 1.66631942,3.2259999 2.45087996,3.2259999 Z" id="path0_fill"></path>
-        </g>
-    </g>
-</svg>
+<svg width="26" height="26" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg"><title>Info</title><desc>Created with Sketch.</desc><g fill="none"><circle stroke="#C70000" cx="13" cy="13" r="12.5"/><path d="M10.96 19h4.576v-1.056l-.976-.256v-7.536l-.24-.128-3.456.4v1.104l1.088.272v5.888l-.992.256v1.056zm2.241-9.774c.801 0 1.425-.563 1.425-1.434 0-.836-.624-1.416-1.425-1.416-.785 0-1.425.58-1.425 1.416 0 .87.64 1.434 1.425 1.434z" fill="#C70000" fill-rule="nonzero"/></g></svg>

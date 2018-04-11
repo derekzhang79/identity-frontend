@@ -30,6 +30,7 @@ signinTwoStep.setPasswordTitle=To continue we need to confirm this is you. Click
 signinTwoStep.setPasswordAction=Set a password
 
 signinTwoStep.signInCtaEmailAction=Sign in with Email
+signinTwoStep.oauthStepTwoFieldTitle=Continue with a social account
 
 # com.gu.identity.frontend.models.text.RegisterText
 register.pageTitle=Register

@@ -1,18 +1,33 @@
 // @flow
 
+/*
+You can se this component to wrap any flow of n steps
+in a nice single page app way, you can see how this works
+in the sign in page or in the sign in token request page
+but basically you want to wrap your flow in
+`div.ajax-step-flow` and `div.ajax-step-flow__slide`
+
+The parent one (this file) acts as a 'stage' of sorts while
+the second one is the actual 'page' of the flow. They are
+separated for clarity.
+
+Wrap your steps in these divs and make sure their routes are
+inside `_valid-routes.js` and you should be good to go!
+*/
+
 import {
   EV_DONE,
   getSlide
-} from 'components/two-step-signin/two-step-signin__slide';
+} from 'components/ajax-step-flow/ajax-step-flow__slide';
 import { loadComponents } from 'js/load-components';
 import { pageView } from '../analytics/ga';
 
-const selector: string = '.two-step-signin';
+const selector: string = '.ajax-step-flow';
 
 const ERR_MALFORMED_EVENT: string = 'Something went wrong';
 const ERR_MALFORMED_HTML: string = 'Something went wrong';
 
-const STATE_INITIATOR: string = 'two-step-signin-state-init';
+const STATE_INITIATOR: string = 'ajax-step-flow-state-init';
 
 const pushSlide = (
   $old: HTMLElement,
@@ -21,12 +36,12 @@ const pushSlide = (
 ): Promise<HTMLElement> => {
   const classNames = reverse
     ? {
-        in: 'two-step-signin__slide--in-reverse',
-        out: 'two-step-signin__slide--out-reverse'
+        in: 'ajax-step-flow__slide--in-reverse',
+        out: 'ajax-step-flow__slide--out-reverse'
       }
     : {
-        in: 'two-step-signin__slide--in',
-        out: 'two-step-signin__slide--out'
+        in: 'ajax-step-flow__slide--in',
+        out: 'ajax-step-flow__slide--out'
       };
 
   const animateOut = () =>
@@ -37,19 +52,19 @@ const pushSlide = (
           resolve($new);
         });
         requestAnimationFrame(() => {
-          $old.classList.remove('two-step-signin__slide--visible');
+          $old.classList.remove('ajax-step-flow__slide--visible');
           $old.classList.add(classNames.out);
         });
         $new.addEventListener('animationend', () => {
           [
-            'two-step-signin__slide--in',
-            'two-step-signin__slide--out',
-            'two-step-signin__slide--in-reverse',
-            'two-step-signin__slide--out-reverse'
+            'ajax-step-flow__slide--in',
+            'ajax-step-flow__slide--out',
+            'ajax-step-flow__slide--in-reverse',
+            'ajax-step-flow__slide--out-reverse'
           ].forEach(_ => $new.classList.remove(_));
         });
         requestAnimationFrame(() => {
-          ['two-step-signin__slide--visible', classNames.in].forEach(_ =>
+          ['ajax-step-flow__slide--visible', classNames.in].forEach(_ =>
             $new.classList.add(_)
           );
         });

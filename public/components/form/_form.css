@@ -75,19 +75,18 @@ generic input wrapper
 }
 
 /*
-errors
+feedback
 */
-%form-error {
-  @extend %font-text-sans-2;
-  color: var(--color-error);
+%form-feedback {
+  @extend %font-text-2;
   background: transparent inline('status-alert.svg') left top no-repeat;
-  padding: 0 0 0 2.8rem;
+  padding: 0 0 0 calc(var(--size-baseline) * 6);
 }
 
 .form-feedback-wrap {
   .form-feedback {
-    @extend %form__error;
-    margin: 0 0 calc(var(--size-baseline-vertical) / 2) 0;
+    @extend %form-feedback;
+    margin: 0 0 var(--size-baseline-vertical) 0;
     &:not(:first-child) {
       background: none;
     }
@@ -95,4 +94,14 @@ errors
       margin: 0 0 var(--size-baseline-vertical) 0;
     }
   }
+}
+
+.form-feedback--error {
+  color: var(--color-error);
+  background-image: inline('status-alert.svg');
+}
+
+.form-feedback--info {
+  color: var(--color-error);
+  background-image: inline('status-alert.svg');
 }

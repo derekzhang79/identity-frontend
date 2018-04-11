@@ -141,10 +141,6 @@ const init = ($slide: HTMLElement): void => {
     .filter(_ => validAjaxFormRoutes.some(r => _.action.contains(r)));
 
   $forms.forEach(($form: HTMLFormElement) => {
-    setTimeout(()=>
-      showErrorText('error-unexpected')
-    ,999);
-
     $form.addEventListener('submit', (ev: Event) => {
       ev.preventDefault();
       fetchAndDispatchSlide($form.action, $slide, {

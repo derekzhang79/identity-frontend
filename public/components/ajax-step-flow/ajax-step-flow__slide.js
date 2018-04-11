@@ -5,7 +5,7 @@ import { getUrlErrors } from '../../js/get-url-errors';
 import {
   formRoutes as validAjaxFormRoutes,
   linkRoutes as validAjaxLinkRoutes
-} from './_valid-routes.js';
+} from './_valid-routes';
 
 const selector: string = '.ajax-step-flow__slide';
 

@@ -89,7 +89,7 @@ feedback
     height: calc(var(--size-baseline) * 6.5);
     position: absolute;
     left: 0;
-    top: calc(var(--size-baseline) * -.75);
+    top: calc(var(--size-baseline) * -0.75);
   }
 }
 
@@ -111,7 +111,7 @@ feedback
   }
 }
 
-.form-feedback--bullet{
+.form-feedback--bullet {
   &:before {
     background-image: inline('status-bullet.svg');
   }

@@ -106,7 +106,6 @@ case class OtherClientBadRequestError(
   extends AbstractIdentityClientError(message, description, context)
   with ClientBadRequestError
 
-
 object ClientBadRequestError {
   def apply(message: String): ClientBadRequestError =
     apply(message, None, None)

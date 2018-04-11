@@ -20,7 +20,7 @@ trait ErrorRecoveryActionBuilder extends ComposableActionBuilder[Request] {
   /**
    * Recover from Future.failed errors when ActionBuilder block is invoked
    */
-  def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+  final def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
     block(request)
       .recoverWith(recoverErrors(request))(executionContext)
 

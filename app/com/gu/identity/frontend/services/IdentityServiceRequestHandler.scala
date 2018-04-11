@@ -1,22 +1,19 @@
 package com.gu.identity.frontend.services
 
-import com.gu.identity.frontend.errors.ServiceRateLimitedAppException
 import com.gu.identity.frontend.logging.{Logging => ApplicationLogging}
+import com.gu.identity.model.Consent
 import com.gu.identity.service.client._
 import com.gu.identity.service.client.models._
 import com.gu.identity.service.client.request._
-import play.api.libs.json.Json
+import org.joda.time.DateTime
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads.jodaDateReads
-import play.api.libs.ws.{WSResponse, WSClient}
+import play.api.libs.json.{Json, _}
+import play.api.libs.ws.{WSClient, WSResponse}
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
-
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.json._
-import play.api.libs.functional.syntax._
-import org.joda.time.DateTime
-import com.gu.identity.model.Consent
 
 class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequestHandler with ApplicationLogging {
 
@@ -81,7 +78,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
       .execute(request.method.toString)
       .map(handleResponse(request))
       .flatMap {
-        case Left(Seq(ClientRateLimitError)) => Future.failed(ServiceRateLimitedAppException)
+        case Left(Seq(ClientRateLimitError)) => Future.successful(Left(Seq(ClientRateLimitError)))
         case other => Future.successful(other)
       }
       .recoverWith {

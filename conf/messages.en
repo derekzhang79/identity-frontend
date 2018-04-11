@@ -24,7 +24,6 @@ signinTwoStep.continueAction=Continue
 signinTwoStep.emailFieldTitle=Enter your email
 signinTwoStep.passwordFieldTitle=Please enter your password
 signinTwoStep.dividetext=or
-signinTwoStep.unknownEmailTitle=We couldn''t find that email address in our records. Did you type it correctly? If this is your first time signing in to The Guardian you might need to create an account.
 signinTwoStep.registerAction=Create an account
 signinTwoStep.setPasswordTitle=To continue, first you need to verify it’s you. Just click the button below and we’ll email you a link.
 signinTwoStep.setPasswordAction=Send me a link to set a password
@@ -32,7 +31,7 @@ signinTwoStep.setPasswordAction=Send me a link to set a password
 signinTwoStep.signInCtaEmailAction=Sign in with Email
 signinTwoStep.oauthStepTwoFieldTitle=You can sign in with your social accounts:
 
-signinTwoStep.newUserEmailNotFoundErrorPre=Sorry, we couldn't find
+signinTwoStep.newUserEmailNotFoundErrorPre=Sorry, we couldn''t find
 signinTwoStep.newUserEmailNotFoundErrorPost=in our records.
 signinTwoStep.newUserEmailNotFoundPrompt=Is that the right one?
 signinTwoStep.newUserCreateAccountAction=If this is your first time signing in to The Guardian you need to create an account (it only takes 1 minute).

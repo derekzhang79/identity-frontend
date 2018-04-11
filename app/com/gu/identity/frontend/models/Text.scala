@@ -60,6 +60,7 @@ object Text {
         "unknownEmailTitle" -> messages("signinTwoStep.unknownEmailTitle"),
         "registerAction" -> messages("signinTwoStep.registerAction"),
         "passwordFieldTitle" -> messages("signinTwoStep.passwordFieldTitle"),
+        "oauthStepTwoFieldTitle" -> messages("signinTwoStep.oauthStepTwoFieldTitle"),
 
         "signInCtaEmailAction" -> messages("signinTwoStep.signInCtaEmailAction")
       )

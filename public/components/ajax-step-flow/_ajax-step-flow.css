@@ -1,0 +1,61 @@
+.ajax-step-flow[data-enhanced] {
+  position: relative;
+  min-height: 100%;
+  .ajax-step-flow__slide {
+    left: 0;
+    right: 0;
+    top: 0;
+    &[data-state='SLIDE_STATE_LOADING'] {
+      opacity: 0.5;
+    }
+  }
+}
+
+.ajax-step-flow__slide--out {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  animation: ajax-step-flow-animation__slide-left 0.2s both;
+}
+.ajax-step-flow__slide--in {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  animation: ajax-step-flow-animation__slide-right reverse 0.2s both;
+}
+.ajax-step-flow__slide--out-reverse {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  animation: ajax-step-flow-animation__slide-right 0.2s both;
+}
+.ajax-step-flow__slide--in-reverse {
+  visibility: visible;
+  display: block;
+  position: absolute;
+  animation: ajax-step-flow-animation__slide-left reverse 0.2s both;
+}
+
+@keyframes ajax-step-flow-animation__slide-left {
+  0% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(-4em);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes ajax-step-flow-animation__slide-right {
+  0% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateX(4em);
+    opacity: 0;
+    visibility: hidden;
+  }
+}

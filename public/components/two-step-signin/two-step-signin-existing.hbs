@@ -1,4 +1,4 @@
-<form class="two-step-signin-form" method="POST" action="{{ actions.signInSecondStepCurrent }}">
+<form class="two-step-signin" method="POST" action="{{ actions.signInSecondStepCurrent }}">
 
     {{> components/two-step-signin/_helpers }}
 
@@ -17,5 +17,12 @@
     <div class="form-field-wrap">
       <button class="form-button form-button--main form-field-wrap__field" type="submit">{{twoStepSignInPageText.signInAction}} {{> components/icon/arrow-inline }}</button>
     </div>
+
+    <p class="form-prelude"> <span>{{twoStepSignInPageText.divideText}}</span> </p>
+
+    <fieldset class="form-field-wrap">
+      <label class="form-field-wrap__title" for="signin_field_email">{{twoStepSignInPageText.oauthStepTwoFieldTitle}}</label>
+      {{> components/oauth-cta/_oauth-cta-content }}
+    </fieldset>
 
 </form>

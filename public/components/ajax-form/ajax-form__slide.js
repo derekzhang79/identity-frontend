@@ -24,10 +24,10 @@ const validAjaxFormRoutes: ValidRouteList = [
 
 const validAjaxLinkRoutes: ValidRouteList = [route('twoStepSignIn')];
 
-const getSlide = ($component: HTMLElement): HTMLElement => {
-  const $slide = $component.querySelector(selector);
+const getSlide = ($wrapper: HTMLElement): HTMLElement => {
+  const $slide = $wrapper.querySelector(selector);
   if ($slide) return $slide;
-  throw new Error([ERR_MALFORMED_HTML, $component]);
+  throw new Error([ERR_MALFORMED_HTML, $slide]);
 };
 
 const getSlideFromFetch = (textHtml: string): HTMLElement => {
@@ -58,12 +58,12 @@ const dispatchDone = (
 
 const fetchSlide = (
   action: string,
-  $stateable: HTMLElement,
+  $slide: HTMLElement,
   fetchProps: {}
 ): Promise<string[]> =>
   Promise.resolve()
     .then(() => {
-      $stateable.dataset.state = SLIDE_STATE_LOADING;
+      $slide.dataset.state = SLIDE_STATE_LOADING;
     })
     .then(() =>
       window.fetch(
@@ -104,8 +104,8 @@ const fetchSlide = (
       });
     });
 
-const catchSlide = ($stateable: HTMLElement, err: Error): void => {
-  $stateable.dataset.state = SLIDE_STATE_DEFAULT;
+const catchSlide = ($slide: HTMLElement, err: Error): void => {
+  $slide.dataset.state = SLIDE_STATE_DEFAULT;
   if (err.message.split(',')[0] === ERR_BACKEND_ERROR) {
     err.message
       .split(',')
@@ -119,41 +119,37 @@ const catchSlide = ($stateable: HTMLElement, err: Error): void => {
 
 const fetchAndDispatchSlide = (
   action: string,
-  $stateable: HTMLElement,
+  $slide: HTMLElement,
   fetchProps: {},
   props: { reverse: boolean } = { reverse: false }
 ): Promise<void> =>
-  fetchSlide(action, $stateable, fetchProps)
+  fetchSlide(action, $slide, fetchProps)
     .then(([responseHtml, url]) =>
-      dispatchDone($stateable, {
+      dispatchDone($slide, {
         $slide: getSlideFromFetch(responseHtml),
         url,
         reverse: props.reverse
       })
     )
-    .catch(err => catchSlide($stateable, err));
+    .catch(err => catchSlide($slide, err));
 
-const init = ($component: HTMLElement): void => {
+const init = ($slide: HTMLElement): void => {
   const $links: HTMLAnchorElement[] = [
-    ...($component.querySelectorAll(`a.ajax-form__link`): any)
+    ...($slide.querySelectorAll(`a.ajax-form__link`): any)
   ]
     .filter(_ => _ instanceof HTMLAnchorElement)
     .filter(_ =>
       validAjaxLinkRoutes.map(r => _.href.contains(r)).some(c => c === true)
     );
 
-  const $forms: HTMLFormElement[] = [
-    ...($component.querySelectorAll(`form`): any)
-  ]
+  const $forms: HTMLFormElement[] = [...($slide.querySelectorAll(`form`): any)]
     .filter(_ => _ instanceof HTMLFormElement)
-    .filter(_ =>
-      validAjaxFormRoutes.map(r => _.action.contains(r)).some(c => c === true)
-    );
+    .filter(_ => validAjaxFormRoutes.some(r => _.action.contains(r)));
 
   $forms.forEach(($form: HTMLFormElement) => {
     $form.addEventListener('submit', (ev: Event) => {
       ev.preventDefault();
-      fetchAndDispatchSlide($form.action, $component, {
+      fetchAndDispatchSlide($form.action, $slide, {
         method: 'post',
         body: new FormData($form)
       });
@@ -165,7 +161,7 @@ const init = ($component: HTMLElement): void => {
       ev.preventDefault();
       fetchAndDispatchSlide(
         $link.href,
-        $component,
+        $slide,
         {
           method: 'get'
         },

@@ -47,14 +47,6 @@ private[errors] abstract class ServiceGatewayAppException(
   with NoStackTrace
 
 
-case object ServiceRateLimitedAppException
-  extends AbstractAppException(ClientRateLimitError)
-  with NoStackTrace {
-
-  val id = RateLimitedErrorID
-}
-
-
 // 500
 case class UnexpectedAppException(
     message: String,

@@ -1,7 +1,9 @@
 package com.gu.identity.frontend.errors
 
-import com.gu.identity.service.client.{ClientGatewayError, ClientBadRequestError, ClientInvalidCredentialsError, IdentityClientError}
+import com.gu.identity.service.client._
 import ErrorIDs._
+
+import scala.util.control.NoStackTrace
 
 /**
  * Errors which may occur during the Sign in process.
@@ -14,6 +16,7 @@ object SignInServiceAppException {
   def apply(clientError: IdentityClientError): SignInServiceAppException =
     clientError match {
       case ClientInvalidCredentialsError => SignInInvalidCredentialsAppException
+      case ClientRateLimitError => ServiceRateLimitedAppException
       case err: ClientBadRequestError => SignInServiceBadRequestException(clientError)
       case err: ClientGatewayError => SignInServiceGatewayAppException(clientError)
     }
@@ -40,6 +43,14 @@ case object SignInInvalidCredentialsAppException
   with SignInServiceAppException {
 
   val id = SignInInvalidCredentialsErrorID
+}
+
+case object ServiceRateLimitedAppException
+  extends ServiceBadRequestAppException(ClientRateLimitError)
+  with SignInServiceAppException
+  with NoStackTrace {
+
+  val id = RateLimitedErrorID
 }
 
 

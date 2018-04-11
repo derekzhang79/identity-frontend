@@ -24,7 +24,7 @@ abstract class ResultFromAppException(route: String) extends ErrorRecoveryAction
       resultFromAppException(request, UnexpectedAppException(s"Unexpected error: ${ex.getMessage}", Some(ex)), response(_))
   }
 
-  def resultFromAppException[A](request: Request[A], error: AppException, response: String => Future[Result]): Future[Result] = {
+  private def resultFromAppException[A](request: Request[A], error: AppException, response: String => Future[Result]): Future[Result] = {
     val url = request.body match {
       case CoreSessionParameters(returnUrl, skipConfirmation, clientId, groupCode) =>
         UrlBuilder(route, returnUrl, skipConfirmation, clientId, groupCode, error)

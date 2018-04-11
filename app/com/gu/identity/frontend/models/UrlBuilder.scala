@@ -52,7 +52,6 @@ object UrlBuilder {
   def apply(call: Call, params: UrlParameters): String =
     apply(call.url, params)
 
-
   def apply(call: Call, returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], group: Option[String]): String =
     apply(call.url, returnUrl, skipConfirmation, clientId, group, skipThirdPartyLandingPage = None)
 

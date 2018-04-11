@@ -6,6 +6,7 @@ import com.gu.identity.frontend.authentication.CookieService
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.configuration.Configuration.Environment._
 import com.gu.identity.frontend.csrf.{CSRFCheck, CSRFConfig}
+import com.gu.identity.frontend.errors.ErrorIDs.SignInGatewayErrorID
 import com.gu.identity.frontend.errors._
 import com.gu.identity.frontend.logging.{LogOnErrorAction, Logging, MetricsLoggingActor}
 import com.gu.identity.frontend.models._
@@ -13,6 +14,7 @@ import com.gu.identity.frontend.request.{EmailSignInRequest, EmailSignInRequests
 import com.gu.identity.frontend.services._
 import com.gu.identity.frontend.views.ViewRenderer.{renderErrorPage, renderSendSignInLinkSent}
 import com.gu.identity.model.CurrentUser
+import com.gu.identity.service.client.ClientGatewayError
 import com.gu.tip.Tip
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -167,13 +169,16 @@ class SigninAction(
     }
   }
 
-  def sendSignInLink(): Action[EmailSignInRequest] = Action.async(emailSigninFormParser) { _req =>
+  def sendSignInLinkAction(): Action[EmailSignInRequest] = Action.async(emailSigninFormParser) { _req =>
     val req = _req.body
     identityService.sendSignInTokenEmail(req, ClientIp(_req)).map {
       case Right(_) =>
         SeeOther(routes.Application.sendSignInLinkSent().url)
       case Left(errors) =>
-        SeeOther(routes.Application.sendSignInLink(error = errors.map(_.getMessage)).url)
+        SeeOther(routes.Application.sendSignInLink(error = errors.map(_.id.toString)).url)
+    }.recover {
+      case e: ClientGatewayError =>
+        SeeOther(routes.Application.sendSignInLink(error = List(SignInGatewayErrorID.toString)).url)
     }
   }
 

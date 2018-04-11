@@ -32,6 +32,13 @@ prelude
 }
 
 /*
+texty text
+*/
+.form-text {
+  @extend %font-text-sans-3;
+}
+
+/*
 generic input wrapper
 */
 .form-field-wrap {

@@ -59,7 +59,9 @@ object Text {
         "continueAction" -> messages("signinTwoStep.continueAction"),
         "unknownEmailTitle" -> messages("signinTwoStep.unknownEmailTitle"),
         "registerAction" -> messages("signinTwoStep.registerAction"),
-        "passwordFieldTitle" -> messages("signinTwoStep.passwordFieldTitle")
+        "passwordFieldTitle" -> messages("signinTwoStep.passwordFieldTitle"),
+
+        "signInCtaEmailAction" -> messages("signinTwoStep.signInCtaEmailAction")
       )
     }
   }

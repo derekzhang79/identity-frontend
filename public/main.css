@@ -12,6 +12,7 @@
 /** Generics **/
 
 @import 'components/form/_form.css';
+@import 'components/cta-email-sign-in/_cta-email-sign-in.css';
 @import 'components/error-page-content/_error-page-content.css';
 
 /** Terms and conditions **/

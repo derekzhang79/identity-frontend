@@ -84,7 +84,7 @@ errors
   padding: 0 0 0 2.8rem;
 }
 
-.form-error-wrap {
+.form-feedback-wrap {
   .form-error {
     @extend %form__error;
     margin: 0 0 calc(var(--size-baseline-vertical) / 2) 0;

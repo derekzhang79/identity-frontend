@@ -18,7 +18,7 @@ import {
 import {
   init as initFormErrorWrap,
   selector as selectorErrorWrap
-} from 'components/form-error-wrap/index';
+} from 'components/form-feedback-wrap/index';
 import {
   init as initTwoStepSignInGa,
   selector as selectorTwoStepSignInGa

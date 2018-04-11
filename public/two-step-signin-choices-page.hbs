@@ -5,27 +5,17 @@
   <section class="layout-wrap-width">
     <div class="ajax-step-flow"><div class="ajax-step-flow__slide">
 
-      <a class="layout-header ajax-step-flow__link" data-is-reverse="true" href="{{signinUrl}}" >
-        <h1 class="layout-header__title">{{ twoStepSignInPageText.welcome }}</h1>
-        <div class="layout-header__title layout-header__title--has-proxy layout-header__title--standfirst">
-          <div>{{{emailForDisplay}}}</div>
-          <div class="layout-header__title__proxy">{{twoStepSignInPageText.changeEmailLink}}</div>
-        </div>
-      </a>
+      {{> components/form/form-feedback-wrap }}
 
-      {{> components/form/form-error-wrap }}
-
-      <section>
-        {{#userTypes.isExisting}}
-          {{> components/two-step-signin/two-step-signin-existing }}
-        {{/userTypes.isExisting}}
-        {{#userTypes.isNew}}
-          {{> components/two-step-signin/two-step-signin-new }}
-        {{/userTypes.isNew}}
-        {{#userTypes.isGuest}}
-          {{> components/two-step-signin/two-step-signin-guest }}
-        {{/userTypes.isGuest}}
-      </section>
+      {{#userTypes.isExisting}}
+        {{> components/two-step-signin/two-step-signin-existing }}
+      {{/userTypes.isExisting}}
+      {{#userTypes.isNew}}
+        {{> components/two-step-signin/two-step-signin-new }}
+      {{/userTypes.isNew}}
+      {{#userTypes.isGuest}}
+        {{> components/two-step-signin/two-step-signin-guest }}
+      {{/userTypes.isGuest}}
 
       <section class="layout-section">
         {{> components/terms/_terms-inline }}

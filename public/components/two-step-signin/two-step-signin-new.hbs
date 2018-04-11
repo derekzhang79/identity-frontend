@@ -1,7 +1,14 @@
 <form class="two-step-signin" method="POST" action="{{ actions.signInWithEmailAndPassword }}">
 
+  <section class="layout-header">
+    <h1 class="layout-header__title">{{ twoStepSignInPageText.title }}</h1>
+  </section>
+
   {{> components/two-step-signin/_helpers }}
 
+  <div class="form-feedback-wrap">
+
+  </div>
   <div class="form-field-wrap">
     <label class="form-field-wrap__title" for="signin_field_email">{{twoStepSignInPageText.unknownEmailTitle}}</label>
     <a href="{{registerUrl}}" class="form-button form-button--main form-field-wrap__field">{{twoStepSignInPageText.registerAction}} {{> components/icon/arrow-inline }}</a>

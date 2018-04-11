@@ -3,7 +3,7 @@ import { localisedError } from 'js/config';
 
 const $elements: HTMLElement[] = [];
 
-const selector: string = '.form-error-wrap';
+const selector: string = '.form-feedback-wrap';
 
 const errors: string[] = [];
 

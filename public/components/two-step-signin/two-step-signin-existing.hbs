@@ -1,5 +1,7 @@
 <form class="two-step-signin" method="POST" action="{{ actions.signInSecondStepCurrent }}">
 
+    {{> components/two-step-signin/_email-header }}
+
     {{> components/two-step-signin/_helpers }}
 
     <div class="form-field-wrap">

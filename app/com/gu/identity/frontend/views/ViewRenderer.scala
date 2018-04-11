@@ -127,6 +127,7 @@ object ViewRenderer {
       clientId: Option[ClientID],
       group: Option[GroupCode],
       email: Option[String],
+      signInType: Option[SignInType],
       shouldCollectConsents: Boolean,
       shouldCollectV2Consents: Boolean)
       (implicit messages: Messages) = {
@@ -141,6 +142,7 @@ object ViewRenderer {
       clientId = clientId,
       group = group,
       email = email,
+      signInType = signInType,
       shouldCollectConsents = shouldCollectConsents,
       shouldCollectV2Consents = shouldCollectV2Consents
     )
@@ -171,6 +173,28 @@ object ViewRenderer {
       clientId = clientId
     )
     renderViewModel("reset-password-email-sent-page", model)
+  }
+
+  def renderSendSignInLink(
+    configuration: Configuration,
+    errorIds: Seq[String],
+    csrfToken: Option[CSRFToken])
+    (implicit messages: Messages) = {
+    val model = SendSignInLinkViewModel(
+      configuration = configuration,
+      errors = errorIds.map(ErrorViewModel.apply),
+      csrfToken = csrfToken
+    )
+    renderViewModel("send-sign-in-link", model)
+  }
+
+  def renderSendSignInLinkSent(
+    configuration: Configuration)
+    (implicit messages: Messages) = {
+    val model = SendSignInLinkSentViewModel(
+      configuration = configuration
+    )
+    renderViewModel("send-sign-in-link-sent", model)
   }
 
   def renderInvalidConsentToken(configuration: Configuration, token: String, csrfToken: Option[CSRFToken], errorIds: Seq[String])(implicit messages: Messages) = {

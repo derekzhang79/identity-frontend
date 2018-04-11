@@ -29,6 +29,8 @@ signinTwoStep.registerAction=Create an account
 signinTwoStep.setPasswordTitle=To continue we need to confirm this is you. Click ''Set a password'' and we''ll send you an email to your registered address to confirm your identity.
 signinTwoStep.setPasswordAction=Set a password
 
+signinTwoStep.signInCtaEmailAction=Sign in with Email
+
 # com.gu.identity.frontend.models.text.RegisterText
 register.pageTitle=Register
 register.title=Create your Guardian account
@@ -85,6 +87,18 @@ footer.techfeedback=Report technical issue
 footer.cookies=Cookie Policy
 footer.copyright=© {0} Guardian News and Media Limited or its affiliated companies. All rights reserved.
 
+
+# com.gu.identity.frontend.models.text.SendSignInLinkText
+sendSignInLink.pageTitle=Send me a sign-in link
+sendSignInLink.title=Send me a sign-in link
+sendSignInLink.emailInput=Your email
+sendSignInLink.submitAction=Submit
+
+# com.gu.identity.frontend.models.text.SendSignInLinkSentText
+sendSignInLinkSent.pageTitle=Check your email
+sendSignInLinkSent.title=Now check your email
+
+
 # com.gu.identity.frontend.models.text.ResetPasswordText
 resetPassword.pageTitle=Reset password
 resetPassword.title=Forgotten or need to set your password?
@@ -116,6 +130,9 @@ errors.notFound.pageTitle=Page not found
 errors.notFound.title=Page not found
 errors.notFound.description=Sorry - we have not been able to find the page you asked for.
 
+errors.signinLink.pageTitle=Sign in Failed
+errors.signinLink.title=Sign In Failed
+errors.signinLink.description=Sorry - that sign in link is expired or invalid. Please request a new one.
 
 errors.unexpected.pageTitle=Unexpected error
 errors.unexpected.title=Unexpected error: {0}

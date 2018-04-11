@@ -9,11 +9,17 @@ GET        /signin/start                                com.gu.identity.frontend
 
 GET        /signin/:signInType                          com.gu.identity.frontend.controllers.Application.twoStepSignInStepTwo(signInType: String, error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
 
-GET        /register                                    com.gu.identity.frontend.controllers.Application.register(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None)
+GET        /register                                    com.gu.identity.frontend.controllers.Application.register(error: Seq[String] ?= Seq.empty, returnUrl: Option[String] ?= None, skipConfirmation: Option[Boolean] ?= None, clientId: Option[String] ?= None, group: Option[String] ?= None, signInType: Option[String] ?= None)
 
 GET        /reset                                       com.gu.identity.frontend.controllers.Application.reset(error: Seq[String] ?= Seq.empty, clientId: Option[String] ?= None)
 
 GET        /reset/email-sent                            com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent(clientId: Option[String] ?= None)
+
+GET        /signin-token                                com.gu.identity.frontend.controllers.Application.sendSignInLink(error: Seq[String] ?= Seq.empty)
+
+GET        /signin-token/email-sent                     com.gu.identity.frontend.controllers.Application.sendSignInLinkSent
+
+POST       /actions/signin-token/email                  com.gu.identity.frontend.controllers.SigninAction.sendSignInLink()
 
 GET        /signout                                     com.gu.identity.frontend.controllers.SignOutAction.signOut(returnUrl: Option[String] ?= None)
 
@@ -67,6 +73,8 @@ GET        /opt/reset                                   com.gu.identity.frontend
 GET        /static/*file                                controllers.Assets.versioned(path="/public", file: Asset)
 
 GET        /robots.txt                                  controllers.Assets.at(path="/public", file="robots.txt")
+
+GET        /signin/token/:signinToken                    com.gu.identity.frontend.controllers.SigninTokenController.signinWithToken(signinToken: String, returnUrl: Option[String] ?= None)
 
 # Redirects
 GET        /                                            com.gu.identity.frontend.controllers.Redirects.indexRedirect

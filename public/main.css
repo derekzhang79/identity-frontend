@@ -15,6 +15,7 @@
 /** Generic blocks **/
 
 @import 'components/form/_form.css';
+@import 'components/cta-email-sign-in/_cta-email-sign-in.css';
 @import 'components/error-page-content/_error-page-content.css';
 @import 'components/ajax-form/_ajax-form.css';
 

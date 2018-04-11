@@ -4,14 +4,18 @@
 {{# partial "content" }}
   <section class="layout-wrap-width">
 
-    <section class="layout-header">
-      <h1 class="layout-header__title">{{ sendSignInLinkSentText.title }}</h1>
-    </section>
+    <div class="ajax-step-flow"><div class="ajax-step-flow__slide">
 
-    <div class="form-field-wrap">
-      <p class="form-field-wrap__field form-text">{{ sendSignInLinkSentText.text }}</p>
-      <a class="form-button form-button--secondary form-field-wrap__field" href="{{actions.returnUrl}}">{{sendSignInLinkSentText.cta}} {{> components/icon/arrow-inline }}</a>
-    </div>
+      <section class="layout-header">
+        <h1 class="layout-header__title">{{ sendSignInLinkSentText.title }}</h1>
+      </section>
+
+      <div class="form-field-wrap">
+        <p class="form-field-wrap__field form-text">{{ sendSignInLinkSentText.text }}</p>
+        <a class="form-button form-button--secondary form-field-wrap__field" href="{{actions.returnUrl}}">{{sendSignInLinkSentText.cta}} {{> components/icon/arrow-inline }}</a>
+      </div>
+
+    </div></div>
 
   </section>
 {{/partial}}

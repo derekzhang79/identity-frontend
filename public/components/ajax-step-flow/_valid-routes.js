@@ -4,7 +4,8 @@ type ValidRouteList = string[];
 
 const formRoutes: ValidRouteList = [
   route('twoStepSignInAction'),
-  route('signInSecondStepCurrentAction')
+  route('signInSecondStepCurrentAction'),
+  route('sendSignInLinkAction')
 ];
 
 const linkRoutes: ValidRouteList = [route('twoStepSignIn')];

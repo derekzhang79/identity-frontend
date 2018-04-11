@@ -4,25 +4,29 @@
 {{# partial "content" }}
   <section class="layout-wrap-width">
 
-    <section class="layout-header">
-      <h1 class="layout-header__title">{{ sendSignInLinkText.title }}</h1>
-    </section>
+    <div class="ajax-step-flow"><div class="ajax-step-flow__slide">
 
-    {{> components/form/form-error-wrap }}
+      <section class="layout-header">
+        <h1 class="layout-header__title">{{ sendSignInLinkText.title }}</h1>
+      </section>
 
-    <form method="POST" action="{{ actions.submit }}">
+      {{> components/form/form-error-wrap }}
 
-      <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
+      <form method="POST" action="{{ actions.submit }}">
 
-      <div class="form-field-wrap">
-        <label class="form-field-wrap__title" for="signin_field_email">{{sendSignInLinkText.emailInput}}</label>
-        <input class="form-input form-field-wrap__field" type="email" name="email" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false" autofocus />
-      </div>
-      <div class="form-field-wrap">
-        <button class="form-button form-button--main form-field-wrap__field" type="submit">{{sendSignInLinkText.submitAction}} {{> components/icon/arrow-inline }}</button>
-      </div>
+        <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
 
-    </form>
+        <div class="form-field-wrap">
+          <label class="form-field-wrap__title" for="signin_field_email">{{sendSignInLinkText.emailInput}}</label>
+          <input class="form-input form-field-wrap__field" type="email" name="email" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false" autofocus />
+        </div>
+        <div class="form-field-wrap">
+          <button class="form-button form-button--main form-field-wrap__field" type="submit">{{sendSignInLinkText.submitAction}} {{> components/icon/arrow-inline }}</button>
+        </div>
+
+      </form>
+
+    </div></div>
 
   </section>
 {{/partial}}

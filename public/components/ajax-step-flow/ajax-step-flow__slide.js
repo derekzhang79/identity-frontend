@@ -1,12 +1,13 @@
 // @flow
 
-import { route } from 'js/config';
 import { showErrorText } from '../form-error-wrap/index';
 import { getUrlErrors } from '../../js/get-url-errors';
+import {
+  formRoutes as validAjaxFormRoutes,
+  linkRoutes as validAjaxLinkRoutes
+} from './_valid-routes.js';
 
-type ValidRouteList = string[];
-
-const selector: string = '.ajax-form__slide';
+const selector: string = '.ajax-step-flow__slide';
 
 const SLIDE_STATE_LOADING: string = 'SLIDE_STATE_LOADING';
 const SLIDE_STATE_DEFAULT: string = 'SLIDE_STATE_DEFAULT';
@@ -16,13 +17,6 @@ const EV_DONE: string = 'form-done';
 const ERR_MALFORMED_HTML: string = 'ERR_MALFORMED_HTML';
 const ERR_MALFORMED_RESPONSE: string = 'ERR_MALFORMED_RESPONSE';
 const ERR_BACKEND_ERROR: string = 'ERR_BACKEND_ERROR';
-
-const validAjaxFormRoutes: ValidRouteList = [
-  route('twoStepSignInAction'),
-  route('signInSecondStepCurrentAction')
-];
-
-const validAjaxLinkRoutes: ValidRouteList = [route('twoStepSignIn')];
 
 const getSlide = ($wrapper: HTMLElement): HTMLElement => {
   const $slide = $wrapper.querySelector(selector);
@@ -135,7 +129,7 @@ const fetchAndDispatchSlide = (
 
 const init = ($slide: HTMLElement): void => {
   const $links: HTMLAnchorElement[] = [
-    ...($slide.querySelectorAll(`a.ajax-form__link`): any)
+    ...($slide.querySelectorAll(`a.ajax-step-flow__link`): any)
   ]
     .filter(_ => _ instanceof HTMLAnchorElement)
     .filter(_ =>

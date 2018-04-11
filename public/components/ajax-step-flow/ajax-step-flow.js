@@ -1,15 +1,18 @@
 // @flow
 
-import { EV_DONE, getSlide } from 'components/ajax-form/ajax-form__slide';
+import {
+  EV_DONE,
+  getSlide
+} from 'components/ajax-step-flow/ajax-step-flow__slide';
 import { loadComponents } from 'js/load-components';
 import { pageView } from '../analytics/ga';
 
-const selector: string = '.ajax-form';
+const selector: string = '.ajax-step-flow';
 
 const ERR_MALFORMED_EVENT: string = 'Something went wrong';
 const ERR_MALFORMED_HTML: string = 'Something went wrong';
 
-const STATE_INITIATOR: string = 'ajax-form-state-init';
+const STATE_INITIATOR: string = 'ajax-step-flow-state-init';
 
 const pushSlide = (
   $old: HTMLElement,
@@ -18,12 +21,12 @@ const pushSlide = (
 ): Promise<HTMLElement> => {
   const classNames = reverse
     ? {
-        in: 'ajax-form__slide--in-reverse',
-        out: 'ajax-form__slide--out-reverse'
+        in: 'ajax-step-flow__slide--in-reverse',
+        out: 'ajax-step-flow__slide--out-reverse'
       }
     : {
-        in: 'ajax-form__slide--in',
-        out: 'ajax-form__slide--out'
+        in: 'ajax-step-flow__slide--in',
+        out: 'ajax-step-flow__slide--out'
       };
 
   const animateOut = () =>
@@ -34,19 +37,19 @@ const pushSlide = (
           resolve($new);
         });
         requestAnimationFrame(() => {
-          $old.classList.remove('ajax-form__slide--visible');
+          $old.classList.remove('ajax-step-flow__slide--visible');
           $old.classList.add(classNames.out);
         });
         $new.addEventListener('animationend', () => {
           [
-            'ajax-form__slide--in',
-            'ajax-form__slide--out',
-            'ajax-form__slide--in-reverse',
-            'ajax-form__slide--out-reverse'
+            'ajax-step-flow__slide--in',
+            'ajax-step-flow__slide--out',
+            'ajax-step-flow__slide--in-reverse',
+            'ajax-step-flow__slide--out-reverse'
           ].forEach(_ => $new.classList.remove(_));
         });
         requestAnimationFrame(() => {
-          ['ajax-form__slide--visible', classNames.in].forEach(_ =>
+          ['ajax-step-flow__slide--visible', classNames.in].forEach(_ =>
             $new.classList.add(_)
           );
         });

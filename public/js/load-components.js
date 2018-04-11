@@ -6,11 +6,11 @@ import {
   init as initAjaxForm,
   selector as selectorAjaxForm,
   initOnce as initOnceAjaxForm
-} from 'components/ajax-form/ajax-form';
+} from 'components/ajax-step-flow/ajax-step-flow';
 import {
   init as initAjaxFormSlide,
   selector as selectorAjaxFormSlide
-} from 'components/ajax-form/ajax-form__slide';
+} from 'components/ajax-step-flow/ajax-step-flow__slide';
 import {
   init as initSmartLock,
   selector as selectorSmartLock

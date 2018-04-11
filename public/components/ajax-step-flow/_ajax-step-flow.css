@@ -1,7 +1,7 @@
-.ajax-form[data-enhanced] {
+.ajax-step-flow[data-enhanced] {
   position: relative;
   min-height: 100%;
-  .ajax-form__slide {
+  .ajax-step-flow__slide {
     left: 0;
     right: 0;
     top: 0;
@@ -11,32 +11,32 @@
   }
 }
 
-.ajax-form__slide--out {
+.ajax-step-flow__slide--out {
   visibility: visible;
   display: block;
   position: absolute;
-  animation: ajax-form-animation__slide-left 0.2s both;
+  animation: ajax-step-flow-animation__slide-left 0.2s both;
 }
-.ajax-form__slide--in {
+.ajax-step-flow__slide--in {
   visibility: visible;
   display: block;
   position: absolute;
-  animation: ajax-form-animation__slide-right reverse 0.2s both;
+  animation: ajax-step-flow-animation__slide-right reverse 0.2s both;
 }
-.ajax-form__slide--out-reverse {
+.ajax-step-flow__slide--out-reverse {
   visibility: visible;
   display: block;
   position: absolute;
-  animation: ajax-form-animation__slide-right 0.2s both;
+  animation: ajax-step-flow-animation__slide-right 0.2s both;
 }
-.ajax-form__slide--in-reverse {
+.ajax-step-flow__slide--in-reverse {
   visibility: visible;
   display: block;
   position: absolute;
-  animation: ajax-form-animation__slide-left reverse 0.2s both;
+  animation: ajax-step-flow-animation__slide-left reverse 0.2s both;
 }
 
-@keyframes ajax-form-animation__slide-left {
+@keyframes ajax-step-flow-animation__slide-left {
   0% {
     transform: translateX(0);
     opacity: 0.5;
@@ -48,7 +48,7 @@
   }
 }
 
-@keyframes ajax-form-animation__slide-right {
+@keyframes ajax-step-flow-animation__slide-right {
   0% {
     transform: translateX(0);
     opacity: 0.5;

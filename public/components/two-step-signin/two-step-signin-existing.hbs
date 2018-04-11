@@ -1,10 +1,10 @@
 <form class="two-step-signin" method="POST" action="{{ actions.signInSecondStepCurrent }}">
 
-    {{> components/two-step-signin/_email-header }}
+  {{> components/two-step-signin/_email-header }}
+  {{> components/two-step-signin/_helpers }}
+  {{> components/form/form-feedback-wrap }}
 
-    {{> components/two-step-signin/_helpers }}
-
-    <div class="form-field-wrap">
+  <div class="form-field-wrap">
       <input class="u-h" name="email" autocomplete="username" value="{{email}}" />
       <label class="form-field-wrap__title" for="signin_field_email">{{twoStepSignInPageText.passwordFieldTitle}}</label>
       <input class="form-input form-field-wrap__field" type="password" name="password" autocomplete="password" autocapitalize="off" autocorrect="off" spellcheck="false" autofocus value="{{password}}" />

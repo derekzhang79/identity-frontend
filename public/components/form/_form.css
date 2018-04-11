@@ -85,7 +85,7 @@ errors
 }
 
 .form-feedback-wrap {
-  .form-error {
+  .form-feedback {
     @extend %form__error;
     margin: 0 0 calc(var(--size-baseline-vertical) / 2) 0;
     &:not(:first-child) {

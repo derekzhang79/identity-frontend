@@ -57,12 +57,16 @@ object Text {
         "changeEmailLink" -> messages("signinTwoStep.changeEmailLink"),
         "signInAction" -> messages("signinTwoStep.signInAction"),
         "continueAction" -> messages("signinTwoStep.continueAction"),
-        "unknownEmailTitle" -> messages("signinTwoStep.unknownEmailTitle"),
         "registerAction" -> messages("signinTwoStep.registerAction"),
         "passwordFieldTitle" -> messages("signinTwoStep.passwordFieldTitle"),
         "oauthStepTwoFieldTitle" -> messages("signinTwoStep.oauthStepTwoFieldTitle"),
+        "signInCtaEmailAction" -> messages("signinTwoStep.signInCtaEmailAction"),
 
-        "signInCtaEmailAction" -> messages("signinTwoStep.signInCtaEmailAction")
+        "newUserEmailNotFoundErrorPre" -> messages("signinTwoStep.newUserEmailNotFoundErrorPre"),
+        "newUserEmailNotFoundErrorPost" -> messages("signinTwoStep.newUserEmailNotFoundErrorPost"),
+        "newUserEmailNotFoundPrompt" -> messages("signinTwoStep.newUserEmailNotFoundPrompt"),
+        "newUserCreateAccountAction" -> messages("signinTwoStep.newUserCreateAccountAction"),
+        "newUserCreateSocialAccountAction" -> messages("signinTwoStep.newUserCreateSocialAccountAction")
       )
     }
   }

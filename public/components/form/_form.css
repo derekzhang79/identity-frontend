@@ -67,7 +67,7 @@ generic input wrapper
 }
 
 .form-field-wrap__title {
-  @extend %font-text-sans-2;
+  @extend %font-text-2;
 }
 
 .form-field-wrap__footer {
@@ -79,13 +79,40 @@ feedback
 */
 %form-feedback {
   @extend %font-text-2;
-  background: transparent inline('status-alert.svg') left top no-repeat;
-  padding: 0 0 0 calc(var(--size-baseline) * 6);
+  padding: 0 0 0 calc(var(--size-baseline) * 8);
+  position: relative;
+  &:before {
+    content: '';
+    background: transparent center center no-repeat;
+    background-size: contain;
+    width: calc(var(--size-baseline) * 6.5);
+    height: calc(var(--size-baseline) * 6.5);
+    position: absolute;
+    left: 0;
+    top: calc(var(--size-baseline) * -.5);
+  }
+}
+
+.form-feedback {
+  @extend %form-feedback;
+}
+
+.form-feedback--error {
+  color: var(--color-error);
+  &:before {
+    background-image: inline('status-alert.svg');
+  }
+}
+
+.form-feedback--info {
+  color: var(--color-error);
+  &:before {
+    background-image: inline('status-info.svg');
+  }
 }
 
 .form-feedback-wrap {
   .form-feedback {
-    @extend %form-feedback;
     margin: 0 0 var(--size-baseline-vertical) 0;
     &:not(:first-child) {
       background: none;
@@ -94,14 +121,4 @@ feedback
       margin: 0 0 var(--size-baseline-vertical) 0;
     }
   }
-}
-
-.form-feedback--error {
-  color: var(--color-error);
-  background-image: inline('status-alert.svg');
-}
-
-.form-feedback--info {
-  color: var(--color-error);
-  background-image: inline('status-alert.svg');
 }

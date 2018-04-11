@@ -10,22 +10,21 @@
   <div class="form-feedback-wrap">
     <div class="form-feedback form-feedback--info">
       <p>
-        Sorry, we couldn’t find <strong>katya.beer@guardian.co.uk</strong> in our records.
+        {{twoStepSignInPageText.newUserEmailNotFoundErrorPre}} <strong>katya.beer@guardian.co.uk</strong> {{twoStepSignInPageText.newUserEmailNotFoundErrorPost}}
       </p>
       <p>
-        Sorry, we couldn’t find <a href="{{signinUrl}}" class="ajax-step-flow__link" data-is-reverse="true">{{twoStepSignInPageText.changeEmailLink}}</a>.
+        {{twoStepSignInPageText.newUserEmailNotFoundPrompt}} <a href="{{signinUrl}}" class="ajax-step-flow__link" data-is-reverse="true">{{twoStepSignInPageText.changeEmailLink}}</a>.
       </p>
     </div>
     <div class="form-feedback form-feedback--bullet">
-      If this is your first time signing in to the Guardian you need to create an account (it only takes 1 minute).
       <div class="form-field-wrap">
-        <label class="form-field-wrap__title" for="signin_field_email">{{twoStepSignInPageText.unknownEmailTitle}}</label>
+        <label class="form-field-wrap__title" for="signin_field_email">{{twoStepSignInPageText.newUserCreateAccountAction}}</label>
         <a href="{{registerUrl}}" class="form-button form-button--main form-field-wrap__field">{{twoStepSignInPageText.registerAction}} {{> components/icon/arrow-inline }}</a>
       </div>
     </div>
     <div class="form-feedback form-feedback--bullet">
       <div class="form-field-wrap">
-        <label class="form-field-wrap__title">Alternatively, you can create a Guardian account using these social services:</label>
+        <label class="form-field-wrap__title">{{twoStepSignInPageText.newUserCreateSocialAccountAction}}</label>
         {{> components/oauth-cta/_oauth-cta-content }}
       </div>
     </div>

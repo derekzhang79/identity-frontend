@@ -98,6 +98,8 @@ sendSignInLink.submitAction=Submit
 # com.gu.identity.frontend.models.text.SendSignInLinkSentText
 sendSignInLinkSent.pageTitle=Check your email
 sendSignInLinkSent.title=Now check your email
+sendSignInLinkSent.text=Follow the link in the email to sign in.
+sendSignInLinkSent.cta=Return to The Guardian
 
 
 # com.gu.identity.frontend.models.text.ResetPasswordText

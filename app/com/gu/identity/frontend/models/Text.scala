@@ -52,6 +52,7 @@ object Text {
         "emailFieldTitle" -> messages("signinTwoStep.emailFieldTitle"),
         "setPasswordTitle" -> messages("signinTwoStep.setPasswordTitle"),
         "setPasswordAction" -> messages("signinTwoStep.setPasswordAction"),
+        "recoverPasswordAction" -> messages("signinTwoStep.recoverPasswordAction"),
         "divideText" -> messages("signinTwoStep.dividetext"),
         "welcome" -> messages("signinTwoStep.welcome"),
         "changeEmailLink" -> messages("signinTwoStep.changeEmailLink"),

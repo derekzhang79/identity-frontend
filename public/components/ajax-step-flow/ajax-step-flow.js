@@ -1,5 +1,20 @@
 // @flow
 
+/*
+You can se this component to wrap any flow of n steps
+in a nice single page app way, you can see how this works
+in the sign in page or in the sign in token request page
+but basically you want to wrap your flow in
+`div.ajax-step-flow` and `div.ajax-step-flow__slide`
+
+The parent one (this file) acts as a 'stage' of sorts while
+the second one is the actual 'page' of the flow. They are
+separated for clarity.
+
+Wrap your steps in these divs and make sure their routes are
+inside `_valid-routes.js` and you should be good to go!
+*/
+
 import {
   EV_DONE,
   getSlide

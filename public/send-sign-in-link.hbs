@@ -15,6 +15,7 @@
       <form method="POST" action="{{ actions.submit }}">
 
         <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
+        <input type="hidden" name="returnUrl" value="{{ returnUrl }}">
 
         <div class="form-field-wrap">
           <label class="form-field-wrap__title" for="signin_field_email">{{sendSignInLinkText.emailInput}}</label>

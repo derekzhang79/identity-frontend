@@ -1,6 +1,6 @@
 // @flow
 
-import { showErrorText } from '../form-error-wrap/index';
+import { showErrorText } from '../form-feedback-wrap/index';
 import { getUrlErrors } from '../../js/get-url-errors';
 import {
   formRoutes as validAjaxFormRoutes,

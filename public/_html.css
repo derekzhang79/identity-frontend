@@ -41,7 +41,7 @@ body > section:last-of-type {
 %page-block {
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 0 1rem;
+  padding: 0 calc(var(--size-baseline)*3);
 
   @media (--viewport-min-mobile-landscape) {
     max-width: 56rem;
@@ -191,8 +191,15 @@ body > section:last-of-type {
   @extend %content-container;
 }
 
+p {
+  margin: 0;
+  + p {
+    margin-top: var(--size-baseline-gutter);
+  }
+}
+
 %a {
-  color: var(--color-brand);
+  color: var(--color-link);
   cursor: pointer;
   text-decoration: none;
 
@@ -205,13 +212,13 @@ body > section:last-of-type {
 
 %link {
   @extend %a;
-  border-bottom: 1px solid #dcdcdc;
+  text-decoration: underline;
+  text-decoration-color: var(--color-link-underline);
   transition: border-color 0.15s ease-out;
 
   &:hover,
   &:focus {
-    text-decoration: none;
-    border-color: var(--color-brand);
+    text-decoration-color: var(--color-link);
   }
 }
 

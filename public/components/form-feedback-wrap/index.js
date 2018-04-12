@@ -3,12 +3,12 @@ import { localisedError } from 'js/config';
 
 const $elements: HTMLElement[] = [];
 
-const selector: string = '.form-error-wrap';
+const selector: string = '.form-feedback-wrap';
 
 const errors: string[] = [];
 
 const renderErrors = (): void => {
-  $elements.forEach($element => {
+  $elements.filter((el, index) => index === 0).forEach($element => {
     $element.innerHTML = '';
     errors.forEach(error => {
       const $div = document.createElement('div');

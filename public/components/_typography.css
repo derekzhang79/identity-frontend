@@ -78,7 +78,10 @@ html {
 
 %font-text-2 {
   @extend %font-serif;
-  @include font-size(16, 24);
+  @include font-size(14, 20);
+  @media (--viewport-min-tablet) {
+    @include font-size(16, 24);
+  }
 }
 
 %font-text-sans-0 {

@@ -1,8 +1,10 @@
 <form class="two-step-signin" method="POST" action="{{ actions.signInSecondStepCurrent }}">
 
-    {{> components/two-step-signin/_helpers }}
+  {{> components/two-step-signin/_email-header }}
+  {{> components/two-step-signin/_helpers }}
+  {{> components/form/form-feedback-wrap }}
 
-    <div class="form-field-wrap">
+  <div class="form-field-wrap">
       <input class="u-h" name="email" autocomplete="username" value="{{email}}" />
       <label class="form-field-wrap__title" for="signin_field_email">{{twoStepSignInPageText.passwordFieldTitle}}</label>
       <input class="form-input form-field-wrap__field" type="password" name="password" autocomplete="password" autocapitalize="off" autocorrect="off" spellcheck="false" autofocus value="{{password}}" />
@@ -11,7 +13,7 @@
           <input class="form-checkbox__input" type="checkbox" name="rememberMe" checked="checked" value="true"/>
           <span class="form-checkbox__label">{{twoStepSignInPageText.rememberMe}}</span>
         </label>
-        <a class="link" href="{{forgotPasswordUrl}}">{{twoStepSignInPageText.forgottenPassword}}</a>
+        <a class="link" href="{{forgotPasswordUrl}}">{{twoStepSignInPageText.recoverPasswordAction}}</a>
       </div>
     </div>
     <div class="form-field-wrap">

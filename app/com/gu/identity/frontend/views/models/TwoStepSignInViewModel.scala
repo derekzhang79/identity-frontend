@@ -13,7 +13,7 @@ import play.twirl.api.HtmlFormat
 case class TwoStepSignInViewModel private(
   layout: LayoutViewModel,
 
-  oauth: OAuthSignInViewModel,
+  oauth: OAuthViewModel,
 
   twoStepSignInPageText: Map[String, String],
   terms: TermsViewModel,
@@ -69,10 +69,15 @@ object TwoStepSignInViewModel {
 
     val isMembership = clientId.exists(_ == GuardianMembersClientID)
 
+    val oauth = userType match {
+      case Some(NewUser) => OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests)
+      case _ => OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests)
+    }
+
     TwoStepSignInViewModel(
       layout = layout,
 
-      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
+      oauth = oauth,
 
       twoStepSignInPageText = TwoStepSignInPageText.toMap(isMembership),
       terms = Terms.getTermsModel(group),

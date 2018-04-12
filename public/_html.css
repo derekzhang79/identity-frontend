@@ -41,7 +41,7 @@ body > section:last-of-type {
 %page-block {
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 0 1rem;
+  padding: 0 calc(var(--size-baseline)*3);
 
   @media (--viewport-min-mobile-landscape) {
     max-width: 56rem;
@@ -189,6 +189,13 @@ body > section:last-of-type {
 
 .page-content {
   @extend %content-container;
+}
+
+p {
+  margin: 0;
+  + p {
+    margin-top: var(--size-baseline-gutter);
+  }
 }
 
 %a {

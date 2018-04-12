@@ -72,6 +72,10 @@ generic input wrapper
 
 .form-field-wrap__footer {
   @extend %font-text-sans-1;
+  &,
+  .link {
+    color: var(--color-text-light);
+  }
 }
 
 /*

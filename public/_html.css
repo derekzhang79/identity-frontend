@@ -192,7 +192,7 @@ body > section:last-of-type {
 }
 
 %a {
-  color: var(--color-brand);
+  color: var(--color-link);
   cursor: pointer;
   text-decoration: none;
 
@@ -205,13 +205,13 @@ body > section:last-of-type {
 
 %link {
   @extend %a;
-  border-bottom: 1px solid #dcdcdc;
+  text-decoration: underline;
+  text-decoration-color: var(--color-link-underline);
   transition: border-color 0.15s ease-out;
 
   &:hover,
   &:focus {
-    text-decoration: none;
-    border-color: var(--color-brand);
+    text-decoration-color: var(--color-link);
   }
 }
 

@@ -2,7 +2,7 @@
 :root {
   --color-brand: #121212;
   --color-cta: #ffe500;
-  --color-card: #f6f6f6;
+
   --color-border: #dcdcdc;
   --color-border-hover: #a4a3a5;
 
@@ -11,7 +11,10 @@
 
   --color-error: #c70000;
 
-  --color-bg: var(--color-card);
+  --color-link: var(--color-text);
+  --color-link-underline: var(--color-border-hover);
+
+  --color-bg: #f6f6f6;
 }
 
 /* Metrics */

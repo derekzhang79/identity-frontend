@@ -138,7 +138,7 @@ object RegisterLinks {
   def apply(returnUrl: ReturnUrl, skipConfirmation: Option[Boolean], clientId: Option[ClientID], signInType: Option[SignInType]): RegisterLinks =
     RegisterLinks(
       signIn = signInType match {
-        case Some(TwoStepSignInType) => UrlBuilder(routes.Application.twoStepSignIn().url, returnUrl, skipConfirmation, clientId, group = None)
+        case Some(TwoStepSignInType) => UrlBuilder(routes.Application.twoStepSignInStart().url, returnUrl, skipConfirmation, clientId, group = None)
         case _ => UrlBuilder(routes.Application.signIn().url, returnUrl, skipConfirmation, clientId, group = None)
       }
     )

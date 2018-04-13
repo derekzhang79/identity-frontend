@@ -67,7 +67,7 @@ object TwoStepSignInStartViewModel {
 
       oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
-      twoStepSignInPageText = TwoStepSignInPageText.toMap(isMembership),
+      twoStepSignInPageText = TwoStepSignInStartPageText.toMap(isMembership),
       terms = Terms.getTermsModel(group),
 
       errors = errors,

@@ -78,7 +78,7 @@ object TwoStepSignInChoicesViewModel {
 
       oauth = oauth,
 
-      twoStepSignInPageText = TwoStepSignInPageText.toMap(isMembership),
+      twoStepSignInPageText = TwoStepSignInChoicesPageText.toMap(),
       terms = Terms.getTermsModel(group),
 
       errors = errors,

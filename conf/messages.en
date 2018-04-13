@@ -112,9 +112,12 @@ sendSignInLinkSent.cta=Return to The Guardian
 # com.gu.identity.frontend.models.text.ResetPasswordText
 resetPassword.pageTitle=Reset password
 resetPassword.title=Forgotten or need to set your password?
+resetPassword.resend.title=Oh no! The reset password link has expired
 resetPassword.subtitle=We will email you a link to reset it.
+resetPassword.resend.subtitle=Enter your email address and we'll send you another.
 resetPassword.emailAddressField=Email address
 resetPassword.button=Reset Password
+resetPassword.resend.button=Send me another
 resetPassword.socialNetworksTitle=Unlinked The Guardian from Facebook or Google and want to sign in?
 resetPassword.socialNetworksContent=Use the email address field to send a reset link to your registered Facebook or Google email. You will then be able to add a password to your account.
 resetPassword.userHelpTitle=Something else?
@@ -125,7 +128,7 @@ resetPassword.userHelpContent=who will be able to help you.
 resetPasswordEmailSent.pageTitle=Check your email
 resetPasswordEmailSent.title=Now check your email
 resetPasswordEmailSent.instructions1=Follow the link in the email to reset your password.
-resetPasswordEmailSent.instructions2=Reset password links are valid for 30 minutes. If you do not receive an email there is no account associated with the address.  
+resetPasswordEmailSent.instructions2=Reset password links are valid for 30 minutes. If you do not receive an email there is no account associated with the address.
 
 errors.badRequest.pageTitle=Bad request: {0}
 errors.badRequest.title=Bad request: {0}
@@ -157,7 +160,7 @@ errors.unauthorized.resendTokenLink=You can manage all of your email preferences
 resendTokenSent.pageTitle=Email Sent
 resendTokenSent.title=Email sent
 resendTokenSent.description=Please go to your inbox. If you have not received it please check your spam folder.
-resendTokenSent.unexpectedTitle=Opps there was a problem 
+resendTokenSent.unexpectedTitle=Opps there was a problem
 
 resendConsentLink.pageTitle=Invalid consent token
 resendConsentLink.title=Expired link

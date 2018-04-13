@@ -31,13 +31,14 @@ object ResetPasswordViewModel {
     errors: Seq[ErrorViewModel],
     csrfToken: Option[CSRFToken],
     email: Option[String],
+    text: ResetPasswordText,
     clientId: Option[ClientID])
     (implicit messages: Messages): ResetPasswordViewModel = {
     val layout = LayoutViewModel(configuration, clientId = clientId, returnUrl = None)
 
     ResetPasswordViewModel(
       layout = layout,
-      resetPasswordText = ResetPasswordText(),
+      resetPasswordText = text,
       errors = errors,
       csrfToken = csrfToken,
       email = email,

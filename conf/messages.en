@@ -18,7 +18,8 @@ signin.signup=Create an account
 signin.continue=Continue
 
 signinTwoStep.welcome=Hello,
-signinTwoStep.changeEmailLink=Change
+signinTwoStep.changeEmailLink=Change email
+signinTwoStep.changeEmailLinkShort=Change
 signinTwoStep.signInAction=Sign In
 signinTwoStep.continueAction=Continue
 signinTwoStep.emailFieldTitle=Enter your email

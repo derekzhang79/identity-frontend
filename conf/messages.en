@@ -160,7 +160,7 @@ errors.unauthorized.resendTokenLink=You can manage all of your email preferences
 resendTokenSent.pageTitle=Email Sent
 resendTokenSent.title=Email sent
 resendTokenSent.description=Please go to your inbox. If you have not received it please check your spam folder.
-resendTokenSent.unexpectedTitle=Opps there was a problem
+resendTokenSent.unexpectedTitle=Oops there was a problem
 
 resendConsentLink.pageTitle=Invalid consent token
 resendConsentLink.title=Expired link

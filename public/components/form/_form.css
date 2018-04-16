@@ -35,7 +35,7 @@ prelude
 texty text
 */
 .form-text {
-  @extend %font-text-sans-3;
+  @extend %font-body-copy;
 }
 
 /*
@@ -67,7 +67,7 @@ generic input wrapper
 }
 
 .form-field-wrap__title {
-  @extend %font-text-2;
+  @extend %font-body-copy;
 }
 
 .form-field-wrap__footer {
@@ -82,7 +82,7 @@ generic input wrapper
 feedback
 */
 %form-feedback {
-  @extend %font-text-2;
+  @extend %font-body-copy;
   padding: 0 0 0 calc(var(--size-baseline) * 8);
   position: relative;
   &:before {

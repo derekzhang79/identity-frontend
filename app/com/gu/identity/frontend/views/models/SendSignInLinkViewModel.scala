@@ -16,6 +16,7 @@ case class SendSignInLinkViewModel private(
     ),
     errors: Seq[ErrorViewModel] = Seq.empty,
     csrfToken: Option[CSRFToken],
+    returnUrl: String = "",
     resources: Seq[PageResource with Product],
     indirectResources: Seq[PageResource with Product]
   )
@@ -35,7 +36,10 @@ object SendSignInLinkViewModel {
       layout = layout,
       sendSignInLinkText = SendSignInLinkText(),
       errors = errors,
+
       csrfToken = csrfToken,
+      returnUrl = "https://profile.theguardian.com/consents/staywithus",
+
       resources = layout.resources,
       indirectResources = layout.indirectResources
     )

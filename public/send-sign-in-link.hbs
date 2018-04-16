@@ -8,6 +8,9 @@
 
       <section class="layout-header">
         <h1 class="layout-header__title">{{ sendSignInLinkText.title }}</h1>
+        <p class="layout-header__title layout-header__title--has-proxy layout-header__title--standfirst">
+          {{sendSignInLinkText.subtitle}}
+        </p>
       </section>
 
       {{> components/form/form-feedback-wrap }}
@@ -15,6 +18,7 @@
       <form method="POST" action="{{ actions.submit }}">
 
         <input type="hidden" name="{{ csrfToken.fieldName }}" value="{{ csrfToken.value }}">
+        <input type="hidden" name="returnUrl" value="{{ returnUrl }}">
 
         <div class="form-field-wrap">
           <label class="form-field-wrap__title" for="signin_field_email">{{sendSignInLinkText.emailInput}}</label>

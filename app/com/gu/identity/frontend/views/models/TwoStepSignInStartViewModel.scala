@@ -10,7 +10,7 @@ import com.gu.identity.model.{CurrentUser, GuestUser, NewUser, UserType}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 
-case class TwoStepSignInViewModel private(
+case class TwoStepSignInStartViewModel private(
   layout: LayoutViewModel,
 
   oauth: OAuthViewModel,
@@ -27,21 +27,15 @@ case class TwoStepSignInViewModel private(
   group: Option[GroupCode],
 
   email:Option[String],
-  emailForDisplay:Option[String],
 
   registerUrl: String = "",
   signinUrl: String = "",
   forgotPasswordUrl: String = "",
 
-  userTypes: Map[String, Boolean],
-
   recaptchaModel: Option[Any],
 
   actions: Map[String, String] = Map(
-    "signInWithEmailAndPassword" -> routes.SigninAction.signIn().url,
-    "resetPassword" -> routes.ResetPasswordAction.reset().url,
-    "signInWithEmail" -> routes.SigninAction.emailSignInFirstStep().url,
-    "signInSecondStepCurrent" -> routes.SigninAction.signInSecondStepCurrent().url
+    "signInWithEmail" -> routes.SigninAction.emailSignInFirstStep().url
   ),
   resources: Seq[PageResource with Product],
   indirectResources: Seq[PageResource with Product])
@@ -49,7 +43,7 @@ case class TwoStepSignInViewModel private(
     with ViewModelResources
 
 
-object TwoStepSignInViewModel {
+object TwoStepSignInStartViewModel {
   def apply(
     configuration: Configuration,
     activeTests: ActiveMultiVariantTests,
@@ -59,8 +53,7 @@ object TwoStepSignInViewModel {
     skipConfirmation: Option[Boolean],
     clientId: Option[ClientID],
     group: Option[GroupCode],
-    email: Option[String],
-    userType: Option[UserType])(implicit messages: Messages): TwoStepSignInViewModel = {
+    email: Option[String])(implicit messages: Messages): TwoStepSignInStartViewModel = {
 
     val layout = LayoutViewModel(configuration, activeTests, clientId, Some(returnUrl))
     val recaptchaModel : Option[GoogleRecaptchaViewModel] = None
@@ -69,17 +62,12 @@ object TwoStepSignInViewModel {
 
     val isMembership = clientId.exists(_ == GuardianMembersClientID)
 
-    val oauth = userType match {
-      case Some(NewUser) => OAuthRegistrationViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests)
-      case _ => OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests)
-    }
-
-    TwoStepSignInViewModel(
+    TwoStepSignInStartViewModel(
       layout = layout,
 
-      oauth = oauth,
+      oauth = OAuthSignInViewModel(configuration, returnUrl, skipConfirmation, clientId, group, activeTests),
 
-      twoStepSignInPageText = TwoStepSignInPageText.toMap(isMembership),
+      twoStepSignInPageText = TwoStepSignInStartPageText.toMap(isMembership),
       terms = Terms.getTermsModel(group),
 
       errors = errors,
@@ -90,31 +78,16 @@ object TwoStepSignInViewModel {
       clientId = clientId,
       group = group,
       email = email,
-      emailForDisplay = email.map(breakEmailWords),
 
       registerUrl = UrlBuilder(routes.Application.register(), returnUrl, skipConfirmation, clientId, group.map(_.id), Some(TwoStepSignInType)),
-      signinUrl = UrlBuilder(routes.Application.twoStepSignIn(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
+      signinUrl = UrlBuilder(routes.Application.twoStepSignInStart(), returnUrl, skipConfirmation, clientId, group.map(_.id)),
       forgotPasswordUrl = UrlBuilder("/reset", returnUrl, skipConfirmation, clientId, group.map(_.id)),
-
-      userTypes = Map(
-        ("isNew", userType.contains(NewUser)),
-        ("isExisting", userType.contains(CurrentUser)),
-        ("isGuest", userType.contains(GuestUser))
-      ),
 
       recaptchaModel = recaptchaModel,
 
       resources = resources,
       indirectResources = layout.indirectResources
     )
-  }
-
-  private def breakEmailWords(email: String) = {
-    HtmlFormat.escape(email).toString.flatMap {
-      case '@' => s"<wbr>@"
-      case '+' => s"<wbr>+"
-      case c   => s"$c"
-    }
   }
 
   private def getResources(layout: LayoutViewModel, recaptchaViewModel: Option[GoogleRecaptchaViewModel]): Seq[PageResource with Product] ={

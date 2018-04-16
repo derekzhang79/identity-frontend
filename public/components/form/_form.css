@@ -32,13 +32,6 @@ prelude
 }
 
 /*
-texty text
-*/
-.form-text {
-  @extend %font-body-copy;
-}
-
-/*
 generic input wrapper
 */
 .form-field-wrap {

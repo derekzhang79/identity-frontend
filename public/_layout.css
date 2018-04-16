@@ -62,3 +62,10 @@
     border-top: 0;
   }
 }
+
+/*
+texty text
+*/
+.layout-text {
+  @extend %font-body-copy;
+}

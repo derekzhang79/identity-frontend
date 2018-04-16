@@ -4,7 +4,7 @@ import com.gu.identity.frontend.controllers.routes
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.models.ClientID
-import com.gu.identity.frontend.models.text.ResetPasswordText
+import com.gu.identity.frontend.models.text.{ResetPasswordResendText, ResetPasswordText}
 import play.api.i18n.Messages
 
 
@@ -31,14 +31,14 @@ object ResetPasswordViewModel {
     errors: Seq[ErrorViewModel],
     csrfToken: Option[CSRFToken],
     email: Option[String],
-    text: ResetPasswordText,
+    resend: Boolean,
     clientId: Option[ClientID])
     (implicit messages: Messages): ResetPasswordViewModel = {
     val layout = LayoutViewModel(configuration, clientId = clientId, returnUrl = None)
 
     ResetPasswordViewModel(
       layout = layout,
-      resetPasswordText = text,
+      resetPasswordText = if(resend) ResetPasswordResendText() else ResetPasswordText(),
       errors = errors,
       csrfToken = csrfToken,
       email = email,

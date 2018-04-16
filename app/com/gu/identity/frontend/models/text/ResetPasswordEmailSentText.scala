@@ -7,7 +7,8 @@ case class ResetPasswordEmailSentText private(
                                       title: String,
                                       instructions1: String,
                                       instructions2: String,
-                                      instructions3: String)
+                                      instructions3: String,
+                                      instructions4: String)
 
 object ResetPasswordEmailSentText {
   def apply()(implicit messages: Messages): ResetPasswordEmailSentText =
@@ -16,6 +17,7 @@ object ResetPasswordEmailSentText {
       title = messages("resetPasswordEmailSent.title"),
       instructions1 = messages("resetPasswordEmailSent.instructions1"),
       instructions2 = messages("resetPasswordEmailSent.instructions2"),
-      instructions3 = messages("resetPasswordEmailSent.instructions3")
+      instructions3 = messages("resetPasswordEmailSent.instructions3"),
+      instructions4 = messages("resetPasswordEmailSent.instructions4")
     )
 }

@@ -38,7 +38,7 @@ class SigninAction(
 
   val redirectRoute: String = routes.Application.signIn().url
 
-  val signInSecondStepCurrentRedirectRoute: String = routes.Application.twoStepSignInStepTwo(CurrentUser.name).url
+  val signInSecondStepCurrentRedirectRoute: String = routes.Application.twoStepSignInChoices(CurrentUser.name).url
 
   val SignInServiceAction =
     ServiceAction andThen

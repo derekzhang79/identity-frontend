@@ -56,7 +56,7 @@ object ViewRenderer {
   }
 
 
-  def renderTwoStepSignIn(
+  def renderTwoStepSignInStart(
     configuration: Configuration,
     activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
     csrfToken: Option[CSRFToken],
@@ -68,7 +68,7 @@ object ViewRenderer {
     email: Option[String])
     (implicit messages: Messages) = {
 
-    val model = TwoStepSignInViewModel(
+    val model = TwoStepSignInStartViewModel(
       configuration = configuration,
       activeTests = activeTests,
       csrfToken = csrfToken,
@@ -77,14 +77,13 @@ object ViewRenderer {
       skipConfirmation = skipConfirmation,
       clientId = clientId,
       group = group,
-      email = email,
-      userType = None
+      email = email
     )
 
     renderViewModel("two-step-signin-start-page", model)
   }
 
-  def renderTwoStepSignInStepTwo(
+  def renderTwoStepSignInChoices(
     configuration: Configuration,
     activeTests: Map[MultiVariantTest, MultiVariantTestVariant],
     csrfToken: Option[CSRFToken],
@@ -97,7 +96,7 @@ object ViewRenderer {
     email: Option[String])
     (implicit messages: Messages) = {
 
-    val model = TwoStepSignInViewModel(
+    val model = TwoStepSignInChoicesViewModel(
       configuration = configuration,
       activeTests = activeTests,
       csrfToken = csrfToken,
@@ -112,7 +111,7 @@ object ViewRenderer {
 
     if(userType.isDefined)
       if (email.isDefined) renderViewModel("two-step-signin-choices-page", model)
-      else NoCache(SeeOther(routes.Application.twoStepSignIn().url))
+      else NoCache(SeeOther(routes.Application.twoStepSignInStart().url))
     else
       renderErrorPage(configuration, NotFoundError("The requested page was not found."), NotFound.apply)
   }

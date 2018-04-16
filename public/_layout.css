@@ -57,6 +57,9 @@
   margin-top: var(--size-baseline-vertical);
   border-top: 1px solid var(--color-border);
   padding-top: var(--size-baseline);
+  &.layout-section--far {
+    margin-top: calc(var(--size-baseline-vertical)*3);
+  }
   &.layout-section--no-border {
     padding-top: 0;
     border-top: 0;
@@ -68,4 +71,7 @@ texty text
 */
 .layout-text {
   @extend %font-body-copy;
+  &.layout-text--center {
+    text-align: center;
+  }
 }

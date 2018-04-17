@@ -15,11 +15,11 @@ GET        /reset                                       com.gu.identity.frontend
 
 GET        /reset/email-sent                            com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent(clientId: Option[String] ?= None)
 
-GET        /signin-token                                com.gu.identity.frontend.controllers.Application.sendSignInLink(error: Seq[String] ?= Seq.empty)
+GET        /resub-email                                 com.gu.identity.frontend.controllers.Application.sendResubLink(error: Seq[String] ?= Seq.empty)
 
-GET        /signin-token/email-sent                     com.gu.identity.frontend.controllers.Application.sendSignInLinkSent
+GET        /signin-token/email-sent                     com.gu.identity.frontend.controllers.Application.sendResubLinkSent
 
-POST       /actions/signin-token/email                  com.gu.identity.frontend.controllers.SigninAction.sendSignInLinkAction()
+POST       /actions/resub-email                         com.gu.identity.frontend.controllers.SigninAction.sendResubLinkAction()
 
 GET        /signout                                     com.gu.identity.frontend.controllers.SignOutAction.signOut(returnUrl: Option[String] ?= None)
 
@@ -74,7 +74,7 @@ GET        /static/*file                                controllers.Assets.versi
 
 GET        /robots.txt                                  controllers.Assets.at(path="/public", file="robots.txt")
 
-GET        /signin/token/:signinToken                    com.gu.identity.frontend.controllers.SigninTokenController.signinWithToken(signinToken: String, returnUrl: Option[String] ?= None)
+GET        /resub-email/:token                          com.gu.identity.frontend.controllers.SigninTokenController.signinWithResubToken(token: String, returnUrl: Option[String] ?= None)
 
 # Redirects
 GET        /                                            com.gu.identity.frontend.controllers.Redirects.indexRedirect

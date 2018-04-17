@@ -65,7 +65,8 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
   implicit val userResponseFormat = Json.format[UserResponse]
   implicit val userTypeFormat = Json.format[UserTypeResponse]
 
-  implicit val signinTokenEmailRequestBodyFormat = Json.format[SendSiginInTokenEmailApiRequestBody]
+  implicit val resubEmailRequestBodyFormat = Json.format[SendResubEmailApiRequestBody]
+  implicit val resubTokenRequestBodyFormat = Json.format[ResubTokenRequestBody]
 
   implicit val assignGroupResponseFormat = Json.format[AssignGroupResponse]
 
@@ -98,7 +99,8 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
     case AuthenticateCookiesFromTokenApiRequestBody(token) => encodeBody("token" -> token)
     case b: ResendRepermissionFromTokenApiRequestBody => Json.stringify(Json.toJson(b))
     case b: SendResetPasswordEmailRequestBody => Json.stringify(Json.toJson(b))
-    case b: SendSiginInTokenEmailApiRequestBody => Json.stringify(Json.toJson(b))
+    case b: SendResubEmailApiRequestBody => Json.stringify(Json.toJson(b))
+    case b: ResubTokenRequestBody => Json.stringify(Json.toJson(b))
   }
 
   private def encodeBody(params: (String, String)*) = {
@@ -112,7 +114,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
       handleErrorResponse(response)
     }
 
-    case _: AuthenticateCookiesApiRequest | _: SigninTokenRequest  =>
+    case _: AuthenticateCookiesApiRequest | _: ResubTokenRequest  =>
       response.json.asOpt[AuthenticationCookiesResponse]
         .map(Right.apply)
         .getOrElse(handleUnexpectedResponse(response))
@@ -153,7 +155,7 @@ class IdentityServiceRequestHandler (ws: WSClient) extends IdentityClientRequest
         handleUnexpectedResponse(response)
       }
 
-    case _: SendSiginInTokenEmailApiRequest =>
+    case _: SendResubEmailApiRequest =>
       if (response.status == 200)
         Right(SendSignInTokenEmailResponse())
       else

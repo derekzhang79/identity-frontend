@@ -174,17 +174,17 @@ object ViewRenderer {
     renderViewModel("reset-password-email-sent-page", model)
   }
 
-  def renderSendSignInLink(
+  def renderResubLink(
     configuration: Configuration,
     errorIds: Seq[String],
     csrfToken: Option[CSRFToken])
-    (implicit messages: Messages) = {
+                     (implicit messages: Messages) = {
     val model = SendSignInLinkViewModel(
       configuration = configuration,
       errors = errorIds.map(ErrorViewModel.apply),
       csrfToken = csrfToken
     )
-    renderViewModel("send-sign-in-link", model)
+    renderViewModel("send-resub-link", model)
   }
 
   def renderSendSignInLinkSent(

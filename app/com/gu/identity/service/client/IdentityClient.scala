@@ -16,8 +16,8 @@ class IdentityClient extends Logging {
       case Left(err) => Future.successful(Left(Seq(err)))
     }
 
-  def authenticateSigninToken(signinToken: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] = {
-    configuration.requestHandler.handleRequest(SigninTokenRequest(signinToken, configuration)).map {
+  def authenticateResubToken(token: String)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, Seq[IdentityApiCookie]]] = {
+    configuration.requestHandler.handleRequest(ResubTokenRequest(token, configuration)).map {
       case Left(error) => Left(error)
       case Right(AuthenticationCookiesResponse(cookies)) =>
         Right(cookies.values.map(IdentityApiCookie(_, cookies.expiresAt)))
@@ -99,7 +99,7 @@ class IdentityClient extends Logging {
     }
   }
 
-  def sendEmailSignInToken(apiRequest: SendSiginInTokenEmailApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, SendSignInTokenEmailResponse]] = {
+  def sendResubEmail(apiRequest: SendResubEmailApiRequest)(implicit configuration: IdentityClientConfiguration, ec: ExecutionContext): Future[Either[IdentityClientErrors, SendSignInTokenEmailResponse]] = {
     configuration.requestHandler.handleRequest(apiRequest).map {
       case Left(error) =>
         logger.error("Failed to send email sign in link")

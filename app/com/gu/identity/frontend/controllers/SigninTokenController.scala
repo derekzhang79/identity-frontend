@@ -17,8 +17,8 @@ class SigninTokenController(
   implicit val executionContext: ExecutionContext
 ) extends Controller with LazyLogging with I18nSupport {
 
-  def signinWithToken(token: String, returnUrl: Option[String]): Action[AnyContent] = Action.async {
-    identityService.authenticateSigninToken(token).map {
+  def signinWithResubToken(token: String, returnUrl: Option[String]): Action[AnyContent] = Action.async {
+    identityService.authenticateResubToken(token).map {
       case Right(cookies) =>
         SeeOther(returnUrl.getOrElse(configuration.dotcomBaseUrl)).withCookies(cookies: _*)
       case Left(_) =>

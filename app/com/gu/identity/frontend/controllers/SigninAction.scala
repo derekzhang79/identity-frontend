@@ -10,7 +10,7 @@ import com.gu.identity.frontend.errors.ErrorIDs.SignInGatewayErrorID
 import com.gu.identity.frontend.errors._
 import com.gu.identity.frontend.logging.{LogOnErrorAction, Logging, MetricsLoggingActor}
 import com.gu.identity.frontend.models._
-import com.gu.identity.frontend.request.{EmailSignInRequest, EmailSignInRequests, SignInActionRequestBody}
+import com.gu.identity.frontend.request.{EmailResubscribeRequest, EmailResubRequests, SignInActionRequestBody}
 import com.gu.identity.frontend.services._
 import com.gu.identity.frontend.views.ViewRenderer.{renderErrorPage, renderSendSignInLinkSent}
 import com.gu.identity.model.CurrentUser
@@ -34,7 +34,7 @@ class SigninAction(
   extends Controller
     with Logging
     with I18nSupport
-    with EmailSignInRequests {
+    with EmailResubRequests {
 
   val redirectRoute: String = routes.Application.signIn().url
 
@@ -169,16 +169,16 @@ class SigninAction(
     }
   }
 
-  def sendSignInLinkAction(): Action[EmailSignInRequest] = Action.async(emailSigninFormParser) { _req =>
+  def sendResubLinkAction(): Action[EmailResubscribeRequest] = Action.async(emailResubFormParser) { _req =>
     val req = _req.body
-    identityService.sendSignInTokenEmail(req, ClientIp(_req)).map {
+    identityService.sendResubEmail(req, ClientIp(_req)).map {
       case Right(_) =>
-        SeeOther(routes.Application.sendSignInLinkSent().url)
+        SeeOther(routes.Application.sendResubLinkSent().url)
       case Left(errors) =>
-        SeeOther(routes.Application.sendSignInLink(error = errors.map(_.id.toString)).url)
+        SeeOther(routes.Application.sendResubLink(error = errors.map(_.id.toString)).url)
     }.recover {
       case e: ClientGatewayError =>
-        SeeOther(routes.Application.sendSignInLink(error = List(SignInGatewayErrorID.toString)).url)
+        SeeOther(routes.Application.sendResubLink(error = List(SignInGatewayErrorID.toString)).url)
     }
   }
 

@@ -3,7 +3,7 @@ package com.gu.identity.frontend.controllers
 import com.gu.identity.frontend.configuration.Configuration
 import com.gu.identity.frontend.csrf.{CSRFAddToken, CSRFConfig, CSRFToken}
 import com.gu.identity.frontend.logging.Logging
-import com.gu.identity.frontend.models.{ClientID, GroupCode, SignInType, ReturnUrl}
+import com.gu.identity.frontend.models.{ClientID, GroupCode, ReturnUrl, SignInType}
 import com.gu.identity.frontend.mvt.MultiVariantTestAction
 import com.gu.identity.frontend.views.ViewRenderer._
 import com.gu.identity.model.{CurrentUser, GuestUser, NewUser}
@@ -73,9 +73,17 @@ class Application(
   def reset(error: Seq[String], clientId: Option[String]) = CSRFAddToken(csrfConfig) { req =>
     val clientIdOpt = ClientID(clientId)
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
-    val email : Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
+    val email: Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
 
-    renderResetPassword(configuration, error, csrfToken, email, clientIdOpt)
+    renderResetPassword(configuration, error, csrfToken, email, resend = false, clientIdOpt)
+  }
+
+  def resetResend(error: Seq[String], clientId: Option[String]) = CSRFAddToken(csrfConfig) { req =>
+    val clientIdOpt = ClientID(clientId)
+    val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
+    val email: Option[String] = req.cookies.get("GU_SIGNIN_EMAIL").map(_.value)
+
+    renderResetPassword(configuration, error, csrfToken, email, resend = true, clientIdOpt)
   }
 
   def resetPasswordEmailSent(clientId: Option[String]) = Action {

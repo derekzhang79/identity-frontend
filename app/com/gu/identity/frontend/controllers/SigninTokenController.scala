@@ -18,11 +18,11 @@ class SigninTokenController(
 ) extends Controller with LazyLogging with I18nSupport {
 
   def signinWithResubToken(token: String, returnUrl: Option[String]): Action[AnyContent] = Action.async {
-    identityService.authenticateResubToken(token).map {
+    identityService.authenticateRepermissionToken(token).map {
       case Right(cookies) =>
         SeeOther(returnUrl.getOrElse(configuration.dotcomBaseUrl)).withCookies(cookies: _*)
       case Left(_) =>
-        ViewRenderer.renderErrorPage(configuration, SigninTokenRejected("The sign in token was expired or invalid, please request a new one."), Results.Unauthorized.apply)
+        ViewRenderer.renderErrorPage(configuration, SigninTokenRejected("The link was expired or invalid, please request a new one."), Results.Unauthorized.apply)
     }
   }
 

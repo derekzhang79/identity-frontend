@@ -2,6 +2,7 @@ package com.gu.identity.frontend.models.text
 
 import play.api.i18n.Messages
 
+
 case class ResetPasswordText private(
   pageTitle: String,
   title: String,
@@ -14,6 +15,15 @@ case class ResetPasswordText private(
   userHelpEmail: String,
   userHelpContent: String
 )
+
+object ResetPasswordResendText {
+  def apply()(implicit messages: Messages): ResetPasswordText =
+    ResetPasswordText().copy(
+      title = messages("resetPassword.resend.title"),
+      subtitle = messages("resetPassword.resend.subtitle"),
+      button = messages("resetPassword.resend.button")
+    )
+}
 
 object ResetPasswordText {
   def apply()(implicit messages: Messages): ResetPasswordText =

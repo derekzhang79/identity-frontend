@@ -13,6 +13,8 @@ GET        /register                                    com.gu.identity.frontend
 
 GET        /reset                                       com.gu.identity.frontend.controllers.Application.reset(error: Seq[String] ?= Seq.empty, clientId: Option[String] ?= None)
 
+GET        /reset/resend                                com.gu.identity.frontend.controllers.Application.resetResend(error: Seq[String] ?= Seq.empty, clientId: Option[String] ?= None)
+
 GET        /reset/email-sent                            com.gu.identity.frontend.controllers.Application.resetPasswordEmailSent(clientId: Option[String] ?= None)
 
 GET        /resub-email                                 com.gu.identity.frontend.controllers.Application.sendResubLink(error: Seq[String] ?= Seq.empty)

@@ -7,6 +7,7 @@ import com.gu.identity.frontend.controllers.{NoCache, routes}
 import com.gu.identity.frontend.csrf.CSRFToken
 import com.gu.identity.frontend.errors.{HttpError, NotFoundError, UnexpectedError}
 import com.gu.identity.frontend.models._
+import com.gu.identity.frontend.models.text.ResetPasswordText
 import com.gu.identity.frontend.mvt.{MultiVariantTest, MultiVariantTestVariant}
 import com.gu.identity.frontend.views.models._
 import com.gu.identity.model.UserType
@@ -154,6 +155,7 @@ object ViewRenderer {
     errorIds: Seq[String],
     csrfToken: Option[CSRFToken],
     email: Option[String],
+    resend: Boolean = false,
     clientId: Option[ClientID])
     (implicit messages: Messages) = {
     val model = ResetPasswordViewModel(
@@ -161,6 +163,7 @@ object ViewRenderer {
       errors = errorIds.map(ErrorViewModel.apply),
       csrfToken = csrfToken,
       email = email,
+      resend = resend,
       clientId = clientId
     )
     renderViewModel("reset-password-page", model)

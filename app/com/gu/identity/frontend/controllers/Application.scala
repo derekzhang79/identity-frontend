@@ -62,12 +62,12 @@ class Application(
     renderRegister(configuration, req.activeTests, error, csrfToken, returnUrlActual, skipConfirmation, clientIdActual, groupCode, email, signInTypeActual, shouldCollectConsents, shouldCollectV2Consents)
   }
 
-  def sendSignInLink(error: Seq[String]) = CSRFAddToken(csrfConfig) { req =>
+  def sendResubLink(error: Seq[String]) = CSRFAddToken(csrfConfig) { req =>
     val csrfToken = CSRFToken.fromRequest(csrfConfig, req)
-    renderSendSignInLink(configuration, error, csrfToken)
+    renderResubLink(configuration, error, csrfToken)
   }
 
-  def sendSignInLinkSent() = Action {
+  def sendResubLinkSent() = Action {
     renderSendSignInLinkSent(configuration)
   }
 

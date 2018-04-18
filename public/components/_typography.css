@@ -9,7 +9,7 @@
 $base-font-size: 10;
 
 html {
-  font-size: calc($base-font-size * 1px);
+  font-size: 0.625em;
   text-rendering: optimizeSpeed;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;

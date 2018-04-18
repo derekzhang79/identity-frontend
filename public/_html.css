@@ -18,13 +18,13 @@ body {
   min-height: 100%;
 }
 
-body > section {
+body > section, body > main {
   max-width: 100vw;
   max-width: 100%;
   overflow: hidden;
 }
 
-body > section:last-of-type {
+body > main {
   flex-grow: 1;
 }
 

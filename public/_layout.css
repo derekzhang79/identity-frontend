@@ -3,6 +3,22 @@
   max-width: 48em;
 }
 
+.layout-skip-link {
+  @extend %font-body-copy;
+  text-align: center;
+  color: var(--color-text);
+  background: var(--color-cta);
+  text-decoration: underline;
+  position: absolute;
+  height: var(--size-header-height);
+  line-height: var(--size-header-height);
+  top: calc(var(--size-header-height)*-1);
+  display: block;
+  &:focus {
+    position: static;
+  }
+}
+
 .layout-header {
   padding: var(--size-baseline) 0 var(--size-baseline-vertical);
   display: block;

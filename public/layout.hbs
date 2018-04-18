@@ -36,9 +36,12 @@
 
 </head>
 <body class="{{ layout.skin }}">
+  <a href="#main-content" class="layout-skip-link">{{ layout.text.skipToContent }}</a>
   {{> components/header/_header }}
 
-  {{#block "content" }}{{/block}}
+  <main id="main-content">
+    {{#block "content" }}{{/block}}
+  </main>
 
   {{> components/footer/_footer }}
 

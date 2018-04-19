@@ -11,6 +11,10 @@
   }
 }
 
+.ajax-step-flow__slide {
+  outline: none;
+}
+
 .ajax-step-flow__slide--out {
   visibility: visible;
   display: block;

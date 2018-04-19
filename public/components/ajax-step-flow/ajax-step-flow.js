@@ -80,7 +80,16 @@ const pushSlide = (
   } else {
     throw new Error(ERR_MALFORMED_HTML);
   }
-  return animateOut();
+  return animateOut().then(
+    $element =>
+      new Promise(yay => {
+        $element.tabIndex = -1;
+        requestAnimationFrame(() => {
+          $element.focus();
+          yay($element);
+        });
+      })
+  );
 };
 
 const initOnce = (): void => {

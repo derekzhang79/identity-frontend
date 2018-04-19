@@ -34,8 +34,6 @@ html {
   font-weight: 300;
 }
 
-
-
 %font-body-copy {
   @extend %font-serif;
   @include font-size(14, 20);

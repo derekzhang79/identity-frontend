@@ -21,8 +21,8 @@
         <input type="hidden" name="returnUrl" value="{{ returnUrl }}">
 
         <div class="form-field-wrap">
-          <label class="form-field-wrap__title" for="signin_field_email">{{sendSignInLinkText.emailInput}}</label>
-          <input class="form-input form-field-wrap__field" type="email" name="email" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false" autofocus />
+          <label class="form-field-wrap__title" for="srlf-email">{{sendSignInLinkText.emailInput}}</label>
+          <input class="form-input form-field-wrap__field" id="srlf-email" type="email" name="email" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false" autofocus />
         </div>
         <div class="form-field-wrap">
           <button class="form-button form-button--main form-field-wrap__field" type="submit">{{sendSignInLinkText.submitAction}} {{> components/icon/arrow-inline }}</button>

@@ -12,6 +12,10 @@ html {
   color: var(--color-text);
 }
 
+main {
+  outline: none;
+}
+
 body {
   display: flex;
   flex-direction: column;

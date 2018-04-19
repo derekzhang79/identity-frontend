@@ -3,13 +3,13 @@
 {{# partial "content" }}
 
   <section class="layout-wrap-width">
-    <div class="smartlock-trigger" data-csrf-token="{{ csrfToken.value }}" data-return-url="{{ returnUrl }}"></div>
+    <div class="smartlock-trigger" data-csrf-token="{{ csrfToken.value }}" data-return-url="{{ returnUrl }}" role="presentation"></div>
 
     <div class="ajax-step-flow"><div class="ajax-step-flow__slide">
 
-      <section class="layout-header">
+      <header class="layout-header">
         <h1 class="layout-header__title">{{ twoStepSignInPageText.title }}</h1>
-      </section>
+      </header>
 
       {{> components/form/form-feedback-wrap }}
 
@@ -24,9 +24,9 @@
         </p>
       </section>
 
-      <section class="layout-section">
+      <footer class="layout-section">
         {{> components/terms/_terms-inline }}
-      </section>
+      </footer>
 
     </div></div>
   </section>

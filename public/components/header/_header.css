@@ -2,7 +2,7 @@
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
   padding: 2.5px 0;
-  height: 42px;
+  height: var(--size-header-height);
 }
 
 .header__inner {

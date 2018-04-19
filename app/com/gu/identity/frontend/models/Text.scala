@@ -116,7 +116,8 @@ object Text {
   object LayoutText {
     def toMap(implicit messages: Messages): Map[String, String] = {
       Map(
-        "layoutPageTitle" -> messages("layout.pagetitle")
+        "layoutPageTitle" -> messages("layout.pagetitle"),
+        "skipToContent" -> messages("layout.skip")
       )
     }
   }

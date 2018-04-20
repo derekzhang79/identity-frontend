@@ -6,6 +6,7 @@ import play.api.i18n.Messages
 
 sealed trait TermsViewModel{
   def conditionsText: String
+  def dataText: String
   def termsOfServiceText: String
   def privacyPolicyText: String
   def termsOfServiceUrl: String
@@ -14,6 +15,7 @@ sealed trait TermsViewModel{
 
 case class BasicTermsViewModel private(
     conditionsText: String,
+    dataText: String,
     termsOfServiceText: String,
     termsOfServiceUrl: String,
     privacyPolicyText: String,
@@ -23,6 +25,7 @@ case class BasicTermsViewModel private(
 
 case class TeachersTermsViewModel private(
     conditionsText: String,
+    dataText: String,
     termsOfServiceText: String,
     termsOfServiceUrl: String,
     privacyPolicyText: String,
@@ -36,6 +39,7 @@ case class TeachersTermsViewModel private(
 
 case class JobsTermsViewModel(
     conditionsText: String,
+    dataText: String,
     termsOfServiceText: String,
     termsOfServiceUrl: String,
     privacyPolicyText: String,
@@ -52,6 +56,7 @@ object BasicTermsViewModel {
     val text = TermsText()
     BasicTermsViewModel(
       conditionsText = text.conditionsText,
+      dataText = text.dataText,
       termsOfServiceText = text.termsOfServiceText,
       termsOfServiceUrl = text.termsOfServiceUrl,
       privacyPolicyText = text.privacyPolicyText,
@@ -65,6 +70,7 @@ object TeachersTermsViewModel {
     val text = TeachersTermsText()
     TeachersTermsViewModel(
       conditionsText = text.basicTermsText.conditionsText,
+      dataText = text.basicTermsText.dataText,
       termsOfServiceText = text.basicTermsText.termsOfServiceText,
       termsOfServiceUrl = text.basicTermsText.termsOfServiceUrl,
       privacyPolicyText = text.basicTermsText.privacyPolicyText,
@@ -81,6 +87,7 @@ object JobsTermsViewModel {
     val text = JobsTermsText()
     JobsTermsViewModel(
       conditionsText = text.basicTermsText.conditionsText,
+      dataText = text.basicTermsText.dataText,
       termsOfServiceText = text.basicTermsText.termsOfServiceText,
       termsOfServiceUrl = text.basicTermsText.termsOfServiceUrl,
       privacyPolicyText = text.basicTermsText.privacyPolicyText,

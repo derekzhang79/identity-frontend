@@ -1,7 +1,7 @@
 package com.gu.identity.frontend.views.models
 
 import com.gu.identity.frontend.models.{GroupCode, GuardianJobs, GuardianTeachersNetwork}
-import com.gu.identity.frontend.models.text.{PartnerTermsText, TermsText}
+import com.gu.identity.frontend.models.text.{GroupTermsText, TermsText}
 import play.api.i18n.Messages
 
 sealed trait TermsViewModel{
@@ -33,10 +33,10 @@ object BasicTermsViewModel {
 
 object TeachersTermsViewModel {
   def apply()(implicit messages: Messages): TeachersTermsViewModel = {
-    val text = PartnerTermsText(
+    val text = GroupTermsText(
       termsUrl = "https://teachers.theguardian.com/guardian-teacher-network-terms-and-conditions",
       privacyUrl = "https://teachers.theguardian.com/guardian-teacher-network-privacy-policy",
-      partnerName = "terms.partnerTeachers"
+      groupName = "terms.groupTeachers"
     )
     TeachersTermsViewModel(
       conditionsText = text.conditionsText,
@@ -47,10 +47,10 @@ object TeachersTermsViewModel {
 
 object JobsTermsViewModel {
   def apply()(implicit messages: Messages): JobsTermsViewModel = {
-    val text = PartnerTermsText(
+    val text = GroupTermsText(
       termsUrl = "https://jobs.theguardian.com/terms-and-conditions/",
       privacyUrl = "https://jobs.theguardian.com/privacy-policy/",
-      partnerName = "terms.partnerJobs"
+      groupName = "terms.groupJobs"
     )
     JobsTermsViewModel(
       conditionsText = text.conditionsText,

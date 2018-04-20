@@ -7,7 +7,7 @@ case class TermsText private(
   privacyText: String
 )
 
-case class PartnerTermsText private(
+case class GroupTermsText private(
   conditionsText: String,
   privacyText: String
 )
@@ -33,12 +33,12 @@ object TermsText {
   }
 }
 
-object PartnerTermsText {
+object GroupTermsText {
   def apply(
     termsUrl: String,
     privacyUrl: String,
-    partnerName: String
-  )(implicit messages: Messages): PartnerTermsText = {
+    groupName: String
+  )(implicit messages: Messages): GroupTermsText = {
     lazy val conditionsLink: String = Helpers.makeLink(
       messages("terms.termsOfService"),
       messages("terms.termsOfServiceUrl")
@@ -47,17 +47,17 @@ object PartnerTermsText {
       messages("terms.privacyPolicy"),
       messages("terms.privacyPolicyUrl")
     )
-    lazy val conditionsPartnerLink: String = Helpers.makeLink(
+    lazy val conditionsGroupLink: String = Helpers.makeLink(
       messages("terms.termsOfService"),
       termsUrl
     )
-    lazy val privacyPartnerLink: String = Helpers.makeLink(
+    lazy val privacyGroupLink: String = Helpers.makeLink(
       messages("terms.privacyPolicy"),
       privacyUrl
     )
-    PartnerTermsText (
-      conditionsText = messages("terms.conditionsWithPartner", conditionsLink, messages(partnerName), conditionsPartnerLink),
-      privacyText = messages("terms.privacyWithPartner", privacyLink, messages(partnerName), privacyPartnerLink)
+    GroupTermsText (
+      conditionsText = messages("terms.conditionsWithGroup", conditionsLink, messages(groupName), conditionsGroupLink),
+      privacyText = messages("terms.privacyWithGroup", privacyLink, messages(groupName), privacyGroupLink)
     )
   }
 }

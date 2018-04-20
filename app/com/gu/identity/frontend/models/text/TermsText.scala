@@ -27,8 +27,8 @@ object TermsText {
       messages("terms.privacyPolicyUrl")
     )
     TermsText(
-      conditionsText = messages("terms.conditions",conditionsLink),
-      privacyText = messages("terms.privacy",privacyLink)
+      conditionsText = messages("terms.conditions", conditionsLink),
+      privacyText = messages("terms.privacy", privacyLink)
     )
   }
 }

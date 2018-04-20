@@ -11,15 +11,15 @@ sealed trait TermsViewModel{
 
 case class BasicTermsViewModel private(
   conditionsText: String,
-  privacyText: String) extends ViewModel with TermsViewModel {}
+  privacyText: String) extends ViewModel with TermsViewModel
 
 case class TeachersTermsViewModel private(
   conditionsText: String,
-  privacyText: String) extends ViewModel with TermsViewModel {}
+  privacyText: String) extends ViewModel with TermsViewModel
 
 case class JobsTermsViewModel private(
   conditionsText: String,
-  privacyText: String) extends ViewModel with TermsViewModel {}
+  privacyText: String) extends ViewModel with TermsViewModel
 
 object BasicTermsViewModel {
   def apply()(implicit messages: Messages): BasicTermsViewModel = {

@@ -71,14 +71,17 @@ register.becausePhone=We use your mobile phone number for account verification p
 register.countryCode=Country code
 
 # com.gu.identity.frontend.models.text.TermsText
-terms.conditions=By proceeding, you agree to our
-terms.dataConditions=To find out what personal data we collect and how we use it, please visit our
 terms.termsOfService=Terms of Service
 terms.termsOfServiceUrl=https://www.theguardian.com/help/terms-of-service
 terms.privacyPolicy=Privacy Policy
 terms.privacyPolicyUrl=https://www.theguardian.com/help/privacy-policy
-terms.teachersConditions=and Guardian Teacher Network''s
-terms.jobsConditions=and Guardian Jobs''
+terms.partnerTeachers=Guardian Teacher Network''s
+terms.partnerJobs=Guardian Jobs''
+
+terms.conditions=By proceeding, you agree to our {0}.
+terms.conditionsWithPartner=By proceeding, you agree to our {0} and {1} {2}.
+terms.privacy=To find out what personal data we collect and how we use it, please visit our {0}.
+terms.privacyWithPartner=To find out what personal data we collect and how we use it, please visit our {0} and {1} {2}.
 
 # com.gu.identity.frontend.models.text.OAuthText
 oauth.signIn=Sign in with {0}

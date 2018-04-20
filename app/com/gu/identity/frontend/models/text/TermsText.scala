@@ -3,45 +3,61 @@ package com.gu.identity.frontend.models.text
 import play.api.i18n.Messages
 
 case class TermsText private(
-     conditionsText: String,
-     dataText: String,
-     termsOfServiceText: String,
-     termsOfServiceUrl: String,
-     privacyPolicyText: String,
-     privacyPolicyUrl: String)
+  conditionsText: String,
+  privacyText: String
+)
 
-case class TeachersTermsText private(
-    basicTermsText: TermsText,
-    conditionsText: String)
+case class PartnerTermsText private(
+  conditionsText: String,
+  privacyText: String
+)
 
-case class JobsTermsText private(
-    basicTermsText: TermsText,
-    conditionsText: String)
+object Helpers {
+  def makeLink(name: String, url: String) = s"<a href=\042$url\042>$name</a>"
+}
 
 object TermsText {
-  def apply()(implicit messages: Messages): TermsText =
+  def apply()(implicit messages: Messages): TermsText = {
+    lazy val conditionsLink: String = Helpers.makeLink(
+      messages("terms.termsOfService"),
+      messages("terms.termsOfServiceUrl")
+    )
+    lazy val privacyLink: String = Helpers.makeLink(
+      messages("terms.privacyPolicy"),
+      messages("terms.privacyPolicyUrl")
+    )
     TermsText(
-      conditionsText = messages("terms.conditions"),
-      dataText = messages("terms.dataConditions"),
-      termsOfServiceText = messages("terms.termsOfService"),
-      termsOfServiceUrl = messages("terms.termsOfServiceUrl"),
-      privacyPolicyText = messages("terms.privacyPolicy"),
-      privacyPolicyUrl = messages("terms.privacyPolicyUrl")
+      conditionsText = messages("terms.conditions",conditionsLink),
+      privacyText = messages("terms.privacy",privacyLink)
     )
+  }
 }
 
-object TeachersTermsText {
-  def apply()(implicit messages: Messages): TeachersTermsText =
-    TeachersTermsText(
-      basicTermsText = TermsText(),
-      conditionsText = messages("terms.teachersConditions")
+object PartnerTermsText {
+  def apply(
+    termsUrl: String,
+    privacyUrl: String,
+    partnerName: String
+  )(implicit messages: Messages): PartnerTermsText = {
+    lazy val conditionsLink: String = Helpers.makeLink(
+      messages("terms.termsOfService"),
+      messages("terms.termsOfServiceUrl")
     )
-}
-
-object JobsTermsText {
-  def apply()(implicit messages: Messages): JobsTermsText =
-    JobsTermsText(
-      basicTermsText = TermsText(),
-      conditionsText = messages("terms.jobsConditions")
+    lazy val privacyLink: String = Helpers.makeLink(
+      messages("terms.privacyPolicy"),
+      messages("terms.privacyPolicyUrl")
     )
+    lazy val conditionsPartnerLink: String = Helpers.makeLink(
+      messages("terms.termsOfService"),
+      termsUrl
+    )
+    lazy val privacyPartnerLink: String = Helpers.makeLink(
+      messages("terms.privacyPolicy"),
+      privacyUrl
+    )
+    PartnerTermsText (
+      conditionsText = messages("terms.conditionsWithPartner", conditionsLink, messages(partnerName), conditionsPartnerLink),
+      privacyText = messages("terms.privacyWithPartner", privacyLink, messages(partnerName), privacyPartnerLink)
+    )
+  }
 }
